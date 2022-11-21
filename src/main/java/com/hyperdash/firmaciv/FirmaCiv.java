@@ -3,6 +3,8 @@ package com.hyperdash.firmaciv;
 import com.hyperdash.firmaciv.block.ModBlocks;
 import com.hyperdash.firmaciv.item.ModItems;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,13 +41,19 @@ public class FirmaCiv
         ModBlocks.register(eventBus);
 
         eventBus.addListener(this::setup);
+
+        eventBus.addListener(this::clientSetup);
+
         // Register the enqueueIMC method for modloading
         eventBus.addListener(this::enqueueIMC);
         // Register the processIMC method for modloading
         eventBus.addListener(this::processIMC);
-
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    private void clientSetup(final FMLCommonSetupEvent event) {
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CANOE_COMPONENT_BLOCK.get(), RenderType.cutout());
     }
 
     private void setup(final FMLCommonSetupEvent event)

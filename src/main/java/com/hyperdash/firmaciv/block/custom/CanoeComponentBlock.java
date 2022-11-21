@@ -23,9 +23,14 @@ import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class CanoeComponentBlock extends HorizontalDirectionalBlock {
 
@@ -56,6 +61,14 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     @Override
     public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
         return 5;
+    }
+
+    private static final VoxelShape SHAPE = Stream.of(
+            Block.box(0,0,0,16,9,16))
+            .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    public VoxelShape getShape(BlockState pstate, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return SHAPE;
     }
 
     public CanoeComponentBlock(BlockBehaviour.Properties pProperties) {

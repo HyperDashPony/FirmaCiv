@@ -24,7 +24,7 @@ public class ModBlocks {
             DeferredRegister.create(ForgeRegistries.BLOCKS, FirmaCiv.MOD_ID);
 
     public static final RegistryObject<Block> CANOE_COMPONENT_BLOCK = registerBlock("canoe_component_block",
-            () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.CARVED_PUMPKIN)),
+            () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.CARVED_PUMPKIN).noOcclusion()),
             CreativeModeTab.TAB_TRANSPORTATION);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
