@@ -1,14 +1,13 @@
 package com.hyperdash.firmaciv.block.custom;
 
-import com.hyperdash.firmaciv.FirmaCiv;
-import com.hyperdash.firmaciv.block.ModBlocks;
+import com.hyperdash.firmaciv.block.FirmacivBlocks;
+import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -97,13 +96,14 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
                 pLevel.levelEvent(2001, blockinworld.getPos(), Block.getId(blockinworld.getState()));
             }
 
-            Boat boat = EntityType.BOAT.create(pLevel);
+            CanoeEntity canoe = FirmacivEntities.CANOE_ENTITY.get().create(pLevel);
             BlockPos blockpos1 = blockpattern$blockpatternmatch.getBlock(0, 2, 0).getPos();
-            boat.moveTo((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.05D, (double)blockpos1.getZ() + 0.5D, 0.0F, 0.0F);
-            pLevel.addFreshEntity(boat);
+            canoe.moveTo((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.05D, (double)blockpos1.getZ() + 0.5D, 0.0F, 0.0F);
+            canoe.rotate(blockpos1.north())
+            pLevel.addFreshEntity(canoe);
 
-            for(ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class, boat.getBoundingBox().inflate(5.0D))) {
-                CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, boat);
+            for(ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class, canoe.getBoundingBox().inflate(5.0D))) {
+                CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, canoe);
             }
 
             for(int l = 0; l < this.getOrCreateCanoeFull().getHeight(); ++l) {
@@ -125,7 +125,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     private BlockPattern getOrCreateCanoeFull() {
         if (this.canoeFull == null) {
             this.canoeFull = BlockPatternBuilder.start().aisle("#", "#", "#").where('#',
-                    BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
+                    BlockInWorld.hasState(BlockStatePredicate.forBlock(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
         }
 
         return this.canoeFull;
@@ -134,7 +134,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     private BlockPattern getOrCreateCanoeMissingInside() {
         if (this.canoeMissingInside == null) {
             this.canoeMissingInside = BlockPatternBuilder.start().aisle("#", " ", "#").where('#',
-                    BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
+                    BlockInWorld.hasState(BlockStatePredicate.forBlock(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
         }
 
         return this.canoeMissingInside;
@@ -143,7 +143,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     private BlockPattern getOrCreateCanoeMissingOutsideRight() {
         if (this.canoeMissingOutsideRight == null) {
             this.canoeMissingOutsideRight = BlockPatternBuilder.start().aisle("#", "#", " ").where('#',
-                    BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
+                    BlockInWorld.hasState(BlockStatePredicate.forBlock(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
         }
 
         return this.canoeMissingOutsideRight;
@@ -152,7 +152,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     private BlockPattern getOrCreateCanoeMissingOutsideLeft() {
         if (this.canoeMissingOutsideLeft == null) {
             this.canoeMissingOutsideLeft = BlockPatternBuilder.start().aisle(" ", "#", "#").where('#',
-                    BlockInWorld.hasState(BlockStatePredicate.forBlock(ModBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
+                    BlockInWorld.hasState(BlockStatePredicate.forBlock(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
         }
 
         return this.canoeMissingOutsideLeft;

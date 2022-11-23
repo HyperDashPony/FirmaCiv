@@ -1,6 +1,7 @@
 {
 
   "item.firmaciv.testitem": "They're waiting for you, Mr. Freeman. With the Test Item.",
-  "block.firmaciv.canoe_component_block": "Canoe Component"
+  "block.firmaciv.canoe_component_block": "Canoe Component",
+  "entity.firmaciv.canoe_entity": "Dugout Canoe"
 
 }
