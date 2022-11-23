@@ -99,7 +99,6 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
             CanoeEntity canoe = FirmacivEntities.CANOE_ENTITY.get().create(pLevel);
             BlockPos blockpos1 = blockpattern$blockpatternmatch.getBlock(0, 2, 0).getPos();
             canoe.moveTo((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.05D, (double)blockpos1.getZ() + 0.5D, 0.0F, 0.0F);
-            canoe.rotate(blockpos1.north())
             pLevel.addFreshEntity(canoe);
 
             for(ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class, canoe.getBoundingBox().inflate(5.0D))) {
