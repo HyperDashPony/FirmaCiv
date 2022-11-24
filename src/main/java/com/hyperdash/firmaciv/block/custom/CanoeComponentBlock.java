@@ -41,10 +41,6 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     private BlockPattern canoeMissingOutsideRight;
     @Nullable
     private BlockPattern canoeMissingOutsideLeft;
-
-    private static final Predicate<BlockState> PUMPKINS_PREDICATE = (properties) -> {
-        return properties != null && (properties.is(Blocks.CARVED_PUMPKIN) || properties.is(Blocks.JACK_O_LANTERN));
-    };
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     @Override
@@ -77,8 +73,9 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
 
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (!pOldState.is(pState.getBlock())) {
-            this.trySpawnCanoe(pLevel, pPos);
+            this.trySpawnCanoe(pLevel, pPos, pState);
         }
+
     }
 
     public boolean canSpawnCanoe(LevelReader pLevel, BlockPos pPos) {
@@ -87,9 +84,42 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
                 this.getOrCreateCanoeMissingInside().find(pLevel, pPos) != null;
     }
 
-    private void trySpawnCanoe(Level pLevel, BlockPos pPos) {
+    private BlockPos getMiddleBlockPos(Level pLevel, BlockPos pPos){
+        String rotatedirs = pLevel.getBlockState(pPos).getValue(FACING).getName();
+
+        if (rotatedirs == "east" || rotatedirs == "west") {
+            if (pLevel.getBlockState(pPos.west()).getBlock().equals(this) && pLevel.getBlockState(pPos.east()).getBlock().equals(this)) {
+                return pPos;
+            }
+        } if (rotatedirs == "north" || rotatedirs == "south") {
+            if (pLevel.getBlockState(pPos.north()).getBlock().equals(this) && pLevel.getBlockState(pPos.south()).getBlock().equals(this)) {
+                return pPos;
+            }
+        } if (rotatedirs == "east" || rotatedirs == "west") {
+            if (pLevel.getBlockState(pPos.west()).getBlock().equals(this) && pLevel.getBlockState(pPos.west().west()).getBlock().equals(this)) {
+                return pPos.west();
+            } else if (pLevel.getBlockState(pPos.east()).getBlock().equals(this) && pLevel.getBlockState(pPos.east().east()).getBlock().equals(this)) {
+                return pPos.east();
+            }
+        } if (rotatedirs == "north" || rotatedirs == "south") {
+            if (pLevel.getBlockState(pPos.north()).getBlock().equals(this) && pLevel.getBlockState(pPos.north().north()).getBlock().equals(this)) {
+                return pPos.north();
+            } else if (pLevel.getBlockState(pPos.south()).getBlock().equals(this) && pLevel.getBlockState(pPos.south().south()).getBlock().equals(this)) {
+                return pPos.south();
+            }
+        }
+
+        return pPos;
+    }
+
+    private void trySpawnCanoe(Level pLevel, BlockPos pPos, BlockState pState) {
+
         BlockPattern.BlockPatternMatch blockpattern$blockpatternmatch = this.getOrCreateCanoeFull().find(pLevel, pPos);
         if (blockpattern$blockpatternmatch != null) {
+
+            String rotatedirs = pLevel.getBlockState(pPos).getValue(FACING).getName();
+            BlockPos middleblockpos = getMiddleBlockPos(pLevel, pPos);
+
             for(int i = 0; i < this.getOrCreateCanoeFull().getHeight(); ++i) {
                 BlockInWorld blockinworld = blockpattern$blockpatternmatch.getBlock(0, i, 0);
                 pLevel.setBlock(blockinworld.getPos(), Blocks.AIR.defaultBlockState(), 2);
@@ -97,8 +127,14 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
             }
 
             CanoeEntity canoe = FirmacivEntities.CANOE_ENTITY.get().create(pLevel);
-            BlockPos blockpos1 = blockpattern$blockpatternmatch.getBlock(0, 2, 0).getPos();
-            canoe.moveTo((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.05D, (double)blockpos1.getZ() + 0.5D, 0.0F, 0.0F);
+
+            if (rotatedirs == "east" || rotatedirs == "west") {
+                canoe.moveTo((double)middleblockpos.getX() + 0.5D, (double)middleblockpos.getY() + 0.05D, (double)middleblockpos.getZ() + 0.5D, 90.0F, 0.0F);
+            } else {
+                canoe.moveTo((double)middleblockpos.getX() + 0.5D, (double)middleblockpos.getY() + 0.05D, (double)middleblockpos.getZ() + 0.5D, 0.0F, 0.0F);
+            }
+
+
             pLevel.addFreshEntity(canoe);
 
             for(ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class, canoe.getBoundingBox().inflate(5.0D))) {

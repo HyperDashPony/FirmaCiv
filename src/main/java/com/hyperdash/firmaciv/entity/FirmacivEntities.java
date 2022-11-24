@@ -17,7 +17,7 @@ public final class FirmacivEntities {
             = DeferredRegister.create(ForgeRegistries.ENTITIES, FirmaCiv.MOD_ID);
 
     public static final RegistryObject<EntityType<CanoeEntity>> CANOE_ENTITY = ENTITY_TYPES.register("canoe_entity",
-            () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1F, 0.5625F)
+            () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
                     .build(new ResourceLocation(FirmaCiv.MOD_ID, "canoe_entity").toString()));
 
     public static void register(IEventBus eventBus) {
