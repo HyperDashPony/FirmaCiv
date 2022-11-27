@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 public class CanoeEntity extends FirmacivBoatEntity{
     public enum Type {
 
-
     }
 
     @Override
