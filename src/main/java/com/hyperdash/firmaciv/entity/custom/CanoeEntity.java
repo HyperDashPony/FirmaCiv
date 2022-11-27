@@ -9,7 +9,9 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -25,6 +27,11 @@ public class CanoeEntity extends FirmacivBoatEntity{
     public enum Type {
 
 
+    }
+
+    @Override
+    public Item getDropItem() {
+        return Items.STICK;
     }
 
     public CanoeEntity(EntityType<? extends Boat> pEntityType, Level pLevel) {
