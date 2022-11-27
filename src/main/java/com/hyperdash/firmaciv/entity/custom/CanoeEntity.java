@@ -22,6 +22,10 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import javax.annotation.Nullable;
 
 public class CanoeEntity extends FirmacivBoatEntity{
+    public enum Type {
+
+
+    }
 
     public CanoeEntity(EntityType<? extends Boat> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
