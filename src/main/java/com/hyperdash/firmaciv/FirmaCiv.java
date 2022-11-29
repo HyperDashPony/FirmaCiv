@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv;
 
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
+import com.hyperdash.firmaciv.client.FirmacivClientEvents;
 import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivBoatRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.events.FirmacivBlockEvents;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -24,6 +26,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 import java.util.stream.Collectors;
@@ -48,20 +51,16 @@ public class FirmaCiv
 
         eventBus.addListener(this::setup);
 
-        eventBus.addListener(this::clientSetup);
-
         // Register the enqueueIMC method for modloading
         eventBus.addListener(this::enqueueIMC);
         // Register the processIMC method for modloading
         eventBus.addListener(this::processIMC);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-    }
 
-    private void clientSetup(final FMLClientSetupEvent event) {
-        ItemBlockRenderTypes.setRenderLayer(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get(), RenderType.cutout());
-        EntityRenderers.register(FirmacivEntities.CANOE_ENTITY.get(), FirmacivBoatRenderer::new);
-
+        if(FMLEnvironment.dist == Dist.CLIENT){
+            FirmacivClientEvents.init();
+        }
     }
 
     private void setup(final FMLCommonSetupEvent event)

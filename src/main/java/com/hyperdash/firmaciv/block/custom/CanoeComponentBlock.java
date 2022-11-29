@@ -39,6 +39,9 @@ import java.util.stream.Stream;
 public class CanoeComponentBlock extends HorizontalDirectionalBlock {
 
 
+
+
+
     @Nullable
     public static BlockPattern canoeFull;
     @Nullable
