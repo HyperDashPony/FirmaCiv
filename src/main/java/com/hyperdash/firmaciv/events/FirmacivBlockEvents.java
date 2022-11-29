@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.AXIS;
 import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.FACING;
 
-@Mod.EventBusSubscriber(modid = FirmaCiv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = FirmaCiv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class FirmacivBlockEvents {
 
     private FirmacivBlockEvents() {}
@@ -46,7 +46,7 @@ public final class FirmacivBlockEvents {
                     Direction.Axis rotatedirs = event.getState().getValue(BlockStateProperties.AXIS);
 
                     if (CanoeComponentBlock.isValidCanoeShape(world, thisBlock, thisBlockPos, rotatedirs)) {
-                        event.getWorld().playSound(event.getPlayer(), event.getPos(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 
                         world.destroyBlock(thisBlockPos, false);
 
@@ -59,7 +59,7 @@ public final class FirmacivBlockEvents {
                             world.setBlock(thisBlockPos, newblock.defaultBlockState().setValue(AXIS, Direction.Axis.Z), 2);
                         }
 
-                        CanoeComponentBlock.spawnCanoeWithAxe(event.getContext().getLevel(), thisBlockPos);
+                        CanoeComponentBlock.spawnCanoeWithAxe(event.getPlayer().getLevel(), thisBlockPos);
 
 
                     }

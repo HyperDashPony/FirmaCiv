@@ -18,6 +18,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -57,7 +58,7 @@ public class FirmaCiv
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void clientSetup(final FMLCommonSetupEvent event) {
+    private void clientSetup(final FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get(), RenderType.cutout());
         EntityRenderers.register(FirmacivEntities.CANOE_ENTITY.get(), FirmacivBoatRenderer::new);
 
