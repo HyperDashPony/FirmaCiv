@@ -100,76 +100,52 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     }
 
     public static boolean isValidCanoeShape(LevelAccessor world, Block thisBlock, BlockPos thisBlockPos, Direction.Axis rotatedirs){
-
+        
         boolean validCanoeShape = false;
 
-        BlockPos blockPos1 = thisBlockPos;
+        Direction.Axis axis = world.getBlockState(thisBlockPos).getValue(AXIS);
 
-        BlockPos blockPos2 = thisBlockPos;
+        BlockPos blockPos0 = thisBlockPos.relative(axis, 2);
+        BlockPos blockPos1 = thisBlockPos.relative(axis, 1);
+        BlockPos blockPos2 = thisBlockPos.relative(axis, -1);
+        BlockPos blockPos3 = thisBlockPos.relative(axis, -2);
 
-        Block CCB = FirmacivBlocks.CANOE_COMPONENT_BLOCK.get();
+        BlockState blockState0 = world.getBlockState(blockPos0);
+        BlockState blockState1 = world.getBlockState(blockPos0);
 
-        int canoeState = -1;
+        if((world.getBlockState(blockPos0).is(thisBlock) || world.getBlockState(blockPos0).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
+                (world.getBlockState(blockPos1).is(thisBlock) || world.getBlockState(blockPos1).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))) {
 
-        if (rotatedirs == Direction.Axis.X) {
-            if ((world.getBlockState(thisBlockPos.west()).is(thisBlock) || world.getBlockState(thisBlockPos.west()).is(CCB)) &&
-                    (world.getBlockState(thisBlockPos.east()).is(thisBlock) || world.getBlockState(thisBlockPos.east()).is(CCB))) {
-                canoeState = 0;
+            blockState0 = world.getBlockState(blockPos0);
+            blockState1 = world.getBlockState(blockPos1);
+            validCanoeShape = true;
 
-                blockPos1 = thisBlockPos.west();
-                blockPos2 = thisBlockPos.east();
+        } if((world.getBlockState(blockPos1).is(thisBlock) || world.getBlockState(blockPos1).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
+                (world.getBlockState(blockPos2).is(thisBlock) || world.getBlockState(blockPos2).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))) {
 
-                validCanoeShape = true;
-            } else if ((world.getBlockState(thisBlockPos.west()).is(thisBlock) || world.getBlockState(thisBlockPos.west()).is(CCB)) &&
-                    (world.getBlockState(thisBlockPos.west().west()).is(thisBlock) || world.getBlockState(thisBlockPos.west().west()).is(CCB))) {
-                canoeState = 1;
+            blockState0 = world.getBlockState(blockPos1);
+            blockState1 = world.getBlockState(blockPos2);
+            validCanoeShape = true;
 
-                blockPos1 = thisBlockPos.west();
-                blockPos2 = thisBlockPos.west().west();
-                validCanoeShape = true;
-            } else if ((world.getBlockState(thisBlockPos.east()).is(thisBlock) || world.getBlockState(thisBlockPos.east()).is(CCB)) &&
-                    (world.getBlockState(thisBlockPos.east().east()).is(thisBlock) || world.getBlockState(thisBlockPos.east().east()).is(CCB))) {
-                canoeState = 3;
+        } if((world.getBlockState(blockPos2).is(thisBlock) || world.getBlockState(blockPos2).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
+                (world.getBlockState(blockPos3).is(thisBlock) || world.getBlockState(blockPos3).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))) {
 
-                blockPos1 = thisBlockPos.east();
-                blockPos2 = thisBlockPos.east().east();
-                validCanoeShape = true;
-            }
-        } else if (rotatedirs == Direction.Axis.Z) {
-            if ((world.getBlockState(thisBlockPos.north()).is(thisBlock)  || world.getBlockState(thisBlockPos.north()).is(CCB)) &&
-                    (world.getBlockState(thisBlockPos.south()).is(thisBlock) || world.getBlockState(thisBlockPos.south()).is(CCB))) {
-                canoeState = 4;
+            blockState0 = world.getBlockState(blockPos2);
+            blockState1 = world.getBlockState(blockPos3);
+            validCanoeShape = true;
 
-                blockPos1 = thisBlockPos.north();
-                blockPos2 = thisBlockPos.south();
-                validCanoeShape = true;
-            } else if ((world.getBlockState(thisBlockPos.north()).is(thisBlock) || world.getBlockState(thisBlockPos.north()).is(CCB))  &&
-                    (world.getBlockState(thisBlockPos.north().north()).is(thisBlock) || world.getBlockState(thisBlockPos.north().north()).is(CCB)) ) {
-                canoeState = 5;
-
-                blockPos1 = thisBlockPos.north();
-                blockPos2 = thisBlockPos.north().north();
-                validCanoeShape = true;
-            } else if ((world.getBlockState(thisBlockPos.south()).is(thisBlock) || world.getBlockState(thisBlockPos.south()).is(CCB)) &&
-                    (world.getBlockState(thisBlockPos.south().south()).is(thisBlock) || world.getBlockState(thisBlockPos.south().south()).is(CCB)) ) {
-                canoeState = 6;
-
-                blockPos1 = thisBlockPos.south();
-                blockPos2 = thisBlockPos.south().south();
-                validCanoeShape = true;
-            }
         }
 
         if(validCanoeShape){
-            if(world.getBlockState(blockPos1).getValue(BlockStateProperties.AXIS).getName() == rotatedirs.getName() &&
-                    world.getBlockState(blockPos2).getValue(BlockStateProperties.AXIS).getName() == rotatedirs.getName()){
+            if(blockState0.getValue(BlockStateProperties.AXIS) == rotatedirs &&
+                    blockState1.getValue(BlockStateProperties.AXIS) == rotatedirs){
                 return true;
             }
         }
 
-
         return false;
     }
+
 
     private static BlockPos getMiddleBlockPos(Level pLevel, BlockPos pPos){
         String rotatedirs = pLevel.getBlockState(pPos).getValue(FACING).getName();
