@@ -53,7 +53,7 @@ public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
     public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
 
         pMatrixStack.pushPose();
-        pMatrixStack.translate(0.0D, 0.375D, 0.0D);
+        pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - pEntityYaw));
         float f = (float)pEntity.getHurtTime() - pPartialTicks;
         float f1 = pEntity.getDamage() - pPartialTicks;
