@@ -99,83 +99,72 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
                 this.getOrCreateCanoeMissingInside().find(pLevel, pPos) != null;
     }
 
-    public static boolean isValidCanoeShape(LevelAccessor world, Block thisBlock, BlockPos thisBlockPos, Direction.Axis rotatedirs){
+    public static boolean isValidCanoeShape(LevelAccessor world, Block thisBlock, BlockPos pPos){
 
-        boolean validCanoeShape = false;
+        Direction.Axis axis = world.getBlockState(pPos).getValue(AXIS);
 
-        Direction.Axis axis = world.getBlockState(thisBlockPos).getValue(AXIS);
-
-        BlockPos blockPos0 = thisBlockPos.relative(axis, 2);
-        BlockPos blockPos1 = thisBlockPos.relative(axis, 1);
-        BlockPos blockPos2 = thisBlockPos.relative(axis, -1);
-        BlockPos blockPos3 = thisBlockPos.relative(axis, -2);
+        BlockPos blockPos0 = pPos.relative(axis, 2);
+        BlockPos blockPos1 = pPos.relative(axis, 1);
+        BlockPos blockPos2 = pPos.relative(axis, -1);
+        BlockPos blockPos3 = pPos.relative(axis, -2);
 
         BlockState blockState0 = world.getBlockState(blockPos0);
         BlockState blockState1 = world.getBlockState(blockPos0);
 
-        if((world.getBlockState(blockPos0).is(thisBlock) || world.getBlockState(blockPos0).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
+        if ((world.getBlockState(blockPos0).is(thisBlock) || world.getBlockState(blockPos0).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
                 (world.getBlockState(blockPos1).is(thisBlock) || world.getBlockState(blockPos1).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))) {
 
             blockState0 = world.getBlockState(blockPos0);
             blockState1 = world.getBlockState(blockPos1);
-            validCanoeShape = true;
+            if(validPartRotation(blockState0, blockState1, axis)) { return true; }
 
-        } if((world.getBlockState(blockPos1).is(thisBlock) || world.getBlockState(blockPos1).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
+        }
+        if ((world.getBlockState(blockPos1).is(thisBlock) || world.getBlockState(blockPos1).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
                 (world.getBlockState(blockPos2).is(thisBlock) || world.getBlockState(blockPos2).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))) {
 
             blockState0 = world.getBlockState(blockPos1);
             blockState1 = world.getBlockState(blockPos2);
-            validCanoeShape = true;
+            if(validPartRotation(blockState0, blockState1, axis)) { return true; }
 
-        } if((world.getBlockState(blockPos2).is(thisBlock) || world.getBlockState(blockPos2).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
+        }
+        if ((world.getBlockState(blockPos2).is(thisBlock) || world.getBlockState(blockPos2).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) &&
                 (world.getBlockState(blockPos3).is(thisBlock) || world.getBlockState(blockPos3).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))) {
 
             blockState0 = world.getBlockState(blockPos2);
             blockState1 = world.getBlockState(blockPos3);
-            validCanoeShape = true;
+            if(validPartRotation(blockState0, blockState1, axis)) { return true; }
 
-        }
-
-        if(validCanoeShape){
-            if(blockState0.getValue(BlockStateProperties.AXIS) == rotatedirs &&
-                    blockState1.getValue(BlockStateProperties.AXIS) == rotatedirs){
-                return true;
-            }
         }
 
         return false;
     }
 
+    private static boolean validPartRotation(BlockState blockState0, BlockState blockState1, Direction.Axis axis){
+        if(blockState0.getValue(BlockStateProperties.AXIS) == axis &&
+                blockState1.getValue(BlockStateProperties.AXIS) == axis){
+            return true;
+        }
+        return false;
+    }
+
 
     private static BlockPos getMiddleBlockPos(Level pLevel, BlockPos pPos){
-        String rotatedirs = pLevel.getBlockState(pPos).getValue(FACING).getName();
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
 
-        if (rotatedirs == "east" || rotatedirs == "west") {
-            if (pLevel.getBlockState(pPos.west()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
-                    pLevel.getBlockState(pPos.east()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
-                return pPos;
-            }
-        } if (rotatedirs == "north" || rotatedirs == "south") {
-            if (pLevel.getBlockState(pPos.north()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
-                    pLevel.getBlockState(pPos.south()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
-                return pPos;
-            }
-        } if (rotatedirs == "east" || rotatedirs == "west") {
-            if (pLevel.getBlockState(pPos.west()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
-                    pLevel.getBlockState(pPos.west().west()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
-                return pPos.west();
-            } else if (pLevel.getBlockState(pPos.east()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
-                    pLevel.getBlockState(pPos.east().east()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
-                return pPos.east();
-            }
-        } if (rotatedirs == "north" || rotatedirs == "south") {
-            if (pLevel.getBlockState(pPos.north()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
-                    pLevel.getBlockState(pPos.north().north()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
-                return pPos.north();
-            } else if (pLevel.getBlockState(pPos.south()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
-                    pLevel.getBlockState(pPos.south().south()).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
-                return pPos.south();
-            }
+        BlockPos blockPos0 = pPos.relative(axis, 2);
+        BlockPos blockPos1 = pPos.relative(axis, 1);
+        BlockPos blockPos2 = pPos.relative(axis, -1);
+        BlockPos blockPos3 = pPos.relative(axis, -2);
+
+        if (pLevel.getBlockState(blockPos0).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
+                pLevel.getBlockState(blockPos1).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
+            return pPos.relative(axis, 1);
+        } if (pLevel.getBlockState(blockPos1).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
+                pLevel.getBlockState(blockPos2).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
+            return pPos;
+        } if (pLevel.getBlockState(blockPos2).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()) &&
+                pLevel.getBlockState(blockPos3).is(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get())) {
+            return pPos.relative(axis, -1);
         }
 
         return pPos;

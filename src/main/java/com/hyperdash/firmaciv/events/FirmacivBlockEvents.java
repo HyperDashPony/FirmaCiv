@@ -43,9 +43,9 @@ public final class FirmacivBlockEvents {
                     Block thisBlock = event.getState().getBlock();
                     BlockPos thisBlockPos = event.getPos();
                     LevelAccessor world = event.getWorld();
-                    Direction.Axis rotatedirs = event.getState().getValue(BlockStateProperties.AXIS);
+                    Direction.Axis axis = event.getState().getValue(BlockStateProperties.AXIS);
 
-                    if (CanoeComponentBlock.isValidCanoeShape(world, thisBlock, thisBlockPos, rotatedirs)) {
+                    if (CanoeComponentBlock.isValidCanoeShape(world, thisBlock, thisBlockPos)) {
                         world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 
                         world.destroyBlock(thisBlockPos, false);
@@ -53,7 +53,7 @@ public final class FirmacivBlockEvents {
                         Block newblock = FirmacivBlocks.CANOE_COMPONENT_BLOCK.get();
                         newblock.defaultBlockState().setValue(AXIS, Direction.Axis.Z);
 
-                        if(rotatedirs == Direction.Axis.X){
+                        if(axis == Direction.Axis.X){
                             world.setBlock(thisBlockPos, newblock.defaultBlockState().setValue(AXIS, Direction.Axis.X).setValue(FACING, Direction.WEST), 2);
                         } else {
                             world.setBlock(thisBlockPos, newblock.defaultBlockState().setValue(AXIS, Direction.Axis.Z), 2);
