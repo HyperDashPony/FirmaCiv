@@ -3,7 +3,7 @@ package com.hyperdash.firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.item.ModItems;
+import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -38,7 +38,7 @@ public class Firmaciv
         // Register the setup method for modloading
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModItems.register(eventBus);
+        FirmacivItems.register(eventBus);
         FirmacivBlocks.register(eventBus);
         FirmacivEntities.ENTITY_TYPES.register(eventBus);
 

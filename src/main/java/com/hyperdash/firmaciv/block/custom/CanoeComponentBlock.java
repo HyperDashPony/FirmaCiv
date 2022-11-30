@@ -37,11 +37,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class CanoeComponentBlock extends HorizontalDirectionalBlock {
-
-
-
-
-
     @Nullable
     public static BlockPattern canoeFull;
     @Nullable
@@ -50,6 +45,8 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     private BlockPattern canoeMissingOutsideRight;
     @Nullable
     private BlockPattern canoeMissingOutsideLeft;
+
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;

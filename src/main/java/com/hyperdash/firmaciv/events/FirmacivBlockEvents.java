@@ -59,7 +59,6 @@ public final class FirmacivBlockEvents {
 
             }
 
-            //event.getState().getBlock().
         }
 
 
