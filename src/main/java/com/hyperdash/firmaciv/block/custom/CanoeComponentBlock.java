@@ -100,7 +100,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     }
 
     public static boolean isValidCanoeShape(LevelAccessor world, Block thisBlock, BlockPos thisBlockPos, Direction.Axis rotatedirs){
-        
+
         boolean validCanoeShape = false;
 
         Direction.Axis axis = world.getBlockState(thisBlockPos).getValue(AXIS);
