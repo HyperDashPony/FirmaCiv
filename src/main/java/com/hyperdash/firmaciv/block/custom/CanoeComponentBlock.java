@@ -211,6 +211,8 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()).setValue(AXIS, pContext.getHorizontalDirection().getAxis());
     }
 
+
+
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING);
         pBuilder.add(AXIS);

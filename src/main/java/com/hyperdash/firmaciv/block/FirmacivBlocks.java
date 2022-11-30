@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.block;
 
-import com.hyperdash.firmaciv.FirmaCiv;
+import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.item.ModItems;
 import net.minecraft.world.item.BlockItem;
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 public class FirmacivBlocks {
     public static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, FirmaCiv.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.BLOCKS, Firmaciv.MOD_ID);
 
     public static final RegistryObject<Block> CANOE_COMPONENT_BLOCK = registerBlock("canoe_component_block",
             () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.CARVED_PUMPKIN).noOcclusion()),

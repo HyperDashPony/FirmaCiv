@@ -1,37 +1,22 @@
 package com.hyperdash.firmaciv.entity.FirmacivBoatRenderer;
 
-import com.google.common.collect.ImmutableMap;
-import com.hyperdash.firmaciv.FirmaCiv;
+import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import net.dries007.tfc.TerraFirmaCraft;
-import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.tutorial.Tutorial;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
-
-import java.util.Map;
-import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
@@ -39,7 +24,7 @@ public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final ResourceLocation BOAT_TEXTURE =
-            new ResourceLocation(FirmaCiv.MOD_ID, "textures/block/canoe_component_side.png");
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/block/canoe_component_side.png");
 
     private final CanoeEntityModel boatModel;
 

@@ -3,7 +3,7 @@ package com.hyperdash.firmaciv.entity.custom.entitymodel;// Made with Blockbench
 // Paste this class into your mod and generate all required imports
 
 
-import com.hyperdash.firmaciv.FirmaCiv;
+import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(FirmaCiv.MOD_ID, "canoe_entity"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "canoe_entity"), "main");
 	private final ModelPart middle;
 	private final ModelPart end;
 	private final ModelPart end2;
