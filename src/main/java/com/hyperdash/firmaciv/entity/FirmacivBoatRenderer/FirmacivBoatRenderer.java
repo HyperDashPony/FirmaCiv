@@ -9,6 +9,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -26,11 +27,11 @@ public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
     private static final ResourceLocation BOAT_TEXTURE =
             new ResourceLocation(Firmaciv.MOD_ID, "textures/block/canoe_component_side.png");
 
-    private final CanoeEntityModel boatModel;
+    private final CanoeEntityModel canoeModel;
 
     public FirmacivBoatRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
-        boatModel = new CanoeEntityModel<>();
+        canoeModel = new CanoeEntityModel<>();
         this.shadowRadius = 0.7f;
     }
 
@@ -58,9 +59,14 @@ public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
         pMatrixStack.translate(0.0f, 1.0625f, 0f);
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(0.0F));
-        this.boatModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(this.boatModel.renderType(getTextureLocation(pEntity)));
-        this.boatModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.canoeModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
+        VertexConsumer vertexconsumer = pBuffer.getBuffer(this.canoeModel.renderType(getTextureLocation(pEntity)));
+        this.canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
+        if (!pEntity.isUnderWater()) {
+            VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
+            canoeModel.getWaterocclusion().render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
 
         pMatrixStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
