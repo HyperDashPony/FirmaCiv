@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir"
+    },
+    "facing=south": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir",
+      "y": 270
+    }
+  }
+}
