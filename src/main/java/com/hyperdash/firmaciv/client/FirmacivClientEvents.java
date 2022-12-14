@@ -19,7 +19,8 @@ public class FirmacivClientEvents {
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
-        ItemBlockRenderTypes.setRenderLayer(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(FirmacivBlocks.CANOE_COMPONENT_BLOCKS.get(), RenderType.cutout());
+
         EntityRenderers.register(FirmacivEntities.CANOE_ENTITY.get(), FirmacivBoatRenderer::new);
 
     }

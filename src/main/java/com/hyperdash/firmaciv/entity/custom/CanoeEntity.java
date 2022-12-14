@@ -24,7 +24,7 @@ public class CanoeEntity extends FirmacivBoatEntity{
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get());
+        return null;
     }
 
 }

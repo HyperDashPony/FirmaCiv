@@ -17,8 +17,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.AXIS;
-import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.FACING;
+import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.*;
 
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class FirmacivBlockEvents {
@@ -31,26 +30,26 @@ public final class FirmacivBlockEvents {
             if(event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE)){
                 if(event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()){
 
-                    Block thisBlock = event.getState().getBlock();
+                    Block strippedLogBlock = event.getState().getBlock();
                     BlockPos thisBlockPos = event.getPos();
                     LevelAccessor world = event.getWorld();
                     Direction.Axis axis = event.getState().getValue(BlockStateProperties.AXIS);
 
-                    if (CanoeComponentBlock.isValidCanoeShape(world, thisBlock, thisBlockPos)) {
+                    if (CanoeComponentBlock.isValidCanoeShape(world, strippedLogBlock, thisBlockPos)) {
                         world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 
                         world.destroyBlock(thisBlockPos, false);
 
-                        Block newblock = FirmacivBlocks.CANOE_COMPONENT_BLOCK.get();
-                        newblock.defaultBlockState().setValue(AXIS, Direction.Axis.Z);
+                        Block canoeComponentBlock = getByStripped(strippedLogBlock);
+                        canoeComponentBlock.defaultBlockState().setValue(AXIS, Direction.Axis.Z);
 
                         if(axis == Direction.Axis.X){
-                            world.setBlock(thisBlockPos, newblock.defaultBlockState().setValue(AXIS, Direction.Axis.X).setValue(FACING, Direction.WEST), 2);
+                            world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState().setValue(AXIS, Direction.Axis.X).setValue(FACING, Direction.WEST), 2);
                         } else {
-                            world.setBlock(thisBlockPos, newblock.defaultBlockState().setValue(AXIS, Direction.Axis.Z), 2);
+                            world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState().setValue(AXIS, Direction.Axis.Z).setValue(FACING, Direction.NORTH), 2);
                         }
 
-                        CanoeComponentBlock.spawnCanoeWithAxe(event.getPlayer().getLevel(), thisBlockPos);
+                        CanoeComponentBlock.spawnCanoeWithAxe(event.getPlayer().getLevel(), thisBlockPos, strippedLogBlock);
 
 
                     }
