@@ -26,6 +26,8 @@ public final class FirmacivBlockEvents {
 
     @SubscribeEvent
     public static void registerToolModificationEvents(BlockEvent.BlockToolModificationEvent event){
+
+
         if(event.getToolAction() == ToolActions.AXE_STRIP) {
             if(event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE)){
                 if(event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()){
