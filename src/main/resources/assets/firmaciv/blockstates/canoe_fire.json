@@ -1,0 +1,21 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "up": "false",
+        "north": "false",
+        "west": "false",
+        "south": "false",
+        "east": "false"
+      },
+      "apply": [
+        {
+          "model": "minecraft:block/fire_floor0"
+        },
+        {
+          "model": "minecraft:block/fire_floor1"
+        }
+      ]
+    }
+  ]
+}

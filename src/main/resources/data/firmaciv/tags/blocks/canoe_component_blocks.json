@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "firmaciv:canoe_component_block/douglas_fir",
+    "firmaciv:canoe_component_block/pine",
+    "firmaciv:canoe_component_block/chestnut",
+    "firmaciv:canoe_component_block/spruce",
+    "firmaciv:canoe_component_block/aspen",
+    "firmaciv:canoe_component_block/kapok",
+    "firmaciv:canoe_component_block/rosewood",
+    "firmaciv:canoe_component_block/white_cedar",
+    "firmaciv:canoe_component_block/willow"
+  ]
+}

@@ -18,6 +18,8 @@ public class FirmacivTags {
 
         public static final TagKey<Block> CAN_MAKE_CANOE = create("can_make_canoe");
 
+        public static final TagKey<Block> CANOE_COMPONENT_BLOCKS = create("canoe_component_blocks");
+
         /*
         private static TagKey<Block> create(String id) {
             return TagKey.create(Registry.BLOCK_REGISTRY, identifier(id));
@@ -28,7 +30,7 @@ public class FirmacivTags {
         }
 
         public static TagKey<Block> create(String id) {
-            return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("firmaciv","can_make_canoe"));
+            return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("firmaciv",id));
         }
 
         public Blocks() {

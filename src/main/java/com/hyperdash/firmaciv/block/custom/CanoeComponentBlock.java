@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.block.custom;
 
+import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -70,18 +72,13 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
 
     @Nullable
     public static BlockPattern canoeFull;
-    @Nullable
-    private BlockPattern canoeMissingInside;
-    @Nullable
-    private BlockPattern canoeMissingOutsideRight;
-    @Nullable
-    private BlockPattern canoeMissingOutsideLeft;
 
 
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
+    public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED_11;
     @Override
     public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
         return true;
@@ -110,7 +107,8 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     public CanoeComponentBlock(Properties properties, Supplier<? extends Block> strippedBlock)
     {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(AXIS, Direction.Axis.Z));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
+                .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1));
         this.strippedBlock = strippedBlock;
     }
 
@@ -249,6 +247,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING);
         pBuilder.add(AXIS);
+        pBuilder.add(CANOE_CARVED);
     }
 
     private static BlockPattern createCanoeFull(Block canoeComponentBlock) {
@@ -258,35 +257,5 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
         return canoeFull;
     }
 
-
-    /*
-    private BlockPattern getOrCreateCanoeMissingInside() {
-        if (this.canoeMissingInside == null) {
-            this.canoeMissingInside = BlockPatternBuilder.start().aisle("#", " ", "#").where('#',
-                    BlockInWorld.hasState(BlockStatePredicate.forBlock(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
-        }
-
-        return this.canoeMissingInside;
-    }
-
-    private BlockPattern getOrCreateCanoeMissingOutsideRight() {
-        if (this.canoeMissingOutsideRight == null) {
-            this.canoeMissingOutsideRight = BlockPatternBuilder.start().aisle("#", "#", " ").where('#',
-                    BlockInWorld.hasState(BlockStatePredicate.forBlock(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
-        }
-
-        return this.canoeMissingOutsideRight;
-    }
-
-    private BlockPattern getOrCreateCanoeMissingOutsideLeft() {
-        if (this.canoeMissingOutsideLeft == null) {
-            this.canoeMissingOutsideLeft = BlockPatternBuilder.start().aisle(" ", "#", "#").where('#',
-                    BlockInWorld.hasState(BlockStatePredicate.forBlock(FirmacivBlocks.CANOE_COMPONENT_BLOCK.get()))).build();
-        }
-
-        return this.canoeMissingOutsideLeft;
-    }
-
-     */
 
 }

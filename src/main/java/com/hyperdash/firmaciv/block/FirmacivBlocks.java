@@ -9,9 +9,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,11 +28,15 @@ public class FirmacivBlocks {
             Helpers.mapOfKeys(CanoeComponentBlock.CanoeWoodType.class, canoeComponent -> registerBlockWithoutItem("canoe_component_block/" + canoeComponent.name().toLowerCase(Locale.ROOT),
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(), canoeComponent.stripped)));
 
-    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
+    private static <T extends Block> RegistryObject<T> registerBlockWithItem(String name, Supplier<T> block, CreativeModeTab tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn, tab);
         return toReturn;
     }
+
+    public static final RegistryObject<Block> CANOE_FIRE = registerBlockWithItem("canoe_fire",
+            () -> new FireBlock(BlockBehaviour.Properties.copy(Blocks.FIRE)),
+            CreativeModeTab.TAB_TRANSPORTATION);
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
