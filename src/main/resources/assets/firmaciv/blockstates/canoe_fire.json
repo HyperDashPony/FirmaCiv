@@ -10,10 +10,10 @@
       },
       "apply": [
         {
-          "model": "minecraft:block/fire_floor0"
+          "model": "firmaciv:block/canoe_fire_model"
         },
         {
-          "model": "minecraft:block/fire_floor1"
+          "model": "firmaciv:block/canoe_fire_model"
         }
       ]
     }

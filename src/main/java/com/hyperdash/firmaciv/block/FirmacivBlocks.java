@@ -2,6 +2,7 @@ package com.hyperdash.firmaciv.block;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
+import com.hyperdash.firmaciv.block.custom.CanoeFire;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.world.item.BlockItem;
@@ -35,7 +36,7 @@ public class FirmacivBlocks {
     }
 
     public static final RegistryObject<Block> CANOE_FIRE = registerBlockWithItem("canoe_fire",
-            () -> new FireBlock(BlockBehaviour.Properties.copy(Blocks.FIRE)),
+            () -> new CanoeFire(BlockBehaviour.Properties.copy(Blocks.FIRE)),
             CreativeModeTab.TAB_TRANSPORTATION);
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {

@@ -5,6 +5,7 @@ import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,6 +14,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -33,7 +36,6 @@ public final class FirmacivBlockEvents {
 
         if(event.getToolAction() == ToolActions.AXE_STRIP && event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE)) {
             if(event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()){
-
                 convertLogToCanoeComponent(event);
 
             }
@@ -58,9 +60,9 @@ public final class FirmacivBlockEvents {
 
         if(canoeComponentBlockState.getValue(CANOE_CARVED) < 11){
             world.setBlock(thisBlockPos, event.getState().setValue(CANOE_CARVED, nextCanoeCarvedState), 2);
+            //world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, thisBlockPos, 10);
             world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
-
 
     }
 

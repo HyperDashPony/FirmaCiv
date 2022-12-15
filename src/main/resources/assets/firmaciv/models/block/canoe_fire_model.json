@@ -1,0 +1,46 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "#fire",
+		"fire": "minecraft:block/fire_1"
+	},
+	"elements": [
+		{
+			"from": [0, -9, 8.8],
+			"to": [16, 13.4, 8.8],
+			"shade": false,
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, -1, 8], "rescale": true},
+			"faces": {
+				"south": {"uv": [0, 0, 16, 16], "texture": "#fire"}
+			}
+		},
+		{
+			"from": [0, -9, 7.2],
+			"to": [16, 13.4, 7.2],
+			"shade": false,
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, -1, 8], "rescale": true},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#fire"}
+			}
+		},
+		{
+			"from": [8.8, -9, 0],
+			"to": [8.8, 13.4, 16],
+			"shade": false,
+			"rotation": {"angle": -22.5, "axis": "z", "origin": [8, -1, 8], "rescale": true},
+			"faces": {
+				"west": {"uv": [0, 0, 16, 16], "texture": "#fire"}
+			}
+		},
+		{
+			"from": [7.2, -9, 0],
+			"to": [7.2, 13.4, 16],
+			"shade": false,
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [8, -1, 8], "rescale": true},
+			"faces": {
+				"east": {"uv": [0, 0, 16, 16], "texture": "#fire"}
+			}
+		}
+	]
+}

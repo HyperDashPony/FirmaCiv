@@ -68,12 +68,6 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
         }
     }
 
-
-
-    @Nullable
-    public static BlockPattern canoeFull;
-
-
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
