@@ -26,8 +26,8 @@ public class FirmacivBlocks {
             DeferredRegister.create(ForgeRegistries.BLOCKS, Firmaciv.MOD_ID);
 
     public static final Map<CanoeComponentBlock.CanoeWoodType, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS =
-            Helpers.mapOfKeys(CanoeComponentBlock.CanoeWoodType.class, canoeComponent -> registerBlockWithoutItem("canoe_component_block/" + canoeComponent.name().toLowerCase(Locale.ROOT),
-                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(), canoeComponent.stripped)));
+            Helpers.mapOfKeys(CanoeComponentBlock.CanoeWoodType.class, canoeWoodType -> registerBlockWithoutItem("canoe_component_block/" + canoeWoodType.name().toLowerCase(Locale.ROOT),
+                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(), canoeWoodType.stripped, canoeWoodType.lumber)));
 
     private static <T extends Block> RegistryObject<T> registerBlockWithItem(String name, Supplier<T> block, CreativeModeTab tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

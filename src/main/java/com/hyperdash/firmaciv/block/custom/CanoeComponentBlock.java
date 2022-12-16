@@ -1,19 +1,32 @@
 package com.hyperdash.firmaciv.block.custom;
 
+import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
+import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -24,12 +37,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -39,31 +54,52 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
 
     public enum CanoeWoodType
     {
-        ACACIA(TFCBlocks.WOODS.get(Wood.ACACIA).get(Wood.BlockType.STRIPPED_LOG)),
-        ASH(TFCBlocks.WOODS.get(Wood.ASH).get(Wood.BlockType.STRIPPED_LOG)),
-        ASPEN(TFCBlocks.WOODS.get(Wood.ASPEN).get(Wood.BlockType.STRIPPED_LOG)),
-        BIRCH(TFCBlocks.WOODS.get(Wood.BIRCH).get(Wood.BlockType.STRIPPED_LOG)),
-        BLACKWOOD(TFCBlocks.WOODS.get(Wood.BLACKWOOD).get(Wood.BlockType.STRIPPED_LOG)),
-        CHESTNUT(TFCBlocks.WOODS.get(Wood.CHESTNUT).get(Wood.BlockType.STRIPPED_LOG)),
-        DOUGLAS_FIR(TFCBlocks.WOODS.get(Wood.DOUGLAS_FIR).get(Wood.BlockType.STRIPPED_LOG)),
-        HICKORY(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.STRIPPED_LOG)),
-        KAPOK(TFCBlocks.WOODS.get(Wood.KAPOK).get(Wood.BlockType.STRIPPED_LOG)),
-        MAPLE(TFCBlocks.WOODS.get(Wood.MAPLE).get(Wood.BlockType.STRIPPED_LOG)),
-        OAK(TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.STRIPPED_LOG)),
-        PALM(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.STRIPPED_LOG)),
-        PINE(TFCBlocks.WOODS.get(Wood.PINE).get(Wood.BlockType.STRIPPED_LOG)),
-        ROSEWOOD(TFCBlocks.WOODS.get(Wood.ROSEWOOD).get(Wood.BlockType.STRIPPED_LOG)),
-        SEQUOIA(TFCBlocks.WOODS.get(Wood.SEQUOIA).get(Wood.BlockType.STRIPPED_LOG)),
-        SPRUCE(TFCBlocks.WOODS.get(Wood.SPRUCE).get(Wood.BlockType.STRIPPED_LOG)),
-        SYCAMORE(TFCBlocks.WOODS.get(Wood.SYCAMORE).get(Wood.BlockType.STRIPPED_LOG)),
-        WHITE_CEDAR(TFCBlocks.WOODS.get(Wood.WHITE_CEDAR).get(Wood.BlockType.STRIPPED_LOG)),
-        WILLOW(TFCBlocks.WOODS.get(Wood.WILLOW).get(Wood.BlockType.STRIPPED_LOG));
+        ACACIA(TFCBlocks.WOODS.get(Wood.ACACIA).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.ACACIA)),
+        ASH(TFCBlocks.WOODS.get(Wood.ASH).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.ASH)),
+        ASPEN(TFCBlocks.WOODS.get(Wood.ASPEN).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.ASPEN)),
+        BIRCH(TFCBlocks.WOODS.get(Wood.BIRCH).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.BIRCH)),
+        BLACKWOOD(TFCBlocks.WOODS.get(Wood.BLACKWOOD).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.BLACKWOOD)),
+        CHESTNUT(TFCBlocks.WOODS.get(Wood.CHESTNUT).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.CHESTNUT)),
+        DOUGLAS_FIR(TFCBlocks.WOODS.get(Wood.DOUGLAS_FIR).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.DOUGLAS_FIR)),
+        HICKORY(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.HICKORY)),
+        KAPOK(TFCBlocks.WOODS.get(Wood.KAPOK).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.KAPOK)),
+        MAPLE(TFCBlocks.WOODS.get(Wood.MAPLE).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.MAPLE)),
+        OAK(TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.OAK)),
+        PALM(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.PALM)),
+        PINE(TFCBlocks.WOODS.get(Wood.PINE).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.PINE)),
+        ROSEWOOD(TFCBlocks.WOODS.get(Wood.ROSEWOOD).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.ROSEWOOD)),
+        SEQUOIA(TFCBlocks.WOODS.get(Wood.SEQUOIA).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.SEQUOIA)),
+        SPRUCE(TFCBlocks.WOODS.get(Wood.SPRUCE).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.SPRUCE)),
+        SYCAMORE(TFCBlocks.WOODS.get(Wood.SYCAMORE).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.SYCAMORE)),
+        WHITE_CEDAR(TFCBlocks.WOODS.get(Wood.WHITE_CEDAR).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.WHITE_CEDAR)),
+        WILLOW(TFCBlocks.WOODS.get(Wood.WILLOW).get(Wood.BlockType.STRIPPED_LOG),
+                TFCItems.LUMBER.get(Wood.WILLOW));
 
 
         public final Supplier<? extends Block> stripped;
+        public final Supplier<? extends Item> lumber;
 
-        CanoeWoodType(Supplier<? extends Block> stripped)
+        CanoeWoodType(Supplier<? extends Block> stripped, Supplier<? extends Item> lumber)
         {
+            this.lumber = lumber;
             this.stripped = stripped;
         }
     }
@@ -88,22 +124,39 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
         return 5;
     }
 
-    private static final VoxelShape SHAPE = Stream.of(
+    private static final VoxelShape SHAPE_FINAL = Stream.of(
             Block.box(0,0,0,16,9,16))
             .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
+    private static final VoxelShape SHAPE_1 = Stream.of(
+                    Block.box(0,0,0,16,16,16))
+            .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
     public VoxelShape getShape(BlockState pstate, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return SHAPE;
+
+        int canoeCarvedState = pstate.getValue(CANOE_CARVED);
+
+        switch(canoeCarvedState){
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return SHAPE_1;
+            default:
+                return SHAPE_FINAL;
+        }
     }
 
     public final Supplier<? extends Block> strippedBlock;
+    public final Supplier<? extends Item> lumberItem;
 
-    public CanoeComponentBlock(Properties properties, Supplier<? extends Block> strippedBlock)
+    public CanoeComponentBlock(Properties properties, Supplier<? extends Block> strippedBlock, Supplier<? extends Item> lumberItem)
     {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
                 .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1));
         this.strippedBlock = strippedBlock;
+        this.lumberItem = lumberItem;
     }
 
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
@@ -117,6 +170,16 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
         return CANOE_COMPONENT_BLOCKS.values().stream()
                 .filter(registryObject -> registryObject.get().strippedBlock.get() == strippedLogBlock)
                 .map(registryObject -> registryObject.get()).findFirst().get();
+    }
+
+    public Item getLumber()
+    {
+        return lumberItem.get();
+    }
+
+    public Block getStrippedLog()
+    {
+        return strippedBlock.get();
     }
 
     public static void spawnCanoeWithAxe(Level pLevel, BlockPos pPos, Block strippedLogBlock){

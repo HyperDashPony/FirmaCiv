@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 
@@ -40,6 +41,16 @@ public class FirmacivTags {
 
     public static class Items {
 
+        public static final TagKey<Item> SAWS = getFromTFC("saws");
+
+        public static final TagKey<Item> AXES = getFromTFC("axes");
+
+        public static TagKey<Item> getFromTFC(String id) {
+            return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("tfc",id));
+        }
+        public static TagKey<Item> create(String id) {
+            return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("firmaciv",id));
+        }
     }
 
 

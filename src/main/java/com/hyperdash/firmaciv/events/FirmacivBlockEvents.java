@@ -5,13 +5,19 @@ import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -34,7 +40,8 @@ public final class FirmacivBlockEvents {
     @SubscribeEvent
     public static void registerToolModificationEvents(BlockEvent.BlockToolModificationEvent event){
 
-        if(event.getToolAction() == ToolActions.AXE_STRIP && event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE)) {
+        if(event.getToolAction() == ToolActions.AXE_STRIP && event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE) &&
+                event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS)) {
             if(event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()){
                 convertLogToCanoeComponent(event);
 
@@ -51,6 +58,7 @@ public final class FirmacivBlockEvents {
     }
 
     private static void processCanoeComponent(BlockEvent.BlockToolModificationEvent event){
+
         Block canoeComponentBlock = event.getState().getBlock();
         BlockState canoeComponentBlockState = event.getState();
         BlockPos thisBlockPos = event.getPos();
@@ -58,10 +66,29 @@ public final class FirmacivBlockEvents {
 
         int nextCanoeCarvedState = event.getState().getValue(CANOE_CARVED) + 1;
 
-        if(canoeComponentBlockState.getValue(CANOE_CARVED) < 11){
+        if(canoeComponentBlockState.getValue(CANOE_CARVED) < 5 &&
+                event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS) ){
+
             world.setBlock(thisBlockPos, event.getState().setValue(CANOE_CARVED, nextCanoeCarvedState), 2);
-            //world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, thisBlockPos, 10);
+            event.getPlayer().level.addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
+            event.getPlayer().getItemInHand(event.getContext().getHand()).getUseAnimation();
             world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+            if(nextCanoeCarvedState == 5){
+                Item lumber = ((CanoeComponentBlock)canoeComponentBlock).getLumber();
+                Block.dropResources(canoeComponentBlockState, world, thisBlockPos.above(), null);
+                //Block.dropResources(canoeComponentBlockState, event.getPlayer().getLevel(), thisBlockPos, null, event.getPlayer(), Item);
+
+            }
+
+        } else if(canoeComponentBlockState.getValue(CANOE_CARVED) >= 5 && canoeComponentBlockState.getValue(CANOE_CARVED) < 11 &&
+                event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.AXES) ){
+
+            world.setBlock(thisBlockPos, event.getState().setValue(CANOE_CARVED, nextCanoeCarvedState), 2);
+            event.getPlayer().level.addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
+            event.getPlayer().getItemInHand(event.getContext().getHand()).getUseAnimation();
+            world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+
         }
 
     }
