@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv;
 
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
+import com.hyperdash.firmaciv.block.entity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.item.FirmacivItems;
@@ -41,6 +42,7 @@ public class Firmaciv
         FirmacivItems.register(eventBus);
         FirmacivBlocks.register(eventBus);
         FirmacivEntities.ENTITY_TYPES.register(eventBus);
+        FirmacivBlockEntities.register(eventBus);
 
         eventBus.addListener(this::setup);
 

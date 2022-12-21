@@ -33,10 +33,7 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -109,6 +106,8 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
     public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED_11;
+
+    public static final BooleanProperty CANOE_HOLLOWED = FirmacivBlockStateProperties.CANOE_HOLLOWED;
     @Override
     public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
         return true;
@@ -154,7 +153,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
     {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
-                .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1));
+                .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1).setValue(CANOE_HOLLOWED, false));
         this.strippedBlock = strippedBlock;
         this.lumberItem = lumberItem;
     }
@@ -305,6 +304,7 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
         pBuilder.add(FACING);
         pBuilder.add(AXIS);
         pBuilder.add(CANOE_CARVED);
+        pBuilder.add(CANOE_HOLLOWED);
     }
 
     private static BlockPattern createCanoeFull(Block canoeComponentBlock) {
@@ -313,6 +313,5 @@ public class CanoeComponentBlock extends HorizontalDirectionalBlock {
 
         return canoeFull;
     }
-
 
 }

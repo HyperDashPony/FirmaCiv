@@ -22,18 +22,13 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class FirmacivBlocks {
-    public static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, Firmaciv.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Firmaciv.MOD_ID);
 
     public static final Map<CanoeComponentBlock.CanoeWoodType, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS =
             Helpers.mapOfKeys(CanoeComponentBlock.CanoeWoodType.class, canoeWoodType -> registerBlockWithoutItem("canoe_component_block/" + canoeWoodType.name().toLowerCase(Locale.ROOT),
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(), canoeWoodType.stripped, canoeWoodType.lumber)));
 
-    private static <T extends Block> RegistryObject<T> registerBlockWithItem(String name, Supplier<T> block, CreativeModeTab tab) {
-        RegistryObject<T> toReturn = BLOCKS.register(name, block);
-        registerBlockItem(name, toReturn, tab);
-        return toReturn;
-    }
+
 
     public static final RegistryObject<Block> CANOE_FIRE = registerBlockWithItem("canoe_fire",
             () -> new CanoeFire(BlockBehaviour.Properties.copy(Blocks.FIRE)),
@@ -41,6 +36,12 @@ public class FirmacivBlocks {
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
+        return toReturn;
+    }
+
+    private static <T extends Block> RegistryObject<T> registerBlockWithItem(String name, Supplier<T> block, CreativeModeTab tab) {
+        RegistryObject<T> toReturn = BLOCKS.register(name, block);
+        registerBlockItem(name, toReturn, tab);
         return toReturn;
     }
 

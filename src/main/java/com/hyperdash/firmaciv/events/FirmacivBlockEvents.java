@@ -75,7 +75,6 @@ public final class FirmacivBlockEvents {
             world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
             if(nextCanoeCarvedState == 5){
-                Item lumber = ((CanoeComponentBlock)canoeComponentBlock).getLumber();
                 Block.dropResources(canoeComponentBlockState, world, thisBlockPos.above(), null);
                 //Block.dropResources(canoeComponentBlockState, event.getPlayer().getLevel(), thisBlockPos, null, event.getPlayer(), Item);
 
@@ -112,12 +111,14 @@ public final class FirmacivBlockEvents {
                 world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState()
                         .setValue(AXIS, Direction.Axis.X)
                         .setValue(FACING, Direction.WEST)
-                                .setValue(CANOE_CARVED, 1), 2);
+                        .setValue(CANOE_CARVED, 1)
+                        .setValue(CANOE_HOLLOWED, false), 2);
             } else {
                 world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState()
                         .setValue(AXIS, Direction.Axis.Z)
                         .setValue(FACING, Direction.NORTH)
-                                .setValue(CANOE_CARVED, 1), 2);
+                        .setValue(CANOE_CARVED, 1)
+                        .setValue(CANOE_HOLLOWED, false), 2);
             }
 
             //CanoeComponentBlock.spawnCanoeWithAxe(event.getPlayer().getLevel(), thisBlockPos, strippedLogBlock);
