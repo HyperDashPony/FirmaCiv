@@ -22,6 +22,10 @@ public class FirmacivBlockStateProperties {
 
     public static final IntegerProperty CANOE_CARVED_10;
     public static final IntegerProperty CANOE_CARVED_11;
+    public static final IntegerProperty CANOE_CARVED_12; // lit
+    public static final IntegerProperty CANOE_CARVED_13; // hollowed
+    public static final IntegerProperty CANOE_CARVED_14;
+    public static final IntegerProperty CANOE_CARVED_15;
 
     public static final BooleanProperty CANOE_HOLLOWED;
     public static final BooleanProperty CANOE_LIT;
@@ -48,6 +52,10 @@ public class FirmacivBlockStateProperties {
         CANOE_CARVED_9 = IntegerProperty.create("canoe_carved", 0, 9);
         CANOE_CARVED_10 = IntegerProperty.create("canoe_carved", 0, 10);
         CANOE_CARVED_11 = IntegerProperty.create("canoe_carved", 0, 11);
+        CANOE_CARVED_12 = IntegerProperty.create("canoe_carved", 0, 12);
+        CANOE_CARVED_13 = IntegerProperty.create("canoe_carved", 0, 13);
+        CANOE_CARVED_14 = IntegerProperty.create("canoe_carved", 0, 14);
+        CANOE_CARVED_15 = IntegerProperty.create("canoe_carved", 0, 15);
 
         CANOE_HOLLOWED = BooleanProperty.create("canoe_hollowed");
         CANOE_LIT = BooleanProperty.create("canoe_lit");

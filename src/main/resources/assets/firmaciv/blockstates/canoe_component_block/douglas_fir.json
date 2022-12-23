@@ -33,6 +33,12 @@
     "canoe_carved=11,facing=north": {
       "model": "firmaciv:block/canoe_component_block/douglas_fir_11"
     },
+    "canoe_carved=12,facing=north": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_12"
+    },
+    "canoe_carved=13,facing=north": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_13"
+    },
 
 
 
@@ -69,6 +75,12 @@
     },
     "canoe_carved=11,facing=south": {
       "model": "firmaciv:block/canoe_component_block/douglas_fir_11"
+    },
+    "canoe_carved=12,facing=south": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_12"
+    },
+    "canoe_carved=13,facing=south": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_13"
     },
 
 
@@ -116,6 +128,14 @@
       "model": "firmaciv:block/canoe_component_block/douglas_fir_11",
       "y": 90
     },
+    "canoe_carved=12,facing=east": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_12",
+      "y": 90
+    },
+    "canoe_carved=13,facing=east": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_13",
+      "y": 90
+    },
 
 
 
@@ -161,6 +181,14 @@
     },
     "canoe_carved=11,facing=west": {
       "model": "firmaciv:block/canoe_component_block/douglas_fir_11",
+      "y": 90
+    },
+    "canoe_carved=12,facing=west": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_12",
+      "y": 90
+    },
+    "canoe_carved=13,facing=west": {
+      "model": "firmaciv:block/canoe_component_block/douglas_fir_13",
       "y": 90
     }
   }

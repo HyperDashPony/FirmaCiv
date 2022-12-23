@@ -24,8 +24,7 @@ public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final ResourceLocation BOAT_TEXTURE =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/block/canoe_component_side.png");
+    private static final ResourceLocation BOAT_TEXTURE = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
 
     private final CanoeEntityModel canoeModel;
 

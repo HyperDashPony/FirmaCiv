@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.block.entity;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
+import com.hyperdash.firmaciv.block.custom.CanoeFire;
 import com.hyperdash.firmaciv.block.entity.custom.CanoeComponentBlockEntity;
 import net.dries007.tfc.common.blockentities.*;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -23,6 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.rmi.registry.Registry;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -32,7 +34,8 @@ import java.util.stream.Stream;
 public class FirmacivBlockEntities {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES;
-    public static final RegistryObject<BlockEntityType<CanoeComponentBlockEntity>> CANOE_COMPONENT_BLOCK_ENTITIES;
+
+    public static final RegistryObject<BlockEntityType<CanoeComponentBlockEntity>> CANOE_COMPONENT_BLOCK_ENTITY;
 
     public FirmacivBlockEntities() {
     }
@@ -45,13 +48,18 @@ public class FirmacivBlockEntities {
         return RegistrationHelpers.register(BLOCK_ENTITIES, name, factory, blocks);
     }
 
+    public static void register(IEventBus eventBus){
+        BLOCK_ENTITIES.register(eventBus);
+    }
 
 
     static {
         BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, "tfc");
-        CANOE_COMPONENT_BLOCK_ENTITIES = register("canoe_component_block_entities", CanoeComponentBlockEntity::new, TFCBlocks.WOODS.values().stream().map((map) -> {
-            return (RegistryObject)map.get(Wood.BlockType.CHEST);
-        }));
+
+        CANOE_COMPONENT_BLOCK_ENTITY =
+                BLOCK_ENTITIES.register("canoe_component_block_entity", () ->
+                    BlockEntityType.Builder.of(CanoeComponentBlockEntity::new, (FirmacivBlocks.CANOE_COMPONENT_BLOCKS.get(CanoeComponentBlock.CanoeWoodType.DOUGLAS_FIR).get())).build(null));
+
     }
 
 

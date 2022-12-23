@@ -4,6 +4,7 @@ import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.custom.CanoeFire;
 import com.hyperdash.firmaciv.item.FirmacivItems;
+import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -26,9 +28,7 @@ public class FirmacivBlocks {
 
     public static final Map<CanoeComponentBlock.CanoeWoodType, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS =
             Helpers.mapOfKeys(CanoeComponentBlock.CanoeWoodType.class, canoeWoodType -> registerBlockWithoutItem("canoe_component_block/" + canoeWoodType.name().toLowerCase(Locale.ROOT),
-                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(), canoeWoodType.stripped, canoeWoodType.lumber)));
-
-
+                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_HYPHAE).noOcclusion().color(MaterialColor.COLOR_BROWN), canoeWoodType.stripped, canoeWoodType.lumber)));
 
     public static final RegistryObject<Block> CANOE_FIRE = registerBlockWithItem("canoe_fire",
             () -> new CanoeFire(BlockBehaviour.Properties.copy(Blocks.FIRE)),

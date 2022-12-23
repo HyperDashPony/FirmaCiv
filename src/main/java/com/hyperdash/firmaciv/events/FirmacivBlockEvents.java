@@ -4,9 +4,13 @@ import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
+import com.hyperdash.firmaciv.block.entity.custom.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import com.mojang.logging.LogUtils;
+import net.dries007.tfc.ForgeEventHandler;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,13 +26,16 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.slf4j.Logger;
 
 import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.*;
 
@@ -36,6 +43,23 @@ import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.*;
 public final class FirmacivBlockEvents {
 
     private FirmacivBlockEvents() {}
+
+    @SubscribeEvent
+    public static void registerFireStarterEvents(StartFireEvent event){
+
+        if(event.getState().is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)){
+
+            if((int)event.getState().getValue(CANOE_CARVED) == 11){
+
+                BlockEntity blockEntity = event.getPlayer().getLevel().getBlockEntity(event.getPos());
+
+                if (blockEntity instanceof CanoeComponentBlockEntity){
+                    CanoeComponentBlockEntity ccBlockEntity = (CanoeComponentBlockEntity) blockEntity;
+                    ccBlockEntity.light();
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void registerToolModificationEvents(BlockEvent.BlockToolModificationEvent event){
@@ -100,7 +124,7 @@ public final class FirmacivBlockEvents {
         Direction.Axis axis = event.getState().getValue(BlockStateProperties.AXIS);
 
         if (CanoeComponentBlock.isValidCanoeShape(world, strippedLogBlock, thisBlockPos)) {
-            world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+            world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
             world.destroyBlock(thisBlockPos, false);
 
@@ -111,14 +135,12 @@ public final class FirmacivBlockEvents {
                 world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState()
                         .setValue(AXIS, Direction.Axis.X)
                         .setValue(FACING, Direction.WEST)
-                        .setValue(CANOE_CARVED, 1)
-                        .setValue(CANOE_HOLLOWED, false), 2);
+                        .setValue(CANOE_CARVED, 1), 2);
             } else {
                 world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState()
                         .setValue(AXIS, Direction.Axis.Z)
                         .setValue(FACING, Direction.NORTH)
-                        .setValue(CANOE_CARVED, 1)
-                        .setValue(CANOE_HOLLOWED, false), 2);
+                        .setValue(CANOE_CARVED, 1), 2);
             }
 
             //CanoeComponentBlock.spawnCanoeWithAxe(event.getPlayer().getLevel(), thisBlockPos, strippedLogBlock);

@@ -4,6 +4,7 @@ import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.entity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.events.ForgeEventHandler;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;
@@ -45,7 +46,6 @@ public class Firmaciv
         FirmacivBlockEntities.register(eventBus);
 
         eventBus.addListener(this::setup);
-
         // Register the enqueueIMC method for modloading
         eventBus.addListener(this::enqueueIMC);
         // Register the processIMC method for modloading
