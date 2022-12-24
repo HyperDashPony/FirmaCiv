@@ -4,7 +4,6 @@ import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.entity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.events.ForgeEventHandler;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;

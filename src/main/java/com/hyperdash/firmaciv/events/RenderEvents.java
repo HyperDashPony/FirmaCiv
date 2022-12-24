@@ -1,10 +1,9 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivBoatRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivCanoeRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,6 +22,6 @@ public final class RenderEvents {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
-        event.registerEntityRenderer(FirmacivEntities.CANOE_ENTITY.get(), FirmacivBoatRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.CANOE_ENTITY.get(), FirmacivCanoeRenderer::new);
     }
 }

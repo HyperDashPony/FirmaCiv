@@ -1,33 +1,20 @@
 package com.hyperdash.firmaciv.block.entity.custom;
 
-import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
-import com.hyperdash.firmaciv.block.custom.CanoeFire;
 import com.hyperdash.firmaciv.block.entity.FirmacivBlockEntities;
-import com.mojang.logging.LogUtils;
-import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
-import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
-import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
-import org.slf4j.Logger;
 
-import java.util.Iterator;
-
-import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.trySpawnCanoe;
+import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.CANOE_CARVED;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
 
 public class CanoeComponentBlockEntity extends TFCBlockEntity implements ICalendarTickable {
 
@@ -53,23 +40,15 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity implements ICalend
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, CanoeComponentBlockEntity canoeBlock) {
-        Logger LOGGER = LogUtils.getLogger();
-
 
         if (canoeBlock.isLit) {
             BlockPos above = pos.above();
-            if (level.isEmptyBlock(above) || level.getBlockState(above).is(Blocks.FIRE)) {
-                //level.setBlockAndUpdate(above, FirmacivBlocks.CANOE_FIRE.get().defaultBlockState());
-            }
 
             long remainingTicks = (long)(Integer) TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlock.litTick);
 
-            LOGGER.info("remainingTicks is  " + remainingTicks);
-
             if (remainingTicks <= 0L) {
-                LOGGER.info("setting state");
                 level.setBlockAndUpdate(pos.above(), Blocks.AIR.defaultBlockState());
-                level.setBlock(pos, canoeBlock.getBlockState().setValue(CanoeComponentBlock.CANOE_CARVED, 13), 4);
+                level.setBlock(pos, canoeBlock.getBlockState().setValue(CANOE_CARVED, 13), 4);
                 canoeBlock.isLit = false;
                 CanoeComponentBlock.trySpawnCanoe(level, pos, canoeBlock.getBlockState().getBlock());
             }
@@ -83,7 +62,7 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity implements ICalend
             if (BaseFireBlock.canBePlacedAt(this.level, above, Direction.UP)) {
 
                 this.light();
-                this.level.setBlockAndUpdate(this.worldPosition, (BlockState)this.level.getBlockState(this.worldPosition).setValue(CanoeComponentBlock.CANOE_CARVED, 12));
+                this.level.setBlockAndUpdate(this.worldPosition, (BlockState)this.level.getBlockState(this.worldPosition).setValue(CANOE_CARVED, 12));
                 //this.level.setBlockAndUpdate(above, FirmacivBlocks.CANOE_FIRE.get().defaultBlockState());
 
                 return true;
@@ -95,11 +74,35 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity implements ICalend
 
     @VisibleForTesting
     public void light() {
+
+        if(this.isLit){
+            return;
+        }
+
         this.isLit = true;
         this.litTick = Calendars.SERVER.getTicks();
         this.markForBlockUpdate();
-        BlockState newState = this.getBlockState().setValue(CanoeComponentBlock.CANOE_CARVED, 12);
+        BlockState newState = this.getBlockState().setValue(CANOE_CARVED, 12);
         level.setBlock(this.getBlockPos(), newState, 4);
+
+        BlockPos pPos = this.getBlockPos();
+        Level pLevel = this.getLevel();
+
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
+
+        BlockPos blockPos1 = pPos.relative(axis, 1);
+        BlockPos blockPos2 = pPos.relative(axis, -1);
+
+        if(pLevel.getBlockEntity(blockPos1) instanceof CanoeComponentBlockEntity){
+            if(pLevel.getBlockState(blockPos1).getValue(CANOE_CARVED) == 11){
+                ((CanoeComponentBlockEntity) pLevel.getBlockEntity(blockPos1)).light();
+            }
+        }
+        if(pLevel.getBlockEntity(blockPos2) instanceof CanoeComponentBlockEntity){
+            if(pLevel.getBlockState(blockPos2).getValue(CANOE_CARVED) == 11){
+                ((CanoeComponentBlockEntity) pLevel.getBlockEntity(blockPos2)).light();
+            }
+        }
     }
 
     public long getTicksLeft() {

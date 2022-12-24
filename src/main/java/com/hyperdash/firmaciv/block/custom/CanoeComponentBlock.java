@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -130,6 +131,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         public final Supplier<? extends Block> stripped;
         public final Supplier<? extends Item> lumber;
 
+        //public final Supplier<? extends Entity> canoe;
+
         CanoeWoodType(Supplier<? extends Block> stripped, Supplier<? extends Item> lumber)
         {
             this.lumber = lumber;
@@ -175,7 +178,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
-                .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1));
+                .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1).setValue(END, false));
         this.strippedBlock = strippedBlock;
         this.lumberItem = lumberItem;
     }
@@ -194,6 +197,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         pBuilder.add(FACING);
         pBuilder.add(AXIS);
         pBuilder.add(CANOE_CARVED);
+        pBuilder.add(END);
     }
 
     public Item getLumber()
@@ -224,6 +228,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
     public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED_15;
+
+    public static final BooleanProperty END = FirmacivBlockStateProperties.END;
 
     private static final VoxelShape SHAPE_FINAL = Stream.of(
                     Block.box(0,0,0,16,9,16))
@@ -304,6 +310,68 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         }
 
         return pPos;
+    }
+
+    public static BlockState getStateForPlacement(LevelAccessor world, Block strippedLogBlock, BlockPos pPos){
+
+        Direction.Axis axis = world.getBlockState(pPos).getValue(AXIS);
+
+        Block canoeComponentBlock = getByStripped(strippedLogBlock);
+
+        BlockState finalBlockState = canoeComponentBlock.defaultBlockState().setValue(CANOE_CARVED, 1);
+        finalBlockState = finalBlockState.setValue(END,false).setValue(AXIS, axis);
+
+        if(axis == Direction.Axis.X){
+            finalBlockState = finalBlockState.setValue(FACING, Direction.WEST);
+        } else {
+            finalBlockState = finalBlockState.setValue(FACING, Direction.NORTH);
+        }
+
+        BlockPos blockPos0 = pPos.relative(axis, 2);
+        BlockPos blockPos1 = pPos.relative(axis, 1);
+        BlockPos blockPos2 = pPos.relative(axis, -1);
+        BlockPos blockPos3 = pPos.relative(axis, -2);
+
+        if ((world.getBlockState(blockPos0).is(strippedLogBlock) || world.getBlockState(blockPos0).is(canoeComponentBlock)) &&
+                (world.getBlockState(blockPos1).is(strippedLogBlock) || world.getBlockState(blockPos1).is(canoeComponentBlock))) {
+            // positive relative to axis
+            // if x, west
+            // if z, north
+            finalBlockState = finalBlockState.setValue(END,true);
+
+            if(axis == Direction.Axis.X){
+                finalBlockState = finalBlockState.setValue(FACING, Direction.WEST);
+                return finalBlockState;
+            } else {
+                finalBlockState = finalBlockState.setValue(FACING, Direction.NORTH);
+                return finalBlockState;
+            }
+
+        }
+        if ((world.getBlockState(blockPos1).is(strippedLogBlock) || world.getBlockState(blockPos1).is(canoeComponentBlock)) &&
+                (world.getBlockState(blockPos2).is(strippedLogBlock) || world.getBlockState(blockPos2).is(canoeComponentBlock))) {
+            // middle
+            return finalBlockState;
+
+        }
+        if ((world.getBlockState(blockPos2).is(strippedLogBlock) || world.getBlockState(blockPos2).is(canoeComponentBlock)) &&
+                (world.getBlockState(blockPos3).is(strippedLogBlock) || world.getBlockState(blockPos3).is(canoeComponentBlock))) {
+            // negative relative to axis
+            // if x, east
+            // if z, south
+            finalBlockState = finalBlockState.setValue(END,true);
+
+            if(axis == Direction.Axis.X){
+                finalBlockState = finalBlockState.setValue(FACING, Direction.EAST);
+                return finalBlockState;
+            } else {
+                finalBlockState = finalBlockState.setValue(FACING, Direction.SOUTH);
+                return finalBlockState;
+            }
+
+        }
+
+        return finalBlockState;
     }
 
     private static boolean areValidBlockStates(Level pLevel, BlockPos pPos, Block canoeComponentBlock){

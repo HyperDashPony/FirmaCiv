@@ -1,13 +1,20 @@
 package com.hyperdash.firmaciv.entity.FirmacivBoatRenderer;
 
+import com.google.common.collect.ImmutableMap;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import net.dries007.tfc.client.RenderHelpers;
+import net.dries007.tfc.util.Helpers;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,20 +22,44 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
+import java.util.Map;
+import java.util.stream.Stream;
+
 @OnlyIn(Dist.CLIENT)
-public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
+public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final ResourceLocation BOAT_TEXTURE = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
+    public static ModelLayerLocation boatName(String name) {
+        return RenderHelpers.modelIdentifier("boat/" + name);
+    }
 
+    private static final ResourceLocation DOUGLAS_FIR =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
+    private static final ResourceLocation PINE =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/pine.png");
+    private static final ResourceLocation CHESTNUT =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/chestnut.png");
+    private static final ResourceLocation SPRUCE =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/spruce.png");
+    private static final ResourceLocation ASPEN =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/aspen.png");
+    private static final ResourceLocation KAPOK =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/kapok.png");
+    private static final ResourceLocation ROSEWOOD =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/rosewood.png");
+    private static final ResourceLocation WHITE_CEDAR =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/white_cedar.png");
+    private static final ResourceLocation WILLOW =
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
     private final CanoeEntityModel canoeModel;
 
-    public FirmacivBoatRenderer(EntityRendererProvider.Context pContext) {
+    public FirmacivCanoeRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         canoeModel = new CanoeEntityModel<>();
         this.shadowRadius = 0.7f;
@@ -36,7 +67,6 @@ public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
 
     @Override
     public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - pEntityYaw));
@@ -73,7 +103,7 @@ public class FirmacivBoatRenderer extends EntityRenderer<CanoeEntity> {
 
     @Deprecated // forge: override getModelWithLocation to change the texture / model
     public ResourceLocation getTextureLocation(CanoeEntity pEntity) {
-        return BOAT_TEXTURE;
+        return DOUGLAS_FIR;
     }
 
 

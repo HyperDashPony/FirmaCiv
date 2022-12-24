@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.client;
 
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
-import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivBoatRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivCanoeRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -20,8 +20,7 @@ public class FirmacivClientEvents {
 
     private static void clientSetup(final FMLClientSetupEvent event) {
         //ItemBlockRenderTypes.setRenderLayer(FirmacivBlocks.CANOE_COMPONENT_BLOCKS.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(FirmacivBlocks.CANOE_FIRE.get(), RenderType.cutout());
-        EntityRenderers.register(FirmacivEntities.CANOE_ENTITY.get(), FirmacivBoatRenderer::new);
+        EntityRenderers.register(FirmacivEntities.CANOE_ENTITY.get(), FirmacivCanoeRenderer::new);
 
     }
 }

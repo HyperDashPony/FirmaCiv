@@ -126,22 +126,12 @@ public final class FirmacivBlockEvents {
         if (CanoeComponentBlock.isValidCanoeShape(world, strippedLogBlock, thisBlockPos)) {
             world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            world.destroyBlock(thisBlockPos, false);
+            event.getPlayer().level.addDestroyBlockEffect(thisBlockPos, event.getState());
 
             Block canoeComponentBlock = getByStripped(strippedLogBlock);
             canoeComponentBlock.defaultBlockState().setValue(AXIS, Direction.Axis.Z);
 
-            if(axis == Direction.Axis.X){
-                world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState()
-                        .setValue(AXIS, Direction.Axis.X)
-                        .setValue(FACING, Direction.WEST)
-                        .setValue(CANOE_CARVED, 1), 2);
-            } else {
-                world.setBlock(thisBlockPos, canoeComponentBlock.defaultBlockState()
-                        .setValue(AXIS, Direction.Axis.Z)
-                        .setValue(FACING, Direction.NORTH)
-                        .setValue(CANOE_CARVED, 1), 2);
-            }
+            world.setBlock(thisBlockPos, CanoeComponentBlock.getStateForPlacement(world, strippedLogBlock, thisBlockPos), 2);
 
             //CanoeComponentBlock.spawnCanoeWithAxe(event.getPlayer().getLevel(), thisBlockPos, strippedLogBlock);
 

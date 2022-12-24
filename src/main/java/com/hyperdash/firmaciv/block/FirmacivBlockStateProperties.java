@@ -27,9 +27,7 @@ public class FirmacivBlockStateProperties {
     public static final IntegerProperty CANOE_CARVED_14;
     public static final IntegerProperty CANOE_CARVED_15;
 
-    public static final BooleanProperty CANOE_HOLLOWED;
-    public static final BooleanProperty CANOE_LIT;
-
+    public static final BooleanProperty END;
     private static final IntegerProperty[] CANOE_CARVED;
 
     public static IntegerProperty getCanoeCarvedProperty(int maxStage) {
@@ -57,8 +55,7 @@ public class FirmacivBlockStateProperties {
         CANOE_CARVED_14 = IntegerProperty.create("canoe_carved", 0, 14);
         CANOE_CARVED_15 = IntegerProperty.create("canoe_carved", 0, 15);
 
-        CANOE_HOLLOWED = BooleanProperty.create("canoe_hollowed");
-        CANOE_LIT = BooleanProperty.create("canoe_lit");
+        END = BooleanProperty.create("end");
 
         CANOE_CARVED = new IntegerProperty[]{ CANOE_CARVED_1, CANOE_CARVED_2, CANOE_CARVED_3, CANOE_CARVED_4, CANOE_CARVED_5,
                 CANOE_CARVED_6, CANOE_CARVED_7, CANOE_CARVED_8, CANOE_CARVED_9, CANOE_CARVED_10, CANOE_CARVED_11};
