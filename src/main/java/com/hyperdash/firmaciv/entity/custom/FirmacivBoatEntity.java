@@ -10,7 +10,4 @@ public class FirmacivBoatEntity extends Boat {
     }
 
 
-
-
-
 }

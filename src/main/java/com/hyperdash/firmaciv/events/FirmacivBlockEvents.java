@@ -1,41 +1,23 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
-import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
-import com.hyperdash.firmaciv.block.entity.custom.CanoeComponentBlockEntity;
+import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
-import com.mojang.logging.LogUtils;
-import net.dries007.tfc.ForgeEventHandler;
-import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.events.StartFireEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.slf4j.Logger;
 
 import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.*;
 

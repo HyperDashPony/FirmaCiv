@@ -57,7 +57,7 @@ public class CanoeEntity extends FirmacivBoatEntity{
         return null;
     }
 
-    public CanoeEntity(EntityType<? extends Boat> pEntityType, Level pLevel) {
+    public CanoeEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
