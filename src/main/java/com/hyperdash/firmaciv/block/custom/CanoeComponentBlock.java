@@ -36,6 +36,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -77,53 +78,51 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public enum CanoeWoodType
     {
         ACACIA(TFCBlocks.WOODS.get(Wood.ACACIA).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.ACACIA)),
+                TFCItems.LUMBER.get(Wood.ACACIA), CanoeEntity.Type.ACACIA),
         ASH(TFCBlocks.WOODS.get(Wood.ASH).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.ASH)),
+                TFCItems.LUMBER.get(Wood.ASH), CanoeEntity.Type.ASH),
         ASPEN(TFCBlocks.WOODS.get(Wood.ASPEN).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.ASPEN)),
+                TFCItems.LUMBER.get(Wood.ASPEN), CanoeEntity.Type.ASPEN),
         BIRCH(TFCBlocks.WOODS.get(Wood.BIRCH).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.BIRCH)),
+                TFCItems.LUMBER.get(Wood.BIRCH), CanoeEntity.Type.BIRCH),
         BLACKWOOD(TFCBlocks.WOODS.get(Wood.BLACKWOOD).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.BLACKWOOD)),
+                TFCItems.LUMBER.get(Wood.BLACKWOOD), CanoeEntity.Type.BLACKWOOD),
         CHESTNUT(TFCBlocks.WOODS.get(Wood.CHESTNUT).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.CHESTNUT)),
+                TFCItems.LUMBER.get(Wood.CHESTNUT), CanoeEntity.Type.CHESTNUT),
         DOUGLAS_FIR(TFCBlocks.WOODS.get(Wood.DOUGLAS_FIR).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.DOUGLAS_FIR)),
+                TFCItems.LUMBER.get(Wood.DOUGLAS_FIR), CanoeEntity.Type.DOUGLAS_FIR),
         HICKORY(TFCBlocks.WOODS.get(Wood.HICKORY).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.HICKORY)),
+                TFCItems.LUMBER.get(Wood.HICKORY), CanoeEntity.Type.HICKORY),
         KAPOK(TFCBlocks.WOODS.get(Wood.KAPOK).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.KAPOK)),
+                TFCItems.LUMBER.get(Wood.KAPOK), CanoeEntity.Type.KAPOK),
         MAPLE(TFCBlocks.WOODS.get(Wood.MAPLE).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.MAPLE)),
+                TFCItems.LUMBER.get(Wood.MAPLE), CanoeEntity.Type.MAPLE),
         OAK(TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.OAK)),
+                TFCItems.LUMBER.get(Wood.OAK), CanoeEntity.Type.OAK),
         PALM(TFCBlocks.WOODS.get(Wood.PALM).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.PALM)),
+                TFCItems.LUMBER.get(Wood.PALM), CanoeEntity.Type.PALM),
         PINE(TFCBlocks.WOODS.get(Wood.PINE).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.PINE)),
+                TFCItems.LUMBER.get(Wood.PINE), CanoeEntity.Type.PINE),
         ROSEWOOD(TFCBlocks.WOODS.get(Wood.ROSEWOOD).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.ROSEWOOD)),
+                TFCItems.LUMBER.get(Wood.ROSEWOOD), CanoeEntity.Type.ROSEWOOD),
         SEQUOIA(TFCBlocks.WOODS.get(Wood.SEQUOIA).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.SEQUOIA)),
+                TFCItems.LUMBER.get(Wood.SEQUOIA), CanoeEntity.Type.SEQUOIA),
         SPRUCE(TFCBlocks.WOODS.get(Wood.SPRUCE).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.SPRUCE)),
+                TFCItems.LUMBER.get(Wood.SPRUCE), CanoeEntity.Type.SPRUCE),
         SYCAMORE(TFCBlocks.WOODS.get(Wood.SYCAMORE).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.SYCAMORE)),
+                TFCItems.LUMBER.get(Wood.SYCAMORE), CanoeEntity.Type.SYCAMORE),
         WHITE_CEDAR(TFCBlocks.WOODS.get(Wood.WHITE_CEDAR).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.WHITE_CEDAR)),
+                TFCItems.LUMBER.get(Wood.WHITE_CEDAR), CanoeEntity.Type.WHITE_CEDAR),
         WILLOW(TFCBlocks.WOODS.get(Wood.WILLOW).get(Wood.BlockType.STRIPPED_LOG),
-                TFCItems.LUMBER.get(Wood.WILLOW));
+                TFCItems.LUMBER.get(Wood.WILLOW), CanoeEntity.Type.WILLOW);
 
         public final Supplier<? extends Block> stripped;
         public final Supplier<? extends Item> lumber;
+        public final CanoeEntity.Type canoe;
 
-        int index;
-
-        //public final Supplier<? extends Entity> canoe;
-
-        CanoeWoodType(Supplier<? extends Block> stripped, Supplier<? extends Item> lumber)
+        CanoeWoodType(Supplier<? extends Block> stripped, Supplier<? extends Item> lumber, CanoeEntity.Type canoe)
         {
+            this.canoe = canoe;
             this.lumber = lumber;
             this.stripped = stripped;
         }
@@ -132,7 +131,15 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             return stripped.get();
         }
 
+        public CanoeEntity.Type getCanoeType(){ return this.canoe;}
 
+        public String getName() {
+            return this.name().toLowerCase(Locale.ROOT);
+        }
+
+        public String toString() {
+            return this.name().toLowerCase(Locale.ROOT);
+        }
     }
 
 
@@ -169,13 +176,16 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
 
-    public CanoeComponentBlock(Properties properties, Supplier<? extends Block> strippedBlock, Supplier<? extends Item> lumberItem)
+    public final CanoeWoodType woodType;
+
+    public CanoeComponentBlock(Properties properties, CanoeWoodType woodType)
     {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
                 .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1).setValue(END, false));
-        this.strippedBlock = strippedBlock;
-        this.lumberItem = lumberItem;
+        this.woodType = woodType;
+        this.strippedBlock = woodType.stripped;
+        this.lumberItem = woodType.lumber;
     }
 
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
@@ -416,7 +426,9 @@ public class CanoeComponentBlock extends BaseEntityBlock {
                 pLevel.levelEvent(2001, blockinworld.getPos(), Block.getId(blockinworld.getState()));
             }
 
-            CanoeEntity canoe = FirmacivEntities.CANOE_ENTITY.get().create(pLevel);
+            CanoeComponentBlock ccb = (CanoeComponentBlock)canoeComponentBlock;
+
+            CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.woodType.getCanoeType()).get().create(pLevel);
 
             if (axis == Direction.Axis.X) {
                 canoe.moveTo((double)middleblockpos.getX() + 0.5D, (double)middleblockpos.getY() + 0.05D, (double)middleblockpos.getZ() + 0.5D, 90.0F, 0.0F);

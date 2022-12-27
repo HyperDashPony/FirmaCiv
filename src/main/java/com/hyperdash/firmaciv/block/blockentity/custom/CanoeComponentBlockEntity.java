@@ -41,9 +41,6 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         if (canoeBlock.isLit) {
             long remainingTicks = (long)(Integer) TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlock.litTick);
 
-            LOGGER.info("log from: " + pos);
-            LOGGER.info("ticks: " + remainingTicks);
-
             if (remainingTicks <= 0L) {
 
                 BlockState newState = state.setValue(CANOE_CARVED, 13);

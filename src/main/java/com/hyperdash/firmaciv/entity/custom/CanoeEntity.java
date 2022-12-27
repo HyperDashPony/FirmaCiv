@@ -3,7 +3,9 @@ package com.hyperdash.firmaciv.entity.custom;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,24 +22,38 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.Locale;
+import java.util.function.Supplier;
 
 public class CanoeEntity extends FirmacivBoatEntity{
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class, EntityDataSerializers.INT);
     public enum Type {
-        DOUGLAS_FIR( ),
-        PINE(),
-        CHESTNUT(),
-        SPRUCE(),
-        ASPEN(),
-        KAPOK(),
-        ROSEWOOD(),
-        WHITE_CEDAR(),
-        WILLOW();
+        ACACIA(TFCItems.LUMBER.get(Wood.ACACIA)),
+        ASH(TFCItems.LUMBER.get(Wood.ASH)),
+        ASPEN(TFCItems.LUMBER.get(Wood.ASPEN)),
+        BIRCH(TFCItems.LUMBER.get(Wood.BIRCH)),
+        BLACKWOOD(TFCItems.LUMBER.get(Wood.BLACKWOOD)),
+        CHESTNUT(TFCItems.LUMBER.get(Wood.CHESTNUT)),
+        DOUGLAS_FIR(TFCItems.LUMBER.get(Wood.DOUGLAS_FIR)),
+        HICKORY(TFCItems.LUMBER.get(Wood.HICKORY)),
+        KAPOK(TFCItems.LUMBER.get(Wood.KAPOK)),
+        MAPLE(TFCItems.LUMBER.get(Wood.MAPLE)),
+        OAK(TFCItems.LUMBER.get(Wood.OAK)),
+        PALM(TFCItems.LUMBER.get(Wood.PALM)),
+        PINE(TFCItems.LUMBER.get(Wood.PINE)),
+        ROSEWOOD(TFCItems.LUMBER.get(Wood.ROSEWOOD)),
+        SEQUOIA(TFCItems.LUMBER.get(Wood.SEQUOIA)),
+        SPRUCE(TFCItems.LUMBER.get(Wood.SPRUCE)),
+        SYCAMORE(TFCItems.LUMBER.get(Wood.SYCAMORE)),
+        WHITE_CEDAR(TFCItems.LUMBER.get(Wood.WHITE_CEDAR)),
+        WILLOW(TFCItems.LUMBER.get(Wood.WILLOW));
 
         //private final String name;
 
-        private Type() {
+        private Type(Supplier<? extends Item> lumber) {
+            this.lumber = lumber;
         }
+
+        public final Supplier<? extends Item> lumber;
 
         public String getName() {
             return this.name().toLowerCase(Locale.ROOT);
@@ -80,12 +96,13 @@ public class CanoeEntity extends FirmacivBoatEntity{
 
     @Override
     public Item getDropItem() {
-        return null;
+        return getCanoeType().lumber.get();
     }
 
     public CanoeEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.entityData.define(DATA_ID_TYPE, CanoeEntity.Type.DOUGLAS_FIR.ordinal());
+        String name = pEntityType.getRegistryName().getPath().split("/")[1];
+        this.entityData.define(DATA_ID_TYPE, CanoeEntity.Type.byName(name).ordinal());
     }
 
     public static ModelLayerLocation createCanoeModelName(CanoeEntity.Type pType) {

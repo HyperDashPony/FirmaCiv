@@ -37,14 +37,6 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "canoe_entity").toString()));
 
-    /*
-    public static final RegistryObject<EntityType<CanoeEntity>> CANOES =
-            ENTITY_TYPES.register("canoe/" + Stream.of(CanoeEntity.Type.class),
-            () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "canoe/" + Stream.of(CanoeEntity.Type.values()).toString()).toString()));
-
-     */
-
     public static final Map<CanoeEntity.Type, RegistryObject<EntityType<CanoeEntity>>> CANOES =
             Helpers.mapOfKeys(CanoeEntity.Type.class, canoeWoodType -> ENTITY_TYPES.register("canoe/" + canoeWoodType.getName(),
                     () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
