@@ -10,10 +10,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import net.dries007.tfc.client.RenderHelpers;
-import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -35,9 +32,7 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static ModelLayerLocation boatName(String name) {
-        return RenderHelpers.modelIdentifier("boat/" + name);
-    }
+    private final Map<CanoeEntity.Type, Pair<ResourceLocation, CanoeEntityModel>> canoeResources;
 
     private static final ResourceLocation DOUGLAS_FIR =
             new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
@@ -57,12 +52,16 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
             new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/white_cedar.png");
     private static final ResourceLocation WILLOW =
             new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
-    private final CanoeEntityModel canoeModel;
 
     public FirmacivCanoeRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
-        canoeModel = new CanoeEntityModel<>();
         this.shadowRadius = 0.7f;
+        this.canoeResources = Stream.of(CanoeEntity.Type.values()).collect(ImmutableMap.toImmutableMap((type) -> {
+            return type;
+        }, (type) -> {
+            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + type.getName() + ".png"),
+                    new CanoeEntityModel());
+        }));
     }
 
     @Override
@@ -85,12 +84,16 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
             pMatrixStack.mulPose(new Quaternion(new Vector3f(1.0F, 0.0F, 1.0F), pEntity.getBubbleAngle(pPartialTicks), true));
         }
 
+        Pair<ResourceLocation, CanoeEntityModel> pair = getModelWithLocation(pEntity);
+        ResourceLocation resourcelocation = pair.getFirst();
+        CanoeEntityModel canoeModel = pair.getSecond();
+
         pMatrixStack.translate(0.0f, 1.0625f, 0f);
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(0.0F));
-        this.canoeModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(this.canoeModel.renderType(getTextureLocation(pEntity)));
-        this.canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        canoeModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
+        VertexConsumer vertexconsumer = pBuffer.getBuffer(canoeModel.renderType(getTextureLocation(pEntity)));
+        canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
@@ -103,8 +106,10 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     @Deprecated // forge: override getModelWithLocation to change the texture / model
     public ResourceLocation getTextureLocation(CanoeEntity pEntity) {
-        return DOUGLAS_FIR;
+        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getCanoeType().getName() + ".png");
     }
+
+    public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) { return this.canoeResources.get(canoe.getCanoeType()); }
 
 
 }

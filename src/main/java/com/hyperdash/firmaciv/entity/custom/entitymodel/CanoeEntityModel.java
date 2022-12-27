@@ -23,6 +23,17 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
 
 	private final ModelPart waterocclusion;
 
+	/*
+	public CanoeEntityModel(ModelPart pRoot) {
+		//ModelPart root = createBodyLayer().bakeRoot();
+		this.middle = pRoot.getChild("middle");
+		this.end = pRoot.getChild("end");
+		this.end2 = pRoot.getChild("end2");
+		this.waterocclusion = pRoot.getChild("waterocclusion");
+	}
+
+	 */
+
 	public CanoeEntityModel() {
 		ModelPart root = createBodyLayer().bakeRoot();
 		this.middle = root.getChild("middle");

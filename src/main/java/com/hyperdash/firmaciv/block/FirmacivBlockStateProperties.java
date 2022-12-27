@@ -40,20 +40,20 @@ public class FirmacivBlockStateProperties {
 
     static{
         CANOE_CARVED_1 = IntegerProperty.create("canoe_carved", 0, 1);
-        CANOE_CARVED_2 = IntegerProperty.create("canoe_carved", 0, 2);
-        CANOE_CARVED_3 = IntegerProperty.create("canoe_carved", 0, 3);
-        CANOE_CARVED_4 = IntegerProperty.create("canoe_carved", 0, 4);
-        CANOE_CARVED_5 = IntegerProperty.create("canoe_carved", 0, 5);
-        CANOE_CARVED_6 = IntegerProperty.create("canoe_carved", 0, 6);
-        CANOE_CARVED_7 = IntegerProperty.create("canoe_carved", 0, 7);
-        CANOE_CARVED_8 = IntegerProperty.create("canoe_carved", 0, 8);
-        CANOE_CARVED_9 = IntegerProperty.create("canoe_carved", 0, 9);
-        CANOE_CARVED_10 = IntegerProperty.create("canoe_carved", 0, 10);
-        CANOE_CARVED_11 = IntegerProperty.create("canoe_carved", 0, 11);
-        CANOE_CARVED_12 = IntegerProperty.create("canoe_carved", 0, 12);
-        CANOE_CARVED_13 = IntegerProperty.create("canoe_carved", 0, 13);
-        CANOE_CARVED_14 = IntegerProperty.create("canoe_carved", 0, 14);
-        CANOE_CARVED_15 = IntegerProperty.create("canoe_carved", 0, 15);
+        CANOE_CARVED_2 = IntegerProperty.create("canoe_carved", 1, 2);
+        CANOE_CARVED_3 = IntegerProperty.create("canoe_carved", 1, 3);
+        CANOE_CARVED_4 = IntegerProperty.create("canoe_carved", 1, 4);
+        CANOE_CARVED_5 = IntegerProperty.create("canoe_carved", 1, 5);
+        CANOE_CARVED_6 = IntegerProperty.create("canoe_carved", 1, 6);
+        CANOE_CARVED_7 = IntegerProperty.create("canoe_carved", 1, 7);
+        CANOE_CARVED_8 = IntegerProperty.create("canoe_carved", 1, 8);
+        CANOE_CARVED_9 = IntegerProperty.create("canoe_carved", 1, 9);
+        CANOE_CARVED_10 = IntegerProperty.create("canoe_carved", 1, 10);
+        CANOE_CARVED_11 = IntegerProperty.create("canoe_carved", 1, 11);
+        CANOE_CARVED_12 = IntegerProperty.create("canoe_carved", 1, 12);
+        CANOE_CARVED_13 = IntegerProperty.create("canoe_carved", 1, 13);
+        CANOE_CARVED_14 = IntegerProperty.create("canoe_carved", 1, 14);
+        CANOE_CARVED_15 = IntegerProperty.create("canoe_carved", 1, 15);
 
         END = BooleanProperty.create("end");
 

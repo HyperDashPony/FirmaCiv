@@ -5,6 +5,7 @@ import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
+import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
@@ -114,9 +115,10 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         WILLOW(TFCBlocks.WOODS.get(Wood.WILLOW).get(Wood.BlockType.STRIPPED_LOG),
                 TFCItems.LUMBER.get(Wood.WILLOW));
 
-
         public final Supplier<? extends Block> stripped;
         public final Supplier<? extends Item> lumber;
+
+        int index;
 
         //public final Supplier<? extends Entity> canoe;
 
@@ -125,6 +127,12 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             this.lumber = lumber;
             this.stripped = stripped;
         }
+
+        Block getStrippedWoodByIndex(){
+            return stripped.get();
+        }
+
+
     }
 
 
@@ -196,7 +204,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     {
         return strippedBlock.get();
     }
-
     // static methods and fields below
 
     public static void spawnCanoeWithAxe(Level pLevel, BlockPos pPos, Block strippedLogBlock){
@@ -232,48 +239,50 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         Block canoeComponentBlock = getByStripped(strippedLogBlock);
 
-        BlockPos blockPos0 = pPos.relative(axis, 2);
-        BlockPos blockPos1 = pPos.relative(axis, 1);
-        BlockPos blockPos2 = pPos.relative(axis, -1);
-        BlockPos blockPos3 = pPos.relative(axis, -2);
+        BlockPos blockPos0 = pPos;
 
-        BlockState blockState0;
-        BlockState blockState1;
+        int row = 0;
+        for(int i = -2; i <= 2; ++i){
+            // check two blocks in each direction and look for a row of 3 blocks
 
-        if ((world.getBlockState(blockPos0).is(strippedLogBlock) || world.getBlockState(blockPos0).is(canoeComponentBlock)) &&
-                (world.getBlockState(blockPos1).is(strippedLogBlock) || world.getBlockState(blockPos1).is(canoeComponentBlock))) {
+            blockPos0 = pPos.relative(axis,i);
+            if (world.getBlockState(blockPos0).is(strippedLogBlock) || world.getBlockState(blockPos0).is(canoeComponentBlock)) {
 
-            blockState0 = world.getBlockState(blockPos0);
-            blockState1 = world.getBlockState(blockPos1);
-            if(validPartRotation(blockState0, blockState1, axis)) { return true; }
+                if(world.getBlockState(blockPos0).getValue(AXIS) == axis){
+                    row++;
+                    if(row == 3){
+                        return true;
+                    }
+                } else { row = 0; }
 
-        }
-        if ((world.getBlockState(blockPos1).is(strippedLogBlock) || world.getBlockState(blockPos1).is(canoeComponentBlock)) &&
-                (world.getBlockState(blockPos2).is(strippedLogBlock) || world.getBlockState(blockPos2).is(canoeComponentBlock))) {
-
-            blockState0 = world.getBlockState(blockPos1);
-            blockState1 = world.getBlockState(blockPos2);
-            if(validPartRotation(blockState0, blockState1, axis)) { return true; }
+            } else {
+                row = 0;
+            }
 
         }
-        if ((world.getBlockState(blockPos2).is(strippedLogBlock) || world.getBlockState(blockPos2).is(canoeComponentBlock)) &&
-                (world.getBlockState(blockPos3).is(strippedLogBlock) || world.getBlockState(blockPos3).is(canoeComponentBlock))) {
 
-            blockState0 = world.getBlockState(blockPos2);
-            blockState1 = world.getBlockState(blockPos3);
-            if(validPartRotation(blockState0, blockState1, axis)) { return true; }
-
-        }
+        if (row == 3) { return true; }
 
         return false;
+
     }
 
-    private static boolean validPartRotation(BlockState blockState0, BlockState blockState1, Direction.Axis axis){
-        if(blockState0.getValue(BlockStateProperties.AXIS) == axis &&
-                blockState1.getValue(BlockStateProperties.AXIS) == axis){
-            return true;
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
+            pLevel.removeBlockEntity(pPos);
         }
-        return false;
+        if(!pNewState.is(pState.getBlock()) && pState.getValue(CANOE_CARVED) < 13){
+            Block ccb = pState.getBlock();
+            Direction.Axis axis = pState.getValue(AXIS);
+
+            if(pLevel.getBlockState(pPos.relative(axis, 1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, 1)).getValue(AXIS) == axis){
+                    pLevel.destroyBlock(pPos.relative(axis, 1), true);
+            }
+            if(pLevel.getBlockState(pPos.relative(axis, -1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, -1)).getValue(AXIS) == axis){
+                pLevel.destroyBlock(pPos.relative(axis, -1), true);
+            }
+        }
+
     }
 
     private static BlockPos getMiddleBlockPos(Level pLevel, BlockPos pPos, Block canoeComponentBlock){
@@ -299,66 +308,59 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         return pPos;
     }
 
-    public static BlockState getStateForPlacement(LevelAccessor world, Block strippedLogBlock, BlockPos pPos){
+    public static BlockState getStateForPlacement(Level pLevel, Block strippedLogBlock, BlockPos pPos){
 
-        Direction.Axis axis = world.getBlockState(pPos).getValue(AXIS);
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
 
         Block canoeComponentBlock = getByStripped(strippedLogBlock);
 
-        BlockState finalBlockState = canoeComponentBlock.defaultBlockState().setValue(CANOE_CARVED, 1);
-        finalBlockState = finalBlockState.setValue(END,false).setValue(AXIS, axis);
+        BlockState finalBlockState = canoeComponentBlock.defaultBlockState()
+                .setValue(CANOE_CARVED, 1)
+                .setValue(END,true)
+                .setValue(AXIS, axis)
+                .setValue(FACING, ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
 
-        if(axis == Direction.Axis.X){
-            finalBlockState = finalBlockState.setValue(FACING, Direction.WEST);
-        } else {
-            finalBlockState = finalBlockState.setValue(FACING, Direction.NORTH);
-        }
-
-        BlockPos blockPos0 = pPos.relative(axis, 2);
         BlockPos blockPos1 = pPos.relative(axis, 1);
-        BlockPos blockPos2 = pPos.relative(axis, -1);
-        BlockPos blockPos3 = pPos.relative(axis, -2);
 
-        if ((world.getBlockState(blockPos0).is(strippedLogBlock) || world.getBlockState(blockPos0).is(canoeComponentBlock)) &&
-                (world.getBlockState(blockPos1).is(strippedLogBlock) || world.getBlockState(blockPos1).is(canoeComponentBlock))) {
-            // positive relative to axis
-            // if x, west
-            // if z, north
-            finalBlockState = finalBlockState.setValue(END,true);
-
-            if(axis == Direction.Axis.X){
-                finalBlockState = finalBlockState.setValue(FACING, Direction.WEST);
-                return finalBlockState;
-            } else {
-                finalBlockState = finalBlockState.setValue(FACING, Direction.NORTH);
-                return finalBlockState;
-            }
-
-        }
-        if ((world.getBlockState(blockPos1).is(strippedLogBlock) || world.getBlockState(blockPos1).is(canoeComponentBlock)) &&
-                (world.getBlockState(blockPos2).is(strippedLogBlock) || world.getBlockState(blockPos2).is(canoeComponentBlock))) {
-            // middle
-            return finalBlockState;
-
-        }
-        if ((world.getBlockState(blockPos2).is(strippedLogBlock) || world.getBlockState(blockPos2).is(canoeComponentBlock)) &&
-                (world.getBlockState(blockPos3).is(strippedLogBlock) || world.getBlockState(blockPos3).is(canoeComponentBlock))) {
-            // negative relative to axis
-            // if x, east
-            // if z, south
-            finalBlockState = finalBlockState.setValue(END,true);
-
-            if(axis == Direction.Axis.X){
-                finalBlockState = finalBlockState.setValue(FACING, Direction.EAST);
-                return finalBlockState;
-            } else {
-                finalBlockState = finalBlockState.setValue(FACING, Direction.SOUTH);
-                return finalBlockState;
-            }
-
+        if((pLevel.getBlockState(blockPos1).is(canoeComponentBlock) || pLevel.getBlockState(blockPos1).is(strippedLogBlock)
+                && pLevel.getBlockState(blockPos1).getValue(AXIS) == axis)){
+            // if it's a valid block and rotation positive, then flip it
+            finalBlockState = finalBlockState.setValue(FACING, ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
         }
 
         return finalBlockState;
+    }
+
+    public static void setEndPieces(Level pLevel, BlockPos pPos, Block canoeComponentBlock, boolean positiveDir){
+
+        if(!pLevel.getBlockState(pPos).is(canoeComponentBlock)){
+            return;
+        }
+
+        BlockState thisBlockState = pLevel.getBlockState(pPos);
+
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
+
+        BlockPos blockPos1 = pPos.relative(axis, (positiveDir ? 1 : -1));
+
+        if(pLevel.getBlockState(blockPos1).is(canoeComponentBlock) && pLevel.getBlockState(blockPos1).getValue(AXIS) == axis){
+
+            thisBlockState = thisBlockState.setValue(END, false);
+            pLevel.setBlock(pPos, thisBlockState, 4);
+
+            setEndPieces(pLevel, blockPos1, canoeComponentBlock, positiveDir);
+        } else {
+            thisBlockState = thisBlockState.setValue(END, true);
+
+            if(positiveDir){
+                thisBlockState = thisBlockState.setValue(FACING, ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
+            } else {
+                thisBlockState = thisBlockState.setValue(FACING, ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
+            }
+
+            pLevel.setBlock(pPos, thisBlockState, 4);
+        }
+
     }
 
     private static boolean areValidBlockStates(Level pLevel, BlockPos pPos, Block canoeComponentBlock){
@@ -405,7 +407,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         BlockPattern.BlockPatternMatch blockpattern$blockpatternmatch = createCanoeFull(canoeComponentBlock).find(pLevel, pPos);
         if (blockpattern$blockpatternmatch != null) {
 
-            String rotatedirs = pLevel.getBlockState(pPos).getValue(FACING).getName();
+            Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
             BlockPos middleblockpos = getMiddleBlockPos(pLevel, pPos, canoeComponentBlock);
 
             for(int i = 0; i < createCanoeFull(canoeComponentBlock).getHeight(); ++i) {
@@ -416,12 +418,11 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
             CanoeEntity canoe = FirmacivEntities.CANOE_ENTITY.get().create(pLevel);
 
-            if (rotatedirs == "east" || rotatedirs == "west") {
+            if (axis == Direction.Axis.X) {
                 canoe.moveTo((double)middleblockpos.getX() + 0.5D, (double)middleblockpos.getY() + 0.05D, (double)middleblockpos.getZ() + 0.5D, 90.0F, 0.0F);
             } else {
                 canoe.moveTo((double)middleblockpos.getX() + 0.5D, (double)middleblockpos.getY() + 0.05D, (double)middleblockpos.getZ() + 0.5D, 0.0F, 0.0F);
             }
-
 
             pLevel.addFreshEntity(canoe);
 

@@ -193,57 +193,62 @@
 
 
     "canoe_carved=9,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_9"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_9",
+      "y": 270
     },
     "canoe_carved=10,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_10"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_10",
+      "y": 270
     },
     "canoe_carved=11,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_11"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_11",
+      "y": 270
     },
     "canoe_carved=12,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_12"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_12",
+      "y": 270
     },
     "canoe_carved=13,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_13"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_13",
+      "y": 270
     },
 
     "canoe_carved=9,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_9"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_9",
+      "y": 90
     },
     "canoe_carved=10,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_10"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_10",
+      "y": 90
     },
     "canoe_carved=11,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_11"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_11",
+      "y": 90
     },
     "canoe_carved=12,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_12"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_12",
+      "y": 90
     },
     "canoe_carved=13,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_13"
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_13",
+      "y": 90
     },
 
 
     "canoe_carved=9,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_9",
-      "y": 180
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_9"
     },
     "canoe_carved=10,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_10",
-      "y": 180
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_10"
     },
     "canoe_carved=11,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_11",
-      "y": 180
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_11"
     },
     "canoe_carved=12,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_12",
-      "y": 180
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_12"
     },
     "canoe_carved=13,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_sycamore_13",
-      "y": 180
+      "model": "firmaciv:block/canoe_component_block/end_sycamore_13"
     },
 
 

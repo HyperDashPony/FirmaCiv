@@ -41,8 +41,8 @@ public class Firmaciv
 
         FirmacivItems.register(eventBus);
         FirmacivBlocks.register(eventBus);
-        FirmacivEntities.ENTITY_TYPES.register(eventBus);
         FirmacivBlockEntities.register(eventBus);
+        FirmacivEntities.ENTITY_TYPES.register(eventBus);
 
         eventBus.addListener(this::setup);
         // Register the enqueueIMC method for modloading
