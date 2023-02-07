@@ -27,7 +27,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.0.11-alpha-1.18.2'
+version = '0.0.12-alpha-1.18.2'
 group = 'com.hyperdash.' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = ''
 
@@ -134,7 +134,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'firmaciv', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 examplemod {
@@ -182,8 +182,8 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.85'
 
     // tfc
-    fg.deobf("curse.maven:tfc-302973:${4085585}")
-    implementation fg.deobf("curse.maven:tfc-302973:${4085585}")
+    fg.deobf("curse.maven:tfc-302973:${4378409}")
+    implementation fg.deobf("curse.maven:tfc-302973:${4378409}")
 
     // patchouli
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-71.1:api")
