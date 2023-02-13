@@ -6,6 +6,8 @@ import com.hyperdash.firmaciv.client.FirmacivClientEvents;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
@@ -56,6 +58,13 @@ public class Firmaciv
             FirmacivClientEvents.init();
         }
     }
+
+    public static final CreativeModeTab FIRMACIV_TAB = new CreativeModeTab(MOD_ID) {
+        @Override
+        public ItemStack makeIcon() {
+            return FirmacivItems.SEXTANT.get().getDefaultInstance();
+        }
+    };
 
     private void setup(final FMLCommonSetupEvent event)
     {

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " GB",
+    "#@ ",
+    "## "
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:ingots/brass"
+    },
+    "@": {
+      "item": "tfc:brass_mechanisms"
+    },
+    "B": {
+      "item": "tfc:metal/rod/brass"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "item": "firmaciv:sextant"
+  }
+}

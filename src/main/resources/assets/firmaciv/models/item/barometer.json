@@ -1,0 +1,24 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "firmaciv:item/barometer/barometer_8"
+  },
+  "overrides": [
+    { "predicate": { "firmaciv:altitude": 0.0 }, "model": "firmaciv:item/barometer/barometer_0" },
+    { "predicate": { "firmaciv:altitude": 0.0625 }, "model": "firmaciv:item/barometer/barometer_1" },
+    { "predicate": { "firmaciv:altitude": 0.125 }, "model": "firmaciv:item/barometer/barometer_2" },
+    { "predicate": { "firmaciv:altitude": 0.1875 }, "model": "firmaciv:item/barometer/barometer_3" },
+    { "predicate": { "firmaciv:altitude": 0.25 }, "model": "firmaciv:item/barometer/barometer_4" },
+    { "predicate": { "firmaciv:altitude": 0.3125 }, "model": "firmaciv:item/barometer/barometer_5" },
+    { "predicate": { "firmaciv:altitude": 0.375 }, "model": "firmaciv:item/barometer/barometer_6" },
+    { "predicate": { "firmaciv:altitude": 0.4375 }, "model": "firmaciv:item/barometer/barometer_7" },
+    { "predicate": { "firmaciv:altitude": 0.5 }, "model": "firmaciv:item/barometer/barometer_8" },
+    { "predicate": { "firmaciv:altitude": 0.5625 }, "model": "firmaciv:item/barometer/barometer_9" },
+    { "predicate": { "firmaciv:altitude": 0.625 }, "model": "firmaciv:item/barometer/barometer_10" },
+    { "predicate": { "firmaciv:altitude": 0.6875 }, "model": "firmaciv:item/barometer/barometer_11" },
+    { "predicate": { "firmaciv:altitude": 0.75 }, "model": "firmaciv:item/barometer/barometer_12" },
+    { "predicate": { "firmaciv:altitude": 0.8125 }, "model": "firmaciv:item/barometer/barometer_13" },
+    { "predicate": { "firmaciv:altitude": 0.875 }, "model": "firmaciv:item/barometer/barometer_14" },
+    { "predicate": { "firmaciv:altitude": 0.9375 }, "model": "firmaciv:item/barometer/barometer_15" }
+  ]
+}

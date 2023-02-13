@@ -1,43 +1,48 @@
 package com.hyperdash.firmaciv.item.custom;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.network.chat.*;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
-import java.util.Random;
-
-public class SextantItem extends Item {
+public class SextantItem extends AbstractNavItem {
     public SextantItem(Properties pProperties) {
         super(pProperties);
     }
 
-    @Override
-    public InteractionResult useOn(UseOnContext pContext) {
-        if(pContext.getLevel().isClientSide()) {
-            BlockPos positionClicked = pContext.getClickedPos();
-            Player player = pContext.getPlayer();
-
-            outputCoordinate(positionClicked, player);
-        }
-
-        pContext.getItemInHand().hurtAndBreak(1, pContext.getPlayer(),
-                (player) -> player.broadcastBreakEvent(player.getUsedItemHand()));
-
-        return super.useOn(pContext);
+    public int getUseDuration(ItemStack pStack) {
+        return 1200;
     }
 
-    private void outputCoordinate(BlockPos blockPos, Player player){
-        int falseX = (int)Math.abs(Math.round(blockPos.getX() + Math.random()*20));
-        int falseY = (int)Math.abs(Math.round(blockPos.getY() + Math.random()*20));
+    public UseAnim getUseAnimation(ItemStack pStack) {
+        return UseAnim.SPYGLASS;
+    }
 
-        player.sendMessage(new TextComponent(
-                "Latitude: " + falseY + (blockPos.getZ() > 0 ? " North" : " South")
-                        + ", " +
-                "Longitude: " + falseX + (blockPos.getX() > 0 ? " West" : " East")
-        ), player.getUUID());
+
+
+    public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
+        this.stopUsing(pLivingEntity);
+    }
+
+    private void stopUsing(LivingEntity pUser) {
+        pUser.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0F, 1.0F);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
+
+        pLevel.playSound((Player)null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SPYGLASS_USE, SoundSource.NEUTRAL, 1F, 1);
+
+        return super.use(pLevel, pPlayer, pHand, NavType.LAT);
     }
 
 }

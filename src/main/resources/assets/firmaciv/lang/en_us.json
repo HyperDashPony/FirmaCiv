@@ -22,6 +22,17 @@
   "block.firmaciv.canoe_component_block/white_cedar": "White Cedar Canoe Component",
   "block.firmaciv.canoe_component_block/willow": "Willow Canoe Component",
 
-  "entity.firmaciv.canoe_entity": "Dugout Canoe"
+  "item.firmaciv.barometer": "Barometer",
+  "item.firmaciv.nav_clock": "Navigator's Timepiece",
+  "item.firmaciv.sextant": "Sextant",
+  "item.firmaciv.nav_toolkit": "Navigator's Toolkit",
 
+  "itemGroup.firmaciv": "Firma Civilization",
+
+  "entity.firmaciv.canoe_entity": "Dugout Canoe",
+
+  "copy_latitude": "Copy Latitude to Clipboard",
+  "copy_longitude": "Copy Longitude to Clipboard",
+  "copy_lalon": "Copy Latitude and Longitude to Clipboard",
+  "copy_altitude": "Copy Altitude to Clipboard"
 }

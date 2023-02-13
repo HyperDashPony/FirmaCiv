@@ -2,7 +2,7 @@
 
   "parent": "item/generated",
   "textures": {
-    "layer0": "firmaciv:item/bronze_sextant"
+    "layer0": "firmaciv:item/nav_toolkit"
   }
 
 }
