@@ -50,12 +50,12 @@ public class AbstractNavItem extends Item{
                 break;
             case LON:
                 locationText = navStrings[NavSelection.LONGITUDE.ordinal()];
-                simpleLocationText = navStrings[NavSelection.LONGITUDE.ordinal()];
+                simpleLocationText = navStrings[NavSelection.LON_SIMPLE.ordinal()];
                 copyMessage = new TranslatableComponent("copy_longitude");
                 break;
             case ALT:
                 locationText = navStrings[NavSelection.ALTITUDE.ordinal()];
-                simpleLocationText = navStrings[NavSelection.ALTITUDE.ordinal()];
+                simpleLocationText = navStrings[NavSelection.ALT_SIMPLE.ordinal()];
                 copyMessage = new TranslatableComponent("copy_altitude");
                 break;
             case LAT_LON:

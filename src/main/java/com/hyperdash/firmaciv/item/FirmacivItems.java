@@ -27,6 +27,9 @@ public class FirmacivItems {
     public static final RegistryObject<Item> NAV_TOOLKIT = ITEMS.register("nav_toolkit",
             () -> new NavToolkitItem(new Item.Properties().tab(Firmaciv.FIRMACIV_TAB)));
 
+    public static final RegistryObject<Item> LARGE_WATERPROOF_HIDE = ITEMS.register("large_waterproof_hide",
+            () -> new Item(new Item.Properties().tab(Firmaciv.FIRMACIV_TAB)));
+
     public static void  register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

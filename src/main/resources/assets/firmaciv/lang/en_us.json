@@ -33,6 +33,6 @@
 
   "copy_latitude": "Copy Latitude to Clipboard",
   "copy_longitude": "Copy Longitude to Clipboard",
-  "copy_lalon": "Copy Latitude and Longitude to Clipboard",
+  "copy_latlon": "Copy Latitude and Longitude to Clipboard",
   "copy_altitude": "Copy Altitude to Clipboard"
 }
