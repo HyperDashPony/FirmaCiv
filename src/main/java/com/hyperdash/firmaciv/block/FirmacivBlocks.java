@@ -12,7 +12,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,9 +32,12 @@ public class FirmacivBlocks {
 
 
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
-            () -> new RoofBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
-                    BlockBehaviour.Properties.of(TFCMaterials.THATCH_COLOR_LEAVES).strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH)),
+            () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
+                    BlockBehaviour.Properties.of(TFCMaterials.THATCH_COLOR_LEAVES).strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH).noCollission()),
             Firmaciv.FIRMACIV_TAB);
+
+    public static final RegistryObject<Block> BOAT_FRAME = registerBlockWithItem("boat_frame",
+            ()-> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion().color(MaterialColor.COLOR_BROWN)), Firmaciv.FIRMACIV_TAB);
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);

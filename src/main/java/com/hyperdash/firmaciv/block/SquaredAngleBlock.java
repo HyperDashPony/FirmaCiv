@@ -2,6 +2,10 @@ package com.hyperdash.firmaciv.block;
 
 import java.util.Random;
 import java.util.stream.IntStream;
+
+import net.dries007.tfc.common.fluids.FluidProperty;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -33,14 +37,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RoofBlock extends Block implements SimpleWaterloggedBlock {
+public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final EnumProperty<StairsShape> SHAPE = BlockStateProperties.STAIRS_SHAPE;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-
-    protected static final VoxelShape TOP_EXCLUDE = Block.box(0.0D, 8.0D, 0.0D, 8.0D, 8.0D, 8.0D);
-    protected static final VoxelShape BOTTOM_EXCLUDE = Block.box(8.0D, 0.0D, 8.0D, 8.0D, 8.0D, 8.0D);
 
     protected static final VoxelShape TOP_AABB = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
@@ -107,7 +108,7 @@ public class RoofBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Deprecated // Forge: Use the other constructor that takes a Supplier
-    public RoofBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
+    public SquaredAngleBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
         this.base = pBaseState.getBlock();
@@ -115,7 +116,7 @@ public class RoofBlock extends Block implements SimpleWaterloggedBlock {
         this.stateSupplier = () -> pBaseState;
     }
 
-    public RoofBlock(java.util.function.Supplier<BlockState> state, BlockBehaviour.Properties properties) {
+    public SquaredAngleBlock(java.util.function.Supplier<BlockState> state, BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
         this.base = Blocks.AIR; // These are unused, fields are redirected
@@ -266,7 +267,7 @@ public class RoofBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     public static boolean isRoof(BlockState pState) {
-        return pState.getBlock() instanceof RoofBlock;
+        return pState.getBlock() instanceof SquaredAngleBlock;
     }
 
     public BlockState rotate(BlockState pState, Rotation pRot) {

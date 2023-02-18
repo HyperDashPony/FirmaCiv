@@ -178,8 +178,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
     public final CanoeWoodType woodType;
 
-    public CanoeComponentBlock(Properties properties, CanoeWoodType woodType)
-    {
+    public CanoeComponentBlock(Properties properties, CanoeWoodType woodType) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
                 .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED,1).setValue(END, false));

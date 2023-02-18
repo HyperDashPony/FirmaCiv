@@ -55,7 +55,6 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
 
     @VisibleForTesting
     public void light() {
-        LOGGER.info("lighting:" + this.getBlockPos());
 
         if(this.isLit){
             return;
