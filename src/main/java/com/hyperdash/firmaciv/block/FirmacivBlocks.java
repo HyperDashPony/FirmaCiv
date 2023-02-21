@@ -32,7 +32,7 @@ public class FirmacivBlocks {
 
 
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
-            () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
+            () -> new SquaredAngleBlock(
                     BlockBehaviour.Properties.of(TFCMaterials.THATCH_COLOR_LEAVES).strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH).noCollission()),
             Firmaciv.FIRMACIV_TAB);
 
