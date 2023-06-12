@@ -3,6 +3,9 @@ package com.hyperdash.firmaciv.block;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import net.dries007.tfc.common.fluids.FluidProperty;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -40,8 +43,6 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     public static final EnumProperty<StairsShape> SHAPE = BlockStateProperties.STAIRS_SHAPE;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static BooleanProperty IS_STAIR_SHAPED = FirmacivBlockStateProperties.IS_STAIR_SHAPED;
-
     protected static final VoxelShape TOP_AABB = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
     protected static final VoxelShape OCTET_NNN = Block.box(0.0D, 0.0D, 0.0D, 8.0D, 8.0D, 8.0D);
@@ -58,11 +59,9 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     private final Block base;
     private final BlockState baseState;
 
-    private final BlockState defaultState = defaultBlockState().setValue(IS_STAIR_SHAPED, false).setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false));
-
     private static VoxelShape[] makeShapes(VoxelShape pSlabShape, VoxelShape pNwCorner, VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
         return IntStream.range(0, 16).mapToObj((p_56945_) -> {
-            return makeAngleShape(p_56945_, pSlabShape, pNwCorner, pNeCorner, pSwCorner, pSeCorner);
+            return makeStairShape(p_56945_, pSlabShape, pNwCorner, pNeCorner, pSwCorner, pSeCorner);
         }).toArray((p_56949_) -> {
             return new VoxelShape[p_56949_];
         });
@@ -71,7 +70,7 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     /**
      * Combines the shapes according to the mode set in the bitfield
      */
-    private static VoxelShape makeAngleShape(int pBitfield, VoxelShape pSlabShape, VoxelShape pNwCorner, VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
+    private static VoxelShape makeStairShape(int pBitfield, VoxelShape pSlabShape, VoxelShape pNwCorner, VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
 
         double move = -0.5D;
         if(pSlabShape == TOP_AABB){
@@ -109,7 +108,7 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Deprecated // Forge: Use the other constructor that takes a Supplier
-    public SquaredAngleBlock(BlockBehaviour.Properties pProperties) {
+    public SquaredAngleBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
         this.base = pBaseState.getBlock();
@@ -212,8 +211,7 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         Direction direction = pContext.getClickedFace();
         BlockPos blockpos = pContext.getClickedPos();
         FluidState fluidstate = pContext.getLevel().getFluidState(blockpos);
-        BlockState blockstate = this.defaultBlockState().setValue(IS_STAIR_SHAPED, (direction == Direction.UP))
-                .setValue(FACING, pContext.getHorizontalDirection()).setValue(HALF, Half.BOTTOM).setValue(WATERLOGGED, Boolean.valueOf(fluidstate.getType() == Fluids.WATER));
+        BlockState blockstate = this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection()).setValue(HALF, direction != Direction.DOWN && (direction == Direction.UP || !(pContext.getClickLocation().y - (double)blockpos.getY() > 0.5D)) ? Half.BOTTOM : Half.TOP).setValue(WATERLOGGED, Boolean.valueOf(fluidstate.getType() == Fluids.WATER));
         return blockstate.setValue(SHAPE, getStairsShape(blockstate, pContext.getLevel(), blockpos));
     }
 
