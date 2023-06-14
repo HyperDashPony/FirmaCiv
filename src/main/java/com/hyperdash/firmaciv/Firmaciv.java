@@ -34,7 +34,7 @@ public class Firmaciv
     public static final String MOD_ID = "firmaciv";
 
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public Firmaciv()
     {
@@ -91,8 +91,6 @@ public class Firmaciv
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
@@ -103,8 +101,6 @@ public class Firmaciv
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent)
         {
-            // Register a new block here
-            LOGGER.info("HELLO from Register Block");
         }
 
 

@@ -12,6 +12,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
@@ -86,6 +88,8 @@ public class CanoeEntity extends FirmacivBoatEntity{
 
     }
 
+
+    public final int PASSENGER_NUMBER = 2;
     public void setType(CanoeEntity.Type pCanoeType) {
         this.entityData.set(DATA_ID_TYPE, pCanoeType.ordinal());
     }
@@ -107,6 +111,10 @@ public class CanoeEntity extends FirmacivBoatEntity{
 
     public static ModelLayerLocation createCanoeModelName(CanoeEntity.Type pType) {
         return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pType.getName()), "main");
+    }
+
+    protected boolean canAddPassenger(Entity pPassenger) {
+        return this.getPassengers().size() < PASSENGER_NUMBER && !this.isEyeInFluid(FluidTags.WATER);
     }
 
     @Override

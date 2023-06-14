@@ -3,6 +3,7 @@ buildscript {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://repo.spongepowered.org/maven'}
         mavenCentral()
 
 
@@ -73,6 +74,8 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'examplemod'
+
+            arg "-mixin.config=firmaciv.mixins.json"
 
             mods {
                 examplemod {
@@ -212,9 +215,14 @@ jar {
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "examplemodsareus",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "TweakClaass":"org.spongepowered.asm.launch.MixinTweaker",
+                "TweakOrder":0,
+                "MixinConfigs":"firmaciv.mixins.json"
         ])
     }
+
+    rename "mixin.refmap.json", "modid.mixin-refmap.json"
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.hyperdash.firmaciv.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "LocalPlayerMixin"
+  ],
+  "client": [
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "firmaciv.mixin-refmap.json"
+}
