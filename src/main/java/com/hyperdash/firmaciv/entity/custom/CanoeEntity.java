@@ -115,6 +115,62 @@ public class CanoeEntity extends FirmacivBoatEntity{
     protected void controlBoat() {
         if (this.isVehicle() && this.getPassengers().get(0) instanceof Player) {
             if(((Player) this.getPassengers().get(0)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
+
+                if(this.getPassengers().size() == 2 && ((Player) this.getPassengers().get(1)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
+                    float f = 0.0F;
+                    if (this.inputLeft) {
+                        --this.deltaRotation;
+                    }
+
+                    if (this.inputRight) {
+                        ++this.deltaRotation;
+                    }
+
+                    if (this.inputRight != this.inputLeft && !this.inputUp && !this.inputDown) {
+                        f += 0.004F;
+                    }
+
+                    this.setYRot(this.getYRot() + this.deltaRotation);
+                    if (this.inputUp) {
+                        f += 0.06F;
+                    }
+
+                    if (this.inputDown) {
+                        f -= 0.03F;
+                    }
+                    this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f));
+                    this.setPaddleState(this.inputRight && !this.inputLeft || this.inputUp, this.inputLeft && !this.inputRight || this.inputUp);
+                } else {
+                    float f = 0.0F;
+                    if (this.inputLeft) {
+                        --this.deltaRotation;
+                    }
+
+                    if (this.inputRight) {
+                        ++this.deltaRotation;
+                    }
+
+                    if (this.inputRight != this.inputLeft && !this.inputUp && !this.inputDown) {
+                        f += 0.004F;
+                    }
+
+                    this.setYRot(this.getYRot() + this.deltaRotation);
+                    if (this.inputUp) {
+                        f += 0.05F;
+                    }
+
+                    if (this.inputDown) {
+                        f -= 0.02F;
+                    }
+
+                    this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f));
+                    this.setPaddleState(this.inputRight && !this.inputLeft || this.inputUp, this.inputLeft && !this.inputRight || this.inputUp);
+                }
+
+
+
+
+            } else {
                 float f = 0.0F;
                 if (this.inputLeft) {
                     --this.deltaRotation;
@@ -125,16 +181,16 @@ public class CanoeEntity extends FirmacivBoatEntity{
                 }
 
                 if (this.inputRight != this.inputLeft && !this.inputUp && !this.inputDown) {
-                    f += 0.005F;
+                    f += 0.002F;
                 }
 
                 this.setYRot(this.getYRot() + this.deltaRotation);
                 if (this.inputUp) {
-                    f += 0.05F;
+                    f += 0.02F;
                 }
 
                 if (this.inputDown) {
-                    f -= 0.025F;
+                    f -= 0.01F;
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f));

@@ -38,6 +38,7 @@ import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WaterlilyBlock;
@@ -49,6 +50,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.event.world.NoteBlockEvent;
 
 public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
@@ -825,9 +827,14 @@ public class FirmacivBoatEntity extends Entity {
 
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
         if (pPlayer.isSecondaryUseActive()) {
+            if(!getPassengers().isEmpty() && !(getPassengers().get(0) instanceof Player)){
+                this.ejectPassengers();
+                return InteractionResult.SUCCESS;
+            }
             return InteractionResult.PASS;
         } else if (this.outOfControlTicks < 60.0F) {
             if (!this.level.isClientSide) {
+
                 return pPlayer.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
             } else {
                 return InteractionResult.SUCCESS;
