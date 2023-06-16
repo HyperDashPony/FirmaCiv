@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.entity.custom;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
+import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
@@ -12,7 +13,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -86,6 +91,8 @@ public class CanoeEntity extends FirmacivBoatEntity{
 
     }
 
+
+    public final int PASSENGER_NUMBER = 2;
     public void setType(CanoeEntity.Type pCanoeType) {
         this.entityData.set(DATA_ID_TYPE, pCanoeType.ordinal());
     }
@@ -105,8 +112,46 @@ public class CanoeEntity extends FirmacivBoatEntity{
         this.entityData.define(DATA_ID_TYPE, CanoeEntity.Type.byName(name).ordinal());
     }
 
+    protected void controlBoat() {
+        if (this.isVehicle() && this.getPassengers().get(0) instanceof Player) {
+            if(((Player) this.getPassengers().get(0)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
+                float f = 0.0F;
+                if (this.inputLeft) {
+                    --this.deltaRotation;
+                }
+
+                if (this.inputRight) {
+                    ++this.deltaRotation;
+                }
+
+                if (this.inputRight != this.inputLeft && !this.inputUp && !this.inputDown) {
+                    f += 0.005F;
+                }
+
+                this.setYRot(this.getYRot() + this.deltaRotation);
+                if (this.inputUp) {
+                    f += 0.05F;
+                }
+
+                if (this.inputDown) {
+                    f -= 0.025F;
+                }
+
+                this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f));
+                this.setPaddleState(this.inputRight && !this.inputLeft || this.inputUp, this.inputLeft && !this.inputRight || this.inputUp);
+            }
+        }
+    }
+
     public static ModelLayerLocation createCanoeModelName(CanoeEntity.Type pType) {
         return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pType.getName()), "main");
+    }
+
+    protected boolean canAddPassenger(Entity pPassenger) {
+        if(this.getPassengers().size() == 1 && !(pPassenger instanceof Player)){
+            return false;
+        }
+        return this.getPassengers().size() < PASSENGER_NUMBER && !this.isEyeInFluid(FluidTags.WATER);
     }
 
     @Override

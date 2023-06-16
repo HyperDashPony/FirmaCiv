@@ -1,0 +1,53 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "tfc:block/wood/planks/maple"
+	},
+	"elements": [
+		{
+			"from": [-2, 0, 7.5],
+			"to": [13, 1, 8.5],
+			"faces": {
+				"north": {"uv": [1, 1, 16, 2], "texture": "#0"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#0"},
+				"south": {"uv": [1, 1, 16, 2], "texture": "#0"},
+				"west": {"uv": [15, 1, 16, 2], "texture": "#0"},
+				"up": {"uv": [16, 1, 1, 0], "texture": "#0"},
+				"down": {"uv": [16, 0, 1, 1], "texture": "#0"}
+			}
+		},
+		{
+			"from": [13, 0, 5.5],
+			"to": [22, 1, 10.5],
+			"faces": {
+				"north": {"uv": [0, 15, 7, 16], "texture": "#0"},
+				"east": {"uv": [5, 15, 10, 16], "texture": "#0"},
+				"south": {"uv": [9, 15, 16, 16], "texture": "#0"},
+				"west": {"uv": [6, 15, 11, 16], "texture": "#0"},
+				"up": {"uv": [9, 6, 16, 11], "texture": "#0"},
+				"down": {"uv": [9, 5, 16, 10], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, -2, 0]
+		},
+		"ground": {
+			"rotation": [90, 0, 0]
+		},
+		"gui": {
+			"rotation": [-67.5, 0, 45],
+			"scale": [1.5, 1.5, 1.5]
+		},
+		"head": {
+			"rotation": [90, 0, 0],
+			"translation": [0, 0, -16],
+			"scale": [1.6, 1.6, 1.6]
+		},
+		"fixed": {
+			"translation": [0, 0, -1.5],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	}
+}

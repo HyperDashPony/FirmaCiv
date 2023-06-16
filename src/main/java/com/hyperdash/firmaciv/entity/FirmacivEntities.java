@@ -4,6 +4,7 @@ import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
+import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import net.dries007.tfc.common.blockentities.BarrelBlockEntity;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -41,6 +42,10 @@ public final class FirmacivEntities {
             Helpers.mapOfKeys(CanoeEntity.Type.class, canoeWoodType -> ENTITY_TYPES.register("canoe/" + canoeWoodType.getName(),
                     () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
                             .build(new ResourceLocation(Firmaciv.MOD_ID, "canoe/" + canoeWoodType.getName()).toString())));
+
+    public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak_entity",
+            () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.8F, 0.5625F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak_entity").toString()));
 
 
     public static void register(IEventBus eventBus) {

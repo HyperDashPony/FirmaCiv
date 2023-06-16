@@ -2,9 +2,11 @@ package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivCanoeRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivKayakRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
+import com.hyperdash.firmaciv.entity.custom.entitymodel.KayakEntityModel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,11 +23,13 @@ public final class RenderEvents {
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(CanoeEntityModel.LAYER_LOCATION, CanoeEntityModel::createBodyLayer);
+        event.registerLayerDefinition(KayakEntityModel.LAYER_LOCATION, KayakEntityModel::createBodyLayer);
     }
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
         event.registerEntityRenderer(FirmacivEntities.CANOE_ENTITY.get(), FirmacivCanoeRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CANOES.get(Stream.of(CanoeEntity.Type.values()).findFirst().get()).get(), FirmacivCanoeRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), FirmacivKayakRenderer::new);
     }
 }
