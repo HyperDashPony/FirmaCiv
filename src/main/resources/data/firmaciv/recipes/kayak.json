@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "@@@",
+    "L@L",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "tfc:lumber"
+    },
+    "@": {
+      "item": "tfc:wool_yarn"
+    },
+    "L": {
+      "item": "firmaciv:large_waterproof_hide"
+    }
+  },
+  "result": {
+    "item": "firmaciv:kayak"
+  }
+}

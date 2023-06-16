@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -49,13 +51,13 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class FirmacivBoatEntity extends Entity {
-    private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_LEFT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_LEFT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
 
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
@@ -63,36 +65,38 @@ public class FirmacivBoatEntity extends Entity {
     private static final float PADDLE_SPEED = ((float)Math.PI / 8F);
     public static final double PADDLE_SOUND_TIME = (double)((float)Math.PI / 4F);
     public static final int BUBBLE_TIME = 60;
-    private final float[] paddlePositions = new float[2];
-    private float invFriction;
-    private float outOfControlTicks;
-    private float turnOutOfControlTicks;
-    private float deltaRotation;
-    private int lerpSteps;
-    private double lerpX;
-    private double lerpY;
-    private double lerpZ;
-    private double lerpYRot;
-    private double lerpXRot;
-    private boolean inputLeft;
-    private boolean inputRight;
-    private boolean inputUp;
-    private boolean inputDown;
-    private double waterLevel;
-    private float landFriction;
-    private Status status;
-    private Status oldStatus;
-    private double lastYd;
-    private boolean isAboveBubbleColumn;
-    private boolean bubbleColumnDirectionIsDown;
-    private float bubbleMultiplier;
-    private float bubbleAngle;
-    private float bubbleAngleO;
+    protected final float[] paddlePositions = new float[2];
+    protected float invFriction;
+    protected float outOfControlTicks;
+    protected float turnOutOfControlTicks;
+    protected float deltaRotation;
+    protected int lerpSteps;
+    protected double lerpX;
+    protected double lerpY;
+    protected double lerpZ;
+    protected double lerpYRot;
+    protected double lerpXRot;
+    protected boolean inputLeft;
+    protected boolean inputRight;
+    protected boolean inputUp;
+    protected boolean inputDown;
+    protected double waterLevel;
+    protected float landFriction;
+    protected Status status;
+    protected Status oldStatus;
+    protected double lastYd;
+    protected boolean isAboveBubbleColumn;
+    protected boolean bubbleColumnDirectionIsDown;
+    protected float bubbleMultiplier;
+    protected float bubbleAngle;
+    protected float bubbleAngleO;
 
     public FirmacivBoatEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.blocksBuilding = true;
     }
+
+
 
     protected float getEyeHeight(Pose pPose, EntityDimensions pSize) {
         return pSize.height;
@@ -255,19 +259,44 @@ public class FirmacivBoatEntity extends Entity {
             this.ejectPassengers();
         }
 
-        if(this.status == Status.IN_WATER){
+
+
+
+        if (this.getHurtTime() > 0) {
+            this.setHurtTime(this.getHurtTime() - 1);
+        }
+
+        if (this.getDamage() > 0.0F) {
+            this.setDamage(this.getDamage() - 1.0F);
+        }
+
+        super.tick();
+
+        if(this.status == Status.IN_WATER && !this.getPassengers().isEmpty()){
             if(Math.abs(this.deltaRotation) > 2){
                 this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
                 if (this.random.nextInt(20) == 0) {
                     this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
                 }
-                if(Math.abs(this.deltaRotation) > 4){
+                if(Math.abs(this.deltaRotation) > 5 && (this.inputRight || this.inputLeft)){
                     this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
+
+
+                    Vec3 splashOffset = this.getDeltaMovement().yRot(45);
+                    if(this.inputLeft){
+                        splashOffset = this.getDeltaMovement().yRot(-45);
+                    }
+                    splashOffset.normalize();
+
+                    for(int i = 0; i < 8; i++){
+                        this.level.addParticle(ParticleTypes.BUBBLE_POP, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
+                        this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
+                    }
 
                     if(Math.abs(this.deltaRotation) > 6){
                         ++turnOutOfControlTicks;
-                        //Firmaciv.LOGGER.info("" + turnOutOfControllTicks);
-                        if (/*!this.level.isClientSide &&*/ this.turnOutOfControlTicks >= 6.0F) {
+                        Firmaciv.LOGGER.info("" + turnOutOfControlTicks);
+                        if (!this.level.isClientSide && this.turnOutOfControlTicks >= 1.0F) {
                             this.ejectPassengers();
                             this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSplashSound(), this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat(), false);
                             this.deltaRotation = 0;
@@ -289,16 +318,6 @@ public class FirmacivBoatEntity extends Entity {
             }
         }
 
-
-        if (this.getHurtTime() > 0) {
-            this.setHurtTime(this.getHurtTime() - 1);
-        }
-
-        if (this.getDamage() > 0.0F) {
-            this.setDamage(this.getDamage() - 1.0F);
-        }
-
-        super.tick();
         this.tickLerp();
         if (this.isControlledByLocalInstance()) {
             if (!(this.getFirstPassenger() instanceof Player)) {
@@ -680,7 +699,7 @@ public class FirmacivBoatEntity extends Entity {
 
     }
 
-    private void controlBoat() {
+    protected void controlBoat() {
         if (this.isVehicle()) {
             float f = 0.0F;
             if (this.inputLeft) {

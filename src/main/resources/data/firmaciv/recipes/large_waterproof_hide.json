@@ -1,0 +1,13 @@
+{
+  "type": "tfc:barrel_sealed",
+  "input_item": {
+    "ingredient": {
+      "item": "tfc:large_prepared_hide"
+    }
+  },
+  "input_fluid": {
+    "ingredient": "tfc:olive_oil",
+    "amount": 200
+  },
+  "duration": 8000
+}
