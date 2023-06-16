@@ -9,5 +9,8 @@
     "ingredient": "tfc:olive_oil",
     "amount": 200
   },
+  "output_item": {
+  "item": "firmaciv:large_waterproof_hide"
+},
   "duration": 8000
 }
