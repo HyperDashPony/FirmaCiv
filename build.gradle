@@ -4,12 +4,14 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://repo.spongepowered.org/maven'}
+        maven {
+            url "https://repo.spongepowered.org/repository/maven-public/"
+            content { includeGroup "org.spongepowered" }
+        }
         mavenCentral()
-
 
     }
     dependencies {
-
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
@@ -20,9 +22,7 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
-apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
@@ -229,11 +229,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+
 mixin {
     // MixinGradle Settings
-    add sourceSets.main, 'mixins.firmaciv.refmap.json'
-    config 'firmaciv.mixins.json'
-
+    add sourceSets.main, 'firmaciv.refmap.json'
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -252,8 +251,6 @@ jar {
                 "MixinConfigs":"firmaciv.mixins.json"
         ])
     }
-
-    rename "mixin.refmap.json", "modid.mixin-refmap.json"
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

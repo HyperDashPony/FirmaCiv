@@ -4,13 +4,12 @@
   "package": "com.hyperdash.firmaciv.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LocalPlayerMixin"
   ],
   "client": [
-
+    "LocalPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "firmaciv.mixin-refmap.json"
+  "refmap": "firmaciv.refmap.json"
 }
