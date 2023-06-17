@@ -115,8 +115,8 @@
     {
       "type": "tfc:sealed_barrel_recipe",
       "anchor": "soaking",
-      "recipe": "firmaciv:large_waterproof_hide",
-      "text": "Soak a Large Prepared Hide in olive oil to make its surface impervious to water.$(br2)An additional kayak tip:$(br)Kayaks cannot carry non-players!"
+      "recipe": "firmaciv:barrel/large_waterproof_hide_olive",
+      "text": "Soak a Large Prepared Hide in either tallow or olive oil to make its surface impervious to water.$(br2)An additional kayak tip:$(br)Kayaks cannot carry non-players!"
     }
   ],
   "read_by_default": true,
