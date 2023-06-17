@@ -60,7 +60,7 @@ public class FirmacivKayakRenderer extends EntityRenderer<KayakEntity> {
         ResourceLocation resourcelocation = pair.getFirst();
         KayakEntityModel kayakModel = pair.getSecond();
 
-        pMatrixStack.translate(0.0f, 1.1875f, 0f);
+        pMatrixStack.translate(0.0f, 1.0625f, 0f);
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(0.0F));
         kayakModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
