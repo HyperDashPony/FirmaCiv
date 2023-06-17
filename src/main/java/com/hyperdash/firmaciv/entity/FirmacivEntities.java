@@ -42,11 +42,11 @@ public final class FirmacivEntities {
      */
     public static final Map<CanoeEntity.Type, RegistryObject<EntityType<CanoeEntity>>> CANOES =
             Helpers.mapOfKeys(CanoeEntity.Type.class, canoeWoodType -> ENTITY_TYPES.register("dugout_canoe/" + canoeWoodType.getName(),
-                    () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
+                    () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.625F)
                             .build(new ResourceLocation(Firmaciv.MOD_ID, "dugout_canoe/" + canoeWoodType.getName()).toString())));
 
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak",
-            () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.8F, 0.5625F)
+            () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.8F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
 
 
