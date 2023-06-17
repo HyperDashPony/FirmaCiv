@@ -1,0 +1,124 @@
+{
+  "name": "Watercraft",
+  "category": "firmaciv:firmaciv",
+  "icon": "firmaciv:kayak",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Travelling the world, or just traversing your locality, is often best done by navigable waterways."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Creating and using a boat may be slightly more involved than you're used to, but there's nothing quite like building the perfect craft and setting off on the high seas. Peruse this manual and learn the ins and outs of carving, crafting, constructing, piloting, and customizing to your delight."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Dugout Canoe",
+      "text": "To build a Dugout Canoe, place 3 stripped logs in a row, horizontally, and cut off the tops with a saw. Then, carve out the canoe shape with an axe. Finally, light the inside of the canoe on fire to hollow out the hull. It will take the same amount of time as a pit kiln to complete the hollowing process. Don't forget to craft a paddle!"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Wood types:$(br2)Carving out a Dugout Canoe requires a softer wood, and as a result, only some logs are workable:$(br2)Douglas Fir$(br)Pine$(br)Chestnut$(br)Spruce$(br)Aspen$(br)Kapok$(br)Rosewood$(br)White Cedar$(br)Willow"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            " F ",
+            " 0 ",
+            " B "
+          ]
+        ],
+        "mapping": {
+          "F": "tfc:wood/stripped_log/douglas_fir[axis=x]",
+          "0": "tfc:wood/stripped_log/douglas_fir[axis=x]",
+          "B": "tfc:wood/stripped_log/douglas_fir[axis=x]"
+        }
+      },
+      "name": "Just a Log",
+      "text": "The first step in making a Dugout Canoe.",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            " F ",
+            " 0 ",
+            " B "
+          ]
+        ],
+        "mapping": {
+          "F": "firmaciv:canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=true]",
+          "0": "firmaciv:canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=false]",
+          "B": "firmaciv:canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=true]"
+        }
+      },
+      "name": "Weird Slabs",
+      "text": "The top of the log has been removed using a saw.",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            " F ",
+            " 0 ",
+            " B "
+          ]
+        ],
+        "mapping": {
+          "F": "firmaciv:canoe_component_block/douglas_fir[canoe_carved=11,facing=west,end=true]",
+          "0": "firmaciv:canoe_component_block/douglas_fir[canoe_carved=11,facing=east,end=false]",
+          "B": "firmaciv:canoe_component_block/douglas_fir[canoe_carved=11,facing=east,end=true]"
+        }
+      },
+      "name": "A Strange Sculpture",
+      "text": "A fully carved Dugout Canoe, ready for hollowing out the hull.",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "firmaciv:dugout_canoe/douglas_fir",
+      "scale": 0.45,
+      "name": "Dugout Canoe",
+      "text": "A completed dugout canoe."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:canoe_paddle",
+      "text": "How else are you supposed to control your canoe? With your blocky hands?"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A few more canoe tips to take with you:$(br2)Two players riding and holding paddles will increase your speed!$(br)Is there a mob riding your canoe and you want it out of there? Crouch and press $(item)$(k:key.use)$() to eject it. Finally, shotgun is all yours.$(br)More than one mob cannot ride in the canoe at a time, but up to two players can ride together."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Your best overland solo-adventure friend. Of course, being the only boat that can be carried as an item helps. It's also fast, maneuverable, and super fun to paddle.",
+      "title": "Kayak"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "firmaciv:kayak",
+      "scale": 0.45,
+      "text": "Kayaks are the smallest and most portable boats."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:kayak",
+      "recipe2": "firmaciv:kayak_paddle"
+    },
+    {
+      "type": "tfc:sealed_barrel_recipe",
+      "anchor": "soaking",
+      "recipe": "firmaciv:large_waterproof_hide",
+      "text": "Soak a Large Prepared Hide in olive oil to make its surface impervious to water.$(br2)An additional kayak tip:$(br)Kayaks cannot carry non-players!"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 8
+}

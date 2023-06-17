@@ -55,12 +55,16 @@ Module 1: Watercraft Overhaul
 [[dependencies.firmaciv]]
     modId="minecraft"
     mandatory=true
-
-#[[dependencies.firmaciv]]
-    #modId="tfc"
-    #mandatory=true
-
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"
+
+
+[[dependencies.firmaciv]]
+    modId="tfc"
+    mandatory=true
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+

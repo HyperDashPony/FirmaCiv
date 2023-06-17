@@ -31,10 +31,14 @@
   "item.firmaciv.sextant": "Sextant",
   "item.firmaciv.nav_toolkit": "Navigator's Toolkit",
   "item.firmaciv.large_waterproof_hide": "Large Waterproof Hide",
+  "item.firmaciv.kayak": "Kayak",
+  "item.firmaciv.kayak_paddle": "Kayak Paddle",
+  "item.firmaciv.canoe_paddle": "Canoe Paddle",
 
   "itemGroup.firmaciv": "Firma: Civilization",
 
   "entity.firmaciv.canoe_entity": "Dugout Canoe",
+  "entity.firmaciv.kayak": "Kayak",
 
   "copy_latitude": "Copy Latitude to Clipboard",
   "copy_longitude": "Copy Longitude to Clipboard",

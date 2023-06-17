@@ -34,18 +34,20 @@ public final class FirmacivEntities {
     public static DeferredRegister<EntityType<?>> ENTITY_TYPES
             = DeferredRegister.create(ForgeRegistries.ENTITIES, Firmaciv.MOD_ID);
 
+    /*
     public static final RegistryObject<EntityType<CanoeEntity>> CANOE_ENTITY = ENTITY_TYPES.register("canoe_entity",
             () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "canoe_entity").toString()));
 
+     */
     public static final Map<CanoeEntity.Type, RegistryObject<EntityType<CanoeEntity>>> CANOES =
-            Helpers.mapOfKeys(CanoeEntity.Type.class, canoeWoodType -> ENTITY_TYPES.register("canoe/" + canoeWoodType.getName(),
+            Helpers.mapOfKeys(CanoeEntity.Type.class, canoeWoodType -> ENTITY_TYPES.register("dugout_canoe/" + canoeWoodType.getName(),
                     () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.5625F)
-                            .build(new ResourceLocation(Firmaciv.MOD_ID, "canoe/" + canoeWoodType.getName()).toString())));
+                            .build(new ResourceLocation(Firmaciv.MOD_ID, "dugout_canoe/" + canoeWoodType.getName()).toString())));
 
-    public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak_entity",
+    public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak",
             () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.8F, 0.5625F)
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak_entity").toString()));
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
 
 
     public static void register(IEventBus eventBus) {

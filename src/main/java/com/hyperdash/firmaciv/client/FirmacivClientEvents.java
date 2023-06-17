@@ -31,8 +31,6 @@ public class FirmacivClientEvents {
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
-        //ItemBlockRenderTypes.setRenderLayer(FirmacivBlocks.CANOE_COMPONENT_BLOCKS.get(), RenderType.cutout());
-        EntityRenderers.register(FirmacivEntities.CANOE_ENTITY.get(), FirmacivCanoeRenderer::new);
 
         for(CanoeEntity.Type type : CanoeEntity.Type.values()){
             EntityRenderers.register(FirmacivEntities.CANOES.get(type).get(), FirmacivCanoeRenderer::new);

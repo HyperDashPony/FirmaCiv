@@ -32,7 +32,6 @@ public final class RenderEvents {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
-        event.registerEntityRenderer(FirmacivEntities.CANOE_ENTITY.get(), FirmacivCanoeRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CANOES.get(Stream.of(CanoeEntity.Type.values()).findFirst().get()).get(), FirmacivCanoeRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), FirmacivKayakRenderer::new);
     }

@@ -22,6 +22,7 @@ public class ForgeEventHandler {
             final GameRules rules = level.getGameRules();
 
             rules.getRule(GameRules.RULE_REDUCEDDEBUGINFO).set(true, server);
+
         }
     }
 

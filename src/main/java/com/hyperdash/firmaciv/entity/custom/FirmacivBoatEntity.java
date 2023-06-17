@@ -294,22 +294,6 @@ public class FirmacivBoatEntity extends Entity {
                         this.level.addParticle(ParticleTypes.BUBBLE_POP, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
                         this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
                     }
-
-                    if(Math.abs(this.deltaRotation) > 6){
-                        ++turnOutOfControlTicks;
-                        Firmaciv.LOGGER.info("" + turnOutOfControlTicks);
-                        if (!this.level.isClientSide && this.turnOutOfControlTicks >= 1.0F) {
-                            this.ejectPassengers();
-                            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSplashSound(), this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat(), false);
-                            this.deltaRotation = 0;
-                            this.setDeltaMovement(Vec3.ZERO);
-                            turnOutOfControlTicks = 0;
-                            this.gameEvent(GameEvent.SPLASH, this.getControllingPassenger());
-                        }
-
-                    } else {
-                        turnOutOfControlTicks = 0;
-                    }
                 }
 
             } else if(this.getDeltaMovement().length() > 0.10){

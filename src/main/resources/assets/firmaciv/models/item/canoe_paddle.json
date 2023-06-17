@@ -3,6 +3,25 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "firmaciv:item/canoe_paddle"
+  },
+  "gui_light": "front",
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [2, -1, 0],
+      "rotation": [45, 0, 45]
+    },
+    "firstperson_righthand": {
+      "translation": [2, -1, 0],
+      "rotation": [45, 0, 45]
+    },
+    "thirdperson_lefthand": {
+      "translation": [2, -1, 0],
+      "rotation": [45, 0, -45]
+    },
+    "firstperson_lefthand": {
+      "translation": [2, -1, 0],
+      "rotation": [45, 0, -45]
+    }
   }
 
 }

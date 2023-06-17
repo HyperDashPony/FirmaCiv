@@ -1,0 +1,5 @@
+{
+  "extend": "tfc:field_guide",
+  "name": "firmaciv field_guide extension",
+  "landing_text": "firmaciv field_guide extension"
+}
