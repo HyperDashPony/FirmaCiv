@@ -40,6 +40,9 @@
   "entity.firmaciv.canoe_entity": "Dugout Canoe",
   "entity.firmaciv.kayak": "Kayak",
 
+  "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_olive": "Large Waterproof Hide",
+  "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_tallow": "Large Waterproof Hide",
+
   "copy_latitude": "Copy Latitude to Clipboard",
   "copy_longitude": "Copy Longitude to Clipboard",
   "copy_latlon": "Copy Latitude and Longitude to Clipboard",

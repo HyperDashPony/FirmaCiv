@@ -10,7 +10,7 @@
       "tag": "tfc:lumber"
     },
     "@": {
-      "item": "tfc:wool_yarn"
+      "tag": "forge:string"
     },
     "L": {
       "item": "firmaciv:large_waterproof_hide"

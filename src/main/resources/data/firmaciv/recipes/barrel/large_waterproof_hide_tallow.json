@@ -1,0 +1,16 @@
+{
+  "type": "tfc:barrel_sealed",
+  "input_item": {
+    "ingredient": {
+      "item": "tfc:large_prepared_hide"
+    }
+  },
+  "input_fluid": {
+    "ingredient": "tfc:tallow",
+    "amount": 100
+  },
+  "output_item": {
+  "item": "firmaciv:large_waterproof_hide"
+},
+  "duration": 8000
+}
