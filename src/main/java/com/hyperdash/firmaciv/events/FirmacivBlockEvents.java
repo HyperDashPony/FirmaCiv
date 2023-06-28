@@ -51,7 +51,6 @@ public final class FirmacivBlockEvents {
                 event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS)) {
             if(event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()){
                 convertLogToCanoeComponent(event);
-
             }
         }
 
