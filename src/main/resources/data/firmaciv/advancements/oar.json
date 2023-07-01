@@ -1,0 +1,30 @@
+{
+  "criteria": {
+    "barrels": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "firmaciv:oar"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "firmaciv:oar"
+    },
+    "title": {
+      "translate": "firmaciv.advancements.oar.title"
+    },
+    "description": {
+      "translate": "firmaciv.advancements.oar.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
+  }
+}

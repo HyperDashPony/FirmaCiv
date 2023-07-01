@@ -5,10 +5,12 @@ import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
 import com.mojang.logging.LogUtils;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.advancements.TFCAdvancements;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,6 +23,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 public class CanoeComponentBlockEntity extends TFCBlockEntity {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    private ServerPlayer lighter;
     private long litTick;
     private boolean isLit;
 

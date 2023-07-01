@@ -112,19 +112,6 @@ public final class FirmacivBlockEvents {
                 world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 
-            /*
-            blockPos1 = thisBlockPos.relative(axis,1);
-            BlockPos blockPos2 = thisBlockPos.relative(axis,-1);
-
-
-
-            if(world.getBlockState(blockPos1).is(canoeComponentBlock) && world.getBlockState(blockPos2).is(canoeComponentBlock)){
-                CanoeComponentBlock.setEndPieces(event.getPlayer().getLevel(), thisBlockPos, canoeComponentBlock, true);
-                CanoeComponentBlock.setEndPieces(event.getPlayer().getLevel(), thisBlockPos.relative(axis, -1), canoeComponentBlock, false);
-            }
-
-             */
-
         }
 
     }

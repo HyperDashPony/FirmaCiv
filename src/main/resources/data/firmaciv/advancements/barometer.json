@@ -1,0 +1,38 @@
+{
+  "parent": "tfc:story/bronze_age",
+  "criteria": {
+    "barometer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "firmaciv:barometer"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "firmaciv:barometer"
+    },
+    "title": {
+      "translate": "firmaciv.advancements.barometer.title"
+    },
+    "description": {
+      "translate": "firmaciv.advancements.barometer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
+  },
+  "requirements": [
+    [
+      "barometer"
+    ]
+  ]
+}

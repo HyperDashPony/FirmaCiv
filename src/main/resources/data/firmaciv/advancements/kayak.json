@@ -1,0 +1,38 @@
+{
+  "parent": "firmaciv:canoe",
+  "criteria": {
+    "kayak": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "firmaciv:kayak"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "firmaciv:kayak"
+    },
+    "title": {
+      "translate": "firmaciv.advancements.kayak.title"
+    },
+    "description": {
+      "translate": "firmaciv.advancements.kayak.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
+  },
+  "requirements": [
+    [
+      "kayak"
+    ]
+  ]
+}
