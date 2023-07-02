@@ -36,6 +36,7 @@ public class ItemRendererMixin implements ResourceManagerReloadListener {
     public void onResourceManagerReload(ResourceManager pResourceManager) {
     }
 
+    /*
     @Inject(method = "render", at = @At("HEAD"))
     void injectRenderChange(ItemStack pItemStack, ItemTransforms.TransformType pTransformType, boolean pLeftHand, PoseStack pPoseStack, MultiBufferSource pBuffer, int pCombinedLight, int pCombinedOverlay, BakedModel pModel, CallbackInfo ci) {
         if (!pItemStack.isEmpty()) {
@@ -63,6 +64,6 @@ public class ItemRendererMixin implements ResourceManagerReloadListener {
 
     }
 
-
+*/
 
 }
