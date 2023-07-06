@@ -10,11 +10,18 @@
           }
         ]
       }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "firmaciv:kayak_paddle"
+      }
     }
   },
   "requirements": [
     [
-      "has_item"
+      "has_item",
+      "has_the_recipe"
     ]
   ],
   "rewards": {

@@ -3,9 +3,11 @@ package com.hyperdash.firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
+import com.hyperdash.firmaciv.config.FirmacivConfig;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.mojang.logging.LogUtils;
+import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -53,7 +55,7 @@ public class Firmaciv
         eventBus.addListener(this::processIMC);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-
+        FirmacivConfig.init();
         if(FMLEnvironment.dist == Dist.CLIENT){
             FirmacivClientEvents.init();
         }
