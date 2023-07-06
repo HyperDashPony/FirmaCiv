@@ -7,7 +7,7 @@
   ],
   "client": [
     "LocalPlayerMixin",
-    "ItemRendererMixin"
+    "PlayerModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "firmaciv:canoe_paddle",
+    "firmaciv:kayak_paddle",
+    "firmaciv:nav_clock",
+    "firmaciv:sextant",
+    "firmaciv:barometer"
+  ]
+}

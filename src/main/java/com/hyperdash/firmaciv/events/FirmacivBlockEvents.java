@@ -3,7 +3,9 @@ package com.hyperdash.firmaciv.events;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
+import com.hyperdash.firmaciv.config.FirmacivConfig;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -47,14 +49,14 @@ public final class FirmacivBlockEvents {
     @SubscribeEvent
     public static void registerToolModificationEvents(BlockEvent.BlockToolModificationEvent event){
 
-        if(event.getToolAction() == ToolActions.AXE_STRIP && event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE) &&
+        if(event.getToolAction() == ToolActions.AXE_STRIP && (event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE) || (!FirmacivConfig.SERVER.canoeWoodRestriction.get() && event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED))) &&
                 event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS)) {
             if(event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()){
                 convertLogToCanoeComponent(event);
             }
         }
 
-        if(event.getToolAction() == ToolActions.AXE_STRIP && event.getState().is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)) {
+        if(event.getToolAction() == ToolActions.AXE_STRIP && (event.getState().is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))) {
             if(event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()){
                 processCanoeComponent(event);
             }

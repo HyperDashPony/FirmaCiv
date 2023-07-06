@@ -1,0 +1,27 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tfc:large_prepared_hide"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "firmaciv:barrel/large_waterproof_hide_tallow",
+      "firmaciv:barrel/large_waterproof_hide_olive",
+      "firmaciv:large_waterproof_hide_wax"
+    ]
+  }
+}

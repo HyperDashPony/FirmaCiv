@@ -115,8 +115,7 @@ public class CanoeEntity extends FirmacivBoatEntity{
     protected void controlBoat() {
         if (this.isVehicle() && this.getPassengers().get(0) instanceof Player) {
             if(((Player) this.getPassengers().get(0)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
-
-                if(this.getPassengers().size() == 2 && ((Player) this.getPassengers().get(1)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
+                if(this.getPassengers().size() == 2 && this.getPassengers().get(1) instanceof Player && ((Player)this.getPassengers().get(1)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
                     float f = 0.0F;
                     if (this.inputLeft) {
                         --this.deltaRotation;

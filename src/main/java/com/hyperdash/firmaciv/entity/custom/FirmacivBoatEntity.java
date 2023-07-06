@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import net.minecraft.BlockUtil;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -51,6 +52,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.event.world.NoteBlockEvent;
+import org.spongepowered.asm.mixin.injection.modify.LocalVariableDiscriminator;
 
 public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
@@ -715,6 +717,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     public void positionRider(Entity pPassenger) {
+
         if (this.hasPassenger(pPassenger)) {
             float f = 0.0F;
             float f1 = (float)((this.isRemoved() ? (double)0.01F : this.getPassengersRidingOffset()) + pPassenger.getMyRidingOffset());

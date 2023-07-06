@@ -20,6 +20,7 @@ public class FirmacivTags {
         public static final TagKey<Block> CAN_MAKE_CANOE = create("can_make_canoe");
 
         public static final TagKey<Block> CANOE_COMPONENT_BLOCKS = create("canoe_component_blocks");
+        public static final TagKey<Block> CAN_MAKE_CANOE_UNRESTRICTED = create("can_make_canoe_unrestricted");
 
         /*
         private static TagKey<Block> create(String id) {
@@ -44,7 +45,7 @@ public class FirmacivTags {
         public static final TagKey<Item> SAWS = getFromTFC("saws");
 
         public static final TagKey<Item> AXES = getFromTFC("axes");
-        public static final TagKey<Item> LUMBER = getFromTFC("axes");
+        public static final TagKey<Item> LUMBER = getFromTFC("lumber");
 
         public static TagKey<Item> getFromTFC(String id) {
             return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("tfc",id));

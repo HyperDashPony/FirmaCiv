@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.config.FirmacivConfig;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.GameRules;
@@ -21,7 +22,9 @@ public class ForgeEventHandler {
 
             final GameRules rules = level.getGameRules();
 
-            rules.getRule(GameRules.RULE_REDUCEDDEBUGINFO).set(true, server);
+            if(FirmacivConfig.SERVER.forceReducedDebugInfo.get()){
+                rules.getRule(GameRules.RULE_REDUCEDDEBUGINFO).set(true, server);
+            }
 
         }
     }
