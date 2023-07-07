@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
+import com.hyperdash.firmaciv.mixins.LivingEntityRendererMixin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -18,12 +19,16 @@ public class PlayerRenderEvents {
     public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
         Player player = (Player) event.getEntity();
 
+        /*
         if(player.isPassenger() && player.getVehicle() instanceof KayakEntity){
             event.getRenderer().getModel().rightLeg.visible = false;
             event.getRenderer().getModel().leftLeg.visible = false;
             event.getRenderer().getModel().rightPants.visible = false;
             event.getRenderer().getModel().leftPants.visible = false;
+            //((LivingEntityRendererMixin)(event.getRenderer())).getLayers().get(3);
         }
+
+         */
 
 
     }
@@ -31,6 +36,8 @@ public class PlayerRenderEvents {
     @SubscribeEvent
     public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
         Player player = (Player) event.getEntity();
+
+        /*
         if(player.isPassenger() && player.getVehicle() instanceof KayakEntity){
             event.getRenderer().getModel().rightLeg.visible = false;
             event.getRenderer().getModel().leftLeg.visible = false;
@@ -38,7 +45,9 @@ public class PlayerRenderEvents {
             event.getRenderer().getModel().leftPants.visible = false;
         }
 
+         */
 
     }
+
 
 }

@@ -24,15 +24,42 @@ public class PlayerModelMixin <T extends LivingEntity> extends HumanoidModel<T>{
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
     void injectRidingPoseChange(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch, CallbackInfo ci){
-        if(pEntity.isPassenger() && pEntity.getVehicle() instanceof CanoeEntity)
-        if (this.riding) {
-            this.rightLeg.xRot = -1.518436F;
-            this.rightLeg.yRot = 0.03490659F;
-            this.rightLeg.zRot = 0.03490659F;
+        if(pEntity.isPassenger() && pEntity.getVehicle() instanceof CanoeEntity){
+            if (this.riding) {
+                this.rightLeg.xRot = -1.570796F;
+                this.rightLeg.yRot = 0F;
+                this.rightLeg.zRot = 0F;
 
-            this.leftLeg.xRot = -1.5184366F;
-            this.leftLeg.yRot = -0.03490659F;
-            this.leftLeg.zRot = -0.03490659F;
+                this.leftLeg.xRot = -1.570796F;
+                this.leftLeg.yRot = -0.002F;
+                this.leftLeg.zRot = -0.002F;
+
+                this.rightLeg.setPos(1.9F, 11.5F, 0.0F);
+                this.leftLeg.setPos(-1.9F, 11.5F, 0.0F);
+            }
+        } else if(pEntity.isPassenger() && pEntity.getVehicle() instanceof KayakEntity){
+            if (this.riding) {
+                this.rightLeg.xRot = -1.570796F;
+                this.rightLeg.yRot = 0.1570796F;
+                this.rightLeg.zRot = 0F;
+
+                this.leftLeg.xRot = -1.570796F;
+                this.leftLeg.yRot = -0.1570796F;
+                this.leftLeg.zRot = -0F;
+
+                this.rightLeg.setPos(1.9F, 13.6F, 1F);
+                this.leftLeg.setPos(-1.9F, 13.6F, 1F);
+            }
+        } else {
+            this.rightLeg.setPos(1.9F, 12.0F, 0.0F);
+            this.leftLeg.setPos(-1.9F, 12.0F, 0.0F);
+            if (this.crouching) {
+                this.rightLeg.z = 4.0F;
+                this.leftLeg.z = 4.0F;
+                this.rightLeg.y = 12.2F;
+                this.leftLeg.y = 12.2F;
+            }
         }
+
     }
 }
