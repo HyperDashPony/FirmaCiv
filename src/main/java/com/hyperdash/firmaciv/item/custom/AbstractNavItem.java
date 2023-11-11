@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.*;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -12,8 +13,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.checkerframework.checker.units.qual.C;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 import static com.hyperdash.firmaciv.item.custom.NavToolkitItem.getNavStrings;
 
@@ -43,7 +46,8 @@ public class AbstractNavItem extends Item{
 
         String locationText = navStrings[NavSelection.LATITUDE.ordinal()];
         String simpleLocationText = navStrings[NavSelection.LAT_SIMPLE.ordinal()];
-        TranslatableComponent copyMessage = new TranslatableComponent("copy_latitude");
+        Component copyMessage = Component.translatable("copy_latitude");
+
 
         switch (navType){
             case LAT:
@@ -51,12 +55,13 @@ public class AbstractNavItem extends Item{
             case LON:
                 locationText = navStrings[NavSelection.LONGITUDE.ordinal()];
                 simpleLocationText = navStrings[NavSelection.LON_SIMPLE.ordinal()];
-                copyMessage = new TranslatableComponent("copy_longitude");
+                copyMessage = Component.translatable("copy_longitude");
+
                 break;
             case ALT:
                 locationText = navStrings[NavSelection.ALTITUDE.ordinal()];
                 simpleLocationText = navStrings[NavSelection.ALT_SIMPLE.ordinal()];
-                copyMessage = new TranslatableComponent("copy_altitude");
+                copyMessage = Component.translatable("copy_altitude");
                 break;
             case LAT_LON:
                 locationText =
@@ -66,18 +71,22 @@ public class AbstractNavItem extends Item{
                 simpleLocationText =
                         navStrings[AbstractNavItem.NavSelection.LAT_SIMPLE.ordinal()] + ", " +
                         navStrings[AbstractNavItem.NavSelection.LON_SIMPLE.ordinal()];
-                copyMessage = new TranslatableComponent("copy_latlon");
+                Component.translatable("copy_latlon");
                 break;
         }
 
         String finalSimpleLocationText = simpleLocationText;
-        TranslatableComponent finalCopyMessage = copyMessage;
+        Component finalCopyMessage = copyMessage;
 
-        Component locationMessage = new TextComponent(
+
+        Component locationMessage = Component.literal(
                 locationText).withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, finalSimpleLocationText))
                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, finalCopyMessage)));
 
-        player.sendMessage(locationMessage, player.getUUID());
+
+        player.sendSystemMessage(locationMessage);
+
+
     }
 
     public static double[] getNavLocation(Vec3 position){

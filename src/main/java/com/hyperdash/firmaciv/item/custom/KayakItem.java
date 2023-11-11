@@ -59,7 +59,7 @@ public class KayakItem extends Item {
                 } else {
                     if (!pLevel.isClientSide) {
                         pLevel.addFreshEntity(kayak);
-                        pLevel.gameEvent(pPlayer, GameEvent.ENTITY_PLACE, new BlockPos(hitresult.getLocation()));
+                        pLevel.gameEvent(pPlayer, GameEvent.ENTITY_PLACE, hitresult.getLocation());
                         if (!pPlayer.getAbilities().instabuild) {
                             itemstack.shrink(1);
                         }

@@ -8,10 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.model.geom.ModelLayers;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -19,9 +16,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Quaternionf;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -68,7 +65,7 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
     public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
-        pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - pEntityYaw));
+        pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
         float f = (float)pEntity.getHurtTime() - pPartialTicks;
         float f1 = pEntity.getDamage() - pPartialTicks;
         if (f1 < 0.0F) {
@@ -76,12 +73,12 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
         }
 
         if (f > 0.0F) {
-            pMatrixStack.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float)pEntity.getHurtDir()));
+            pMatrixStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float)pEntity.getHurtDir()));
         }
 
         float f2 = pEntity.getBubbleAngle(pPartialTicks);
         if (!Mth.equal(f2, 0.0F)) {
-            pMatrixStack.mulPose(new Quaternion(new Vector3f(1.0F, 0.0F, 1.0F), pEntity.getBubbleAngle(pPartialTicks), true));
+            pMatrixStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float)Math.PI / 180F), 1.0F, 0.0F, 1.0F));
         }
 
         Pair<ResourceLocation, CanoeEntityModel> pair = getModelWithLocation(pEntity);
@@ -90,7 +87,7 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
 
         pMatrixStack.translate(0.0f, 1.0625f, 0f);
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
-        pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(0.0F));
+        pMatrixStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         canoeModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(canoeModel.renderType(getTextureLocation(pEntity)));
         canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

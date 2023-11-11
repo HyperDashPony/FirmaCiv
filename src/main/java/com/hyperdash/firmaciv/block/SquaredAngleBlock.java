@@ -136,12 +136,6 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         return pState.getValue(SHAPE).ordinal() * 4 + pState.getValue(FACING).get2DDataValue();
     }
 
-    /**
-     * Called periodically clientside on blocks near the player to show effects (like furnace fire particles).
-     */
-    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, Random pRand) {
-        this.base.animateTick(pState, pLevel, pPos, pRand);
-    }
 
     public void attack(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
         this.baseState.attack(pLevel, pPos, pPlayer);
@@ -185,16 +179,6 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         return this.base.isRandomlyTicking(pState);
     }
 
-    /**
-     * Performs a random tick on a block.
-     */
-    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
-        this.base.randomTick(pState, pLevel, pPos, pRandom);
-    }
-
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRand) {
-        this.base.tick(pState, pLevel, pPos, pRand);
-    }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         return this.baseState.use(pLevel, pPlayer, pHand, pHit);

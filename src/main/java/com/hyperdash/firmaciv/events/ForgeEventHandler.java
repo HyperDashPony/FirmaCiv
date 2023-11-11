@@ -1,23 +1,24 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.config.FirmacivConfig;
+import com.hyperdash.firmaciv.events.config.FirmacivConfig;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeEventHandler {
 
+
     @SubscribeEvent
-    public static void onWorldLoad(WorldEvent.Load event)
+    public static void onWorldLoad(LevelEvent.Load event)
     {
-        if (event.getWorld() instanceof final ServerLevel level)
+        if (event.getLevel() instanceof final ServerLevel level)
         {
+
             final MinecraftServer server = level.getServer();
 
             final GameRules rules = level.getGameRules();

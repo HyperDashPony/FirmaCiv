@@ -3,21 +3,16 @@ package com.hyperdash.firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
-import com.hyperdash.firmaciv.config.FirmacivConfig;
+import com.hyperdash.firmaciv.events.config.FirmacivConfig;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.item.FirmacivItems;
+import com.hyperdash.firmaciv.item.FirmacivTabs;
 import com.mojang.logging.LogUtils;
-import net.dries007.tfc.config.TFCConfig;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -43,6 +38,8 @@ public class Firmaciv
         // Register the setup method for modloading
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        FirmacivTabs.register(eventBus);
+
         FirmacivItems.register(eventBus);
         FirmacivBlocks.register(eventBus);
         FirmacivBlockEntities.register(eventBus);
@@ -55,22 +52,28 @@ public class Firmaciv
         eventBus.addListener(this::processIMC);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        eventBus.addListener(this::addCreative);
         FirmacivConfig.init();
         if(FMLEnvironment.dist == Dist.CLIENT){
             FirmacivClientEvents.init();
         }
     }
 
+    /*
     public static final CreativeModeTab FIRMACIV_TAB = new CreativeModeTab(MOD_ID) {
         @Override
         public ItemStack makeIcon() {
             return FirmacivItems.SEXTANT.get().getDefaultInstance();
         }
     };
-
+    */
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
+    }
+
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
@@ -94,6 +97,7 @@ public class Firmaciv
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
+    /*
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents
     {
@@ -104,4 +108,6 @@ public class Firmaciv
 
 
     }
+
+     */
 }

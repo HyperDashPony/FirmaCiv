@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.util;
 import com.hyperdash.firmaciv.Firmaciv;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -22,17 +23,8 @@ public class FirmacivTags {
         public static final TagKey<Block> CANOE_COMPONENT_BLOCKS = create("canoe_component_blocks");
         public static final TagKey<Block> CAN_MAKE_CANOE_UNRESTRICTED = create("can_make_canoe_unrestricted");
 
-        /*
         private static TagKey<Block> create(String id) {
-            return TagKey.create(Registry.BLOCK_REGISTRY, identifier(id));
-        }
-        */
-        public static TagKey<Block> create(ResourceLocation name) {
-            return TagKey.create(Registry.BLOCK_REGISTRY, name);
-        }
-
-        public static TagKey<Block> create(String id) {
-            return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("firmaciv",id));
+            return TagKey.create(Registries.BLOCK, new ResourceLocation("firmaciv",id));
         }
 
         public Blocks() {
@@ -48,10 +40,10 @@ public class FirmacivTags {
         public static final TagKey<Item> LUMBER = getFromTFC("lumber");
 
         public static TagKey<Item> getFromTFC(String id) {
-            return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("tfc",id));
+            return TagKey.create(Registries.ITEM, new ResourceLocation("tfc",id));
         }
         public static TagKey<Item> create(String id) {
-            return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("firmaciv",id));
+            return TagKey.create(Registries.ITEM, new ResourceLocation("firmaciv",id));
         }
     }
 

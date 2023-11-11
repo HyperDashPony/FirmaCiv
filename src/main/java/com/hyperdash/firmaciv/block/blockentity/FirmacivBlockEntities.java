@@ -1,26 +1,17 @@
 package com.hyperdash.firmaciv.block.blockentity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
-import net.dries007.tfc.common.blockentities.TFCLecternBlockEntity;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Locale;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -49,7 +40,7 @@ public class FirmacivBlockEntities {
 
 
     static {
-        BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Firmaciv.MOD_ID);
+        BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Firmaciv.MOD_ID);
 
         CANOE_COMPONENT_BLOCK_ENTITY = register("canoe_component_block_entity", CanoeComponentBlockEntity::new,
                 Stream.of(CanoeComponentBlock.CanoeWoodType.values()).map(CANOE_COMPONENT_BLOCKS::get));

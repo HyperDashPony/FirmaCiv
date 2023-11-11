@@ -108,9 +108,15 @@ public class CanoeEntity extends FirmacivBoatEntity{
 
     public CanoeEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        String name = pEntityType.getRegistryName().getPath().split("/")[1];
+        //TODO: 1.20
+        //String name = pEntityType.getDescriptionId().getPath().split("/")[1];
+
+        String name = pEntityType.toString().split("canoe.")[1];
+
         this.entityData.define(DATA_ID_TYPE, CanoeEntity.Type.byName(name).ordinal());
     }
+
+
 
     protected void controlBoat() {
         if (this.isVehicle() && this.getPassengers().get(0) instanceof Player) {

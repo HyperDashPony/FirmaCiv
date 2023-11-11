@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.config;
+package com.hyperdash.firmaciv.events.config;
 
 import net.dries007.tfc.common.blocks.plant.fruit.FruitBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;

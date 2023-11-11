@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "firmaciv:block/thatch_roofing_slab"
+    },
+    "type=double": {
+      "model": "tfc:block/thatch"
+    },
+    "type=top": {
+      "model": "firmaciv:block/thatch_roofing_slab_top"
+    }
+  }
+}

@@ -1,10 +1,7 @@
-package com.hyperdash.firmaciv.config;
+package com.hyperdash.firmaciv.events.config;
 
-import com.hyperdash.firmaciv.config.ServerConfig;
-import net.dries007.tfc.util.Helpers;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 

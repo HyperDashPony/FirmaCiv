@@ -25,6 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySelector;
@@ -35,6 +36,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,8 +53,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.event.world.NoteBlockEvent;
-import org.spongepowered.asm.mixin.injection.modify.LocalVariableDiscriminator;
 
 public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
@@ -156,15 +156,15 @@ public class FirmacivBoatEntity extends Entity {
     public boolean hurt(DamageSource pSource, float pAmount) {
         if (this.isInvulnerableTo(pSource)) {
             return false;
-        } else if (!this.level.isClientSide && !this.isRemoved()) {
+        } else if (!this.level().isClientSide && !this.isRemoved()) {
             this.setHurtDir(-this.getHurtDir());
             this.setHurtTime(10);
             this.setDamage(this.getDamage() + pAmount * 10.0F);
             this.markHurt();
-            this.gameEvent(GameEvent.ENTITY_DAMAGED, pSource.getEntity());
+            this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
             boolean flag = pSource.getEntity() instanceof Player && ((Player)pSource.getEntity()).getAbilities().instabuild;
             if (flag || this.getDamage() > 40.0F) {
-                if (!flag && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                     this.spawnAtLocation(this.getDropItem());
                 }
 
@@ -178,7 +178,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     public void onAboveBubbleCol(boolean pDownwards) {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.isAboveBubbleColumn = true;
             this.bubbleColumnDirectionIsDown = pDownwards;
             if (this.getBubbleTime() == 0) {
@@ -186,9 +186,9 @@ public class FirmacivBoatEntity extends Entity {
             }
         }
 
-        this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
+        this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
         if (this.random.nextInt(20) == 0) {
-            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSplashSound(), this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat(), false);
+            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSplashSound(), this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat(), false);
         }
 
         this.gameEvent(GameEvent.SPLASH, this.getControllingPassenger());
@@ -259,7 +259,7 @@ public class FirmacivBoatEntity extends Entity {
             ++this.outOfControlTicks;
         }
 
-        if (!this.level.isClientSide && this.outOfControlTicks >= 60.0F) {
+        if (!this.level().isClientSide && this.outOfControlTicks >= 60.0F) {
             this.ejectPassengers();
         }
 
@@ -278,12 +278,12 @@ public class FirmacivBoatEntity extends Entity {
 
         if(this.status == Status.IN_WATER && !this.getPassengers().isEmpty()){
             if(Math.abs(this.deltaRotation) > 2){
-                this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
+                this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
                 if (this.random.nextInt(20) == 0) {
-                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
                 }
                 if(Math.abs(this.deltaRotation) > 5 && (this.inputRight || this.inputLeft)){
-                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
 
 
                     Vec3 splashOffset = this.getDeltaMovement().yRot(45);
@@ -293,15 +293,15 @@ public class FirmacivBoatEntity extends Entity {
                     splashOffset.normalize();
 
                     for(int i = 0; i < 8; i++){
-                        this.level.addParticle(ParticleTypes.BUBBLE_POP, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
-                        this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
+                        this.level().addParticle(ParticleTypes.BUBBLE_POP, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
+                        this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat() + splashOffset.x*2 + this.getDeltaMovement().x*i, this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat() + splashOffset.z*2 + this.getDeltaMovement().x*i, 0.0D, 0.0D, 0.0D);
                     }
                 }
 
             } else if(this.getDeltaMovement().length() > 0.10){
                 if (this.random.nextInt(8) == 0) {
-                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.1F, 0.8F + 0.4F * this.random.nextFloat(), false);
-                    this.level.addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.1F, 0.8F + 0.4F * this.random.nextFloat(), false);
+                    this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double)this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
                 }
             }
         }
@@ -313,9 +313,9 @@ public class FirmacivBoatEntity extends Entity {
             }
 
             this.floatBoat();
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 this.controlBoat();
-                this.level.sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
+                this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
 
             this.move(MoverType.SELF, this.getDeltaMovement());
@@ -333,8 +333,8 @@ public class FirmacivBoatEntity extends Entity {
                         Vec3 vec3 = this.getViewVector(1.0F);
                         double d0 = i == 1 ? -vec3.z : vec3.z;
                         double d1 = i == 1 ? vec3.x : -vec3.x;
-                        this.level.playSound((Player)null, this.getX() + d0, this.getY(), this.getZ() + d1, soundevent, this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
-                        this.level.gameEvent(this.getControllingPassenger(), GameEvent.SPLASH, new BlockPos(this.getX() + d0, this.getY(), this.getZ() + d1));
+                        this.level().playSound((Player)null, this.getX() + d0, this.getY(), this.getZ() + d1, soundevent, this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
+                        this.level().gameEvent(this.getControllingPassenger(), GameEvent.SPLASH, new BlockPos((int)(this.getX() + d0), (int)this.getY(), (int)(this.getZ() + d1)));
                     }
                 }
 
@@ -345,9 +345,9 @@ public class FirmacivBoatEntity extends Entity {
         }
 
         this.checkInsideBlocks();
-        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate((double)0.2F, (double)-0.01F, (double)0.2F), EntitySelector.pushableBy(this));
+        List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate((double)0.2F, (double)-0.01F, (double)0.2F), EntitySelector.pushableBy(this));
         if (!list.isEmpty()) {
-            boolean flag = !this.level.isClientSide && !(this.getControllingPassenger() instanceof Player);
+            boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
 
             for(int j = 0; j < list.size(); ++j) {
                 Entity entity = list.get(j);
@@ -364,7 +364,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     private void tickBubbleColumn() {
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             int i = this.getBubbleTime();
             if (i > 0) {
                 this.bubbleMultiplier += 0.05F;
@@ -374,7 +374,7 @@ public class FirmacivBoatEntity extends Entity {
 
             this.bubbleMultiplier = Mth.clamp(this.bubbleMultiplier, 0.0F, 1.0F);
             this.bubbleAngleO = this.bubbleAngle;
-            this.bubbleAngle = 10.0F * (float)Math.sin((double)(0.5F * (float)this.level.getGameTime())) * this.bubbleMultiplier;
+            this.bubbleAngle = 10.0F * (float)Math.sin((double)(0.5F * (float)this.level().getGameTime())) * this.bubbleMultiplier;
         } else {
             if (!this.isAboveBubbleColumn) {
                 this.setBubbleTime(0);
@@ -422,7 +422,7 @@ public class FirmacivBoatEntity extends Entity {
     private void tickLerp() {
         if (this.isControlledByLocalInstance()) {
             this.lerpSteps = 0;
-            this.setPacketCoordinates(this.getX(), this.getY(), this.getZ());
+            this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
         }
 
         if (this.lerpSteps > 0) {
@@ -485,9 +485,9 @@ public class FirmacivBoatEntity extends Entity {
             for(int l1 = i; l1 < j; ++l1) {
                 for(int i2 = i1; i2 < j1; ++i2) {
                     blockpos$mutableblockpos.set(l1, k1, i2);
-                    FluidState fluidstate = this.level.getFluidState(blockpos$mutableblockpos);
+                    FluidState fluidstate = this.level().getFluidState(blockpos$mutableblockpos);
                     if (fluidstate.is(FluidTags.WATER)) {
-                        f = Math.max(f, fluidstate.getHeight(this.level, blockpos$mutableblockpos));
+                        f = Math.max(f, fluidstate.getHeight(this.level(), blockpos$mutableblockpos));
                     }
 
                     if (f >= 1.0F) {
@@ -528,9 +528,9 @@ public class FirmacivBoatEntity extends Entity {
                     for(int k2 = k; k2 < l; ++k2) {
                         if (j2 <= 0 || k2 != k && k2 != l - 1) {
                             blockpos$mutableblockpos.set(l1, k2, i2);
-                            BlockState blockstate = this.level.getBlockState(blockpos$mutableblockpos);
-                            if (!(blockstate.getBlock() instanceof WaterlilyBlock) && Shapes.joinIsNotEmpty(blockstate.getCollisionShape(this.level, blockpos$mutableblockpos).move((double)l1, (double)k2, (double)i2), voxelshape, BooleanOp.AND)) {
-                                f += blockstate.getFriction(this.level, blockpos$mutableblockpos, this);
+                            BlockState blockstate = this.level().getBlockState(blockpos$mutableblockpos);
+                            if (!(blockstate.getBlock() instanceof WaterlilyBlock) && Shapes.joinIsNotEmpty(blockstate.getCollisionShape(this.level(), blockpos$mutableblockpos).move((double)l1, (double)k2, (double)i2), voxelshape, BooleanOp.AND)) {
+                                f += blockstate.getFriction(this.level(), blockpos$mutableblockpos, this);
                                 ++k1;
                             }
                         }
@@ -558,9 +558,9 @@ public class FirmacivBoatEntity extends Entity {
             for(int l1 = k; l1 < l; ++l1) {
                 for(int i2 = i1; i2 < j1; ++i2) {
                     blockpos$mutableblockpos.set(k1, l1, i2);
-                    FluidState fluidstate = this.level.getFluidState(blockpos$mutableblockpos);
+                    FluidState fluidstate = this.level().getFluidState(blockpos$mutableblockpos);
                     if (fluidstate.is(FluidTags.WATER)) {
-                        float f = (float)l1 + fluidstate.getHeight(this.level, blockpos$mutableblockpos);
+                        float f = (float)l1 + fluidstate.getHeight(this.level(), blockpos$mutableblockpos);
                         this.waterLevel = Math.max((double)f, this.waterLevel);
                         flag |= aabb.minY < (double)f;
                     }
@@ -591,8 +591,8 @@ public class FirmacivBoatEntity extends Entity {
             for(int l1 = k; l1 < l; ++l1) {
                 for(int i2 = i1; i2 < j1; ++i2) {
                     blockpos$mutableblockpos.set(k1, l1, i2);
-                    FluidState fluidstate = this.level.getFluidState(blockpos$mutableblockpos);
-                    if (fluidstate.is(FluidTags.WATER) && d0 < (double)((float)blockpos$mutableblockpos.getY() + fluidstate.getHeight(this.level, blockpos$mutableblockpos))) {
+                    FluidState fluidstate = this.level().getFluidState(blockpos$mutableblockpos);
+                    if (fluidstate.is(FluidTags.WATER) && d0 < (double)((float)blockpos$mutableblockpos.getY() + fluidstate.getHeight(this.level(), blockpos$mutableblockpos))) {
                         if (!fluidstate.isSource()) {
                             return FirmacivBoatEntity.Status.UNDER_FLOWING_WATER;
                         }
@@ -716,7 +716,10 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
-    public void positionRider(Entity pPassenger) {
+
+    //TODO: 1.20 fix
+    /*
+    final void positionRider(Entity pPassenger) {
 
         if (this.hasPassenger(pPassenger)) {
             float f = 0.0F;
@@ -747,28 +750,30 @@ public class FirmacivBoatEntity extends Entity {
 
         }
     }
+    *
+     */
 
     public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {
         Vec3 vec3 = getCollisionHorizontalEscapeVector((double)(this.getBbWidth() * Mth.SQRT_OF_TWO), (double)pLivingEntity.getBbWidth(), pLivingEntity.getYRot());
         double d0 = this.getX() + vec3.x;
         double d1 = this.getZ() + vec3.z;
-        BlockPos blockpos = new BlockPos(d0, this.getBoundingBox().maxY, d1);
+        BlockPos blockpos = BlockPos.containing(d0, this.getBoundingBox().maxY, d1);
         BlockPos blockpos1 = blockpos.below();
-        if (!this.level.isWaterAt(blockpos1)) {
+        if (!this.level().isWaterAt(blockpos1)) {
             List<Vec3> list = Lists.newArrayList();
-            double d2 = this.level.getBlockFloorHeight(blockpos);
+            double d2 = this.level().getBlockFloorHeight(blockpos);
             if (DismountHelper.isBlockFloorValid(d2)) {
                 list.add(new Vec3(d0, (double)blockpos.getY() + d2, d1));
             }
 
-            double d3 = this.level.getBlockFloorHeight(blockpos1);
+            double d3 = this.level().getBlockFloorHeight(blockpos1);
             if (DismountHelper.isBlockFloorValid(d3)) {
                 list.add(new Vec3(d0, (double)blockpos1.getY() + d3, d1));
             }
 
             for(Pose pose : pLivingEntity.getDismountPoses()) {
                 for(Vec3 vec31 : list) {
-                    if (DismountHelper.canDismountTo(this.level, vec31, pLivingEntity, pose)) {
+                    if (DismountHelper.canDismountTo(this.level(), vec31, pLivingEntity, pose)) {
                         pLivingEntity.setPose(pose);
                         return vec31;
                     }
@@ -820,7 +825,7 @@ public class FirmacivBoatEntity extends Entity {
             }
             return InteractionResult.PASS;
         } else if (this.outOfControlTicks < 60.0F) {
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
 
                 return pPlayer.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
             } else {
@@ -830,6 +835,7 @@ public class FirmacivBoatEntity extends Entity {
             return InteractionResult.PASS;
         }
     }
+
 
     protected void checkFallDamage(double pY, boolean pOnGround, BlockState pState, BlockPos pPos) {
         this.lastYd = this.getDeltaMovement().y;
@@ -841,10 +847,10 @@ public class FirmacivBoatEntity extends Entity {
                         return;
                     }
 
-                    this.causeFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
-                    if (!this.level.isClientSide && !this.isRemoved()) {
+                    this.causeFallDamage(this.fallDistance, 1.0F, this.damageSources().fall());
+                    if (!this.level().isClientSide && !this.isRemoved()) {
                         this.kill();
-                        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                             for(int i = 0; i < 3; ++i) {
                                 this.spawnAtLocation(this.getBoatType().getPlanks());
                             }
@@ -857,7 +863,7 @@ public class FirmacivBoatEntity extends Entity {
                 }
 
                 this.resetFallDistance();
-            } else if (!this.level.getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && pY < 0.0D) {
+            } else if (!this.level().getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && pY < 0.0D) {
                 this.fallDistance -= (float)pY;
             }
 
@@ -934,13 +940,17 @@ public class FirmacivBoatEntity extends Entity {
         return this.getPassengers().size() < 2 && !this.isEyeInFluid(FluidTags.WATER);
     }
 
-    /**
-     * For vehicles, the first passenger is generally considered the controller and "drives" the vehicle. For example,
-     * Pigs, Horses, and Boats are generally "steered" by the controlling passenger.
-     */
     @Nullable
-    public Entity getControllingPassenger() {
-        return this.getFirstPassenger();
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getFirstPassenger();
+        LivingEntity livingentity1;
+        if (entity instanceof LivingEntity livingentity) {
+            livingentity1 = livingentity;
+        } else {
+            livingentity1 = null;
+        }
+
+        return livingentity1;
     }
 
     public void setInput(boolean pInputLeft, boolean pInputRight, boolean pInputUp, boolean pInputDown) {
@@ -948,10 +958,6 @@ public class FirmacivBoatEntity extends Entity {
         this.inputRight = pInputRight;
         this.inputUp = pInputUp;
         this.inputDown = pInputDown;
-    }
-
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
     }
 
     public boolean isUnderWater() {

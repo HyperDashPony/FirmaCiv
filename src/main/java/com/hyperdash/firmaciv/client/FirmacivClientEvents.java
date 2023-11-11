@@ -48,8 +48,8 @@ public class FirmacivClientEvents {
                 if (entity == null) {
                     return 0.0F;
                 } else {
-                    if (pLevel == null && entity.level instanceof ClientLevel) {
-                        pLevel = (ClientLevel)entity.level;
+                    if (pLevel == null && entity.level() instanceof ClientLevel) {
+                        pLevel = (ClientLevel)entity.level();
                     }
 
                     if (pLevel == null) {
@@ -81,8 +81,8 @@ public class FirmacivClientEvents {
                 if (entity == null) {
                     return 0.0F;
                 } else {
-                    if (p_174666_ == null && entity.level instanceof ClientLevel) {
-                        p_174666_ = (ClientLevel)entity.level;
+                    if (p_174666_ == null && entity.level() instanceof ClientLevel) {
+                        p_174666_ = (ClientLevel)entity.level();
                     }
 
                     double longitude = Math.abs((AbstractNavItem.getNavLocation(entity.getEyePosition())[AbstractNavItem.NavSelection.LONGITUDE.ordinal()]%180)/180);

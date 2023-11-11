@@ -22,25 +22,25 @@
   "block.firmaciv.canoe_component_block/white_cedar": "White Cedar Canoe Component",
   "block.firmaciv.canoe_component_block/willow": "Willow Canoe Component",
 
-  "entity.firmaciv.dugout_canoe/acacia": "Acacia Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/ash": "Ash Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/aspen": "Aspen Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/birch": "Birch Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/blackwood": "Blackwood Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/chestnut": "Chestnut Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/douglas_fir": "Douglas Fir Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/hickory": "Hickory Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/kapok": "Kapok Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/maple": "Maple Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/oak": "Oak Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/palm": "Palm Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/pine": "Pine Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/rosewood": "Rosewood Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/sequoia": "Sequoia Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/spruce": "Spruce Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/sycamore": "Sycamore Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/white_cedar": "White Cedar Dugout Canoe",
-  "entity.firmaciv.dugout_canoe/willow": "Willow Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.acacia": "Acacia Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.ash": "Ash Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.aspen": "Aspen Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.birch": "Birch Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.blackwood": "Blackwood Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.chestnut": "Chestnut Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.douglas_fir": "Douglas Fir Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.hickory": "Hickory Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.kapok": "Kapok Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.maple": "Maple Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.oak": "Oak Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.palm": "Palm Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.pine": "Pine Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.rosewood": "Rosewood Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.sequoia": "Sequoia Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.spruce": "Spruce Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.sycamore": "Sycamore Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.white_cedar": "White Cedar Dugout Canoe",
+  "entity.firmaciv.dugout_canoe.willow": "Willow Dugout Canoe",
 
   "entity.firmaciv.kayak": "Kayak",
 
@@ -58,6 +58,8 @@
   "item.firmaciv.canoe_paddle": "Canoe Paddle",
 
   "itemGroup.firmaciv": "Firma: Civilization",
+  "creativetab.firmaciv_tab": "Firma: Civilization",
+  "creativetab.watercraft_tab": "Watercraft",
   
   "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_olive": "Large Waterproof Hide",
   "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_tallow": "Large Waterproof Hide",
@@ -80,5 +82,11 @@
   "firmaciv.advancements.sextant.title": "The Stars Will Aid",
   "firmaciv.advancements.sextant.description": "Craft a Sextant",
   "firmaciv.advancements.barometer.title": "Surf and/or Turf",
-  "firmaciv.advancements.barometer.description": "Craft a Barometer"
+  "firmaciv.advancements.barometer.description": "Craft a Barometer",
+  "creativetab.navigation_tab": "Navigation"
+
+
+
+
+
 }

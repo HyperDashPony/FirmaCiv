@@ -3,9 +3,8 @@ package com.hyperdash.firmaciv.events;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
-import com.hyperdash.firmaciv.config.FirmacivConfig;
+import com.hyperdash.firmaciv.events.config.FirmacivConfig;
 import com.hyperdash.firmaciv.util.FirmacivTags;
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -36,7 +35,7 @@ public final class FirmacivBlockEvents {
 
             if((int)event.getState().getValue(CANOE_CARVED) == 11){
 
-                BlockEntity blockEntity = event.getPlayer().getLevel().getBlockEntity(event.getPos());
+                BlockEntity blockEntity = event.getPlayer().level().getBlockEntity(event.getPos());
 
                 if (blockEntity instanceof CanoeComponentBlockEntity){
                     CanoeComponentBlockEntity ccBlockEntity = (CanoeComponentBlockEntity) blockEntity;
@@ -69,7 +68,7 @@ public final class FirmacivBlockEvents {
         Block canoeComponentBlock = event.getState().getBlock();
         BlockState canoeComponentBlockState = event.getState();
         BlockPos thisBlockPos = event.getPos();
-        LevelAccessor world = event.getWorld();
+        LevelAccessor world = event.getLevel();
         Direction.Axis axis = event.getState().getValue(AXIS);
 
         int nextCanoeCarvedState = event.getState().getValue(CANOE_CARVED) + 1;
@@ -78,7 +77,7 @@ public final class FirmacivBlockEvents {
                 event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS) ){
 
             world.setBlock(thisBlockPos, event.getState().setValue(CANOE_CARVED, nextCanoeCarvedState), 2);
-            event.getPlayer().level.addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
+            event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
             event.getPlayer().getItemInHand(event.getContext().getHand()).getUseAnimation();
             world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
@@ -109,7 +108,7 @@ public final class FirmacivBlockEvents {
 
             if(flag){
                 world.setBlock(thisBlockPos, event.getState().setValue(CANOE_CARVED, nextCanoeCarvedState), 2);
-                event.getPlayer().level.addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
+                event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
                 event.getPlayer().getItemInHand(event.getContext().getHand()).getUseAnimation();
                 world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
@@ -122,13 +121,13 @@ public final class FirmacivBlockEvents {
 
         Block strippedLogBlock = event.getState().getBlock();
         BlockPos thisBlockPos = event.getPos();
-        LevelAccessor world = event.getWorld();
-        Level level = event.getPlayer().getLevel();
+        LevelAccessor world = event.getLevel();
+        Level level = event.getPlayer().level();
 
         if (CanoeComponentBlock.isValidCanoeShape(world, strippedLogBlock, thisBlockPos)) {
             world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            event.getPlayer().level.addDestroyBlockEffect(thisBlockPos, event.getState());
+            event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, event.getState());
 
             Block canoeComponentBlock = getByStripped(strippedLogBlock);
             canoeComponentBlock.defaultBlockState().setValue(AXIS, Direction.Axis.Z);
@@ -140,8 +139,8 @@ public final class FirmacivBlockEvents {
             BlockPos blockPos2 = thisBlockPos.relative(axis,-1);
 
             if(world.getBlockState(blockPos1).is(canoeComponentBlock) && world.getBlockState(blockPos2).is(canoeComponentBlock)){
-                CanoeComponentBlock.setEndPieces(event.getPlayer().getLevel(), thisBlockPos, canoeComponentBlock, true);
-                CanoeComponentBlock.setEndPieces(event.getPlayer().getLevel(), thisBlockPos.relative(axis, -1), canoeComponentBlock, false);
+                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), thisBlockPos, canoeComponentBlock, true);
+                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), thisBlockPos.relative(axis, -1), canoeComponentBlock, false);
             } else if(level.getBlockState(blockPos1).is(canoeComponentBlock)){
                 setEndPieces(level, blockPos1, canoeComponentBlock, true);
             } else {

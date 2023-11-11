@@ -38,7 +38,8 @@ public class NavToolkitItem extends AbstractNavItem{
     }
 
     private void outputCoordinate(Vec3 position, Player player){
-
+        //TODO: fix 1.20
+        /*
         String[] navStrings = AbstractNavItem.getNavStrings(position);
 
         String altitudeText = navStrings[AbstractNavItem.NavSelection.ALTITUDE.ordinal()];
@@ -50,6 +51,10 @@ public class NavToolkitItem extends AbstractNavItem{
                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("copy_altitude"))));
 
         player.sendMessage(altitudeMessage, player.getUUID());
+
+         */
     }
+
+
 
 }
