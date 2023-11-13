@@ -67,67 +67,6 @@ public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
 
-    public enum Type {
-        ACACIA(TFCItems.LUMBER.get(Wood.ACACIA)),
-        ASH(TFCItems.LUMBER.get(Wood.ASH)),
-        ASPEN(TFCItems.LUMBER.get(Wood.ASPEN)),
-        BIRCH(TFCItems.LUMBER.get(Wood.BIRCH)),
-        BLACKWOOD(TFCItems.LUMBER.get(Wood.BLACKWOOD)),
-        CHESTNUT(TFCItems.LUMBER.get(Wood.CHESTNUT)),
-        DOUGLAS_FIR(TFCItems.LUMBER.get(Wood.DOUGLAS_FIR)),
-        HICKORY(TFCItems.LUMBER.get(Wood.HICKORY)),
-        KAPOK(TFCItems.LUMBER.get(Wood.KAPOK)),
-        MAPLE(TFCItems.LUMBER.get(Wood.MAPLE)),
-        OAK(TFCItems.LUMBER.get(Wood.OAK)),
-        PALM(TFCItems.LUMBER.get(Wood.PALM)),
-        PINE(TFCItems.LUMBER.get(Wood.PINE)),
-        ROSEWOOD(TFCItems.LUMBER.get(Wood.ROSEWOOD)),
-        SEQUOIA(TFCItems.LUMBER.get(Wood.SEQUOIA)),
-        SPRUCE(TFCItems.LUMBER.get(Wood.SPRUCE)),
-        SYCAMORE(TFCItems.LUMBER.get(Wood.SYCAMORE)),
-        WHITE_CEDAR(TFCItems.LUMBER.get(Wood.WHITE_CEDAR)),
-        WILLOW(TFCItems.LUMBER.get(Wood.WILLOW));
-
-        //private final String name;
-
-        private Type(Supplier<? extends Item> lumber) {
-            this.lumber = lumber;
-        }
-
-        public final Supplier<? extends Item> lumber;
-
-        public String getName() {
-            return this.name().toLowerCase(Locale.ROOT);
-        }
-
-        public String toString() {
-            return this.name().toLowerCase(Locale.ROOT);
-        }
-
-        public static FirmacivBoatEntity.Type byId(int pId) {
-            FirmacivBoatEntity.Type[] aboat$type = values();
-            if (pId < 0 || pId >= aboat$type.length) {
-                pId = 0;
-            }
-
-            return aboat$type[pId];
-        }
-
-        public static FirmacivBoatEntity.Type byName(String pName) {
-            FirmacivBoatEntity.Type[] aboat$type = values();
-
-            for(int i = 0; i < aboat$type.length; ++i) {
-                if (aboat$type[i].getName().equals(pName)) {
-                    return aboat$type[i];
-                }
-            }
-
-            return aboat$type[0];
-        }
-
-    }
-
-
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
     private static final int TIME_TO_EJECT = 60;
@@ -782,9 +721,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
 
-    //TODO: 1.20 fix
-    /*
-    final void positionRider(Entity pPassenger) {
+    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
 
         if (this.hasPassenger(pPassenger)) {
             float f = 0.0F;
@@ -803,6 +740,7 @@ public class FirmacivBoatEntity extends Entity {
             }
 
             Vec3 vec3 = (new Vec3((double)f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+            pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double)f1, this.getZ() + vec3.z);
             pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double)f1, this.getZ() + vec3.z);
             pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
             pPassenger.setYHeadRot(pPassenger.getYHeadRot() + this.deltaRotation);
@@ -815,8 +753,6 @@ public class FirmacivBoatEntity extends Entity {
 
         }
     }
-    *
-     */
 
     public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {
         Vec3 vec3 = getCollisionHorizontalEscapeVector((double)(this.getBbWidth() * Mth.SQRT_OF_TWO), (double)pLivingEntity.getBbWidth(), pLivingEntity.getYRot());

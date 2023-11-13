@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import net.dries007.tfc.util.Helpers;
@@ -19,10 +20,10 @@ public final class FirmacivEntities {
     public static DeferredRegister<EntityType<?>> ENTITY_TYPES
             = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Firmaciv.MOD_ID);
 
-    public static final Map<CanoeEntity.Type, RegistryObject<EntityType<CanoeEntity>>> CANOES =
-            Helpers.mapOfKeys(CanoeEntity.Type.class, canoeWoodType -> ENTITY_TYPES.register("dugout_canoe/" + canoeWoodType.getName(),
+    public static final Map<BoatVariant, RegistryObject<EntityType<CanoeEntity>>> CANOES =
+            Helpers.mapOfKeys(BoatVariant.class, variant -> ENTITY_TYPES.register("dugout_canoe/" + variant.getName(),
                     () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.625F)
-                            .build(new ResourceLocation(Firmaciv.MOD_ID, "dugout_canoe/" + canoeWoodType.getName()).toString())));
+                            .build(new ResourceLocation(Firmaciv.MOD_ID, "dugout_canoe/" + variant.getName()).toString())));
 
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak",
             () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.8F, 0.625F)

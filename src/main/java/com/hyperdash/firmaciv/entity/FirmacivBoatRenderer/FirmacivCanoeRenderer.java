@@ -2,6 +2,7 @@ package com.hyperdash.firmaciv.entity.FirmacivBoatRenderer;
 
 import com.google.common.collect.ImmutableMap;
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -29,7 +30,7 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<CanoeEntity.Type, Pair<ResourceLocation, CanoeEntityModel>> canoeResources;
+    private final Map<BoatVariant, Pair<ResourceLocation, CanoeEntityModel>> canoeResources;
 
     private static final ResourceLocation DOUGLAS_FIR =
             new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
@@ -53,8 +54,8 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
     public FirmacivCanoeRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 0.7f;
-        this.canoeResources = Stream.of(CanoeEntity.Type.values()).collect(ImmutableMap.toImmutableMap((type) -> {
-            return type;
+        this.canoeResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
+            return variant;
         }, (type) -> {
             return Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + type.getName() + ".png"),
                     new CanoeEntityModel());
@@ -105,11 +106,11 @@ public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
     public ResourceLocation getTextureLocation(CanoeEntity pEntity) {
         int id = pEntity.getId();
         ResourceLocation resloc = pEntity.getTextureLocation();
-        resloc = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getCanoeType() + ".png");
-        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getCanoeType() + ".png");
+        resloc = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
+        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
     }
 
-    public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) { return this.canoeResources.get(canoe.getCanoeType()); }
+    public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) { return this.canoeResources.get(canoe.getVariant()); }
 
 
 }

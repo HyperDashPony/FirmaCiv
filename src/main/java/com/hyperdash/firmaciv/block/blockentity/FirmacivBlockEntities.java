@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.block.blockentity;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
+import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -43,7 +44,7 @@ public class FirmacivBlockEntities {
         BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Firmaciv.MOD_ID);
 
         CANOE_COMPONENT_BLOCK_ENTITY = register("canoe_component_block_entity", CanoeComponentBlockEntity::new,
-                Stream.of(CanoeComponentBlock.CanoeWoodType.values()).map(CANOE_COMPONENT_BLOCKS::get));
+                Stream.of(BoatVariant.values()).map(CANOE_COMPONENT_BLOCKS::get));
 
 
     }
