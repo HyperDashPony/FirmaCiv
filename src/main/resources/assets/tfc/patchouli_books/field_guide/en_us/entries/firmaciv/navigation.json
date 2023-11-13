@@ -1,6 +1,6 @@
 {
   "name": "Navigation",
-  "category": "firmaciv:firmaciv",
+  "category": "tfc:firmaciv",
   "icon": "firmaciv:textures/item/nav_toolkit.png",
   "pages": [
     {
