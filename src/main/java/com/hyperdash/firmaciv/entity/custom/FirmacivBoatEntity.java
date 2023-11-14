@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.AbstractCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.BlockUtil;
@@ -57,6 +59,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
@@ -247,7 +250,7 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Gets the horizontal facing direction of this Entity, adjusted to take specially-treated entity types into account.
      */
-    public Direction getMotionDirection() {
+    public @NotNull Direction getMotionDirection() {
         return this.getDirection().getClockWise();
     }
 
@@ -693,32 +696,38 @@ public class FirmacivBoatEntity extends Entity {
 
     protected void controlBoat() {
         if (this.isVehicle()) {
-            float f = 0.0F;
-            if (this.inputLeft) {
-                --this.deltaRotation;
+            if(getControllingCompartment() != null){
+                float f = 0.0F;
+                if (this.getControllingCompartment().getInputLeft()) {
+                    --this.deltaRotation;
+                }
+
+                if (this.getControllingCompartment().getInputRight()) {
+                    ++this.deltaRotation;
+                }
+
+                if (this.getControllingCompartment().getInputRight() != this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputUp() && !this.getControllingCompartment().getInputDown()) {
+                    f += 0.005F;
+                }
+
+                this.setYRot(this.getYRot() + this.deltaRotation);
+                if (this.getControllingCompartment().getInputUp()) {
+                    f += 0.055F;
+                }
+
+                if (this.getControllingCompartment().getInputDown()) {
+                    f -= 0.025F;
+                }
+
+                this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f));
+                this.setPaddleState(this.getControllingCompartment().getInputRight() && !this.getControllingCompartment().getInputLeft() ||
+                        this.getControllingCompartment().getInputUp(), this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputUp());
             }
 
-            if (this.inputRight) {
-                ++this.deltaRotation;
-            }
-
-            if (this.inputRight != this.inputLeft && !this.inputUp && !this.inputDown) {
-                f += 0.005F;
-            }
-
-            this.setYRot(this.getYRot() + this.deltaRotation);
-            if (this.inputUp) {
-                f += 0.055F;
-            }
-
-            if (this.inputDown) {
-                f -= 0.025F;
-            }
-
-            this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f));
-            this.setPaddleState(this.inputRight && !this.inputLeft || this.inputUp, this.inputLeft && !this.inputRight || this.inputUp);
         }
     }
+
+
 
 
     protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
@@ -737,19 +746,28 @@ public class FirmacivBoatEntity extends Entity {
                 if (pPassenger instanceof Animal) {
                     f += 0.2F;
                 }
+
+            }
+            if(pPassenger instanceof AbstractCompartmentEntity){
+                f1 += 0.25F;
             }
 
             Vec3 vec3 = (new Vec3((double)f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
             pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double)f1, this.getZ() + vec3.z);
             pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double)f1, this.getZ() + vec3.z);
-            pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
-            pPassenger.setYHeadRot(pPassenger.getYHeadRot() + this.deltaRotation);
-            this.clampRotation(pPassenger);
+            if(pPassenger instanceof AbstractCompartmentEntity){
+                pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
+            } else {
+                pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
+                pPassenger.setYHeadRot(pPassenger.getYHeadRot() + this.deltaRotation);
+                this.clampRotation(pPassenger);
+            }
             if (pPassenger instanceof Animal && this.getPassengers().size() > 1) {
                 int j = pPassenger.getId() % 2 == 0 ? 90 : 270;
                 pPassenger.setYBodyRot(((Animal)pPassenger).yBodyRot + (float)j);
                 pPassenger.setYHeadRot(pPassenger.getYHeadRot() + (float)j);
             }
+
 
         }
     }
@@ -941,6 +959,20 @@ public class FirmacivBoatEntity extends Entity {
         return this.getPassengers().size() < 2 && !this.isEyeInFluid(FluidTags.WATER);
     }
 
+    public boolean isControlledByLocalInstance() {
+        LivingEntity livingentity = this.getControllingPassenger();
+        if (livingentity instanceof Player player) {
+            return player.isLocalPlayer();
+        }
+        Entity entity = this.getFirstPassenger();
+        if(entity instanceof EmptyCompartmentEntity) {
+            if(((EmptyCompartmentEntity)entity).hasExactlyOnePlayerPassenger()){
+                return ((Player)(((EmptyCompartmentEntity)entity).getPassengers().get(0))).isLocalPlayer();
+            }
+        }
+        return this.isEffectiveAi();
+    }
+
     @Nullable
     public LivingEntity getControllingPassenger() {
         Entity entity = this.getFirstPassenger();
@@ -952,6 +984,15 @@ public class FirmacivBoatEntity extends Entity {
         }
 
         return livingentity1;
+    }
+
+    @Nullable
+    public EmptyCompartmentEntity getControllingCompartment() {
+        Entity entity = this.getFirstPassenger();
+        if(entity instanceof EmptyCompartmentEntity) {
+            return ((EmptyCompartmentEntity)entity);
+        }
+        return null;
     }
 
     public void setInput(boolean pInputLeft, boolean pInputRight, boolean pInputUp, boolean pInputDown) {

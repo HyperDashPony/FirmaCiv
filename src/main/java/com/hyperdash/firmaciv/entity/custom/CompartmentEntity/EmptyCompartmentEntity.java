@@ -1,38 +1,27 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import net.dries007.tfc.common.container.RestrictedChestContainer;
-import net.dries007.tfc.common.container.TFCContainerTypes;
-import net.dries007.tfc.common.entities.misc.TFCChestBoat;
-import net.dries007.tfc.common.items.ChestBlockItem;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.Containers;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.HasCustomInventoryScreen;
-import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.ContainerEntity;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingMenu;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.GameEvent;
-
-import javax.annotation.Nullable;
 
 public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
 
+    protected boolean inputLeft;
+    protected boolean inputRight;
+    protected boolean inputUp;
+    protected boolean inputDown;
+
+    public boolean getInputLeft(){return inputLeft;}
+    public boolean getInputRight(){return inputRight;}
+    public boolean getInputUp(){return inputUp;}
+    public boolean getInputDown(){return inputDown;}
     public EmptyCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -41,14 +30,39 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         return this.getPassengers().size() == 0;
     }
 
-    protected float getSinglePassengerXOffset() {
-        return 00F;
-    }
-
     protected int getMaxPassengers() {
         return 1;
     }
 
+    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
+        super.positionRider(pPassenger, pCallback);
+        pCallback.accept(pPassenger, this.getX() + 0f, this.getY()-0.6f, this.getZ()+ 0f);
+        if (pPassenger instanceof LivingEntity) {
+            ((LivingEntity)pPassenger).yBodyRot = this.yRotO;
+        }
+        this.clampRotation(pPassenger);
+
+    }
+
+    protected void clampRotation(Entity pEntityToUpdate) {
+        pEntityToUpdate.setYBodyRot(this.getYRot());
+        float f = Mth.wrapDegrees(pEntityToUpdate.getYRot() - this.getYRot());
+        float f1 = Mth.clamp(f, -105.0F, 105.0F);
+        pEntityToUpdate.yRotO += f1 - f;
+        pEntityToUpdate.setYRot(pEntityToUpdate.getYRot() + f1 - f);
+        pEntityToUpdate.setYHeadRot(pEntityToUpdate.getYRot());
+    }
+
+    public void setInput(boolean pInputLeft, boolean pInputRight, boolean pInputUp, boolean pInputDown) {
+        this.inputLeft = pInputLeft;
+        this.inputRight = pInputRight;
+        this.inputUp = pInputUp;
+        this.inputDown = pInputDown;
+    }
+
+    public void onPassengerTurned(Entity pEntityToUpdate) {
+        this.clampRotation(pEntityToUpdate);
+    }
 
     public boolean isPushable() {
         return false;
@@ -78,6 +92,10 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
             newCompartment.setDeltaMovement(this.getDeltaMovement());
             this.level().addFreshEntity(newCompartment);
             this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            if(this.isPassenger()){
+                int passIndex = this.getVehicle().getPassengers().indexOf(this);
+            }
+
             this.discard();
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {

@@ -7,13 +7,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.HasCustomInventoryScreen;
-import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -44,25 +43,6 @@ public class AbstractCompartmentEntity extends Entity {
         super(pEntityType, pLevel);
     }
 
-    protected boolean canAddPassenger(Entity pPassenger) {
-        return this instanceof EmptyCompartmentEntity && this.getPassengers().size() == 0;
-    }
-
-    protected float getSinglePassengerXOffset() {
-        return 00F;
-    }
-
-    protected int getMaxPassengers() {
-        return 1;
-    }
-
-    public void tick() {
-        super.tick();
-        if(this.isPassenger()){
-            Entity vehicle = this.getVehicle();
-            this.setYRot(vehicle.getYRot());
-        }
-    }
 
     public void remove(RemovalReason pReason) {
         super.remove(pReason);
@@ -70,6 +50,19 @@ public class AbstractCompartmentEntity extends Entity {
 
     public Item getDropItem() {
         return blockTypeItem.getItem();
+    }
+
+    @Nullable
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getFirstPassenger();
+        LivingEntity livingentity1;
+        if (entity instanceof LivingEntity livingentity) {
+            livingentity1 = livingentity;
+        } else {
+            livingentity1 = null;
+        }
+
+        return livingentity1;
     }
 
     public ItemStack getPickResult() {

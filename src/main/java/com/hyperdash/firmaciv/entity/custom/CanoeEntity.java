@@ -1,12 +1,8 @@
 package com.hyperdash.firmaciv.entity.custom;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.AbstractCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.item.FirmacivItems;
-import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,9 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-
-import java.util.Locale;
-import java.util.function.Supplier;
 
 public class CanoeEntity extends FirmacivBoatEntity{
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class, EntityDataSerializers.INT);
@@ -53,9 +46,10 @@ public class CanoeEntity extends FirmacivBoatEntity{
     }
 
 
+    /*
     protected void controlBoat() {
-        if (this.isVehicle() && this.getPassengers().get(0) instanceof Player) {
-            if(((Player) this.getPassengers().get(0)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
+        if (this.isVehicle() && this.getPassengers().get(0) instanceof EmptyCompartmentEntity) {
+            if(((Player)this.getPassengers().get(0)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
                 if(this.getPassengers().size() == 2 && this.getPassengers().get(1) instanceof Player && ((Player)this.getPassengers().get(1)).isHolding(FirmacivItems.CANOE_PADDLE.get())){
                     float f = 0.0F;
                     if (this.inputLeft) {
@@ -138,6 +132,7 @@ public class CanoeEntity extends FirmacivBoatEntity{
             }
         }
     }
+*/
 
     public static ModelLayerLocation createCanoeModelName(BoatVariant pVariant) {
         return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pVariant.getName()), "main");

@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.mixins;
 
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -31,6 +32,11 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         if (this.getVehicle() instanceof FirmacivBoatEntity) {
             FirmacivBoatEntity firmacivboat = (FirmacivBoatEntity) this.getVehicle();
             firmacivboat.setInput(this.input.left, this.input.right, this.input.up, this.input.down);
+            this.handsBusy |= this.input.left || this.input.right || this.input.up || this.input.down;
+        }
+        if (this.getVehicle() instanceof EmptyCompartmentEntity) {
+            EmptyCompartmentEntity compartmentEntity = (EmptyCompartmentEntity) this.getVehicle();
+            compartmentEntity.setInput(this.input.left, this.input.right, this.input.up, this.input.down);
             this.handsBusy |= this.input.left || this.input.right || this.input.up || this.input.down;
         }
     }

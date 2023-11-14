@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -37,19 +36,6 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
 
     public ChestCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-    }
-
-    protected boolean canAddPassenger(Entity pPassenger) {
-        return this.getPassengers().size() == 0; // and does not "contain" a block
-    }
-
-
-    protected float getSinglePassengerXOffset() {
-        return 00F;
-    }
-
-    protected int getMaxPassengers() {
-        return 1;
     }
 
     public void remove(Entity.RemovalReason pReason) {

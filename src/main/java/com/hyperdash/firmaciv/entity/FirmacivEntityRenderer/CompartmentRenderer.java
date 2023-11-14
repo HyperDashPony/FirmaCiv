@@ -6,9 +6,6 @@ import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEn
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.WorkbenchCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.wood.Wood;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -16,9 +13,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,18 +34,20 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
 
         if(!(pEntity instanceof EmptyCompartmentEntity)){
 
-            BlockState blockstate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
+            BlockState blockstate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
             if(pEntity instanceof ChestCompartmentEntity){
-                blockstate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
+                blockstate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
             }
             if(pEntity instanceof WorkbenchCompartmentEntity){
                 blockstate = Blocks.CRAFTING_TABLE.defaultBlockState();
             }
 
             pPoseStack.pushPose();
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(pEntity.getVehicle().getYRot()*-1f));
+            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - pEntityYaw));
+            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
             pPoseStack.scale(0.6F, 0.6F, 0.6F);
             pPoseStack.translate(-0.5F, 00F, -0.5F);
+
             this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);
             pPoseStack.popPose();
         }
