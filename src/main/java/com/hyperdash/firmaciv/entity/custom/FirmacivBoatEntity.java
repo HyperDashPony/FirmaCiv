@@ -727,9 +727,6 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
-
-
-
     protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
 
         if (this.hasPassenger(pPassenger)) {
