@@ -90,12 +90,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
             newCompartment.setYRot(this.getYRot());
             newCompartment.setXRot(this.getXRot());
             newCompartment.setDeltaMovement(this.getDeltaMovement());
+            newCompartment.setPassengerIndex(this.passengerIndex);
             this.level().addFreshEntity(newCompartment);
             this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            if(this.isPassenger()){
-                int passIndex = this.getVehicle().getPassengers().indexOf(this);
-            }
-
             this.discard();
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {

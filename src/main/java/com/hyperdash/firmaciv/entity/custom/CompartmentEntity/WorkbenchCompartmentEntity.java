@@ -81,6 +81,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
             this.level().addFreshEntity(newCompartment);
             Containers.dropContents(this.level(), this, this);
             newCompartment.setBlockTypeItem(ItemStack.EMPTY);
+            newCompartment.setPassengerIndex(this.passengerIndex);
             this.playSound(SoundEvents.WOOD_BREAK, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
             this.spawnAtLocation(this.getDropItem());
             this.discard();

@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 public class AbstractCompartmentEntity extends Entity {
     protected ItemStack blockTypeItem = ItemStack.EMPTY;
 
+    protected int passengerIndex = -1;
+
     public ItemStack getBlockTypeItem(){
         return blockTypeItem;
     }
@@ -39,8 +41,19 @@ public class AbstractCompartmentEntity extends Entity {
         this.blockTypeItem = blockTypeItem;
     }
 
+    public void setPassengerIndex(int pIndex){
+        this.passengerIndex = pIndex;
+    }
+
+    public int getPassengerIndex(){
+        return this.passengerIndex;
+    }
+
     public AbstractCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        if(this.isPassenger()){
+            passengerIndex = this.getVehicle().getPassengers().indexOf(this);
+        }
     }
 
 
