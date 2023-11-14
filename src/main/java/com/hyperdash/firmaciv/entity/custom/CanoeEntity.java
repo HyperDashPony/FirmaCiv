@@ -1,6 +1,9 @@
 package com.hyperdash.firmaciv.entity.custom;
 
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.AbstractCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
@@ -44,6 +47,9 @@ public class CanoeEntity extends FirmacivBoatEntity{
         String name = pEntityType.toString().split("canoe.")[1];
 
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
+
+        //EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pLevel);
+        //addPassenger(newCompartment);
     }
 
 

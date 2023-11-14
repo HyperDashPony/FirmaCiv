@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.FirmacivBoatRenderer;
+package com.hyperdash.firmaciv.entity.FirmacivEntityRenderer;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
@@ -19,14 +19,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 @OnlyIn(Dist.CLIENT)
-public class FirmacivKayakRenderer extends EntityRenderer<KayakEntity> {
+public class KayakRenderer extends EntityRenderer<KayakEntity> {
 
     private final Pair<ResourceLocation, KayakEntityModel> kayakResources;
 
     private static final ResourceLocation KAYAK =
             new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/kayak.png");
 
-    public FirmacivKayakRenderer(EntityRendererProvider.Context pContext) {
+    public KayakRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 0.4f;
         this.kayakResources = Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/kayak.png"),

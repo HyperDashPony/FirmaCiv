@@ -1,10 +1,9 @@
 package com.hyperdash.firmaciv.client;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivCanoeRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CanoeRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.hyperdash.firmaciv.item.custom.AbstractNavItem;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -15,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,7 +33,7 @@ public class FirmacivClientEvents {
     private static void clientSetup(final FMLClientSetupEvent event) {
 
         for(BoatVariant variant : BoatVariant.values()){
-            EntityRenderers.register(FirmacivEntities.CANOES.get(variant).get(), FirmacivCanoeRenderer::new);
+            EntityRenderers.register(FirmacivEntities.CANOES.get(variant).get(), CanoeRenderer::new);
         }
 
 

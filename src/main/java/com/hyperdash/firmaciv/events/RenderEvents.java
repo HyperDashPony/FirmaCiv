@@ -1,19 +1,15 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivCanoeRenderer;
-import com.hyperdash.firmaciv.entity.FirmacivBoatRenderer.FirmacivKayakRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CanoeRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CompartmentRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.KayakRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
-import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.KayakEntityModel;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -33,8 +29,11 @@ public final class RenderEvents {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
-        event.registerEntityRenderer(FirmacivEntities.CANOES.get(Stream.of(BoatVariant.values()).findFirst().get()).get(), FirmacivCanoeRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), FirmacivKayakRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.CANOES.get(Stream.of(BoatVariant.values()).findFirst().get()).get(), CanoeRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), KayakRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
     }
 
 

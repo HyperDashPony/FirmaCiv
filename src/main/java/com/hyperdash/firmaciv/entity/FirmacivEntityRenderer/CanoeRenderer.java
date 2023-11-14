@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.FirmacivBoatRenderer;
+package com.hyperdash.firmaciv.entity.FirmacivEntityRenderer;
 
 import com.google.common.collect.ImmutableMap;
 import com.hyperdash.firmaciv.Firmaciv;
@@ -26,32 +26,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
-public class FirmacivCanoeRenderer extends EntityRenderer<CanoeEntity> {
+public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final Map<BoatVariant, Pair<ResourceLocation, CanoeEntityModel>> canoeResources;
 
-    private static final ResourceLocation DOUGLAS_FIR =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
-    private static final ResourceLocation PINE =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/pine.png");
-    private static final ResourceLocation CHESTNUT =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/chestnut.png");
-    private static final ResourceLocation SPRUCE =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/spruce.png");
-    private static final ResourceLocation ASPEN =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/aspen.png");
-    private static final ResourceLocation KAPOK =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/kapok.png");
-    private static final ResourceLocation ROSEWOOD =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/rosewood.png");
-    private static final ResourceLocation WHITE_CEDAR =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/white_cedar.png");
-    private static final ResourceLocation WILLOW =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/douglas_fir.png");
-
-    public FirmacivCanoeRenderer(EntityRendererProvider.Context pContext) {
+    public CanoeRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 0.7f;
         this.canoeResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
