@@ -34,8 +34,8 @@ public class PlayerModelMixin <T extends LivingEntity> extends HumanoidModel<T>{
                 this.leftLeg.yRot = -0.002F;
                 this.leftLeg.zRot = -0.002F;
 
-                this.rightLeg.setPos(1.9F, 11.5F, 0.0F);
-                this.leftLeg.setPos(-1.9F, 11.5F, 0.0F);
+                this.rightLeg.setPos(-1.9F, 11.5F, 0.0F);
+                this.leftLeg.setPos(01.9F, 11.5F, 0.0F);
             }
         } else if(pEntity.isPassenger() && pEntity.getVehicle() instanceof KayakEntity){
             if (this.riding) {
@@ -47,12 +47,12 @@ public class PlayerModelMixin <T extends LivingEntity> extends HumanoidModel<T>{
                 this.leftLeg.yRot = -0.1570796F;
                 this.leftLeg.zRot = -0F;
 
-                this.rightLeg.setPos(1.9F, 13.6F, 1F);
-                this.leftLeg.setPos(-1.9F, 13.6F, 1F);
+                this.rightLeg.setPos(-1.9F, 13.6F, 1F);
+                this.leftLeg.setPos(01.9F, 13.6F, 1F);
             }
         } else {
-            this.rightLeg.setPos(1.9F, 12.0F, 0.0F);
-            this.leftLeg.setPos(-1.9F, 12.0F, 0.0F);
+            this.rightLeg.setPos(-1.9F, 12.0F, 0.0F);
+            this.leftLeg.setPos(01.9F, 12.0F, 0.0F);
             if (this.crouching) {
                 this.rightLeg.z = 4.0F;
                 this.leftLeg.z = 4.0F;
