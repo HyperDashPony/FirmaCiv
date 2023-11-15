@@ -5,9 +5,13 @@ import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CanoeRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CompartmentRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.KayakRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.VehiclePartRenderer;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.KayakEntityModel;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,6 +38,7 @@ public final class RenderEvents {
         event.registerEntityRenderer(FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), VehiclePartRenderer::new);
     }
 
 

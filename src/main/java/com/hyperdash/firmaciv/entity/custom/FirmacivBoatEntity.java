@@ -1,6 +1,8 @@
 package com.hyperdash.firmaciv.entity.custom;
 
 import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -9,7 +11,9 @@ import javax.annotation.Nullable;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.AbstractCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.ChestCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.BlockUtil;
@@ -70,6 +74,8 @@ public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
 
+    protected List<VehiclePart> vehicleParts = new ArrayList<VehiclePart>();
+
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
     private static final int TIME_TO_EJECT = 60;
@@ -105,8 +111,17 @@ public class FirmacivBoatEntity extends Entity {
     public FirmacivBoatEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.blocksBuilding = true;
-    }
+        this.vehicleParts.add(new VehiclePart(this));
+        this.vehicleParts.add(new VehiclePart(this));
+        /*
+        for(VehiclePart part : vehicleParts){
+            EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pLevel);
+            pLevel.addFreshEntity(newCompartment);
+            newCompartment.startRiding(this);
+        }*/
 
+
+    }
 
 
     protected float getEyeHeight(Pose pPose, EntityDimensions pSize) {
@@ -272,6 +287,8 @@ public class FirmacivBoatEntity extends Entity {
 
 
 
+        //vehicleParts.get(0).setPos(this.getX(), this.getY(), this.getZ());
+        //vehicleParts.get(1).setPos(this.getX(), this.getY(), this.getZ());
 
         if (this.getHurtTime() > 0) {
             this.setHurtTime(this.getHurtTime() - 1);
@@ -282,6 +299,23 @@ public class FirmacivBoatEntity extends Entity {
         }
 
         super.tick();
+
+        for(VehiclePart part : vehicleParts){
+            if(part.getPassengers().isEmpty()){
+                EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(this.level());
+                this.level().addFreshEntity(newCompartment);
+                newCompartment.startRiding(part);
+            }
+        }
+
+        if(!this.level().isClientSide){
+            for(VehiclePart part : vehicleParts){
+                int f = 0;
+                int f1 = 0;
+                //Vec3 vec3 = (new Vec3((double)f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+                part.setPos(this.getX(), this.getY(), this.getZ());
+            }
+        }
 
         if(this.status == Status.IN_WATER && !this.getPassengers().isEmpty()){
             if(Math.abs(this.deltaRotation) > 2){
@@ -368,6 +402,18 @@ public class FirmacivBoatEntity extends Entity {
             }
         }
 
+    }
+
+    private void setPartPosition(VehiclePart part, double offsetX, double offsetY, double offsetZ) {
+        part.setPos(this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ);
+    }
+
+    private float getXForPart(float yaw, float degree) {
+        return Mth.sin((float) (yaw + Math.toRadians(degree)));
+    }
+
+    private float getZForPart(float yaw, float degree) {
+        return -Mth.cos((float) (yaw + Math.toRadians(degree)));
     }
 
     private void tickBubbleColumn() {
@@ -953,7 +999,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     protected boolean canAddPassenger(Entity pPassenger) {
-        return this.getPassengers().size() < 2 && !this.isEyeInFluid(FluidTags.WATER);
+        return this.getPassengers().size() < 2;
     }
 
     public boolean isControlledByLocalInstance() {

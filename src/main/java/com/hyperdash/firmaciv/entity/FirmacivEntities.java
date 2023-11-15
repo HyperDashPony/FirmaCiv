@@ -5,6 +5,7 @@ import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.ChestCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.WorkbenchCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import net.dries007.tfc.util.Helpers;
@@ -43,6 +44,10 @@ public final class FirmacivEntities {
     public static final RegistryObject<EntityType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = ENTITY_TYPES.register("compartment_workbench",
             () -> EntityType.Builder.of(WorkbenchCompartmentEntity::new, MobCategory.MISC).sized(0.8F, 0.8F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "compartment_workbench").toString()));
+
+    public static final RegistryObject<EntityType<VehiclePartEntity>> VEHICLE_PART_ENTITY = ENTITY_TYPES.register("vehicle_part",
+            () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.05F, 0.05F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_part").toString()));
 
 
     public static void register(IEventBus eventBus) {

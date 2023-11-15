@@ -77,7 +77,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
 
         ItemStack item = pPlayer.getItemInHand(pHand);
-        AbstractCompartmentEntity newCompartment = null;
+
         if (pPlayer.isSecondaryUseActive()) {
             if(!getPassengers().isEmpty() && !(getPassengers().get(0) instanceof Player)){
                 this.ejectPassengers();
@@ -85,21 +85,22 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
             }
             return InteractionResult.PASS;
         }
-        if (item.getItem() == Items.CHEST) {
-            newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-        } else if (item.getItem() == Items.CRAFTING_TABLE) {
-            newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(pPlayer.level());
+
+        AbstractCompartmentEntity newCompartment = null;
+        if(!item.isEmpty()){
+            if (item.getItem() == Items.CHEST) {
+                newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(pPlayer.level());
+                newCompartment.setBlockTypeItem(item.split(1));
+            } else if (item.getItem() == Items.CRAFTING_TABLE) {
+                newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(pPlayer.level());
+                newCompartment.setBlockTypeItem(item.split(1));
+            }
         }
+
         if (newCompartment != null) {
-            newCompartment.setBlockTypeItem(item.split(1));
-            newCompartment.setPos(this.position());
-            newCompartment.setYRot(this.getYRot());
-            newCompartment.setXRot(this.getXRot());
-            newCompartment.setDeltaMovement(this.getDeltaMovement());
-            newCompartment.setPassengerIndex(this.passengerIndex);
-            this.level().addFreshEntity(newCompartment);
+            newCompartment = swapCompartments(newCompartment);
             this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            this.discard();
+            this.level().addFreshEntity(newCompartment);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             if (!this.level().isClientSide) {

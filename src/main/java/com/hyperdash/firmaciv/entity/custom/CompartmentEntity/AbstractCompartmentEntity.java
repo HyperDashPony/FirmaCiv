@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
+import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import net.dries007.tfc.common.container.RestrictedChestContainer;
 import net.dries007.tfc.common.container.TFCContainerTypes;
 import net.minecraft.core.NonNullList;
@@ -78,6 +79,27 @@ public class AbstractCompartmentEntity extends Entity {
         return livingentity1;
     }
 
+    protected AbstractCompartmentEntity swapCompartments(AbstractCompartmentEntity newCompartment){
+        newCompartment.setPos(this.position());
+        newCompartment.setYRot(this.getYRot());
+        newCompartment.setXRot(this.getXRot());
+        newCompartment.setDeltaMovement(this.getDeltaMovement());
+        newCompartment.setPassengerIndex(this.passengerIndex);
+        this.spawnAtLocation(this.getDropItem());
+        this.stopRiding();;
+        this.discard();
+        return newCompartment;
+    }
+
+    protected void juggleCompartments(){
+        Entity vehicle = this.getVehicle();
+        if (this.getPassengerIndex() != this.getVehicle().getPassengers().indexOf(this)){
+            vehicle.ejectPassengers();
+        } if(vehicle.getPassengers().size()-1 == this.getPassengerIndex()){
+
+        }
+    }
+
     public ItemStack getPickResult() {
         return blockTypeItem;
     }
@@ -86,6 +108,7 @@ public class AbstractCompartmentEntity extends Entity {
     protected void defineSynchedData() {
 
     }
+
 
     public boolean isPushable() {
         return false;

@@ -63,22 +63,21 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
 
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
 
-        if (pPlayer.isHolding(Items.IRON_AXE)){
-            EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pPlayer.level());
+        ItemStack item = pPlayer.getItemInHand(pHand);
+        AbstractCompartmentEntity newCompartment = null;
+        if(!item.isEmpty()){
+            if (item.getItem() == Items.IRON_AXE) {
+                newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pPlayer.level());
+                newCompartment.setBlockTypeItem(ItemStack.EMPTY);
+            }
+        }
 
-            newCompartment.setPos(this.position());
-            newCompartment.setYRot(this.getYRot());
-            newCompartment.setXRot(this.getXRot());
-            newCompartment.setDeltaMovement(this.getDeltaMovement());
-            this.level().addFreshEntity(newCompartment);
+        if (newCompartment != null) {
             Containers.dropContents(this.level(), this, this);
-            newCompartment.setBlockTypeItem(ItemStack.EMPTY);
-            newCompartment.setPassengerIndex(this.passengerIndex);
+            newCompartment = swapCompartments(newCompartment);
             this.playSound(SoundEvents.WOOD_BREAK, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            this.spawnAtLocation(this.getDropItem());
-            this.discard();
+            this.level().addFreshEntity(newCompartment);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
-
         } else {
             InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
             if (interactionresult.consumesAction()) {
