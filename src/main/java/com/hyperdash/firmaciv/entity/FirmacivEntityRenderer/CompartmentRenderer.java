@@ -40,12 +40,12 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
         if(!(pEntity instanceof EmptyCompartmentEntity)){
-            BlockState blockstate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+            BlockState blockstate = Blocks.STONE.defaultBlockState();
             if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
                 blockstate = bi.getBlock().defaultBlockState();
-            }
-            if(pEntity instanceof ChestCompartmentEntity){
-                blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
+                if(pEntity instanceof ChestCompartmentEntity){
+                    blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
+                }
             }
 
             pPoseStack.pushPose();

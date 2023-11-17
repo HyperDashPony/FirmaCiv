@@ -1,37 +1,18 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import net.dries007.tfc.common.container.RestrictedChestContainer;
-import net.dries007.tfc.common.container.TFCContainerTypes;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.vehicle.ContainerEntity;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingMenu;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -92,7 +73,8 @@ public class AbstractCompartmentEntity extends Entity {
         if(ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity){
             ridingThisPart = (VehiclePartEntity)this.getVehicle();
         }
-        if(!this.isPassenger()){
+
+        if(!this.level().isClientSide() && !this.isPassenger()){
             notRidingTicks++;
             if(notRidingTicks > 1){
                 this.spawnAtLocation(this.getDropItem());
@@ -101,6 +83,7 @@ public class AbstractCompartmentEntity extends Entity {
         } else {
             notRidingTicks = 0;
         }
+
         super.tick();
     }
 
