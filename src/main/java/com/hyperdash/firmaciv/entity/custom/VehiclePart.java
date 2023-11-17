@@ -22,12 +22,17 @@ public class VehiclePart extends PartEntity<FirmacivBoatEntity> {
 
     @Override
     public void tick() {
+        super.tick();
         if(this.getPassengers().isEmpty()){
+
             EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(this.level());
             this.level().addFreshEntity(newCompartment);
             newCompartment.startRiding(this);
         }
-        super.tick();
+        if(!this.isPassenger()){
+            this.remove(RemovalReason.DISCARDED);
+        }
+
 
     }
 

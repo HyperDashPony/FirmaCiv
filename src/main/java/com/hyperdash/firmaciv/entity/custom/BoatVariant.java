@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.entity.custom;
 
+import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;

@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.container.RestrictedChestContainer;
 import net.dries007.tfc.common.container.TFCContainerTypes;
 import net.minecraft.core.NonNullList;
@@ -38,8 +39,10 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         super(pEntityType, pLevel);
     }
 
-    public void remove(Entity.RemovalReason pReason) {
+
+    public void remove(RemovalReason pReason) {
         if (!this.level().isClientSide && pReason.shouldDestroy()) {
+            this.playSound(SoundEvents.WOOD_BREAK, 1.0F, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
             Containers.dropContents(this.level(), this, this);
         }
 
@@ -47,13 +50,12 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
         this.addChestVehicleSaveData(pCompound);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
     protected void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
         this.readChestVehicleSaveData(pCompound);
     }
 
@@ -66,24 +68,24 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         ItemStack item = pPlayer.getItemInHand(pHand);
         AbstractCompartmentEntity newCompartment = null;
         if(!item.isEmpty()){
-            if (item.getItem() == Items.IRON_AXE) {
+            if (item.is(FirmacivTags.Items.SAWS) || item.is(FirmacivTags.Items.AXES)) {
                 newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-                newCompartment.setBlockTypeItem(ItemStack.EMPTY);
+
             }
         }
 
         if (newCompartment != null) {
             Containers.dropContents(this.level(), this, this);
             newCompartment = swapCompartments(newCompartment);
+            newCompartment.setBlockTypeItem(ItemStack.EMPTY);
             this.playSound(SoundEvents.WOOD_BREAK, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            this.level().addFreshEntity(newCompartment);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
             if (interactionresult.consumesAction()) {
 
                 this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
-                if(blockTypeItem.is(Items.CHEST)){
+                if(this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)){
                     PiglinAi.angerNearbyPiglins(pPlayer, true);
                 }
 

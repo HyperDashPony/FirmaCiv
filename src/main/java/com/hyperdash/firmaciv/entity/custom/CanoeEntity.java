@@ -138,12 +138,13 @@ public class CanoeEntity extends FirmacivBoatEntity{
         return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pVariant.getName()), "main");
     }
 
+    /*
     protected boolean canAddPassenger(Entity pPassenger) {
         if(this.getPassengers().size() == 1 && !(pPassenger instanceof Player)){
             return false;
         }
         return this.getPassengers().size() < PASSENGER_NUMBER && !this.isEyeInFluid(FluidTags.WATER);
-    }
+    }*/
 
     @Override
     public ItemStack getPickResult() {

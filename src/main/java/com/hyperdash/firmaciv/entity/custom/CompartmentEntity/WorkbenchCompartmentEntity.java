@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -28,15 +29,9 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
 
     private static final int CONTAINER_SIZE = 18;
     private NonNullList<ItemStack> itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
-
-    private ItemStack blockTypeItem = ItemStack.EMPTY;
     @Nullable
     private ResourceLocation lootTable;
     private long lootTableSeed;
-
-    public ItemStack getBlockTypeItem(){
-        return blockTypeItem;
-    }
 
     public WorkbenchCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -44,6 +39,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
 
     public void remove(RemovalReason pReason) {
         if (!this.level().isClientSide && pReason.shouldDestroy()) {
+            this.playSound(SoundEvents.WOOD_BREAK, 1.0F, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
             Containers.dropContents(this.level(), this, this);
         }
 
@@ -51,19 +47,13 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
         this.addChestVehicleSaveData(pCompound);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
     protected void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
         this.readChestVehicleSaveData(pCompound);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-
     }
 
     public boolean isPushable() {
@@ -74,16 +64,16 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
         ItemStack item = pPlayer.getItemInHand(pHand);
         AbstractCompartmentEntity newCompartment = null;
         if(!item.isEmpty()){
-            if (item.getItem() == Items.IRON_AXE) {
+            if (item.is(FirmacivTags.Items.SAWS) || item.is(FirmacivTags.Items.AXES)) {
                 newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-                newCompartment.setBlockTypeItem(ItemStack.EMPTY);
+
             }
         }
 
         if (newCompartment != null) {
             newCompartment = swapCompartments(newCompartment);
+            newCompartment.setBlockTypeItem(ItemStack.EMPTY);
             this.playSound(SoundEvents.WOOD_BREAK, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            this.level().addFreshEntity(newCompartment);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
@@ -100,6 +90,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     public boolean isPickable() {
         return !this.isRemoved();
     }
+
 
     public void openCustomInventoryScreen(Player pPlayer) {
         pPlayer.openMenu(this);

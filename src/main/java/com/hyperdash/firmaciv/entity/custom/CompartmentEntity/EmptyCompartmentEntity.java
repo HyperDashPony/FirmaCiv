@@ -2,23 +2,26 @@ package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
 public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
-
     protected boolean inputLeft;
     protected boolean inputRight;
     protected boolean inputUp;
@@ -87,20 +90,18 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         }
 
         AbstractCompartmentEntity newCompartment = null;
-        if(!item.isEmpty()){
-            if (item.getItem() == Items.CHEST) {
+        if(!item.isEmpty() && this.getPassengers().isEmpty()){
+            if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-                newCompartment.setBlockTypeItem(item.split(1));
-            } else if (item.getItem() == Items.CRAFTING_TABLE) {
+            } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-                newCompartment.setBlockTypeItem(item.split(1));
             }
         }
 
         if (newCompartment != null) {
-            newCompartment = swapCompartments(newCompartment);
+            swapCompartments(newCompartment);
+            newCompartment.setBlockTypeItem(item.split(1));
             this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            this.level().addFreshEntity(newCompartment);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             if (!this.level().isClientSide) {
@@ -112,6 +113,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
 
 
     }
+
+
 
     public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {
         Vec3 vec3 = getCollisionHorizontalEscapeVector((double)(this.getBbWidth() * Mth.SQRT_OF_TWO), (double)pLivingEntity.getBbWidth(), pLivingEntity.getYRot());

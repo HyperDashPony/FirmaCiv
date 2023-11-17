@@ -6,6 +6,7 @@ import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEn
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.WorkbenchCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -13,11 +14,17 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntity> {
@@ -33,13 +40,12 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
         if(!(pEntity instanceof EmptyCompartmentEntity)){
-
             BlockState blockstate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
-            if(pEntity instanceof ChestCompartmentEntity){
-                blockstate = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH);
+            if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
+                blockstate = bi.getBlock().defaultBlockState();
             }
-            if(pEntity instanceof WorkbenchCompartmentEntity){
-                blockstate = Blocks.CRAFTING_TABLE.defaultBlockState();
+            if(pEntity instanceof ChestCompartmentEntity){
+                blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
             }
 
             pPoseStack.pushPose();

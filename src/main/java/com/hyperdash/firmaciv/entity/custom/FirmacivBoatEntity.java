@@ -74,7 +74,8 @@ public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
 
-    protected List<VehiclePart> vehicleParts = new ArrayList<VehiclePart>();
+    public final int PASSENGER_NUMBER = 2;
+    protected List<VehiclePartEntity> vehicleParts = new ArrayList<VehiclePartEntity>();
 
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
@@ -111,18 +112,10 @@ public class FirmacivBoatEntity extends Entity {
     public FirmacivBoatEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.blocksBuilding = true;
-        this.vehicleParts.add(new VehiclePart(this));
-        this.vehicleParts.add(new VehiclePart(this));
-        /*
-        for(VehiclePart part : vehicleParts){
-            EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pLevel);
-            pLevel.addFreshEntity(newCompartment);
-            newCompartment.startRiding(this);
-        }*/
-
-
+        spawnTicks = 0;
     }
 
+    private int spawnTicks = 0;
 
     protected float getEyeHeight(Pose pPose, EntityDimensions pSize) {
         return pSize.height;
@@ -273,6 +266,7 @@ public class FirmacivBoatEntity extends Entity {
      * Called to update the entity's position/logic.
      */
     public void tick() {
+
         this.oldStatus = this.status;
         this.status = this.getStatus();
         if (this.status != FirmacivBoatEntity.Status.UNDER_WATER && this.status != FirmacivBoatEntity.Status.UNDER_FLOWING_WATER) {
@@ -281,14 +275,16 @@ public class FirmacivBoatEntity extends Entity {
             ++this.outOfControlTicks;
         }
 
-        if (!this.level().isClientSide && this.outOfControlTicks >= 60.0F) {
-            this.ejectPassengers();
+
+        if (!this.level().isClientSide) {
+            if (this.getPassengers().size() < PASSENGER_NUMBER){
+                VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
+                this.level().addFreshEntity(newPart);
+                newPart.startRiding(this);
+            }
         }
 
 
-
-        //vehicleParts.get(0).setPos(this.getX(), this.getY(), this.getZ());
-        //vehicleParts.get(1).setPos(this.getX(), this.getY(), this.getZ());
 
         if (this.getHurtTime() > 0) {
             this.setHurtTime(this.getHurtTime() - 1);
@@ -299,23 +295,6 @@ public class FirmacivBoatEntity extends Entity {
         }
 
         super.tick();
-
-        for(VehiclePart part : vehicleParts){
-            if(part.getPassengers().isEmpty()){
-                EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(this.level());
-                this.level().addFreshEntity(newCompartment);
-                newCompartment.startRiding(part);
-            }
-        }
-
-        if(!this.level().isClientSide){
-            for(VehiclePart part : vehicleParts){
-                int f = 0;
-                int f1 = 0;
-                //Vec3 vec3 = (new Vec3((double)f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
-                part.setPos(this.getX(), this.getY(), this.getZ());
-            }
-        }
 
         if(this.status == Status.IN_WATER && !this.getPassengers().isEmpty()){
             if(Math.abs(this.deltaRotation) > 2){
@@ -880,22 +859,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-        if (pPlayer.isSecondaryUseActive()) {
-            if(!getPassengers().isEmpty() && !(getPassengers().get(0) instanceof Player)){
-                this.ejectPassengers();
-                return InteractionResult.SUCCESS;
-            }
-            return InteractionResult.PASS;
-        } else if (this.outOfControlTicks < 60.0F) {
-            if (!this.level().isClientSide) {
-
-                return pPlayer.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
-            } else {
-                return InteractionResult.SUCCESS;
-            }
-        } else {
-            return InteractionResult.PASS;
-        }
+        return InteractionResult.PASS;
     }
 
 
@@ -1002,19 +966,24 @@ public class FirmacivBoatEntity extends Entity {
         return this.getPassengers().size() < 2;
     }
 
+    /*
     public boolean isControlledByLocalInstance() {
         LivingEntity livingentity = this.getControllingPassenger();
         if (livingentity instanceof Player player) {
             return player.isLocalPlayer();
         }
         Entity entity = this.getFirstPassenger();
-        if(entity instanceof EmptyCompartmentEntity) {
-            if(((EmptyCompartmentEntity)entity).hasExactlyOnePlayerPassenger()){
-                return ((Player)(((EmptyCompartmentEntity)entity).getPassengers().get(0))).isLocalPlayer();
+        if(entity instanceof VehiclePartEntity) {
+            if(entity.getPassengers().size() == 1){
+                if(entity.getPassengers().get(0) instanceof EmptyCompartmentEntity){
+                    return ((Player)((entity.getPassengers().get(0)).getPassengers().get(0))).isLocalPlayer();
+                }
             }
+
         }
-        return this.isEffectiveAi();
-    }
+
+        return super.isControlledByLocalInstance();
+    }*/
 
     @Nullable
     public LivingEntity getControllingPassenger() {
@@ -1031,9 +1000,12 @@ public class FirmacivBoatEntity extends Entity {
 
     @Nullable
     public EmptyCompartmentEntity getControllingCompartment() {
-        Entity entity = this.getFirstPassenger();
-        if(entity instanceof EmptyCompartmentEntity) {
-            return ((EmptyCompartmentEntity)entity);
+        Entity vehiclePart = this.getPassengers().get(0);
+        Entity compartment = null;
+        if(!vehiclePart.getPassengers().isEmpty()){
+            if(vehiclePart.getPassengers().get(0) instanceof EmptyCompartmentEntity){
+                return (EmptyCompartmentEntity) vehiclePart;
+            }
         }
         return null;
     }
