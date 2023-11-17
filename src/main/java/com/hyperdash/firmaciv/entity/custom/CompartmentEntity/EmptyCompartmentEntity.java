@@ -38,7 +38,6 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
     protected boolean canAddPassenger(Entity pPassenger) {
         return this.getPassengers().size() == 0;
     }
-
     protected int getMaxPassengers() {
         return 1;
     }

@@ -70,7 +70,7 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         if (interactionresult.consumesAction()) {
 
             this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
-            if(this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)){
+            if (this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)) {
                 PiglinAi.angerNearbyPiglins(pPlayer, true);
             }
 

@@ -42,7 +42,7 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
     public static void serverTick(Level level, BlockPos pos, BlockState state, CanoeComponentBlockEntity canoeBlock) {
 
         if (canoeBlock.isLit) {
-            long remainingTicks = (long)(Integer) TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlock.litTick);
+            long remainingTicks = (long) (Integer) TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlock.litTick);
 
             if (remainingTicks <= 0L) {
 
@@ -59,7 +59,7 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
     @VisibleForTesting
     public void light() {
 
-        if(this.isLit){
+        if (this.isLit) {
             return;
         }
 
@@ -77,13 +77,13 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         BlockPos blockPos1 = pPos.relative(axis, 1);
         BlockPos blockPos2 = pPos.relative(axis, -1);
 
-        if(pLevel.getBlockEntity(blockPos1) instanceof CanoeComponentBlockEntity){
-            if(pLevel.getBlockState(blockPos1).getValue(CANOE_CARVED) == 11){
+        if (pLevel.getBlockEntity(blockPos1) instanceof CanoeComponentBlockEntity) {
+            if (pLevel.getBlockState(blockPos1).getValue(CANOE_CARVED) == 11) {
                 ((CanoeComponentBlockEntity) pLevel.getBlockEntity(blockPos1)).light();
             }
         }
-        if(pLevel.getBlockEntity(blockPos2) instanceof CanoeComponentBlockEntity){
-            if(pLevel.getBlockState(blockPos2).getValue(CANOE_CARVED) == 11){
+        if (pLevel.getBlockEntity(blockPos2) instanceof CanoeComponentBlockEntity) {
+            if (pLevel.getBlockState(blockPos2).getValue(CANOE_CARVED) == 11) {
                 ((CanoeComponentBlockEntity) pLevel.getBlockEntity(blockPos2)).light();
             }
         }
@@ -92,6 +92,6 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
     public long getTicksLeft() {
         assert this.level != null;
 
-        return this.litTick + (long)(Integer)TFCConfig.SERVER.pitKilnTicks.get() - Calendars.get(this.level).getTicks();
+        return this.litTick + (long) (Integer) TFCConfig.SERVER.pitKilnTicks.get() - Calendars.get(this.level).getTicks();
     }
 }

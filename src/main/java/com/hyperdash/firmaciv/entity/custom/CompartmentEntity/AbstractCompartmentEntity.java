@@ -31,7 +31,7 @@ public class AbstractCompartmentEntity extends Entity {
     protected VehiclePartEntity ridingThisPart = null;
 
     public ItemStack getBlockTypeItem() {
-        return (ItemStack)this.entityData.get(DATA_BLOCK_TYPE_ITEM);
+        return (ItemStack) this.entityData.get(DATA_BLOCK_TYPE_ITEM);
     }
 
     public void setBlockTypeItem(ItemStack stack) {
@@ -58,14 +58,13 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
 
-
     public Item getDropItem() {
         return this.getBlockTypeItem().getItem();
     }
 
     @Nullable
     public LivingEntity getControllingPassenger() {
-        if(this instanceof EmptyCompartmentEntity){
+        if (this instanceof EmptyCompartmentEntity) {
             Entity entity = this.getFirstPassenger();
             LivingEntity livingentity1;
             if (entity instanceof LivingEntity livingentity) {
@@ -93,16 +92,16 @@ public class AbstractCompartmentEntity extends Entity {
 
     public void tick() {
 
-        if(ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity){
-            ridingThisPart = (VehiclePartEntity)this.getVehicle();
+        if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity) {
+            ridingThisPart = (VehiclePartEntity) this.getVehicle();
         }
-        if(this.isPassenger() && this.getYRot() == 0.0f && this.getVehicle().getYRot() != 0.0f){
+        if (this.isPassenger() && this.getYRot() == 0.0f && this.getVehicle().getYRot() != 0.0f) {
             this.setYRot(this.getVehicle().getYRot());
         }
 
-        if(!this.level().isClientSide() && !this.isPassenger()){
+        if (!this.level().isClientSide() && !this.isPassenger()) {
             notRidingTicks++;
-            if(notRidingTicks > 1){
+            if (notRidingTicks > 1) {
                 this.spawnAtLocation(this.getDropItem());
                 this.discard();
             }
@@ -133,7 +132,7 @@ public class AbstractCompartmentEntity extends Entity {
 
     }
 
-    protected AbstractCompartmentEntity swapCompartments(AbstractCompartmentEntity newCompartment){
+    protected AbstractCompartmentEntity swapCompartments(AbstractCompartmentEntity newCompartment) {
         this.spawnAtLocation(this.getDropItem());
         this.stopRiding();
         this.discard();
@@ -147,7 +146,7 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if(!(this instanceof EmptyCompartmentEntity)){
+        if (!(this instanceof EmptyCompartmentEntity)) {
             if (this.isInvulnerableTo(pSource)) {
                 return false;
             } else if (!this.level().isClientSide && !this.isRemoved()) {
@@ -156,7 +155,7 @@ public class AbstractCompartmentEntity extends Entity {
                 this.setDamage(this.getDamage() + pAmount * 8.0F);
                 this.markHurt();
                 this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
-                boolean flag = pSource.getEntity() instanceof Player && ((Player)pSource.getEntity()).getAbilities().instabuild;
+                boolean flag = pSource.getEntity() instanceof Player && ((Player) pSource.getEntity()).getAbilities().instabuild;
                 if (flag || this.getDamage() > 10.0F) {
                     if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         this.destroy(pSource);
@@ -222,9 +221,6 @@ public class AbstractCompartmentEntity extends Entity {
     public boolean isPickable() {
         return !this.isRemoved();
     }
-
-
-
 
 
 }
