@@ -19,7 +19,6 @@ import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -35,6 +34,8 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     @Nullable
     private ResourceLocation lootTable;
     private long lootTableSeed;
+    // Forge Start
+    private LazyOptional<?> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
     public WorkbenchCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -63,7 +64,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     @Override
-	public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
+    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
 
         InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
         if (interactionresult.consumesAction()) {
@@ -76,7 +77,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     @Override
-	public void openCustomInventoryScreen(Player pPlayer) {
+    public void openCustomInventoryScreen(Player pPlayer) {
         pPlayer.openMenu(this);
         if (!pPlayer.level().isClientSide) {
             this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
@@ -195,9 +196,6 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     public void clearItemStacks() {
         this.itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
     }
-
-    // Forge Start
-    private LazyOptional<?> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {

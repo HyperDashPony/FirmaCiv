@@ -1,11 +1,11 @@
 package com.hyperdash.firmaciv.entity.custom;
 
-import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
@@ -71,33 +71,45 @@ public enum BoatVariant {
             TFCItems.LUMBER.get(Wood.WILLOW));
 
 
+    private static final BoatVariant[] BY_ID = Arrays.stream(values()).sorted(Comparator.
+            comparingInt(BoatVariant::getId)).toArray(BoatVariant[]::new);
     private final int id;
-
     private final Supplier<? extends Item> lumber;
-
     private final Supplier<? extends Block> stripped;
 
-    BoatVariant(int id, Wood wood, Supplier<? extends Block> stripped, Supplier<? extends Item> lumber)
-    {
+    BoatVariant(int id, Wood wood, Supplier<? extends Block> stripped, Supplier<? extends Item> lumber) {
         this.id = id;
         this.lumber = lumber;
         this.stripped = stripped;
+    }
+
+    public static BoatVariant byId(int id) {
+        return BY_ID[id % BY_ID.length];
+    }
+
+    public static BoatVariant byName(String pName) {
+        BoatVariant[] $boatvariant = values();
+
+        for (int i = 0; i < $boatvariant.length; ++i) {
+            if ($boatvariant[i].getName().equals(pName)) {
+                return $boatvariant[i];
+            }
+        }
+
+        return $boatvariant[0];
     }
 
     public int getId() {
         return this.id;
     }
 
-    private static final BoatVariant[] BY_ID = Arrays.stream(values()).sorted(Comparator.
-            comparingInt(BoatVariant::getId)).toArray(BoatVariant[]::new);
-
-    public static BoatVariant byId(int id) {
-        return BY_ID[id % BY_ID.length];
+    public Supplier<? extends Item> getLumber() {
+        return this.lumber;
     }
 
-    public Supplier<? extends Item> getLumber(){return this.lumber;}
-
-    public Supplier<? extends Block> getStripped(){return this.stripped;}
+    public Supplier<? extends Block> getStripped() {
+        return this.stripped;
+    }
 
     public String getName() {
         return this.name().toLowerCase(Locale.ROOT);
@@ -105,19 +117,6 @@ public enum BoatVariant {
 
     public String toString() {
         return this.name().toLowerCase(Locale.ROOT);
-    }
-
-
-    public static BoatVariant byName(String pName) {
-        BoatVariant[] $boatvariant = values();
-
-        for(int i = 0; i < $boatvariant.length; ++i) {
-            if ($boatvariant[i].getName().equals(pName)) {
-                return $boatvariant[i];
-            }
-        }
-
-        return $boatvariant[0];
     }
 
 

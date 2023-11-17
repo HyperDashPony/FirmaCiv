@@ -3,7 +3,6 @@ package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.container.RestrictedChestContainer;
 import net.dries007.tfc.common.container.TFCContainerTypes;
-
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -34,11 +33,13 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
     @Nullable
     private ResourceLocation lootTable;
     private long lootTableSeed;
+    // Forge Start
+    private net.minecraftforge.common.util.LazyOptional<?> itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(this));
+
 
     public ChestCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
-
 
     @Override
     public void remove(RemovalReason pReason) {
@@ -72,7 +73,7 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         if (interactionresult.consumesAction()) {
 
             this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
-            if(this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)){
+            if (this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)) {
                 PiglinAi.angerNearbyPiglins(pPlayer, true);
             }
 
@@ -164,7 +165,7 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
             return null;
         } else {
             this.unpackLootTable(inv.player);
-            return new RestrictedChestContainer((MenuType) TFCContainerTypes.CHEST_9x2.get(), windowId, inv, this, 2);
+            return new RestrictedChestContainer(TFCContainerTypes.CHEST_9x2.get(), windowId, inv, this, 2);
         }
     }
 
@@ -202,9 +203,6 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
     public void clearItemStacks() {
         this.itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
     }
-
-    // Forge Start
-    private net.minecraftforge.common.util.LazyOptional<?> itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(this));
 
     @Override
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.core.Direction facing) {

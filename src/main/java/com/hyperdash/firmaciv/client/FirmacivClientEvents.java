@@ -1,8 +1,8 @@
 package com.hyperdash.firmaciv.client;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CanoeRenderer;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CanoeRenderer;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.hyperdash.firmaciv.item.custom.AbstractNavItem;
@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 public class FirmacivClientEvents {
 
-    public static void init(){
+    public static void init() {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         bus.addListener(FirmacivClientEvents::clientSetup);
@@ -32,7 +32,7 @@ public class FirmacivClientEvents {
 
     private static void clientSetup(final FMLClientSetupEvent event) {
 
-        for(BoatVariant variant : BoatVariant.values()){
+        for (BoatVariant variant : BoatVariant.values()) {
             EntityRenderers.register(FirmacivEntities.CANOES.get(variant).get(), CanoeRenderer::new);
         }
 
@@ -44,12 +44,12 @@ public class FirmacivClientEvents {
 
             public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity livingEntity, int p_174668_) {
 
-                Entity entity = (Entity)(livingEntity != null ? livingEntity : pStack.getEntityRepresentation());
+                Entity entity = livingEntity != null ? livingEntity : pStack.getEntityRepresentation();
                 if (entity == null) {
                     return 0.0F;
                 } else {
                     if (pLevel == null && entity.level() instanceof ClientLevel) {
-                        pLevel = (ClientLevel)entity.level();
+                        pLevel = (ClientLevel) entity.level();
                     }
 
                     if (pLevel == null) {
@@ -58,17 +58,16 @@ public class FirmacivClientEvents {
                         double height;
                         if (pLevel.dimensionType().natural()) {
                             assert livingEntity != null;
-                            height = (double)(entity.getY()+64)/(pLevel.getHeight());
+                            height = (entity.getY() + 64) / (pLevel.getHeight());
                         } else {
                             height = Math.random();
                         }
 
-                        return (float)height;
+                        return (float) height;
                     }
                 }
             }
         });
-
 
 
         ItemProperties.register(FirmacivItems.NAV_CLOCK.get(), new ResourceLocation(Firmaciv.MOD_ID, "pm_time"), new ClampedItemPropertyFunction() {
@@ -77,22 +76,22 @@ public class FirmacivClientEvents {
             private long lastUpdateTick;
 
             public float unclampedCall(ItemStack p_174665_, @Nullable ClientLevel p_174666_, @Nullable LivingEntity livingEntity, int p_174668_) {
-                net.minecraft.world.entity.Entity entity = (Entity)(livingEntity != null ? livingEntity : p_174665_.getEntityRepresentation());
+                net.minecraft.world.entity.Entity entity = livingEntity != null ? livingEntity : p_174665_.getEntityRepresentation();
                 if (entity == null) {
                     return 0.0F;
                 } else {
                     if (p_174666_ == null && entity.level() instanceof ClientLevel) {
-                        p_174666_ = (ClientLevel)entity.level();
+                        p_174666_ = (ClientLevel) entity.level();
                     }
 
-                    double longitude = Math.abs((AbstractNavItem.getNavLocation(entity.getEyePosition())[AbstractNavItem.NavSelection.LONGITUDE.ordinal()]%180)/180);
+                    double longitude = Math.abs((AbstractNavItem.getNavLocation(entity.getEyePosition())[AbstractNavItem.NavSelection.LONGITUDE.ordinal()] % 180) / 180);
 
                     if (p_174666_ == null) {
                         return 0.0F;
                     } else {
                         double time;
                         if (p_174666_.dimensionType().natural()) {
-                            time = (double)p_174666_.getTimeOfDay(1.0F);
+                            time = p_174666_.getTimeOfDay(1.0F);
                             time += longitude;
                             time %= 1.0F;
                         } else {
@@ -100,11 +99,10 @@ public class FirmacivClientEvents {
                         }
 
                         time = this.wobble(p_174666_, time);
-                        return (float)time;
+                        return (float) time;
                     }
                 }
             }
-
 
 
             private double wobble(Level p_117904_, double p_117905_) {

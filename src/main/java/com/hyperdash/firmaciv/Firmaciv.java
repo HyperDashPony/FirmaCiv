@@ -3,21 +3,21 @@ package com.hyperdash.firmaciv;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
-import com.hyperdash.firmaciv.events.config.FirmacivConfig;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.events.config.FirmacivConfig;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.hyperdash.firmaciv.item.FirmacivTabs;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
@@ -26,15 +26,13 @@ import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Firmaciv.MOD_ID)
-public class Firmaciv
-{
+public class Firmaciv {
     public static final String MOD_ID = "firmaciv";
 
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public Firmaciv()
-    {
+    public Firmaciv() {
         // Register the setup method for modloading
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -54,7 +52,7 @@ public class Firmaciv
         MinecraftForge.EVENT_BUS.register(this);
         eventBus.addListener(this::addCreative);
         FirmacivConfig.init();
-        if(FMLEnvironment.dist == Dist.CLIENT){
+        if (FMLEnvironment.dist == Dist.CLIENT) {
             FirmacivClientEvents.init();
         }
     }
@@ -67,8 +65,7 @@ public class Firmaciv
         }
     };
     */
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) {
         // some preinit code
     }
 
@@ -76,23 +73,20 @@ public class Firmaciv
 
     }
 
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
+    private void enqueueIMC(final InterModEnqueueEvent event) {
         // Some example code to dispatch IMC to another mod
     }
 
-    private void processIMC(final InterModProcessEvent event)
-    {
+    private void processIMC(final InterModProcessEvent event) {
         // Some example code to receive and process InterModComms from other mods
         LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.messageSupplier().get()).
+                map(m -> m.messageSupplier().get()).
                 collect(Collectors.toList()));
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
+    public void onServerStarting(ServerStartingEvent event) {
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD

@@ -11,10 +11,14 @@ public class FirmacivConfig {
 
     public static final ServerConfig SERVER;
 
+    static {
+        SERVER = register(ModConfig.Type.SERVER, ServerConfig::new);
+    }
+
     public FirmacivConfig() {
     }
 
-    public static void init(){
+    public static void init() {
 
     }
 
@@ -24,10 +28,6 @@ public class FirmacivConfig {
         ModLoadingContext.get().registerConfig(type, specPair.getRight());
 
         return specPair.getLeft();
-    }
-
-    static {
-        SERVER = (ServerConfig) register(ModConfig.Type.SERVER, ServerConfig::new);
     }
 
 

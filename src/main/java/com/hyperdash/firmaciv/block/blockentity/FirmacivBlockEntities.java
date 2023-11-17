@@ -1,7 +1,6 @@
 package com.hyperdash.firmaciv.block.blockentity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
@@ -24,6 +23,15 @@ public class FirmacivBlockEntities {
 
     public static final RegistryObject<BlockEntityType<CanoeComponentBlockEntity>> CANOE_COMPONENT_BLOCK_ENTITY;
 
+    static {
+        BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Firmaciv.MOD_ID);
+
+        CANOE_COMPONENT_BLOCK_ENTITY = register("canoe_component_block_entity", CanoeComponentBlockEntity::new,
+                Stream.of(BoatVariant.values()).map(CANOE_COMPONENT_BLOCKS::get));
+
+
+    }
+
     public FirmacivBlockEntities() {
     }
 
@@ -35,18 +43,8 @@ public class FirmacivBlockEntities {
         return RegistrationHelpers.register(BLOCK_ENTITIES, name, factory, blocks);
     }
 
-    public static void register(IEventBus eventBus){
+    public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
-    }
-
-
-    static {
-        BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Firmaciv.MOD_ID);
-
-        CANOE_COMPONENT_BLOCK_ENTITY = register("canoe_component_block_entity", CanoeComponentBlockEntity::new,
-                Stream.of(BoatVariant.values()).map(CANOE_COMPONENT_BLOCKS::get));
-
-
     }
 
 

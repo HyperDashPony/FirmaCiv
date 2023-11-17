@@ -3,7 +3,6 @@ package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.util.FirmacivTags;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -21,18 +20,30 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
+public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected boolean inputLeft;
     protected boolean inputRight;
     protected boolean inputUp;
     protected boolean inputDown;
 
-    public boolean getInputLeft(){return inputLeft;}
-    public boolean getInputRight(){return inputRight;}
-    public boolean getInputUp(){return inputUp;}
-    public boolean getInputDown(){return inputDown;}
     public EmptyCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    public boolean getInputLeft() {
+        return inputLeft;
+    }
+
+    public boolean getInputRight() {
+        return inputRight;
+    }
+
+    public boolean getInputUp() {
+        return inputUp;
+    }
+
+    public boolean getInputDown() {
+        return inputDown;
     }
 
     @Override
@@ -47,9 +58,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
     @Override
     protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
         super.positionRider(pPassenger, pCallback);
-        pCallback.accept(pPassenger, this.getX() + 0f, this.getY()-0.57f, this.getZ()+ 0f);
+        pCallback.accept(pPassenger, this.getX() + 0f, this.getY() - 0.57f, this.getZ() + 0f);
         if (pPassenger instanceof LivingEntity) {
-            ((LivingEntity)pPassenger).yBodyRot = this.yRotO;
+            ((LivingEntity) pPassenger).yBodyRot = this.yRotO;
         }
         this.clampRotation(pPassenger);
 
@@ -76,13 +87,13 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         this.clampRotation(pEntityToUpdate);
     }
 
-	@Override
+    @Override
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
 
         ItemStack item = pPlayer.getItemInHand(pHand);
 
         if (pPlayer.isSecondaryUseActive()) {
-            if(!getPassengers().isEmpty() && !(getPassengers().get(0) instanceof Player)){
+            if (!getPassengers().isEmpty() && !(getPassengers().get(0) instanceof Player)) {
                 this.ejectPassengers();
                 return InteractionResult.SUCCESS;
             }
@@ -90,7 +101,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         }
 
         AbstractCompartmentEntity newCompartment = null;
-        if(!item.isEmpty() && this.getPassengers().isEmpty()){
+        if (!item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(pPlayer.level());
             } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
@@ -116,10 +127,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
     }
 
 
-
     @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {
-        Vec3 vec3 = getCollisionHorizontalEscapeVector((double)(this.getBbWidth() * Mth.SQRT_OF_TWO), (double)pLivingEntity.getBbWidth(), pLivingEntity.getYRot());
+        Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO, pLivingEntity.getBbWidth(), pLivingEntity.getYRot());
         double d0 = this.getX() + vec3.x;
         double d1 = this.getZ() + vec3.z;
         BlockPos blockpos = BlockPos.containing(d0, this.getBoundingBox().maxY, d1);
@@ -128,16 +138,16 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
             List<Vec3> list = Lists.newArrayList();
             double d2 = this.level().getBlockFloorHeight(blockpos);
             if (DismountHelper.isBlockFloorValid(d2)) {
-                list.add(new Vec3(d0, (double)blockpos.getY() + d2, d1));
+                list.add(new Vec3(d0, (double) blockpos.getY() + d2, d1));
             }
 
             double d3 = this.level().getBlockFloorHeight(blockpos1);
             if (DismountHelper.isBlockFloorValid(d3)) {
-                list.add(new Vec3(d0, (double)blockpos1.getY() + d3, d1));
+                list.add(new Vec3(d0, (double) blockpos1.getY() + d3, d1));
             }
 
-            for(Pose pose : pLivingEntity.getDismountPoses()) {
-                for(Vec3 vec31 : list) {
+            for (Pose pose : pLivingEntity.getDismountPoses()) {
+                for (Vec3 vec31 : list) {
                     if (DismountHelper.canDismountTo(this.level(), vec31, pLivingEntity, pose)) {
                         pLivingEntity.setPose(pose);
                         return vec31;

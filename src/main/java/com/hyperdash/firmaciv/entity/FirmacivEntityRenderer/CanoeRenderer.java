@@ -48,19 +48,19 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
-        float f = (float)pEntity.getHurtTime() - pPartialTicks;
+        float f = (float) pEntity.getHurtTime() - pPartialTicks;
         float f1 = pEntity.getDamage() - pPartialTicks;
         if (f1 < 0.0F) {
             f1 = 0.0F;
         }
 
         if (f > 0.0F) {
-            pMatrixStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float)pEntity.getHurtDir()));
+            pMatrixStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
         float f2 = pEntity.getBubbleAngle(pPartialTicks);
         if (!Mth.equal(f2, 0.0F)) {
-            pMatrixStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float)Math.PI / 180F), 1.0F, 0.0F, 1.0F));
+            pMatrixStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F), 1.0F, 0.0F, 1.0F));
         }
 
         Pair<ResourceLocation, CanoeEntityModel> pair = getModelWithLocation(pEntity);
@@ -91,7 +91,9 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
     }
 
-    public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) { return this.canoeResources.get(canoe.getVariant()); }
+    public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) {
+        return this.canoeResources.get(canoe.getVariant());
+    }
 
 
 }

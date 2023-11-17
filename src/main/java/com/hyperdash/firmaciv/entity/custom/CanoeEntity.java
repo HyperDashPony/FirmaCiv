@@ -1,38 +1,20 @@
 package com.hyperdash.firmaciv.entity.custom;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
-import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class CanoeEntity extends FirmacivBoatEntity{
+public class CanoeEntity extends FirmacivBoatEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class, EntityDataSerializers.INT);
 
     public final int PASSENGER_NUMBER = 2;
-    public void setType(BoatVariant pVariant) {
-        this.entityData.set(DATA_ID_TYPE, pVariant.ordinal());
-    }
-
-    public BoatVariant getVariant() {
-        return BoatVariant.byId(this.entityData.get(DATA_ID_TYPE));
-    }
-
-    @Override
-    public Item getDropItem() {
-        return getVariant().getLumber().get();
-    }
 
     public CanoeEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -43,6 +25,18 @@ public class CanoeEntity extends FirmacivBoatEntity{
 
         //EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pLevel);
         //addPassenger(newCompartment);
+    }
+
+    public static ModelLayerLocation createCanoeModelName(BoatVariant pVariant) {
+        return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pVariant.getName()), "main");
+    }
+
+    public void setType(BoatVariant pVariant) {
+        this.entityData.set(DATA_ID_TYPE, pVariant.ordinal());
+    }
+
+    public BoatVariant getVariant() {
+        return BoatVariant.byId(this.entityData.get(DATA_ID_TYPE));
     }
 
 
@@ -134,8 +128,9 @@ public class CanoeEntity extends FirmacivBoatEntity{
     }
 */
 
-    public static ModelLayerLocation createCanoeModelName(BoatVariant pVariant) {
-        return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pVariant.getName()), "main");
+    @Override
+    public Item getDropItem() {
+        return getVariant().getLumber().get();
     }
 
     /*
@@ -151,7 +146,7 @@ public class CanoeEntity extends FirmacivBoatEntity{
         return null;
     }
 
-    public ResourceLocation getTextureLocation(){
+    public ResourceLocation getTextureLocation() {
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + getVariant().getName() + ".png");
     }
 

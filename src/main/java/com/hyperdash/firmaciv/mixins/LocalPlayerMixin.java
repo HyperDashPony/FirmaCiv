@@ -28,14 +28,12 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))
-    void injectMovementCapture(CallbackInfo ci){
-        if (this.getVehicle() instanceof FirmacivBoatEntity) {
-            FirmacivBoatEntity firmacivboat = (FirmacivBoatEntity) this.getVehicle();
+    void injectMovementCapture(CallbackInfo ci) {
+        if (this.getVehicle() instanceof FirmacivBoatEntity firmacivboat) {
             firmacivboat.setInput(this.input.left, this.input.right, this.input.up, this.input.down);
             this.handsBusy |= this.input.left || this.input.right || this.input.up || this.input.down;
         }
-        if (this.getVehicle() instanceof EmptyCompartmentEntity) {
-            EmptyCompartmentEntity compartmentEntity = (EmptyCompartmentEntity) this.getVehicle();
+        if (this.getVehicle() instanceof EmptyCompartmentEntity compartmentEntity) {
             compartmentEntity.setInput(this.input.left, this.input.right, this.input.up, this.input.down);
             this.handsBusy |= this.input.left || this.input.right || this.input.up || this.input.down;
         }

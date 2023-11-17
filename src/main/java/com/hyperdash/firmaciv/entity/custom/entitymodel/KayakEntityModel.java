@@ -116,6 +116,7 @@ public class KayakEntityModel<T extends Entity> extends EntityModel<T> {
     public ModelPart getWaterocclusion() {
         return this.waterocclusion;
     }
+
     public ModelPart getCockpitCover() {
         return this.cockpitcover;
     }

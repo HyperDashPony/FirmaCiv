@@ -1,6 +1,5 @@
 package com.hyperdash.firmaciv.block;
 
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
@@ -32,15 +31,7 @@ public class FirmacivBlockStateProperties {
     public static final BooleanProperty IS_STAIR_SHAPED;
     private static final IntegerProperty[] CANOE_CARVED;
 
-    public static IntegerProperty getCanoeCarvedProperty(int maxStage) {
-        if (maxStage > 0 && maxStage <= CANOE_CARVED.length) {
-            return CANOE_CARVED[maxStage - 1];
-        } else {
-            throw new IllegalArgumentException("No canoe_carved property for stages [0, " + maxStage + "]");
-        }
-    }
-
-    static{
+    static {
         CANOE_CARVED_1 = IntegerProperty.create("canoe_carved", 0, 1);
         CANOE_CARVED_2 = IntegerProperty.create("canoe_carved", 1, 2);
         CANOE_CARVED_3 = IntegerProperty.create("canoe_carved", 1, 3);
@@ -60,8 +51,16 @@ public class FirmacivBlockStateProperties {
         END = BooleanProperty.create("end");
         IS_STAIR_SHAPED = BooleanProperty.create("is_stair_shaped");
 
-        CANOE_CARVED = new IntegerProperty[]{ CANOE_CARVED_1, CANOE_CARVED_2, CANOE_CARVED_3, CANOE_CARVED_4, CANOE_CARVED_5,
+        CANOE_CARVED = new IntegerProperty[]{CANOE_CARVED_1, CANOE_CARVED_2, CANOE_CARVED_3, CANOE_CARVED_4, CANOE_CARVED_5,
                 CANOE_CARVED_6, CANOE_CARVED_7, CANOE_CARVED_8, CANOE_CARVED_9, CANOE_CARVED_10, CANOE_CARVED_11};
+    }
+
+    public static IntegerProperty getCanoeCarvedProperty(int maxStage) {
+        if (maxStage > 0 && maxStage <= CANOE_CARVED.length) {
+            return CANOE_CARVED[maxStage - 1];
+        } else {
+            throw new IllegalArgumentException("No canoe_carved property for stages [0, " + maxStage + "]");
+        }
     }
 
 }
