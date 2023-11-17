@@ -7,11 +7,12 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -27,11 +28,11 @@ public class AbstractCompartmentEntity extends Entity {
 
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
-
+    @Nullable
     protected VehiclePartEntity ridingThisPart = null;
 
     public ItemStack getBlockTypeItem() {
-        return (ItemStack)this.entityData.get(DATA_BLOCK_TYPE_ITEM);
+        return this.entityData.get(DATA_BLOCK_TYPE_ITEM);
     }
 
     public void setBlockTypeItem(ItemStack stack) {
@@ -45,14 +46,17 @@ public class AbstractCompartmentEntity extends Entity {
 
     }
 
+    @Override
     public void remove(RemovalReason pReason) {
         super.remove(pReason);
     }
 
+    @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         this.setBlockTypeItem(ItemStack.of(tag.getCompound("dataBlockTypeItem")));
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
     }
@@ -64,6 +68,7 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     @Nullable
+    @Override
     public LivingEntity getControllingPassenger() {
         if(this instanceof EmptyCompartmentEntity){
             Entity entity = this.getFirstPassenger();
@@ -81,16 +86,19 @@ public class AbstractCompartmentEntity extends Entity {
 
     }
 
+    @Override
     public double getMyRidingOffset() {
         return 0.125D;
     }
 
+    @Override
     public double getPassengersRidingOffset() {
         return super.getPassengersRidingOffset();
     }
 
     private int notRidingTicks = 0;
 
+    @Override
     public void tick() {
 
         if(ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity){
@@ -142,10 +150,12 @@ public class AbstractCompartmentEntity extends Entity {
         return newCompartment;
     }
 
+    @Override
     public ItemStack getPickResult() {
         return getBlockTypeItem();
     }
 
+    @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
         if(!(this instanceof EmptyCompartmentEntity)){
             if (this.isInvulnerableTo(pSource)) {
@@ -213,18 +223,8 @@ public class AbstractCompartmentEntity extends Entity {
         return this.entityData.get(DATA_ID_HURTDIR);
     }
 
-
-    public boolean isPushable() {
-        return false;
-    }
-
-
+	@Override
     public boolean isPickable() {
         return !this.isRemoved();
     }
-
-
-
-
-
 }

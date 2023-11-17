@@ -1,15 +1,13 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.util.FirmacivTags;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.*;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.SlotAccess;
@@ -17,13 +15,15 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
@@ -40,6 +40,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
         super(pEntityType, pLevel);
     }
 
+    @Override
     public void remove(RemovalReason pReason) {
         if (!this.level().isClientSide && pReason.shouldDestroy()) {
             this.playSound(SoundEvents.WOOD_BREAK, 1.0F, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
@@ -49,21 +50,20 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
         super.remove(pReason);
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         this.addChestVehicleSaveData(pCompound);
     }
 
+    @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.readChestVehicleSaveData(pCompound);
     }
 
-    public boolean isPushable() {
-        return false;
-    }
-
-    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
+    @Override
+	public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
 
         InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
         if (interactionresult.consumesAction()) {
@@ -75,12 +75,8 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
         return interactionresult;
     }
 
-    public boolean isPickable() {
-        return !this.isRemoved();
-    }
-
-
-    public void openCustomInventoryScreen(Player pPlayer) {
+    @Override
+	public void openCustomInventoryScreen(Player pPlayer) {
         pPlayer.openMenu(this);
         if (!pPlayer.level().isClientSide) {
             this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
@@ -88,6 +84,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
 
     }
 
+    @Override
     public void clearContent() {
         this.clearChestVehicleContent();
     }
@@ -95,6 +92,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     /**
      * Returns the number of slots in the inventory.
      */
+    @Override
     public int getContainerSize() {
         return CONTAINER_SIZE;
     }
@@ -102,6 +100,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     /**
      * Returns the stack in the given slot.
      */
+    @Override
     public ItemStack getItem(int pSlot) {
         return this.getChestVehicleItem(pSlot);
     }
@@ -109,6 +108,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     /**
      * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
      */
+    @Override
     public ItemStack removeItem(int pSlot, int pAmount) {
         return this.removeChestVehicleItem(pSlot, pAmount);
     }
@@ -116,6 +116,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     /**
      * Removes a stack from the given slot and returns it.
      */
+    @Override
     public ItemStack removeItemNoUpdate(int pSlot) {
         return this.removeChestVehicleItemNoUpdate(pSlot);
     }
@@ -123,10 +124,12 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
+    @Override
     public void setItem(int pSlot, ItemStack pStack) {
         this.setChestVehicleItem(pSlot, pStack);
     }
 
+    @Override
     public SlotAccess getSlot(int pSlot) {
         return this.getChestVehicleSlot(pSlot);
     }
@@ -135,17 +138,20 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
      * For block entities, ensures the chunk containing the block entity is saved to disk later - the game won't think it
      * hasn't changed and skip it.
      */
+    @Override
     public void setChanged() {
     }
 
     /**
      * Don't rename this method to canInteractWith due to conflicts with Container
      */
+    @Override
     public boolean stillValid(Player pPlayer) {
         return this.isChestVehicleStillValid(pPlayer);
     }
 
     @Nullable
+    @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
         if (this.getLootTable() != null && player.isSpectator()) {
             return null;
@@ -160,36 +166,42 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     @Nullable
+    @Override
     public ResourceLocation getLootTable() {
         return this.lootTable;
     }
 
+    @Override
     public void setLootTable(@Nullable ResourceLocation pLootTable) {
         this.lootTable = pLootTable;
     }
 
+    @Override
     public long getLootTableSeed() {
         return this.lootTableSeed;
     }
 
+    @Override
     public void setLootTableSeed(long pLootTableSeed) {
         this.lootTableSeed = pLootTableSeed;
     }
 
+    @Override
     public NonNullList<ItemStack> getItemStacks() {
         return this.itemStacks;
     }
 
+    @Override
     public void clearItemStacks() {
         this.itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
     }
 
     // Forge Start
-    private net.minecraftforge.common.util.LazyOptional<?> itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(this));
+    private LazyOptional<?> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
     @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.core.Direction facing) {
-        if (this.isAlive() && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER)
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER)
             return itemHandler.cast();
         return super.getCapability(capability, facing);
     }
@@ -203,9 +215,10 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     @Override
     public void reviveCaps() {
         super.reviveCaps();
-        itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(this));
+        itemHandler = LazyOptional.of(() -> new InvWrapper(this));
     }
 
+    @Override
     public void stopOpen(Player pPlayer) {
         this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(pPlayer));
     }
