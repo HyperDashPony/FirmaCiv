@@ -45,7 +45,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
 
     protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
         super.positionRider(pPassenger, pCallback);
-        pCallback.accept(pPassenger, this.getX() + 0f, this.getY()-0.6f, this.getZ()+ 0f);
+        pCallback.accept(pPassenger, this.getX() + 0f, this.getY()-0.57f, this.getZ()+ 0f);
         if (pPassenger instanceof LivingEntity) {
             ((LivingEntity)pPassenger).yBodyRot = this.yRotO;
         }
@@ -100,6 +100,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
 
         if (newCompartment != null) {
             swapCompartments(newCompartment);
+            newCompartment.setYRot(ridingThisPart.getYRot());
             newCompartment.setBlockTypeItem(item.split(1));
             this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
             return InteractionResult.sidedSuccess(this.level().isClientSide);

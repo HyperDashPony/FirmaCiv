@@ -4,6 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +25,9 @@ public class AbstractCompartmentEntity extends Entity {
     private static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
 
+    private static final float DAMAGE_TO_BREAK = 8.0f;
+    private static final float DAMAGE_RECOVERY = 0.5f;
+
     protected VehiclePartEntity ridingThisPart = null;
 
     public ItemStack getBlockTypeItem() {
@@ -35,7 +40,9 @@ public class AbstractCompartmentEntity extends Entity {
 
     public AbstractCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        this.setNoGravity(false);
         notRidingTicks = 0;
+
     }
 
     public void remove(RemovalReason pReason) {
@@ -50,28 +57,47 @@ public class AbstractCompartmentEntity extends Entity {
         tag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
     }
 
+
+
     public Item getDropItem() {
         return this.getBlockTypeItem().getItem();
     }
 
     @Nullable
     public LivingEntity getControllingPassenger() {
-        Entity entity = this.getFirstPassenger();
-        LivingEntity livingentity1;
-        if (entity instanceof LivingEntity livingentity) {
-            livingentity1 = livingentity;
+        if(this instanceof EmptyCompartmentEntity){
+            Entity entity = this.getFirstPassenger();
+            LivingEntity livingentity1;
+            if (entity instanceof LivingEntity livingentity) {
+                livingentity1 = livingentity;
+            } else {
+                livingentity1 = null;
+            }
+
+            return livingentity1;
         } else {
-            livingentity1 = null;
+            return null;
         }
 
-        return livingentity1;
+    }
+
+    public double getMyRidingOffset() {
+        return 0.125D;
+    }
+
+    public double getPassengersRidingOffset() {
+        return super.getPassengersRidingOffset();
     }
 
     private int notRidingTicks = 0;
 
     public void tick() {
+
         if(ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity){
             ridingThisPart = (VehiclePartEntity)this.getVehicle();
+        }
+        if(this.isPassenger() && this.getYRot() == 0.0f && this.getVehicle().getYRot() != 0.0f){
+            this.setYRot(this.getVehicle().getYRot());
         }
 
         if(!this.level().isClientSide() && !this.isPassenger()){
@@ -84,7 +110,27 @@ public class AbstractCompartmentEntity extends Entity {
             notRidingTicks = 0;
         }
 
+        if (this.getHurtTime() > 0) {
+            this.setHurtTime(this.getHurtTime() - 1);
+        }
+
+        if (this.getDamage() > 0.0F) {
+            this.setDamage(this.getDamage() - DAMAGE_RECOVERY);
+        }
+
         super.tick();
+    }
+
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return SoundEvents.WOOD_HIT;
+    }
+
+    protected void playHurtSound(DamageSource pSource) {
+        SoundEvent soundevent = this.getHurtSound(pSource);
+        if (soundevent != null) {
+            this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
+        }
+
     }
 
     protected AbstractCompartmentEntity swapCompartments(AbstractCompartmentEntity newCompartment){
@@ -107,11 +153,11 @@ public class AbstractCompartmentEntity extends Entity {
             } else if (!this.level().isClientSide && !this.isRemoved()) {
                 this.setHurtDir(-this.getHurtDir());
                 this.setHurtTime(10);
-                this.setDamage(this.getDamage() + pAmount * 10.0F);
+                this.setDamage(this.getDamage() + pAmount * 8.0F);
                 this.markHurt();
                 this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
                 boolean flag = pSource.getEntity() instanceof Player && ((Player)pSource.getEntity()).getAbilities().instabuild;
-                if (flag || this.getDamage() > 40.0F) {
+                if (flag || this.getDamage() > 10.0F) {
                     if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         this.destroy(pSource);
                     }
@@ -146,6 +192,10 @@ public class AbstractCompartmentEntity extends Entity {
 
     public void setHurtTime(int pHurtTime) {
         this.entityData.set(DATA_ID_HURT, pHurtTime);
+    }
+
+    public int getHurtTime() {
+        return this.entityData.get(DATA_ID_HURT);
     }
 
     protected void destroy(DamageSource pDamageSource) {

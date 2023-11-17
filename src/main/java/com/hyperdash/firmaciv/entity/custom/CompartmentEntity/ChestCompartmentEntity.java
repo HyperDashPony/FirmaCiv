@@ -7,8 +7,10 @@ import net.dries007.tfc.common.container.TFCContainerTypes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.*;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
@@ -50,7 +52,7 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
+        super.addAdditionalSaveData(pCompound);
         this.addChestVehicleSaveData(pCompound);
     }
 
@@ -64,35 +66,17 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
     }
 
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
+        InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
+        if (interactionresult.consumesAction()) {
 
-        ItemStack item = pPlayer.getItemInHand(pHand);
-        AbstractCompartmentEntity newCompartment = null;
-        if(!item.isEmpty()){
-            if (item.is(FirmacivTags.Items.SAWS) || item.is(FirmacivTags.Items.AXES)) {
-                newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-
-            }
-        }
-
-        if (newCompartment != null) {
-            Containers.dropContents(this.level(), this, this);
-            newCompartment = swapCompartments(newCompartment);
-            newCompartment.setBlockTypeItem(ItemStack.EMPTY);
-            this.playSound(SoundEvents.WOOD_BREAK, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
-        } else {
-            InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
-            if (interactionresult.consumesAction()) {
-
-                this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
-                if(this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)){
-                    PiglinAi.angerNearbyPiglins(pPlayer, true);
-                }
-
+            this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
+            if(this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)){
+                PiglinAi.angerNearbyPiglins(pPlayer, true);
             }
 
-            return interactionresult;
         }
+
+        return interactionresult;
     }
 
     public void openCustomInventoryScreen(Player pPlayer) {

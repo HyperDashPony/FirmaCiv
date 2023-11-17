@@ -1,10 +1,14 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class VehiclePartEntity extends Entity {
 
@@ -24,6 +28,7 @@ public class VehiclePartEntity extends Entity {
             if(emptyTicks > 2){
                 this.ejectPassengers();
                 EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(this.level());
+                newCompartment.setYRot(this.getYRot());
                 newCompartment.startRiding(this);
                 this.level().addFreshEntity(newCompartment);
             }
@@ -41,10 +46,25 @@ public class VehiclePartEntity extends Entity {
 
         }
 
-
         super.tick();
 
     }
+
+
+    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
+        //pCallback.accept(pPassenger, this.getX(), this.getY() + this.getPassengersRidingOffset() + pPassenger.getMyRidingOffset(), this.getZ());
+
+        if(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity){
+            if (this.hasPassenger(pPassenger)) {
+                if(pPassenger instanceof AbstractCompartmentEntity abstractCompartmentEntity){
+                    abstractCompartmentEntity.setYRot(pPassenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
+                }
+            }
+        }
+        super.positionRider(pPassenger, pCallback);
+
+    }
+
     @Override
     protected void defineSynchedData() {
 

@@ -4,26 +4,18 @@ import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
-import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.AbstractCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.ChestCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
-import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ServerboundPaddleBoatPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -35,7 +27,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySelector;
@@ -46,12 +37,10 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WaterlilyBlock;
@@ -74,6 +63,8 @@ public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
 
+    protected final float DAMAGE_THRESHOLD = 80.0f;
+    protected final float DAMAGE_RECOVERY = 0.5f;
     public final int PASSENGER_NUMBER = 2;
     protected List<VehiclePartEntity> vehicleParts = new ArrayList<VehiclePartEntity>();
 
@@ -121,6 +112,18 @@ public class FirmacivBoatEntity extends Entity {
         return pSize.height;
     }
 
+    protected float getDamageThreshold(){
+        return this.DAMAGE_THRESHOLD;
+    }
+
+    protected float getDamageRecovery(){
+        return this.DAMAGE_RECOVERY;
+    }
+
+    public float getDeltaRotation(){
+        return deltaRotation;
+    }
+
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.NONE;
     }
@@ -154,6 +157,16 @@ public class FirmacivBoatEntity extends Entity {
         return true;
     }
 
+    @Override
+    protected void readAdditionalSaveData(CompoundTag pCompound) {
+
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag pCompound) {
+
+    }
+
     protected Vec3 getRelativePortalPosition(Direction.Axis pAxis, BlockUtil.FoundRectangle pPortal) {
         return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(pAxis, pPortal));
     }
@@ -178,7 +191,7 @@ public class FirmacivBoatEntity extends Entity {
             this.markHurt();
             this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
             boolean flag = pSource.getEntity() instanceof Player && ((Player)pSource.getEntity()).getAbilities().instabuild;
-            if (flag || this.getDamage() > 40.0F) {
+            if (flag || this.getDamage() > getDamageThreshold()) {
                 if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                     this.spawnAtLocation(this.getDropItem());
                 }
@@ -230,7 +243,7 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Setups the entity to do the hurt animation. Only used by packets in multiplayer.
      */
-    public void animateHurt() {
+    public void animateHurt(float pYaw) {
         this.setHurtDir(-this.getHurtDir());
         this.setHurtTime(10);
         this.setDamage(this.getDamage() * 11.0F);
@@ -291,7 +304,7 @@ public class FirmacivBoatEntity extends Entity {
         }
 
         if (this.getDamage() > 0.0F) {
-            this.setDamage(this.getDamage() - 1.0F);
+            this.setDamage(this.getDamage() - getDamageRecovery());
         }
 
         super.tick();
@@ -341,6 +354,7 @@ public class FirmacivBoatEntity extends Entity {
             this.move(MoverType.SELF, this.getDeltaMovement());
         } else {
             this.setDeltaMovement(Vec3.ZERO);
+            this.deltaRotation = 0f;
         }
 
         this.tickBubbleColumn();
@@ -381,10 +395,6 @@ public class FirmacivBoatEntity extends Entity {
             }
         }
 
-    }
-
-    private void setPartPosition(VehiclePart part, double offsetX, double offsetY, double offsetZ) {
-        part.setPos(this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ);
     }
 
     private float getXForPart(float yaw, float degree) {
@@ -719,6 +729,7 @@ public class FirmacivBoatEntity extends Entity {
 
     }
 
+
     protected void controlBoat() {
         if (this.isVehicle()) {
             if(getControllingCompartment() != null){
@@ -752,17 +763,16 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
-    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
 
+    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
         if (this.hasPassenger(pPassenger)) {
             float f = 0.0F;
             float f1 = (float)((this.isRemoved() ? (double)0.01F : this.getPassengersRidingOffset()) + pPassenger.getMyRidingOffset());
             if (this.getPassengers().size() > 1) {
-                int i = this.getPassengers().indexOf(pPassenger);
-                if (i == 0) {
-                    f = 0.2F;
+                if (this.getPassengers().indexOf(pPassenger) == 0) {
+                    f = 0.3F;
                 } else {
-                    f = -0.6F;
+                    f = -0.7F;
                 }
 
                 if (pPassenger instanceof Animal) {
@@ -777,7 +787,7 @@ public class FirmacivBoatEntity extends Entity {
             Vec3 vec3 = (new Vec3((double)f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
             pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double)f1, this.getZ() + vec3.z);
             pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double)f1, this.getZ() + vec3.z);
-            if(pPassenger instanceof AbstractCompartmentEntity){
+            if(pPassenger instanceof VehiclePartEntity){
                 pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
             } else {
                 pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
@@ -844,19 +854,6 @@ public class FirmacivBoatEntity extends Entity {
         this.clampRotation(pEntityToUpdate);
     }
 
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
-        pCompound.putString("Type", this.getBoatType().getName());
-    }
-
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-        if (pCompound.contains("Type", 8)) {
-            this.setType(net.minecraft.world.entity.vehicle.Boat.Type.byName(pCompound.getString("Type")));
-        }
-
-    }
 
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
         return InteractionResult.PASS;
@@ -966,28 +963,16 @@ public class FirmacivBoatEntity extends Entity {
         return this.getPassengers().size() < 2;
     }
 
-    /*
-    public boolean isControlledByLocalInstance() {
-        LivingEntity livingentity = this.getControllingPassenger();
-        if (livingentity instanceof Player player) {
-            return player.isLocalPlayer();
-        }
-        Entity entity = this.getFirstPassenger();
-        if(entity instanceof VehiclePartEntity) {
-            if(entity.getPassengers().size() == 1){
-                if(entity.getPassengers().get(0) instanceof EmptyCompartmentEntity){
-                    return ((Player)((entity.getPassengers().get(0)).getPassengers().get(0))).isLocalPlayer();
-                }
+    @Nullable
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getPilotPassenger();
+        if(entity instanceof VehiclePartEntity vehiclePart){
+            entity = vehiclePart.getFirstPassenger();
+            if(entity instanceof EmptyCompartmentEntity emptyCompartmentEntity){
+                entity = emptyCompartmentEntity.getControllingPassenger();
             }
 
         }
-
-        return super.isControlledByLocalInstance();
-    }*/
-
-    @Nullable
-    public LivingEntity getControllingPassenger() {
-        Entity entity = this.getFirstPassenger();
         LivingEntity livingentity1;
         if (entity instanceof LivingEntity livingentity) {
             livingentity1 = livingentity;
@@ -1000,14 +985,25 @@ public class FirmacivBoatEntity extends Entity {
 
     @Nullable
     public EmptyCompartmentEntity getControllingCompartment() {
-        Entity vehiclePart = this.getPassengers().get(0);
-        Entity compartment = null;
-        if(!vehiclePart.getPassengers().isEmpty()){
-            if(vehiclePart.getPassengers().get(0) instanceof EmptyCompartmentEntity){
-                return (EmptyCompartmentEntity) vehiclePart;
+        Entity vehiclePart = this.getPilotPassenger();
+        if(vehiclePart instanceof VehiclePartEntity && vehiclePart.isVehicle()){
+            if(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity){
+                if(emptyCompartmentEntity.isVehicle() && emptyCompartmentEntity.getFirstPassenger() instanceof LocalPlayer){
+                    return (EmptyCompartmentEntity)emptyCompartmentEntity;
+                }
+
             }
         }
+
         return null;
+    }
+
+    private Entity getPilotPassenger(){
+        if(this.isVehicle() && this.getPassengers().size() == this.PASSENGER_NUMBER){
+            return this.getPassengers().get(1);
+        } else {
+            return null;
+        }
     }
 
     public void setInput(boolean pInputLeft, boolean pInputRight, boolean pInputUp, boolean pInputDown) {

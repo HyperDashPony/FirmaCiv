@@ -27,6 +27,17 @@ public class KayakEntity extends FirmacivBoatEntity {
         super(pEntityType, pLevel);
     }
 
+    protected final float DAMAGE_THRESHOLD = 10.0f;
+    protected final float DAMAGE_RECOVERY = 1.0f;
+
+    protected float getDamageThreshold(){
+        return this.DAMAGE_THRESHOLD;
+    }
+
+    protected float getDamageRecovery(){
+        return this.DAMAGE_RECOVERY;
+    }
+
     public final int PASSENGER_NUMBER = 1;
 
     protected void controlBoat() {

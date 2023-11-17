@@ -2,13 +2,14 @@ package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.*;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.SlotAccess;
@@ -16,10 +17,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 import javax.annotation.Nullable;
@@ -47,7 +50,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
+        super.addAdditionalSaveData(pCompound);
         this.addChestVehicleSaveData(pCompound);
     }
 
@@ -61,30 +64,15 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-        ItemStack item = pPlayer.getItemInHand(pHand);
-        AbstractCompartmentEntity newCompartment = null;
-        if(!item.isEmpty()){
-            if (item.is(FirmacivTags.Items.SAWS) || item.is(FirmacivTags.Items.AXES)) {
-                newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pPlayer.level());
 
-            }
+        InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
+        if (interactionresult.consumesAction()) {
+
+            this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
+
         }
 
-        if (newCompartment != null) {
-            newCompartment = swapCompartments(newCompartment);
-            newCompartment.setBlockTypeItem(ItemStack.EMPTY);
-            this.playSound(SoundEvents.WOOD_BREAK, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
-        } else {
-            InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
-            if (interactionresult.consumesAction()) {
-
-                this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
-
-            }
-
-            return interactionresult;
-        }
+        return interactionresult;
     }
 
     public boolean isPickable() {
