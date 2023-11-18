@@ -74,8 +74,6 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
 
     }
 
-
-
     public void tick(){
         this.checkInsideBlocks();
         List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate((double) 0.2F, (double) -0.01F, (double) 0.2F), EntitySelector.pushableBy(this));
@@ -134,9 +132,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         if(!item.isEmpty() && this.getPassengers().isEmpty()){
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-            } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
+            } /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-            }
+            } */
         }
         if(ridingThisPart != null){
             if (newCompartment != null) {
