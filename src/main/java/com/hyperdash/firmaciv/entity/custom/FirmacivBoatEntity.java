@@ -108,6 +108,10 @@ public class FirmacivBoatEntity extends Entity {
 
     private int spawnTicks = 0;
 
+    public int getPassengerNumber(){
+        return PASSENGER_NUMBER;
+    }
+
     protected float getEyeHeight(Pose pPose, EntityDimensions pSize) {
         return pSize.height;
     }
@@ -293,7 +297,7 @@ public class FirmacivBoatEntity extends Entity {
 
 
         if (!this.level().isClientSide) {
-            if (this.getPassengers().size() < PASSENGER_NUMBER) {
+            if (this.getPassengers().size() < this.getPassengerNumber()) {
                 VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
                 newPart.setPos(this.getX(), this.getY(), this.getZ());
                 this.level().addFreshEntity(newPart);
@@ -389,7 +393,7 @@ public class FirmacivBoatEntity extends Entity {
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity = list.get(j);
                 if (!entity.hasPassenger(this)) {
-                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                    if (flag && this.getPassengers().size() < this.getPassengerNumber() && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         entity.startRiding(this);
                     } else {
                         this.push(entity);
@@ -961,7 +965,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     protected boolean canAddPassenger(Entity pPassenger) {
-        return this.getPassengers().size() < 2;
+        return this.getPassengers().size() < this.getPassengerNumber();
     }
 
     @Nullable
@@ -1000,7 +1004,7 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     protected Entity getPilotPassenger() {
-        if (this.isVehicle() && this.getPassengers().size() == this.PASSENGER_NUMBER) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
             return this.getPassengers().get(1);
         } else {
             return null;

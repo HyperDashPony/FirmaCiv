@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
+import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.world.biome.TFCBiomes;
@@ -108,6 +109,13 @@ public class AbstractCompartmentEntity extends Entity {
         } else {
             return null;
         }
+    }
+
+    public boolean startRiding(Entity pVehicle) {
+        if(pVehicle instanceof KayakEntity){
+            this.setBoundingBox(this.getBoundingBox().deflate(0.3));
+        }
+        return this.startRiding(pVehicle, false);
     }
 
     private int notRidingTicks = 0;
