@@ -27,62 +27,56 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import javax.annotation.Nullable;
 
 public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implements HasCustomInventoryScreen, ContainerEntity {
-
-
     private static final int CONTAINER_SIZE = 18;
     private NonNullList<ItemStack> itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
     @Nullable
     private ResourceLocation lootTable;
     private long lootTableSeed;
-    // Forge Start
     private LazyOptional<?> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
-    public WorkbenchCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+    public WorkbenchCompartmentEntity(final EntityType<?> entityType, final Level level) {
+        super(entityType, level);
     }
 
     @Override
-    public void remove(RemovalReason pReason) {
-        if (!this.level().isClientSide && pReason.shouldDestroy()) {
-            this.playSound(SoundEvents.WOOD_BREAK, 1.0F, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
+    public void remove(final RemovalReason removalReason) {
+        if (!this.level().isClientSide && removalReason.shouldDestroy()) {
+            this.playSound(SoundEvents.WOOD_BREAK, 1, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
             Containers.dropContents(this.level(), this, this);
         }
 
-        super.remove(pReason);
+        super.remove(removalReason);
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
-        super.addAdditionalSaveData(pCompound);
-        this.addChestVehicleSaveData(pCompound);
+    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+        this.addChestVehicleSaveData(compoundTag);
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
-        this.readChestVehicleSaveData(pCompound);
+    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
+        super.readAdditionalSaveData(compoundTag);
+        this.readChestVehicleSaveData(compoundTag);
     }
 
     @Override
-    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
+    public InteractionResult interact(final Player player, final InteractionHand hand) {
+        final InteractionResult interactionResult = this.interactWithContainerVehicle(player);
 
-        InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
-        if (interactionresult.consumesAction()) {
-
-            this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
-
+        if (interactionResult.consumesAction()) {
+            this.gameEvent(GameEvent.CONTAINER_OPEN, player);
         }
 
-        return interactionresult;
+        return interactionResult;
     }
 
     @Override
-    public void openCustomInventoryScreen(Player pPlayer) {
-        pPlayer.openMenu(this);
-        if (!pPlayer.level().isClientSide) {
-            this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
+    public void openCustomInventoryScreen(final Player player) {
+        player.openMenu(this);
+        if (!player.level().isClientSide) {
+            this.gameEvent(GameEvent.CONTAINER_OPEN, player);
         }
-
     }
 
     @Override
@@ -90,80 +84,57 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
         this.clearChestVehicleContent();
     }
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
     @Override
     public int getContainerSize() {
         return CONTAINER_SIZE;
     }
 
-    /**
-     * Returns the stack in the given slot.
-     */
     @Override
-    public ItemStack getItem(int pSlot) {
-        return this.getChestVehicleItem(pSlot);
-    }
-
-    /**
-     * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
-     */
-    @Override
-    public ItemStack removeItem(int pSlot, int pAmount) {
-        return this.removeChestVehicleItem(pSlot, pAmount);
-    }
-
-    /**
-     * Removes a stack from the given slot and returns it.
-     */
-    @Override
-    public ItemStack removeItemNoUpdate(int pSlot) {
-        return this.removeChestVehicleItemNoUpdate(pSlot);
-    }
-
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
-    @Override
-    public void setItem(int pSlot, ItemStack pStack) {
-        this.setChestVehicleItem(pSlot, pStack);
+    public ItemStack getItem(final int slotIndex) {
+        return this.getChestVehicleItem(slotIndex);
     }
 
     @Override
-    public SlotAccess getSlot(int pSlot) {
-        return this.getChestVehicleSlot(pSlot);
+    public ItemStack removeItem(final int slotIndex, final int amount) {
+        return this.removeChestVehicleItem(slotIndex, amount);
     }
 
-    /**
-     * For block entities, ensures the chunk containing the block entity is saved to disk later - the game won't think it
-     * hasn't changed and skip it.
-     */
+    @Override
+    public ItemStack removeItemNoUpdate(final int slotIndex) {
+        return this.removeChestVehicleItemNoUpdate(slotIndex);
+    }
+
+    @Override
+    public void setItem(final int slotIndex, final ItemStack itemStack) {
+        this.setChestVehicleItem(slotIndex, itemStack);
+    }
+
+    @Override
+    public SlotAccess getSlot(final int slotIndex) {
+        return this.getChestVehicleSlot(slotIndex);
+    }
+
     @Override
     public void setChanged() {
     }
 
-    /**
-     * Don't rename this method to canInteractWith due to conflicts with Container
-     */
     @Override
-    public boolean stillValid(Player pPlayer) {
-        return this.isChestVehicleStillValid(pPlayer);
+    public boolean stillValid(final Player player) {
+        return this.isChestVehicleStillValid(player);
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+    public AbstractContainerMenu createMenu(final int windowId, final Inventory inventory, final Player player) {
         if (this.getLootTable() != null && player.isSpectator()) {
             return null;
-        } else {
-            return new CraftingMenu(windowId, inv);
         }
 
+        return new CraftingMenu(windowId, inventory);
     }
 
-    public void unpackLootTable(@Nullable Player pPlayer) {
-        this.unpackChestVehicleLootTable(pPlayer);
+    public void unpackLootTable(final @Nullable Player player) {
+        this.unpackChestVehicleLootTable(player);
     }
 
     @Nullable
@@ -173,8 +144,8 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     @Override
-    public void setLootTable(@Nullable ResourceLocation pLootTable) {
-        this.lootTable = pLootTable;
+    public void setLootTable(final @Nullable ResourceLocation lootTable) {
+        this.lootTable = lootTable;
     }
 
     @Override
@@ -183,8 +154,8 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     @Override
-    public void setLootTableSeed(long pLootTableSeed) {
-        this.lootTableSeed = pLootTableSeed;
+    public void setLootTableSeed(final long lootTableSeed) {
+        this.lootTableSeed = lootTableSeed;
     }
 
     @Override
@@ -198,7 +169,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+    public <T> LazyOptional<T> getCapability(final Capability<T> capability, final @Nullable Direction facing) {
         if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER)
             return itemHandler.cast();
         return super.getCapability(capability, facing);
@@ -220,5 +191,4 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     public void stopOpen(Player pPlayer) {
         this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(pPlayer));
     }
-
 }
