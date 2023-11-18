@@ -38,6 +38,14 @@ public class KayakEntity extends FirmacivBoatEntity {
     protected final float DAMAGE_THRESHOLD = 10.0f;
     protected final float DAMAGE_RECOVERY = 1.0f;
 
+    protected Entity getPilotPassenger() {
+        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+            return this.getPassengers().get(0);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public int getPassengerNumber(){
         return PASSENGER_NUMBER;

@@ -111,13 +111,6 @@ public class AbstractCompartmentEntity extends Entity {
         }
     }
 
-    public boolean startRiding(Entity pVehicle) {
-        if(pVehicle instanceof KayakEntity){
-            this.setBoundingBox(this.getBoundingBox().deflate(0.3));
-        }
-        return this.startRiding(pVehicle, false);
-    }
-
     private int notRidingTicks = 0;
 
     public void tick() {
@@ -209,7 +202,7 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if (!(this instanceof EmptyCompartmentEntity)) {
+        if (!(this instanceof EmptyCompartmentEntity) || this.getTrueVehicle() instanceof KayakEntity) {
             if (this.isInvulnerableTo(pSource)) {
                 return false;
             } else if (!this.level().isClientSide && !this.isRemoved()) {
@@ -223,8 +216,12 @@ public class AbstractCompartmentEntity extends Entity {
                     if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         this.destroy(pSource);
                     }
-
+                    if(this.getTrueVehicle() instanceof KayakEntity){
+                        this.getTrueVehicle().kill();
+                        this.getVehicle().kill();
+                    }
                     this.discard();
+
                 }
 
                 return true;

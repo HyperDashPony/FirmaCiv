@@ -27,7 +27,7 @@ public final class FirmacivEntities {
                             .build(new ResourceLocation(Firmaciv.MOD_ID, "dugout_canoe/" + variant.getName()).toString())));
 
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak",
-            () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.8F, 0.625F)
+            () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.81F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = ENTITY_TYPES.register("compartment_empty",
