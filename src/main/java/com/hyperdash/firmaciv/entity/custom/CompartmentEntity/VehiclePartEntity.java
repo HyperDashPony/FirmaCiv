@@ -29,6 +29,7 @@ public class VehiclePartEntity extends Entity {
                 this.ejectPassengers();
                 EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(this.level());
                 newCompartment.setYRot(this.getYRot());
+                newCompartment.setPos(this.getX(), this.getY(), this.getZ());
                 newCompartment.startRiding(this);
                 this.level().addFreshEntity(newCompartment);
             }
@@ -51,18 +52,24 @@ public class VehiclePartEntity extends Entity {
     }
 
 
-    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
-        //pCallback.accept(pPassenger, this.getX(), this.getY() + this.getPassengersRidingOffset() + pPassenger.getMyRidingOffset(), this.getZ());
 
-        if(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity){
+    @Override
+    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
+        if(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity) {
             if (this.hasPassenger(pPassenger)) {
-                if(pPassenger instanceof AbstractCompartmentEntity abstractCompartmentEntity){
-                    abstractCompartmentEntity.setYRot(pPassenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
+                float f = 0.0F;
+                float f1 = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + pPassenger.getMyRidingOffset());
+                Vec3 vec3 = (new Vec3((double) f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+                pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
+                pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
+                if (pPassenger instanceof AbstractCompartmentEntity) {
+                    //pPassenger.setYRot(pPassenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
+                    float thing = Math.abs(pPassenger.getYRot() - Math.abs(firmacivBoatEntity.getYRot()));
+                    pPassenger.setYRot(pPassenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
                 }
+
             }
         }
-        super.positionRider(pPassenger, pCallback);
-
     }
 
     @Override

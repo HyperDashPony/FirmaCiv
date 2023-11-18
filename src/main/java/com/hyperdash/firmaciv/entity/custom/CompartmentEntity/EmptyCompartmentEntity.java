@@ -10,6 +10,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
@@ -46,10 +47,31 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         super.positionRider(pPassenger, pCallback);
         pCallback.accept(pPassenger, this.getX() + 0f, this.getY()-0.57f, this.getZ()+ 0f);
         if (pPassenger instanceof LivingEntity) {
-            ((LivingEntity)pPassenger).yBodyRot = this.yRotO;
+            pPassenger.setYBodyRot(this.getYRot());
+            pPassenger.setYHeadRot(pPassenger.getYHeadRot() + this.getYRot());
+            this.clampRotation(pPassenger);
         }
         this.clampRotation(pPassenger);
 
+    }
+
+    public void tick(){
+
+        this.checkInsideBlocks();
+        List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate((double) 0.2F, (double) -0.01F, (double) 0.2F), EntitySelector.pushableBy(this));
+        if (!list.isEmpty()) {
+            boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
+
+            for (int j = 0; j < list.size(); ++j) {
+                Entity entity = list.get(j);
+                if (!entity.hasPassenger(this)) {
+                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                        entity.startRiding(this);
+                    }
+                }
+            }
+        }
+        super.tick();
     }
 
     protected void clampRotation(Entity pEntityToUpdate) {
@@ -72,10 +94,6 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         this.clampRotation(pEntityToUpdate);
     }
 
-    public boolean isPushable() {
-        return false;
-    }
-
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
 
         ItemStack item = pPlayer.getItemInHand(pHand);
@@ -96,24 +114,24 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(pPlayer.level());
             }
         }
-
-        if (newCompartment != null) {
-            swapCompartments(newCompartment);
-            newCompartment.setYRot(ridingThisPart.getYRot());
-            newCompartment.setBlockTypeItem(item.split(1));
-            this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
-        } else {
-            if (!this.level().isClientSide) {
-                return pPlayer.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
+        if(ridingThisPart != null){
+            if (newCompartment != null) {
+                swapCompartments(newCompartment);
+                newCompartment.setYRot(newCompartment.ridingThisPart.getYRot());
+                newCompartment.setBlockTypeItem(item.split(1));
+                this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
             } else {
-                return InteractionResult.SUCCESS;
+                if (!this.level().isClientSide) {
+                    return pPlayer.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
+                } else {
+                    return InteractionResult.SUCCESS;
+                }
             }
         }
-
+        return InteractionResult.PASS;
 
     }
-
 
 
     public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {

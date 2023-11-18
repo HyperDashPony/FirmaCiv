@@ -292,6 +292,7 @@ public class FirmacivBoatEntity extends Entity {
         if (!this.level().isClientSide) {
             if (this.getPassengers().size() < PASSENGER_NUMBER) {
                 VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
+                newPart.setPos(this.getX(), this.getY(), this.getZ());
                 this.level().addFreshEntity(newPart);
                 newPart.startRiding(this);
             }
@@ -784,12 +785,7 @@ public class FirmacivBoatEntity extends Entity {
             pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             if (pPassenger instanceof VehiclePartEntity) {
-                float thingy = Math.abs(pPassenger.getYRot()-this.getYRot());
-                if(Math.abs(pPassenger.getYRot()-this.getYRot()) > 0.1 ){
-                    pPassenger.setYRot(this.getYRot());
-                } else {
-                    pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
-                }
+                pPassenger.setYRot(this.getYRot());
             } else {
                 pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
                 pPassenger.setYHeadRot(pPassenger.getYHeadRot() + this.deltaRotation);

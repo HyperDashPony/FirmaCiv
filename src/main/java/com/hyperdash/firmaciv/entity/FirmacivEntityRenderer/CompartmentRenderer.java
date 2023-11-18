@@ -40,22 +40,23 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
         if(!(pEntity instanceof EmptyCompartmentEntity)){
-            BlockState blockstate = Blocks.BEDROCK.defaultBlockState();
+            BlockState blockstate = null;
             if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
                 blockstate = bi.getBlock().defaultBlockState();
                 if(pEntity instanceof ChestCompartmentEntity){
                     blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
                 }
             }
+            if(blockstate != null){
+                pPoseStack.pushPose();
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - pEntityYaw));
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
+                pPoseStack.scale(0.6F, 0.6F, 0.6F);
+                pPoseStack.translate(-0.5F, 00F, -0.5F);
 
-            pPoseStack.pushPose();
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - pEntityYaw));
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
-            pPoseStack.scale(0.6F, 0.6F, 0.6F);
-            pPoseStack.translate(-0.5F, 00F, -0.5F);
-
-            this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);
-            pPoseStack.popPose();
+                this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);
+                pPoseStack.popPose();
+            }
         }
 
     }
