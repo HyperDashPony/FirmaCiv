@@ -736,6 +736,18 @@ public class FirmacivBoatEntity extends Entity {
 
     }
 
+    protected final List<Entity> getTruePassengers(){
+        List<Entity> truePassengers = Lists.newArrayList();
+        for(Entity vehiclePart : this.getPassengers()){
+            if(vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity abstractCompartmentEntity){
+                if(abstractCompartmentEntity.isVehicle()){
+                    truePassengers.add(abstractCompartmentEntity.getFirstPassenger());
+                }
+            }
+        }
+        return truePassengers;
+    }
+
 
     protected void controlBoat() {
         if (this.isVehicle()) {
