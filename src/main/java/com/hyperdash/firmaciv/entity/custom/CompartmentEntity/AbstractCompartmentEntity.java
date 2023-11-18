@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
+import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.world.biome.TFCBiomes;
@@ -101,15 +102,22 @@ public class AbstractCompartmentEntity extends Entity {
         return super.getPassengersRidingOffset();
     }
 
+    public FirmacivBoatEntity getTrueVehicle(){
+        if(ridingThisPart != null && ridingThisPart.isPassenger() && ridingThisPart.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity){
+            return firmacivBoatEntity;
+        } else {
+            return null;
+        }
+    }
+
     private int notRidingTicks = 0;
 
-
     public void tick() {
+
 
         if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity) {
             ridingThisPart = (VehiclePartEntity) this.getVehicle();
         }
-
 
         if (!this.isPassenger()) {
 

@@ -2,14 +2,18 @@ package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
+import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
@@ -43,9 +47,23 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         return 1;
     }
 
+    @Override
     protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
         super.positionRider(pPassenger, pCallback);
-        pCallback.accept(pPassenger, this.getX() + 0f, this.getY()-0.57f, this.getZ()+ 0f);
+        float f1 = (float)((this.isRemoved() ? (double)0.01F : this.getPassengersRidingOffset()) + pPassenger.getMyRidingOffset());
+        if(pPassenger instanceof Player){
+            f1 = 0;
+        }
+        if(pPassenger.getBbHeight() <= 0.7){
+            f1 -= 0.2f;
+        }
+
+        double eyepos =  pPassenger.getEyePosition().get(Direction.Axis.Y);
+        double thisY = this.getY()+1.1f;
+        if(eyepos < thisY){
+            f1 += Math.abs(eyepos - thisY);
+        }
+        pCallback.accept(pPassenger, this.getX() , this.getY()-0.57f  + (double)f1, this.getZ()+ 0f);
         if (pPassenger instanceof LivingEntity) {
             pPassenger.setYBodyRot(this.getYRot());
             pPassenger.setYHeadRot(pPassenger.getYHeadRot() + this.getYRot());
@@ -55,8 +73,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
 
     }
 
-    public void tick(){
 
+
+    public void tick(){
         this.checkInsideBlocks();
         List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate((double) 0.2F, (double) -0.01F, (double) 0.2F), EntitySelector.pushableBy(this));
         if (!list.isEmpty()) {
@@ -65,7 +84,11 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity = list.get(j);
                 if (!entity.hasPassenger(this)) {
-                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                    float maxSize = 1.0f;
+                    if(this.getTrueVehicle() instanceof CanoeEntity){
+                        maxSize = 0.9f;
+                    }
+                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         entity.startRiding(this);
                     }
                 }

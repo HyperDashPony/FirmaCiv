@@ -279,6 +279,9 @@ public class FirmacivBoatEntity extends Entity {
      * Called to update the entity's position/logic.
      */
     public void tick() {
+        if(this.getControllingPassenger() == null){
+            this.deltaRotation = 0;
+        }
 
         this.oldStatus = this.status;
         this.status = this.getStatus();
@@ -394,6 +397,7 @@ public class FirmacivBoatEntity extends Entity {
                 }
             }
         }
+
 
     }
 
@@ -784,7 +788,7 @@ public class FirmacivBoatEntity extends Entity {
             Vec3 vec3 = (new Vec3((double) f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
             pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
-            if (pPassenger instanceof VehiclePartEntity) {
+            if (!this.level().isClientSide() && pPassenger instanceof VehiclePartEntity) {
                 pPassenger.setYRot(this.getYRot());
             } else {
                 pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);

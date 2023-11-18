@@ -52,7 +52,9 @@ public class VehiclePartEntity extends Entity {
     }
 
 
+    public void ejectMyCompartmentsPassenger(){
 
+    }
     @Override
     protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
         if(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity) {
@@ -63,9 +65,13 @@ public class VehiclePartEntity extends Entity {
                 pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
                 pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
                 if (pPassenger instanceof AbstractCompartmentEntity) {
-                    //pPassenger.setYRot(pPassenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
-                    float thing = Math.abs(pPassenger.getYRot() - Math.abs(firmacivBoatEntity.getYRot()));
                     pPassenger.setYRot(pPassenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
+
+                    float thing = Math.abs(pPassenger.getYRot() - firmacivBoatEntity.getYRot());
+                    if(Math.abs(pPassenger.getYRot() - firmacivBoatEntity.getYRot()) > 1 && (tickCount < 10 || this.getVehicle().getControllingPassenger() == null)){
+                        this.setYRot(this.getVehicle().getYRot());
+                        pPassenger.setYRot(this.getYRot());
+                    }
                 }
 
             }
