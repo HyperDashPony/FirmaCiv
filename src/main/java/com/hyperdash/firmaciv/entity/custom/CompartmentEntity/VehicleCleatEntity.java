@@ -46,9 +46,7 @@ public class VehicleCleatEntity extends Entity {
         super.tick();
         if (!this.level().isClientSide) {
             this.tickLeash();
-            if (this.tickCount % 5 == 0) {
-                //this.updateControlFlags();
-            }
+
         }
 
     }
@@ -76,7 +74,10 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashHolder != null) {
             if (!this.isAlive() || !this.leashHolder.isAlive()) {
                 this.dropLeash(true, true);
+            } else if (this.distanceTo(this.leashHolder) > 7.0f){
+                this.dropLeash(true, true);
             }
+
 
         }
     }
@@ -97,6 +98,11 @@ public class VehicleCleatEntity extends Entity {
             }
         }
 
+    }
+
+    protected void removeAfterChangingDimensions() {
+        super.removeAfterChangingDimensions();
+        this.dropLeash(true, false);
     }
 
     public boolean canBeLeashed(Player pPlayer) {
@@ -160,6 +166,10 @@ public class VehicleCleatEntity extends Entity {
 
     }
 
+
+    public boolean isPickable() {
+        return !this.isRemoved();
+    }
     @Override
     protected void defineSynchedData() {
         this.entityData.define(DATA_CLEAT_FLAGS_ID, (byte)0);
