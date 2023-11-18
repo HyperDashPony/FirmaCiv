@@ -32,34 +32,28 @@ public class AbstractCompartmentEntity extends Entity {
     protected VehiclePartEntity ridingThisPart = null;
     private int notRidingTicks = 0;
 
-    public AbstractCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+    public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
+        super(entityType, level);
         this.setNoGravity(false);
         notRidingTicks = 0;
-
     }
 
     public ItemStack getBlockTypeItem() {
         return this.entityData.get(DATA_BLOCK_TYPE_ITEM);
     }
 
-    public void setBlockTypeItem(ItemStack stack) {
-        this.entityData.set(DATA_BLOCK_TYPE_ITEM, stack.copy());
+    public void setBlockTypeItem(final ItemStack itemStack) {
+        this.entityData.set(DATA_BLOCK_TYPE_ITEM, itemStack.copy());
     }
 
     @Override
-    public void remove(RemovalReason pReason) {
-        super.remove(pReason);
+    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
+        this.setBlockTypeItem(ItemStack.of(compoundTag.getCompound("dataBlockTypeItem")));
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        this.setBlockTypeItem(ItemStack.of(tag.getCompound("dataBlockTypeItem")));
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-        tag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
+    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
+        compoundTag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
     }
 
     public Item getDropItem() {
@@ -69,20 +63,19 @@ public class AbstractCompartmentEntity extends Entity {
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        if (this instanceof EmptyCompartmentEntity) {
-            Entity entity = this.getFirstPassenger();
-            LivingEntity livingentity1;
-            if (entity instanceof LivingEntity livingentity) {
-                livingentity1 = livingentity;
-            } else {
-                livingentity1 = null;
-            }
-
-            return livingentity1;
-        } else {
+        if (!(this instanceof EmptyCompartmentEntity)) {
             return null;
         }
 
+        final Entity entity = this.getFirstPassenger();
+        final LivingEntity pilotEntity;
+        if (entity instanceof LivingEntity livingentity) {
+            pilotEntity = livingentity;
+        } else {
+            pilotEntity = null;
+        }
+
+        return pilotEntity;
     }
 
     @Override
@@ -97,10 +90,10 @@ public class AbstractCompartmentEntity extends Entity {
 
     @Override
     public void tick() {
-
         if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity) {
             ridingThisPart = (VehiclePartEntity) this.getVehicle();
         }
+
         if (this.isPassenger() && this.getYRot() == 0.0f && this.getVehicle().getYRot() != 0.0f) {
             this.setYRot(this.getVehicle().getYRot());
         }
@@ -126,19 +119,22 @@ public class AbstractCompartmentEntity extends Entity {
         super.tick();
     }
 
-    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+    protected SoundEvent getHurtSound(final DamageSource damageSource) {
         return SoundEvents.WOOD_HIT;
     }
 
-    protected void playHurtSound(DamageSource pSource) {
+    protected void playHurtSound(final DamageSource pSource) {
         SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
-        }
-
+        this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
     }
 
-    protected AbstractCompartmentEntity swapCompartments(AbstractCompartmentEntity newCompartment) {
+    /**
+     * Replaces this object with the passed in CompartmentEntity
+     *
+     * @param newCompartment The compartment entity which is replacing this object
+     * @return The compartment passed in
+     */
+    protected AbstractCompartmentEntity swapCompartments(final AbstractCompartmentEntity newCompartment) {
         this.spawnAtLocation(this.getDropItem());
         this.stopRiding();
         this.discard();
@@ -153,31 +149,26 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource pSource, float pAmount) {
-        if (!(this instanceof EmptyCompartmentEntity)) {
-            if (this.isInvulnerableTo(pSource)) {
-                return false;
-            } else if (!this.level().isClientSide && !this.isRemoved()) {
-                this.setHurtDir(-this.getHurtDir());
-                this.setHurtTime(10);
-                this.setDamage(this.getDamage() + pAmount * 8.0F);
-                this.markHurt();
-                this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
-                boolean flag = pSource.getEntity() instanceof Player && ((Player) pSource.getEntity()).getAbilities().instabuild;
-                if (flag || this.getDamage() > 10.0F) {
-                    if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                        this.destroy(pSource);
-                    }
+    public boolean hurt(final DamageSource damageSource, final float amount) {
+        if (this instanceof EmptyCompartmentEntity) return false;
 
-                    this.discard();
-                }
+        if (this.isInvulnerableTo(damageSource)) return false;
 
-                return true;
-            } else {
-                return true;
+        if (this.level().isClientSide || this.isRemoved()) return true;
+
+        this.setHurtDir(-this.getHurtDir());
+        this.setHurtTime(10);
+        this.setDamage(this.getDamage() + amount * 8.0F);
+        this.markHurt();
+        this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+        final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
+        if (instantKill || this.getDamage() > 10.0F) {
+            if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                this.destroy(damageSource);
             }
+            this.discard();
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -192,19 +183,19 @@ public class AbstractCompartmentEntity extends Entity {
         return this.entityData.get(DATA_ID_DAMAGE);
     }
 
-    public void setDamage(float pDamageTaken) {
-        this.entityData.set(DATA_ID_DAMAGE, pDamageTaken);
+    public void setDamage(final float damageTaken) {
+        this.entityData.set(DATA_ID_DAMAGE, damageTaken);
     }
 
     public int getHurtTime() {
         return this.entityData.get(DATA_ID_HURT);
     }
 
-    public void setHurtTime(int pHurtTime) {
-        this.entityData.set(DATA_ID_HURT, pHurtTime);
+    public void setHurtTime(final int hurtTime) {
+        this.entityData.set(DATA_ID_HURT, hurtTime);
     }
 
-    protected void destroy(DamageSource pDamageSource) {
+    protected void destroy(final DamageSource damageSource) {
         this.spawnAtLocation(this.getDropItem());
     }
 
@@ -215,7 +206,7 @@ public class AbstractCompartmentEntity extends Entity {
         return this.entityData.get(DATA_ID_HURTDIR);
     }
 
-    public void setHurtDir(int pHurtDirection) {
+    public void setHurtDir(final int pHurtDirection) {
         this.entityData.set(DATA_ID_HURTDIR, pHurtDirection);
     }
 
