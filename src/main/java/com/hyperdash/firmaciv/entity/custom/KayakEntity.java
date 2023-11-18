@@ -36,6 +36,7 @@ public class KayakEntity extends FirmacivBoatEntity {
         return this.DAMAGE_RECOVERY;
     }
 
+    @Override
     protected void controlBoat() {
         if (this.isVehicle() && this.getPassengers().get(0) instanceof Player) {
             if (((Player) this.getPassengers().get(0)).isHolding(FirmacivItems.KAYAK_PADDLE.get())) {
@@ -97,8 +98,9 @@ public class KayakEntity extends FirmacivBoatEntity {
         return FirmacivItems.KAYAK.get();
     }
 
-    protected boolean canAddPassenger(Entity pPassenger) {
-        return this.getPassengers().size() < PASSENGER_NUMBER && !this.isEyeInFluid(FluidTags.WATER) && pPassenger instanceof Player;
+    @Override
+    protected boolean canAddPassenger(Entity passenger) {
+        return this.getPassengers().size() < PASSENGER_NUMBER && !this.isEyeInFluid(FluidTags.WATER) && passenger instanceof Player;
     }
 
     @Override
