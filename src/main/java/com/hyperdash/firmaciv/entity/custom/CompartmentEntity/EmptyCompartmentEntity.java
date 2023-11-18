@@ -26,8 +26,43 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected boolean inputUp;
     protected boolean inputDown;
 
-    public EmptyCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+    public EmptyCompartmentEntity(final EntityType<?> entityType, final Level level) {
+        super(entityType, level);
+    }
+
+    @Override
+    protected boolean canAddPassenger(final Entity passenger) {
+        return this.getPassengers().isEmpty();
+    }
+
+    protected int getMaxPassengers() {
+        return 1;
+    }
+
+    @Override
+    protected void positionRider(final Entity entity, final Entity.MoveFunction moveFunction) {
+        super.positionRider(entity, moveFunction);
+        moveFunction.accept(entity, this.getX() + 0f, this.getY() - 0.57f, this.getZ() + 0f);
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity) entity).yBodyRot = this.yRotO;
+        }
+        this.clampRotation(entity);
+    }
+
+    protected void clampRotation(final Entity entity) {
+        entity.setYBodyRot(this.getYRot());
+        float f = Mth.wrapDegrees(entity.getYRot() - this.getYRot());
+        float f1 = Mth.clamp(f, -105.0F, 105.0F);
+        entity.yRotO += f1 - f;
+        entity.setYRot(entity.getYRot() + f1 - f);
+        entity.setYHeadRot(entity.getYRot());
+    }
+
+    public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp, final boolean inputDown) {
+        this.inputLeft = inputLeft;
+        this.inputRight = inputRight;
+        this.inputUp = inputUp;
+        this.inputDown = inputDown;
     }
 
     public boolean getInputLeft() {
@@ -47,52 +82,15 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     }
 
     @Override
-    protected boolean canAddPassenger(Entity pPassenger) {
-        return this.getPassengers().size() == 0;
-    }
-
-    protected int getMaxPassengers() {
-        return 1;
+    public void onPassengerTurned(final Entity entity) {
+        this.clampRotation(entity);
     }
 
     @Override
-    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
-        super.positionRider(pPassenger, pCallback);
-        pCallback.accept(pPassenger, this.getX() + 0f, this.getY() - 0.57f, this.getZ() + 0f);
-        if (pPassenger instanceof LivingEntity) {
-            ((LivingEntity) pPassenger).yBodyRot = this.yRotO;
-        }
-        this.clampRotation(pPassenger);
+    public InteractionResult interact(final Player player, final InteractionHand hand) {
+        final ItemStack item = player.getItemInHand(hand);
 
-    }
-
-    protected void clampRotation(Entity pEntityToUpdate) {
-        pEntityToUpdate.setYBodyRot(this.getYRot());
-        float f = Mth.wrapDegrees(pEntityToUpdate.getYRot() - this.getYRot());
-        float f1 = Mth.clamp(f, -105.0F, 105.0F);
-        pEntityToUpdate.yRotO += f1 - f;
-        pEntityToUpdate.setYRot(pEntityToUpdate.getYRot() + f1 - f);
-        pEntityToUpdate.setYHeadRot(pEntityToUpdate.getYRot());
-    }
-
-    public void setInput(boolean pInputLeft, boolean pInputRight, boolean pInputUp, boolean pInputDown) {
-        this.inputLeft = pInputLeft;
-        this.inputRight = pInputRight;
-        this.inputUp = pInputUp;
-        this.inputDown = pInputDown;
-    }
-
-    @Override
-    public void onPassengerTurned(Entity pEntityToUpdate) {
-        this.clampRotation(pEntityToUpdate);
-    }
-
-    @Override
-    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-
-        ItemStack item = pPlayer.getItemInHand(pHand);
-
-        if (pPlayer.isSecondaryUseActive()) {
+        if (player.isSecondaryUseActive()) {
             if (!getPassengers().isEmpty() && !(getPassengers().get(0) instanceof Player)) {
                 this.ejectPassengers();
                 return InteractionResult.SUCCESS;
@@ -103,9 +101,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         AbstractCompartmentEntity newCompartment = null;
         if (!item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
-                newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(pPlayer.level());
+                newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
             } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
-                newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(pPlayer.level());
+                newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
             }
         }
 
@@ -113,51 +111,51 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             swapCompartments(newCompartment);
             newCompartment.setYRot(ridingThisPart.getYRot());
             newCompartment.setBlockTypeItem(item.split(1));
-            this.playSound(SoundEvents.WOOD_PLACE, 1.0F, pPlayer.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            this.playSound(SoundEvents.WOOD_PLACE, 1, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
-        } else {
-            if (!this.level().isClientSide) {
-                return pPlayer.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
-            } else {
-                return InteractionResult.SUCCESS;
-            }
         }
 
+        if (!this.level().isClientSide)
+            return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
 
+        return InteractionResult.SUCCESS;
     }
-
 
     @Override
-    public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {
-        Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO, pLivingEntity.getBbWidth(), pLivingEntity.getYRot());
-        double d0 = this.getX() + vec3.x;
-        double d1 = this.getZ() + vec3.z;
-        BlockPos blockpos = BlockPos.containing(d0, this.getBoundingBox().maxY, d1);
-        BlockPos blockpos1 = blockpos.below();
-        if (!this.level().isWaterAt(blockpos1)) {
-            List<Vec3> list = Lists.newArrayList();
-            double d2 = this.level().getBlockFloorHeight(blockpos);
-            if (DismountHelper.isBlockFloorValid(d2)) {
-                list.add(new Vec3(d0, (double) blockpos.getY() + d2, d1));
-            }
+    public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
+        final Vec3 escapeVector = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO, passenger.getBbWidth(), passenger.getYRot());
 
-            double d3 = this.level().getBlockFloorHeight(blockpos1);
-            if (DismountHelper.isBlockFloorValid(d3)) {
-                list.add(new Vec3(d0, (double) blockpos1.getY() + d3, d1));
-            }
+        final double escapeX = this.getX() + escapeVector.x;
+        final double escapeZ = this.getZ() + escapeVector.z;
 
-            for (Pose pose : pLivingEntity.getDismountPoses()) {
-                for (Vec3 vec31 : list) {
-                    if (DismountHelper.canDismountTo(this.level(), vec31, pLivingEntity, pose)) {
-                        pLivingEntity.setPose(pose);
-                        return vec31;
-                    }
-                }
+        final BlockPos escapePos = BlockPos.containing(escapeX, this.getBoundingBox().maxY, escapeZ);
+        final BlockPos escapePosBelow = escapePos.below();
+
+        if (this.level().isWaterAt(escapePosBelow)) return super.getDismountLocationForPassenger(passenger);
+
+        final List<Vec3> dismountOffsets = Lists.newArrayList();
+        {
+            final double floorHeight = this.level().getBlockFloorHeight(escapePos);
+            if (DismountHelper.isBlockFloorValid(floorHeight)) {
+                dismountOffsets.add(new Vec3(escapeX, escapePos.getY() + floorHeight, escapeZ));
+            }
+        }
+        {
+            final double floorHeight = this.level().getBlockFloorHeight(escapePosBelow);
+            if (DismountHelper.isBlockFloorValid(floorHeight)) {
+                dismountOffsets.add(new Vec3(escapeX, escapePosBelow.getY() + floorHeight, escapeZ));
             }
         }
 
-        return super.getDismountLocationForPassenger(pLivingEntity);
+        for (final Pose dismountPose : passenger.getDismountPoses()) {
+            for (final Vec3 output : dismountOffsets) {
+                if (!DismountHelper.canDismountTo(this.level(), output, passenger, dismountPose)) continue;
+
+                passenger.setPose(dismountPose);
+                return output;
+            }
+        }
+
+        return super.getDismountLocationForPassenger(passenger);
     }
-
-
 }
