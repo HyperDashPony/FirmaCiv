@@ -19,13 +19,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat.Type;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +40,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -92,18 +90,19 @@ public class FirmacivBoatEntity extends Entity {
     protected float bubbleAngleO;
     private int spawnTicks = 0;
 
-    public FirmacivBoatEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+    public FirmacivBoatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+        super(entityType, level);
         this.blocksBuilding = true;
         spawnTicks = 0;
     }
 
-    public static boolean canVehicleCollide(Entity pVehicle, Entity pEntity) {
-        return (pEntity.canBeCollidedWith() || pEntity.isPushable()) && !pVehicle.isPassengerOfSameVehicle(pEntity);
+    public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
+        return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
     }
 
-    protected float getEyeHeight(Pose pPose, EntityDimensions pSize) {
-        return pSize.height;
+    @Override
+    protected float getEyeHeight(final Pose pose, final EntityDimensions entityDimensions) {
+        return entityDimensions.height;
     }
 
     protected float getDamageThreshold() {
@@ -118,87 +117,83 @@ public class FirmacivBoatEntity extends Entity {
         return deltaRotation;
     }
 
+    @Override
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.NONE;
     }
 
+    @Override
     protected void defineSynchedData() {
         this.entityData.define(DATA_ID_HURT, 0);
         this.entityData.define(DATA_ID_HURTDIR, 1);
         this.entityData.define(DATA_ID_DAMAGE, 0.0F);
-        this.entityData.define(DATA_ID_TYPE, net.minecraft.world.entity.vehicle.Boat.Type.OAK.ordinal());
+        this.entityData.define(DATA_ID_TYPE, Type.OAK.ordinal());
         this.entityData.define(DATA_ID_PADDLE_LEFT, false);
         this.entityData.define(DATA_ID_PADDLE_RIGHT, false);
         this.entityData.define(DATA_ID_BUBBLE_TIME, 0);
     }
 
-    public boolean canCollideWith(Entity pEntity) {
-        return canVehicleCollide(this, pEntity);
+    @Override
+    public boolean canCollideWith(final Entity other) {
+        return canVehicleCollide(this, other);
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return true;
     }
 
-    /**
-     * Returns true if this entity should push and be pushed by other entities when colliding.
-     */
+    @Override
     public boolean isPushable() {
         return true;
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-
+    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
-
+    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
     }
 
-    protected Vec3 getRelativePortalPosition(Direction.Axis pAxis, BlockUtil.FoundRectangle pPortal) {
-        return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(pAxis, pPortal));
+    @Override
+    protected Vec3 getRelativePortalPosition(final Direction.Axis axis, final BlockUtil.FoundRectangle portal) {
+        return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, portal));
     }
 
-    /**
-     * Returns the Y offset from the entity's position for any entity riding this one.
-     */
+    @Override
     public double getPassengersRidingOffset() {
-        return -0.0D;
+        return 0;
     }
 
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean hurt(DamageSource pSource, float pAmount) {
-        if (this.isInvulnerableTo(pSource)) {
-            return false;
-        } else if (!this.level().isClientSide && !this.isRemoved()) {
-            this.setHurtDir(-this.getHurtDir());
-            this.setHurtTime(10);
-            this.setDamage(this.getDamage() + pAmount * 10.0F);
-            this.markHurt();
-            this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
-            boolean flag = pSource.getEntity() instanceof Player && ((Player) pSource.getEntity()).getAbilities().instabuild;
-            if (flag || this.getDamage() > getDamageThreshold()) {
-                if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                    this.spawnAtLocation(this.getDropItem());
-                }
+    @Override
+    public boolean hurt(final DamageSource damageSource, final float amount) {
+        if (this.isInvulnerableTo(damageSource)) return false;
 
-                this.discard();
+        if (this.level().isClientSide || this.isRemoved()) return true;
+
+        this.setHurtDir(-this.getHurtDir());
+        this.setHurtTime(10);
+        this.setDamage(this.getDamage() + amount * 10.0F);
+        this.markHurt();
+        this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+        final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
+
+        if (instantKill || this.getDamage() > getDamageThreshold()) {
+            if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                this.spawnAtLocation(this.getDropItem());
             }
-
-            return true;
-        } else {
-            return true;
+            this.discard();
         }
+
+        return true;
     }
 
-    public void onAboveBubbleCol(boolean pDownwards) {
+    @Override
+    public void onAboveBubbleCol(final boolean downwards) {
         if (!this.level().isClientSide) {
             this.isAboveBubbleColumn = true;
-            this.bubbleColumnDirectionIsDown = pDownwards;
+            this.bubbleColumnDirectionIsDown = downwards;
             if (this.getBubbleTime() == 0) {
                 this.setBubbleTime(60);
             }
@@ -212,62 +207,58 @@ public class FirmacivBoatEntity extends Entity {
         this.gameEvent(GameEvent.SPLASH, this.getControllingPassenger());
     }
 
-    /**
-     * Applies a velocity to the entities, to push them away from eachother.
-     */
-    public void push(Entity pEntity) {
-        if (pEntity instanceof FirmacivBoatEntity) {
-            if (pEntity.getBoundingBox().minY < this.getBoundingBox().maxY) {
-                super.push(pEntity);
+    @Override
+    public void push(final Entity entity) {
+        if (entity instanceof FirmacivBoatEntity) {
+            if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
+                super.push(entity);
             }
-        } else if (pEntity.getBoundingBox().minY <= this.getBoundingBox().minY) {
-            super.push(pEntity);
+        } else if (entity.getBoundingBox().minY <= this.getBoundingBox().minY) {
+            super.push(entity);
         }
 
     }
 
+    /**
+     * The item that should be dropped when this entity dies
+     *
+     * @return Item Instance
+     */
     public Item getDropItem() {
-        return null;
+        return Items.AIR;
     }
 
     /**
      * Setups the entity to do the hurt animation. Only used by packets in multiplayer.
      */
-    public void animateHurt(float pYaw) {
+    @Override
+    public void animateHurt(final float pYaw) {
         this.setHurtDir(-this.getHurtDir());
         this.setHurtTime(10);
         this.setDamage(this.getDamage() * 11.0F);
     }
 
-    /**
-     * Returns true if other Entities should be prevented from moving through this Entity.
-     */
+    @Override
     public boolean isPickable() {
         return !this.isRemoved();
     }
 
-    /**
-     * Sets a target for the client to interpolate towards over the next few ticks
-     */
-    public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements, boolean pTeleport) {
-        this.lerpX = pX;
-        this.lerpY = pY;
-        this.lerpZ = pZ;
-        this.lerpYRot = pYaw;
-        this.lerpXRot = pPitch;
+    @Override
+    public void lerpTo(final double posX, final double posY, final double posZ, final float yaw, final float pitch, final int pPosRotationIncrements, final boolean teleport) {
+        this.lerpX = posX;
+        this.lerpY = posY;
+        this.lerpZ = posZ;
+        this.lerpYRot = yaw;
+        this.lerpXRot = pitch;
         this.lerpSteps = 10;
     }
 
-    /**
-     * Gets the horizontal facing direction of this Entity, adjusted to take specially-treated entity types into account.
-     */
-    public @NotNull Direction getMotionDirection() {
+    @Override
+    public Direction getMotionDirection() {
         return this.getDirection().getClockWise();
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
+    @Override
     public void tick() {
 
         this.oldStatus = this.status;
@@ -482,57 +473,59 @@ public class FirmacivBoatEntity extends Entity {
      * Determines whether the boat is in water, gliding on land, or in air
      */
     private FirmacivBoatEntity.Status getStatus() {
-        FirmacivBoatEntity.Status firmacivboat$status = this.isUnderwater();
+        final FirmacivBoatEntity.Status firmacivboat$status = this.isUnderwater();
         if (firmacivboat$status != null) {
             this.waterLevel = this.getBoundingBox().maxY;
             return firmacivboat$status;
-        } else if (this.checkInWater()) {
-            return FirmacivBoatEntity.Status.IN_WATER;
-        } else {
-            float f = this.getGroundFriction();
-            if (f > 0.0F) {
-                this.landFriction = f;
-                return FirmacivBoatEntity.Status.ON_LAND;
-            } else {
-                return FirmacivBoatEntity.Status.IN_AIR;
-            }
         }
+
+        if (this.checkInWater()) {
+            return FirmacivBoatEntity.Status.IN_WATER;
+        }
+
+        final float groundFriction = this.getGroundFriction();
+        if (0 < groundFriction) {
+            this.landFriction = groundFriction;
+            return FirmacivBoatEntity.Status.ON_LAND;
+        }
+
+        return FirmacivBoatEntity.Status.IN_AIR;
     }
 
     public float getWaterLevelAbove() {
-        AABB aabb = this.getBoundingBox();
-        int i = Mth.floor(aabb.minX);
-        int j = Mth.ceil(aabb.maxX);
-        int k = Mth.floor(aabb.maxY);
-        int l = Mth.ceil(aabb.maxY - this.lastYd);
-        int i1 = Mth.floor(aabb.minZ);
-        int j1 = Mth.ceil(aabb.maxZ);
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+        final var boundingBox = this.getBoundingBox();
+        final int minX = Mth.floor(boundingBox.minX);
+        final int maxX = Mth.ceil(boundingBox.maxX);
+        final int maxY = Mth.floor(boundingBox.maxY);
+        final int l = Mth.ceil(boundingBox.maxY - this.lastYd);
+        final int minZ = Mth.floor(boundingBox.minZ);
+        final int maxZ = Mth.ceil(boundingBox.maxZ);
+        final BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
-        label39:
-        for (int k1 = k; k1 < l; ++k1) {
-            float f = 0.0F;
+        topLoop:
+        for (int k1 = maxY; k1 < l; ++k1) {
+            float waterLevel = 0;
 
-            for (int l1 = i; l1 < j; ++l1) {
-                for (int i2 = i1; i2 < j1; ++i2) {
-                    blockpos$mutableblockpos.set(l1, k1, i2);
-                    FluidState fluidstate = this.level().getFluidState(blockpos$mutableblockpos);
+            for (int l1 = minX; l1 < maxX; ++l1) {
+                for (int i2 = minZ; i2 < maxZ; ++i2) {
+                    mutableBlockPos.set(l1, k1, i2);
+                    final FluidState fluidstate = this.level().getFluidState(mutableBlockPos);
                     if (fluidstate.is(FluidTags.WATER)) {
-                        f = Math.max(f, fluidstate.getHeight(this.level(), blockpos$mutableblockpos));
+                        waterLevel = Math.max(waterLevel, fluidstate.getHeight(this.level(), mutableBlockPos));
                     }
 
-                    if (f >= 1.0F) {
-                        continue label39;
+                    if (1 <= waterLevel) {
+                        continue topLoop;
                     }
                 }
             }
 
-            if (f < 1.0F) {
-                return (float) blockpos$mutableblockpos.getY() + f;
+            if (1 > waterLevel) {
+                return mutableBlockPos.getY() + waterLevel;
             }
         }
 
-        return (float) (l + 1);
+        return l + 1;
     }
 
     /**
@@ -714,7 +707,6 @@ public class FirmacivBoatEntity extends Entity {
                 this.setDeltaMovement(vec31.x, (vec31.y + d2 * 0.06153846016296973D) * 0.75D, vec31.z);
             }
         }
-
     }
 
 
@@ -744,145 +736,139 @@ public class FirmacivBoatEntity extends Entity {
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
-                this.setPaddleState(this.getControllingCompartment().getInputRight() && !this.getControllingCompartment().getInputLeft() ||
-                        this.getControllingCompartment().getInputUp(), this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputUp());
+                this.setPaddleState(this.getControllingCompartment().getInputRight() && !this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputUp(), this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputUp());
             }
 
         }
     }
 
 
-    protected void positionRider(Entity pPassenger, Entity.MoveFunction pCallback) {
-        if (this.hasPassenger(pPassenger)) {
+    @Override
+    protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
+        if (this.hasPassenger(passenger)) {
             float f = 0.0F;
-            float f1 = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + pPassenger.getMyRidingOffset());
+            float f1 = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
             if (this.getPassengers().size() > 1) {
-                if (this.getPassengers().indexOf(pPassenger) == 0) {
+                if (this.getPassengers().indexOf(passenger) == 0) {
                     f = 0.3F;
                 } else {
                     f = -0.7F;
                 }
 
-                if (pPassenger instanceof Animal) {
+                if (passenger instanceof Animal) {
                     f += 0.2F;
                 }
 
             }
-            if (pPassenger instanceof AbstractCompartmentEntity) {
+            if (passenger instanceof AbstractCompartmentEntity) {
                 f1 += 0.25F;
             }
 
-            Vec3 vec3 = (new Vec3(f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-            pCallback.accept(pPassenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
-            pPassenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
-            if (pPassenger instanceof VehiclePartEntity) {
-                pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
+            final Vec3 vec3 = (new Vec3(f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
+            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
+            if (passenger instanceof VehiclePartEntity) {
+                passenger.setYRot(passenger.getYRot() + this.deltaRotation);
             } else {
-                pPassenger.setYRot(pPassenger.getYRot() + this.deltaRotation);
-                pPassenger.setYHeadRot(pPassenger.getYHeadRot() + this.deltaRotation);
-                this.clampRotation(pPassenger);
+                passenger.setYRot(passenger.getYRot() + this.deltaRotation);
+                passenger.setYHeadRot(passenger.getYHeadRot() + this.deltaRotation);
+                this.clampRotation(passenger);
             }
-            if (pPassenger instanceof Animal && this.getPassengers().size() > 1) {
-                int j = pPassenger.getId() % 2 == 0 ? 90 : 270;
-                pPassenger.setYBodyRot(((Animal) pPassenger).yBodyRot + (float) j);
-                pPassenger.setYHeadRot(pPassenger.getYHeadRot() + (float) j);
+            if (passenger instanceof Animal && this.getPassengers().size() > 1) {
+                int j = passenger.getId() % 2 == 0 ? 90 : 270;
+                passenger.setYBodyRot(((Animal) passenger).yBodyRot + (float) j);
+                passenger.setYHeadRot(passenger.getYHeadRot() + (float) j);
             }
-
-
         }
     }
 
-    public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {
-        Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO, pLivingEntity.getBbWidth(), pLivingEntity.getYRot());
-        double d0 = this.getX() + vec3.x;
-        double d1 = this.getZ() + vec3.z;
-        BlockPos blockpos = BlockPos.containing(d0, this.getBoundingBox().maxY, d1);
-        BlockPos blockpos1 = blockpos.below();
+    @Override
+    public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
+        final Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO, passenger.getBbWidth(), passenger.getYRot());
+        final double d0 = this.getX() + vec3.x;
+        final double d1 = this.getZ() + vec3.z;
+        final BlockPos blockpos = BlockPos.containing(d0, this.getBoundingBox().maxY, d1);
+        final BlockPos blockpos1 = blockpos.below();
         if (!this.level().isWaterAt(blockpos1)) {
-            List<Vec3> list = Lists.newArrayList();
-            double d2 = this.level().getBlockFloorHeight(blockpos);
+            final List<Vec3> list = Lists.newArrayList();
+            final double d2 = this.level().getBlockFloorHeight(blockpos);
             if (DismountHelper.isBlockFloorValid(d2)) {
                 list.add(new Vec3(d0, (double) blockpos.getY() + d2, d1));
             }
 
-            double d3 = this.level().getBlockFloorHeight(blockpos1);
+            final double d3 = this.level().getBlockFloorHeight(blockpos1);
             if (DismountHelper.isBlockFloorValid(d3)) {
                 list.add(new Vec3(d0, (double) blockpos1.getY() + d3, d1));
             }
 
-            for (Pose pose : pLivingEntity.getDismountPoses()) {
-                for (Vec3 vec31 : list) {
-                    if (DismountHelper.canDismountTo(this.level(), vec31, pLivingEntity, pose)) {
-                        pLivingEntity.setPose(pose);
+            for (final Pose pose : passenger.getDismountPoses()) {
+                for (final Vec3 vec31 : list) {
+                    if (DismountHelper.canDismountTo(this.level(), vec31, passenger, pose)) {
+                        passenger.setPose(pose);
                         return vec31;
                     }
                 }
             }
         }
 
-        return super.getDismountLocationForPassenger(pLivingEntity);
+        return super.getDismountLocationForPassenger(passenger);
     }
 
     /**
      * Applies this boat's yaw to the given entity. Used to update the orientation of its passenger.
      */
-    protected void clampRotation(Entity pEntityToUpdate) {
-        pEntityToUpdate.setYBodyRot(this.getYRot());
-        float f = Mth.wrapDegrees(pEntityToUpdate.getYRot() - this.getYRot());
+    protected void clampRotation(final Entity entity) {
+        entity.setYBodyRot(this.getYRot());
+        float f = Mth.wrapDegrees(entity.getYRot() - this.getYRot());
         float f1 = Mth.clamp(f, -105.0F, 105.0F);
-        pEntityToUpdate.yRotO += f1 - f;
-        pEntityToUpdate.setYRot(pEntityToUpdate.getYRot() + f1 - f);
-        pEntityToUpdate.setYHeadRot(pEntityToUpdate.getYRot());
+        entity.yRotO += f1 - f;
+        entity.setYRot(entity.getYRot() + f1 - f);
+        entity.setYHeadRot(entity.getYRot());
     }
 
-    /**
-     * Applies this entity's orientation (pitch/yaw) to another entity. Used to update passenger orientation.
-     */
+    @Override
     public void onPassengerTurned(Entity pEntityToUpdate) {
         this.clampRotation(pEntityToUpdate);
     }
 
-
-    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-        return InteractionResult.PASS;
-    }
-
-
-    protected void checkFallDamage(double pY, boolean pOnGround, BlockState pState, BlockPos pPos) {
+    @Override
+    protected void checkFallDamage(final double fallDistance, final boolean onGround, final BlockState blockState, final BlockPos blockPos) {
         this.lastYd = this.getDeltaMovement().y;
-        if (!this.isPassenger()) {
-            if (pOnGround) {
-                if (this.fallDistance > 3.0F) {
-                    if (this.status != FirmacivBoatEntity.Status.ON_LAND) {
-                        this.resetFallDistance();
-                        return;
-                    }
+        if (this.isPassenger()) return;
 
-                    this.causeFallDamage(this.fallDistance, 1.0F, this.damageSources().fall());
-                    if (!this.level().isClientSide && !this.isRemoved()) {
-                        this.kill();
-                        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                            for (int i = 0; i < 3; ++i) {
-                                this.spawnAtLocation(this.getBoatType().getPlanks());
-                            }
+        if (!onGround) {
+            if (!this.level().getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && fallDistance < 0) {
+                this.fallDistance -= (float) fallDistance;
+            }
+            return;
+        }
 
-                            for (int j = 0; j < 2; ++j) {
-                                this.spawnAtLocation(Items.STICK);
-                            }
-                        }
-                    }
-                }
-
+        if (this.fallDistance > 3) {
+            if (this.status != Status.ON_LAND) {
                 this.resetFallDistance();
-            } else if (!this.level().getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && pY < 0.0D) {
-                this.fallDistance -= (float) pY;
+                return;
             }
 
+            this.causeFallDamage(this.fallDistance, 1, this.damageSources().fall());
+            if (!this.level().isClientSide && !this.isRemoved()) {
+                this.kill();
+                if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                    for (int i = 0; i < 3; ++i) {
+                        this.spawnAtLocation(this.getBoatType().getPlanks());
+                    }
+
+                    for (int j = 0; j < 2; ++j) {
+                        this.spawnAtLocation(Items.STICK);
+                    }
+                }
+            }
         }
+
+        this.resetFallDistance();
     }
 
-    public boolean getPaddleState(int pSide) {
-        return this.entityData.<Boolean>get(pSide == 0 ? DATA_ID_PADDLE_LEFT : DATA_ID_PADDLE_RIGHT) && this.getControllingPassenger() != null;
+    public boolean getPaddleState(final int side) {
+        return this.entityData.<Boolean>get(side == 0 ? DATA_ID_PADDLE_LEFT : DATA_ID_PADDLE_RIGHT) && this.getControllingPassenger() != null;
     }
 
     /**
@@ -895,8 +881,8 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Sets the damage taken from the last hit.
      */
-    public void setDamage(float pDamageTaken) {
-        this.entityData.set(DATA_ID_DAMAGE, pDamageTaken);
+    public void setDamage(final float damage) {
+        this.entityData.set(DATA_ID_DAMAGE, damage);
     }
 
     /**
@@ -909,20 +895,20 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Sets the time to count down from since the last time entity was hit.
      */
-    public void setHurtTime(int pHurtTime) {
-        this.entityData.set(DATA_ID_HURT, pHurtTime);
+    public void setHurtTime(final int hurtTime) {
+        this.entityData.set(DATA_ID_HURT, hurtTime);
     }
 
     private int getBubbleTime() {
         return this.entityData.get(DATA_ID_BUBBLE_TIME);
     }
 
-    private void setBubbleTime(int pBubbleTime) {
-        this.entityData.set(DATA_ID_BUBBLE_TIME, pBubbleTime);
+    private void setBubbleTime(final int bubbleTime) {
+        this.entityData.set(DATA_ID_BUBBLE_TIME, bubbleTime);
     }
 
-    public float getBubbleAngle(float pPartialTicks) {
-        return Mth.lerp(pPartialTicks, this.bubbleAngleO, this.bubbleAngle);
+    public float getBubbleAngle(final float partialTicks) {
+        return Mth.lerp(partialTicks, this.bubbleAngleO, this.bubbleAngle);
     }
 
     /**
@@ -935,23 +921,25 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Sets the forward direction of the entity.
      */
-    public void setHurtDir(int pHurtDirection) {
-        this.entityData.set(DATA_ID_HURTDIR, pHurtDirection);
+    public void setHurtDir(final int hurtDirection) {
+        this.entityData.set(DATA_ID_HURTDIR, hurtDirection);
     }
 
-    public void setType(net.minecraft.world.entity.vehicle.Boat.Type pBoatType) {
-        this.entityData.set(DATA_ID_TYPE, pBoatType.ordinal());
+    public void setType(final Type boatType) {
+        this.entityData.set(DATA_ID_TYPE, boatType.ordinal());
     }
 
-    public net.minecraft.world.entity.vehicle.Boat.Type getBoatType() {
-        return net.minecraft.world.entity.vehicle.Boat.Type.byId(this.entityData.get(DATA_ID_TYPE));
+    public Type getBoatType() {
+        return Type.byId(this.entityData.get(DATA_ID_TYPE));
     }
 
-    protected boolean canAddPassenger(Entity pPassenger) {
+    @Override
+    protected boolean canAddPassenger(final Entity passenger) {
         return this.getPassengers().size() < 2;
     }
 
     @Nullable
+    @Override
     public LivingEntity getControllingPassenger() {
         Entity entity = this.getPilotPassenger();
         if (entity instanceof VehiclePartEntity vehiclePart) {
@@ -959,9 +947,9 @@ public class FirmacivBoatEntity extends Entity {
             if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
                 entity = emptyCompartmentEntity.getControllingPassenger();
             }
-
         }
-        LivingEntity livingentity1;
+
+        final LivingEntity livingentity1;
         if (entity instanceof LivingEntity livingentity) {
             livingentity1 = livingentity;
         } else {
@@ -986,21 +974,23 @@ public class FirmacivBoatEntity extends Entity {
         return null;
     }
 
+    @Nullable
     private Entity getPilotPassenger() {
         if (this.isVehicle() && this.getPassengers().size() == this.PASSENGER_NUMBER) {
             return this.getPassengers().get(1);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
-    public void setInput(boolean pInputLeft, boolean pInputRight, boolean pInputUp, boolean pInputDown) {
-        this.inputLeft = pInputLeft;
-        this.inputRight = pInputRight;
-        this.inputUp = pInputUp;
-        this.inputDown = pInputDown;
+    public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp, final boolean inputDown) {
+        this.inputLeft = inputLeft;
+        this.inputRight = inputRight;
+        this.inputUp = inputUp;
+        this.inputDown = inputDown;
     }
 
+    @Override
     public boolean isUnderWater() {
         return this.status == Status.UNDER_WATER || this.status == Status.UNDER_FLOWING_WATER;
     }
@@ -1015,6 +1005,7 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
+    @Override
     public ItemStack getPickResult() {
         return new ItemStack(this.getDropItem());
     }
