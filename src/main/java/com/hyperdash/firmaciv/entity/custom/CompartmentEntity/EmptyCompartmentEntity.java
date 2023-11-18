@@ -132,7 +132,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         if(!item.isEmpty() && this.getPassengers().isEmpty()){
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(pPlayer.level());
-            } /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
+            }  /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(pPlayer.level());
             } */
         }

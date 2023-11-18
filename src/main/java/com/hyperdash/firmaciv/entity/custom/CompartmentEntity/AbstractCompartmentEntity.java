@@ -216,8 +216,9 @@ public class AbstractCompartmentEntity extends Entity {
                     if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         this.destroy(pSource);
                     }
-                    if(this.getTrueVehicle() instanceof KayakEntity){
-                        this.getTrueVehicle().kill();
+                    if(this.getTrueVehicle() instanceof KayakEntity kayakEntity){
+                        kayakEntity.spawnAtLocation(kayakEntity.getDropItem());
+                        kayakEntity.kill();
                         this.getVehicle().kill();
                     }
                     this.discard();
