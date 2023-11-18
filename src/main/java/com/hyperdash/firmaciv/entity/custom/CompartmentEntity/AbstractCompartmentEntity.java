@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
 
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -10,12 +11,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -25,17 +28,15 @@ public class AbstractCompartmentEntity extends Entity {
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
-
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
+    public int lifespan = 6000;
     @Nullable
     protected VehiclePartEntity ridingThisPart = null;
     private int notRidingTicks = 0;
 
     public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
-        this.setNoGravity(false);
-        notRidingTicks = 0;
     }
 
     public ItemStack getBlockTypeItem() {
@@ -52,30 +53,29 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
-    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
-        compoundTag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
+    protected void addAdditionalSaveData(final CompoundTag tag) {
+        tag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
+        tag.putInt("Lifespan", this.lifespan);
+        tag.putInt("notRidingTicks", this.notRidingTicks);
     }
 
     public Item getDropItem() {
         return this.getBlockTypeItem().getItem();
     }
 
-    @Nullable
     @Override
+    @Nullable
     public LivingEntity getControllingPassenger() {
-        if (!(this instanceof EmptyCompartmentEntity)) {
-            return null;
+        if (this instanceof EmptyCompartmentEntity) {
+            final Entity entity = this.getFirstPassenger();
+            if (entity instanceof LivingEntity livingentity) {
+                return livingentity;
+            } else {
+                return null;
+            }
         }
 
-        final Entity entity = this.getFirstPassenger();
-        final LivingEntity pilotEntity;
-        if (entity instanceof LivingEntity livingentity) {
-            pilotEntity = livingentity;
-        } else {
-            pilotEntity = null;
-        }
-
-        return pilotEntity;
+        return null;
     }
 
     @Override
@@ -84,27 +84,48 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset();
-    }
-
-    @Override
     public void tick() {
         if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity) {
             ridingThisPart = (VehiclePartEntity) this.getVehicle();
         }
 
-        if (this.isPassenger() && this.getYRot() == 0.0f && this.getVehicle().getYRot() != 0.0f) {
-            this.setYRot(this.getVehicle().getYRot());
-        }
+        if (!this.isPassenger()) {
 
-        if (!this.level().isClientSide() && !this.isPassenger()) {
-            notRidingTicks++;
-            if (notRidingTicks > 1) {
-                this.spawnAtLocation(this.getDropItem());
-                this.discard();
+            if (!(this instanceof EmptyCompartmentEntity)) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
+                if (this.isInWater() || this.getY() < 63 && this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
+                    this.setDeltaMovement(0.0D, -0.01D, 0.0D);
+                    this.setYRot(this.getYRot() + 0.4f);
+                }
+                if (!this.onGround() || this.getDeltaMovement().horizontalDistanceSqr() > (double) 1.0E-5F || (this.tickCount + this.getId()) % 4 == 0) {
+                    this.move(MoverType.SELF, this.getDeltaMovement());
+                    float f1 = 0.98F;
+
+                    this.setDeltaMovement(this.getDeltaMovement().multiply((double) f1, 0.98D, (double) f1));
+                    if (this.onGround()) {
+                        Vec3 vec31 = this.getDeltaMovement();
+                        if (vec31.y < 0.0D) {
+                            this.setDeltaMovement(vec31.multiply(1.0D, -0.5D, 1.0D));
+                        }
+                    }
+                }
+                if (!this.level().isClientSide()) {
+                    notRidingTicks++;
+                    if (notRidingTicks > lifespan) {
+                        this.spawnAtLocation(this.getDropItem());
+                        this.discard();
+                    }
+                }
+
+                this.updateInWaterStateAndDoFluidPushing();
+            } else if (!this.level().isClientSide()) {
+                notRidingTicks++;
+                if (notRidingTicks > 1) {
+                    this.spawnAtLocation(this.getDropItem());
+                    this.discard();
+                }
             }
-        } else {
+        } else if (this.level().isClientSide()) {
             notRidingTicks = 0;
         }
 
@@ -138,6 +159,9 @@ public class AbstractCompartmentEntity extends Entity {
         this.spawnAtLocation(this.getDropItem());
         this.stopRiding();
         this.discard();
+        newCompartment.setYRot(this.getYRot());
+        newCompartment.setPos(this.getX(), this.getY(), this.getZ());
+        newCompartment.ridingThisPart = this.ridingThisPart;
         newCompartment.startRiding(ridingThisPart);
         this.level().addFreshEntity(newCompartment);
         return newCompartment;
@@ -148,27 +172,31 @@ public class AbstractCompartmentEntity extends Entity {
         return getBlockTypeItem();
     }
 
-    @Override
-    public boolean hurt(final DamageSource damageSource, final float amount) {
-        if (this instanceof EmptyCompartmentEntity) return false;
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if (!(this instanceof EmptyCompartmentEntity)) {
+            if (this.isInvulnerableTo(pSource)) {
+                return false;
+            } else if (!this.level().isClientSide && !this.isRemoved()) {
+                this.setHurtDir(-this.getHurtDir());
+                this.setHurtTime(10);
+                this.setDamage(this.getDamage() + pAmount * 8.0F);
+                this.markHurt();
+                this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
+                boolean flag = pSource.getEntity() instanceof Player && ((Player) pSource.getEntity()).getAbilities().instabuild;
+                if (flag || this.getDamage() > 10.0F) {
+                    if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                        this.destroy(pSource);
+                    }
 
-        if (this.isInvulnerableTo(damageSource)) return false;
+                    this.discard();
+                }
 
-        if (this.level().isClientSide || this.isRemoved()) return true;
-
-        this.setHurtDir(-this.getHurtDir());
-        this.setHurtTime(10);
-        this.setDamage(this.getDamage() + amount * 8.0F);
-        this.markHurt();
-        this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
-        final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
-        if (instantKill || this.getDamage() > 10.0F) {
-            if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                this.destroy(damageSource);
+                return true;
+            } else {
+                return true;
             }
-            this.discard();
         }
-        return true;
+        return false;
     }
 
     @Override

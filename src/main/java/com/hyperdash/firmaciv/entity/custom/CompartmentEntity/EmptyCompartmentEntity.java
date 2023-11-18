@@ -8,10 +8,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
@@ -40,23 +38,47 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     }
 
     @Override
-    protected void positionRider(final Entity entity, final Entity.MoveFunction moveFunction) {
-        super.positionRider(entity, moveFunction);
-        moveFunction.accept(entity, this.getX() + 0f, this.getY() - 0.57f, this.getZ() + 0f);
-        if (entity instanceof LivingEntity) {
-            ((LivingEntity) entity).yBodyRot = this.yRotO;
+    protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
+        super.positionRider(passenger, moveFunction);
+        moveFunction.accept(passenger, this.getX() + 0f, this.getY() - 0.57f, this.getZ() + 0f);
+        if (passenger instanceof LivingEntity livingEntity) {
+            livingEntity.setYBodyRot(this.getYRot());
+            livingEntity.setYHeadRot(livingEntity.getYHeadRot() + this.getYRot());
+            this.clampRotation(livingEntity);
         }
-        this.clampRotation(entity);
+        this.clampRotation(passenger);
+    }
+
+    @Override
+    public void tick() {
+        this.checkInsideBlocks();
+        final List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
+
+        if (!list.isEmpty()) {
+            for (final Entity entity : list) {
+                final boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
+                if (!flag) break;
+
+                if (!entity.hasPassenger(this)) {
+
+                    if (this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                        entity.startRiding(this);
+                    }
+                }
+            }
+        }
+        super.tick();
     }
 
     protected void clampRotation(final Entity entity) {
         entity.setYBodyRot(this.getYRot());
-        float f = Mth.wrapDegrees(entity.getYRot() - this.getYRot());
-        float f1 = Mth.clamp(f, -105.0F, 105.0F);
+        final float f = Mth.wrapDegrees(entity.getYRot() - this.getYRot());
+        final float f1 = Mth.clamp(f, -105.0F, 105.0F);
         entity.yRotO += f1 - f;
         entity.setYRot(entity.getYRot() + f1 - f);
         entity.setYHeadRot(entity.getYRot());
     }
+
 
     public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp, final boolean inputDown) {
         this.inputLeft = inputLeft;
@@ -107,16 +129,19 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             }
         }
 
+        if (ridingThisPart == null) return InteractionResult.PASS;
+
         if (newCompartment != null) {
             swapCompartments(newCompartment);
-            newCompartment.setYRot(ridingThisPart.getYRot());
+            newCompartment.setYRot(newCompartment.ridingThisPart.getYRot());
             newCompartment.setBlockTypeItem(item.split(1));
-            this.playSound(SoundEvents.WOOD_PLACE, 1, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            this.playSound(SoundEvents.WOOD_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
-        if (!this.level().isClientSide)
+        if (!this.level().isClientSide) {
             return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
+        }
 
         return InteractionResult.SUCCESS;
     }

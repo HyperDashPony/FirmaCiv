@@ -51,6 +51,7 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         super.remove(removalReason);
     }
 
+
     @Override
     protected void addAdditionalSaveData(final CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
@@ -90,7 +91,6 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         this.clearChestVehicleContent();
     }
 
-    @Override
     public int getContainerSize() {
         return CONTAINER_SIZE;
     }
@@ -129,7 +129,6 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         return this.isChestVehicleStillValid(player);
     }
 
-    @Nullable
     @Override
     public AbstractContainerMenu createMenu(final int windowId, final Inventory inventory, final Player player) {
         if (this.getLootTable() != null && player.isSpectator()) return null;
@@ -153,7 +152,6 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
         this.lootTable = lootTable;
     }
 
-    @Override
     public long getLootTableSeed() {
         return this.lootTableSeed;
     }
