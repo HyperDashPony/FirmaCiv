@@ -44,6 +44,12 @@
 
   "entity.firmaciv.kayak": "Kayak",
 
+  "entity.firmaciv.compartment_chest": "Chest Compartment",
+  "entity.firmaciv.compartment_workbench": "Workbench Compartment",
+  "entity.firmaciv.compartment_log_pile": "Log Pile Compartment",
+  "entity.firmaciv.compartment_large_vessel": "Large Vessel Compartment",
+  "entity.firmaciv.compartment_empty": "Empty Compartment",
+
   "block.firmaciv.boat_frame": "Watercraft Frame",
 
   "block.firmaciv.thatch_roofing": "Thatch Roofing",

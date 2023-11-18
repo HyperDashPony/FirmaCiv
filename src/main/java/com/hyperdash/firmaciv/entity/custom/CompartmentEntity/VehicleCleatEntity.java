@@ -12,7 +12,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -57,6 +60,10 @@ public class VehicleCleatEntity extends Entity {
             this.dropLeash(true, !pPlayer.getAbilities().instabuild);
             this.gameEvent(GameEvent.ENTITY_INTERACT, pPlayer);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }else if (this.getLeashHolder() == pPlayer) {
+            this.dropLeash(true, !pPlayer.getAbilities().instabuild);
+            this.gameEvent(GameEvent.ENTITY_INTERACT, pPlayer);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else if (itemstack.is(Items.LEAD) && this.canBeLeashed(pPlayer)) {
             this.setLeashedTo(pPlayer, true);
             itemstack.shrink(1);
@@ -74,8 +81,9 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashHolder != null) {
             if (!this.isAlive() || !this.leashHolder.isAlive()) {
                 this.dropLeash(true, true);
-            } else if (this.distanceTo(this.leashHolder) > 7.0f){
-                this.dropLeash(true, true);
+            } else if (this.distanceTo(this.leashHolder) > 2.0f){
+
+                this.setDeltaMovement(0, 0.1, 0);
             }
 
 
@@ -177,11 +185,28 @@ public class VehicleCleatEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
-
+        if (pCompound.contains("Leash", 10)) {
+            this.leashInfoTag = pCompound.getCompound("Leash");
+        }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
+        if (this.leashHolder != null) {
+            CompoundTag compoundtag2 = new CompoundTag();
+            if (this.leashHolder instanceof LivingEntity) {
+                UUID uuid = this.leashHolder.getUUID();
+                compoundtag2.putUUID("UUID", uuid);
+            } else if (this.leashHolder instanceof HangingEntity) {
+                BlockPos blockpos = ((HangingEntity)this.leashHolder).getPos();
+                compoundtag2.putInt("X", blockpos.getX());
+                compoundtag2.putInt("Y", blockpos.getY());
+                compoundtag2.putInt("Z", blockpos.getZ());
+            }
 
+            pCompound.put("Leash", compoundtag2);
+        } else if (this.leashInfoTag != null) {
+            pCompound.put("Leash", this.leashInfoTag.copy());
+        }
     }
 }
