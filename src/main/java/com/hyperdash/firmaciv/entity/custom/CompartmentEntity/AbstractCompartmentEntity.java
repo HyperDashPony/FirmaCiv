@@ -125,7 +125,7 @@ public class AbstractCompartmentEntity extends Entity {
             if(!(this instanceof EmptyCompartmentEntity)){
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
                 if (this.isInWater() ||
-                        this.getY() < 63 && this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
+                        this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
                     this.setDeltaMovement(0.0D, -0.01D, 0.0D);
                     this.setYRot(this.getYRot() + 0.4f);
                 }
