@@ -13,7 +13,8 @@
     "HorseMixin",
     "CamelMixin",
     "TFCChestedHorseMixin",
-    "TFCHorseMixin"
+    "TFCHorseMixin",
+    "MobMixin"
   ],
   "injectors": {
     "defaultRequire": 1

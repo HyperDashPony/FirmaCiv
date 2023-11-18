@@ -1,11 +1,8 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CanoeRenderer;
-import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CompartmentRenderer;
-import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.KayakRenderer;
+import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.*;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.VehiclePartRenderer;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
@@ -39,6 +36,7 @@ public final class RenderEvents {
         event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), VehiclePartRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
     }
 
 

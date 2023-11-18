@@ -3,10 +3,7 @@ package com.hyperdash.firmaciv.entity;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.ChestCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.WorkbenchCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.*;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
@@ -49,6 +46,9 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.1F, 0.1F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_part").toString()));
 
+    public static final RegistryObject<EntityType<VehicleCleatEntity>> VEHICLE_CLEAT_ENTITY = ENTITY_TYPES.register("vehicle_cleat",
+            () -> EntityType.Builder.of(VehicleCleatEntity::new, MobCategory.MISC).sized(0.25F, 0.25F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_cleat").toString()));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
