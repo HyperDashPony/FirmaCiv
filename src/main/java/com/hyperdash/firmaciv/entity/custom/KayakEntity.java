@@ -26,10 +26,12 @@ public class KayakEntity extends FirmacivBoatEntity {
         super(pEntityType, pLevel);
     }
 
+    @Override
     protected float getDamageThreshold() {
         return this.DAMAGE_THRESHOLD;
     }
 
+    @Override
     protected float getDamageRecovery() {
         return this.DAMAGE_RECOVERY;
     }
@@ -107,6 +109,4 @@ public class KayakEntity extends FirmacivBoatEntity {
     public ResourceLocation getTextureLocation() {
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/kayak.png");
     }
-
-
 }

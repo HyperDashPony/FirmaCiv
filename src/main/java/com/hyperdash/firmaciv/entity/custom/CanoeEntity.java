@@ -16,23 +16,23 @@ public class CanoeEntity extends FirmacivBoatEntity {
 
     public final int PASSENGER_NUMBER = 2;
 
-    public CanoeEntity(EntityType<? extends FirmacivBoatEntity> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+    public CanoeEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+        super(entityType, level);
 
-        String name = pEntityType.toString().split("canoe.")[1];
+        final String name = entityType.toString().split("canoe.")[1];
 
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
 
-        //EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pLevel);
-        //addPassenger(newCompartment);
+//        EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(level);
+//        addPassenger(newCompartment);
     }
 
-    public static ModelLayerLocation createCanoeModelName(BoatVariant pVariant) {
-        return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pVariant.getName()), "main");
+    public static ModelLayerLocation createCanoeModelName(final BoatVariant boatVariant) {
+        return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + boatVariant.getName()), "main");
     }
 
-    public void setType(BoatVariant pVariant) {
-        this.entityData.set(DATA_ID_TYPE, pVariant.ordinal());
+    public void setType(final BoatVariant boatVariant) {
+        this.entityData.set(DATA_ID_TYPE, boatVariant.ordinal());
     }
 
     public BoatVariant getVariant() {
@@ -149,5 +149,4 @@ public class CanoeEntity extends FirmacivBoatEntity {
     public ResourceLocation getTextureLocation() {
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + getVariant().getName() + ".png");
     }
-
 }
