@@ -70,8 +70,8 @@ public class FirmacivBoatEntity extends Entity {
 
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
-    private static final int TIME_TO_EJECT = 60;
-    private static final float PADDLE_SPEED = ((float) Math.PI / 8F);
+    protected static final int TIME_TO_EJECT = 60;
+    protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
     public static final double PADDLE_SOUND_TIME = (double) ((float) Math.PI / 4F);
     public static final int BUBBLE_TIME = 60;
     protected final float[] paddlePositions = new float[2];
@@ -401,15 +401,15 @@ public class FirmacivBoatEntity extends Entity {
 
     }
 
-    private float getXForPart(float yaw, float degree) {
+    protected float getXForPart(float yaw, float degree) {
         return Mth.sin((float) (yaw + Math.toRadians(degree)));
     }
 
-    private float getZForPart(float yaw, float degree) {
+    protected float getZForPart(float yaw, float degree) {
         return -Mth.cos((float) (yaw + Math.toRadians(degree)));
     }
 
-    private void tickBubbleColumn() {
+    protected void tickBubbleColumn() {
         if (this.level().isClientSide) {
             int i = this.getBubbleTime();
             if (i > 0) {
@@ -465,7 +465,7 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
-    private void tickLerp() {
+    protected void tickLerp() {
         if (this.isControlledByLocalInstance()) {
             this.lerpSteps = 0;
             this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
@@ -496,7 +496,7 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Determines whether the boat is in water, gliding on land, or in air
      */
-    private FirmacivBoatEntity.Status getStatus() {
+    protected FirmacivBoatEntity.Status getStatus() {
         FirmacivBoatEntity.Status firmacivboat$status = this.isUnderwater();
         if (firmacivboat$status != null) {
             this.waterLevel = this.getBoundingBox().maxY;
@@ -588,7 +588,7 @@ public class FirmacivBoatEntity extends Entity {
         return f / (float) k1;
     }
 
-    private boolean checkInWater() {
+    protected boolean checkInWater() {
         AABB aabb = this.getBoundingBox();
         int i = Mth.floor(aabb.minX);
         int j = Mth.ceil(aabb.maxX);
@@ -621,7 +621,7 @@ public class FirmacivBoatEntity extends Entity {
      * Decides whether the boat is currently underwater.
      */
     @Nullable
-    private FirmacivBoatEntity.Status isUnderwater() {
+    protected FirmacivBoatEntity.Status isUnderwater() {
         AABB aabb = this.getBoundingBox();
         double d0 = aabb.maxY + 0.001D;
         int i = Mth.floor(aabb.minX);
@@ -655,7 +655,7 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Update the boat's speed, based on momentum.
      */
-    private void floatBoat() {
+    protected void floatBoat() {
         double d0 = (double) -0.04F;
         double d1 = this.isNoGravity() ? 0.0D : (double) -0.04F;
         double d2 = 0.0D;
@@ -926,11 +926,11 @@ public class FirmacivBoatEntity extends Entity {
         return this.entityData.get(DATA_ID_HURT);
     }
 
-    private void setBubbleTime(int pBubbleTime) {
+    protected void setBubbleTime(int pBubbleTime) {
         this.entityData.set(DATA_ID_BUBBLE_TIME, pBubbleTime);
     }
 
-    private int getBubbleTime() {
+    protected int getBubbleTime() {
         return this.entityData.get(DATA_ID_BUBBLE_TIME);
     }
 
@@ -999,7 +999,7 @@ public class FirmacivBoatEntity extends Entity {
         return null;
     }
 
-    private Entity getPilotPassenger() {
+    protected Entity getPilotPassenger() {
         if (this.isVehicle() && this.getPassengers().size() == this.PASSENGER_NUMBER) {
             return this.getPassengers().get(1);
         } else {
