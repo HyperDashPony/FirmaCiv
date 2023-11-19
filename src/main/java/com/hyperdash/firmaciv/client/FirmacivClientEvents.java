@@ -28,6 +28,7 @@ public class FirmacivClientEvents {
         final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         bus.addListener(FirmacivClientEvents::clientSetup);
+        bus.addListener(IngameOverlays::registerOverlays);
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
