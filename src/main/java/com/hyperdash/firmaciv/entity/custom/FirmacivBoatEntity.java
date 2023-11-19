@@ -58,7 +58,7 @@ public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
     private static final int TIME_TO_EJECT = 60;
-    private static final float PADDLE_SPEED = Math.PI / 8;
+    private static final float PADDLE_SPEED = (float) (Math.PI / 8);
     public final int PASSENGER_NUMBER = 2;
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float DAMAGE_RECOVERY = 0.5f;
@@ -113,7 +113,6 @@ public class FirmacivBoatEntity extends Entity {
         return this.DAMAGE_RECOVERY;
     }
 
-    @Override
     public float getDeltaRotation() {
         return deltaRotation;
     }
