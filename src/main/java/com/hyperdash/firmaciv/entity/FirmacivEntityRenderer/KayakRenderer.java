@@ -68,7 +68,7 @@ public class KayakRenderer extends EntityRenderer<KayakEntity> {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
             kayakModel.getWaterocclusion().render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
-        if(!pEntity.getPassengers().isEmpty()){
+        if(!pEntity.getTruePassengers().isEmpty()){
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(kayakModel.renderType(resourcelocation));
             kayakModel.getCockpitCover().render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
