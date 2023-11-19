@@ -5,16 +5,22 @@ import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.*;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
+import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.common.entities.TFCEntities;
+import net.dries007.tfc.common.entities.misc.TFCBoat;
+import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 public final class FirmacivEntities {
 
@@ -25,6 +31,13 @@ public final class FirmacivEntities {
             Helpers.mapOfKeys(BoatVariant.class, variant -> ENTITY_TYPES.register("dugout_canoe/" + variant.getName(),
                     () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.625F)
                             .build(new ResourceLocation(Firmaciv.MOD_ID, "dugout_canoe/" + variant.getName()).toString())));
+
+    /*
+    public static final Map<Wood, RegistryObject<EntityType<TFCBoat>>> BOATS = Helpers.mapOfKeys(Wood .class, (wood) -> {
+        return ENTITY_TYPES.register("boat/" + wood.name(), EntityType.Builder.of((type, level) -> {
+            return new TFCBoat(type, level, (Supplier) TFCEntities.CHEST_BOATS.get(wood), (Supplier) TFCItems.BOATS.get(wood));
+        }, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10));
+    });*/
 
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak",
             () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
