@@ -32,19 +32,19 @@ public class BoatRendererMixin extends EntityRenderer<Boat> {
         pPoseStack.pushPose();
         pPoseStack.translate(0.0F, 0.375F, 0.0F);
         pPoseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
-        float f = (float)pEntity.getHurtTime() - pPartialTicks;
+        float f = (float) pEntity.getHurtTime() - pPartialTicks;
         float f1 = pEntity.getDamage() - pPartialTicks;
         if (f1 < 0.0F) {
             f1 = 0.0F;
         }
 
         if (f > 0.0F) {
-            pPoseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float)pEntity.getHurtDir()));
+            pPoseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
         float f2 = pEntity.getBubbleAngle(pPartialTicks);
         if (!Mth.equal(f2, 0.0F)) {
-            pPoseStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float)Math.PI / 180F), 1.0F, 0.0F, 1.0F));
+            pPoseStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F), 1.0F, 0.0F, 1.0F));
         }
 
         Pair<ResourceLocation, ListModel<Boat>> pair = getModelWithLocation(pEntity);
@@ -58,8 +58,7 @@ public class BoatRendererMixin extends EntityRenderer<Boat> {
         listmodel.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            if (listmodel instanceof WaterPatchModel) {
-                WaterPatchModel waterpatchmodel = (WaterPatchModel)listmodel;
+            if (listmodel instanceof WaterPatchModel waterpatchmodel) {
                 waterpatchmodel.waterPatch().render(pPoseStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
             }
         }

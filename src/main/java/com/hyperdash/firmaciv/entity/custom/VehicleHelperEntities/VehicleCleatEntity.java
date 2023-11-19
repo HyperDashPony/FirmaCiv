@@ -27,9 +27,8 @@ import java.util.UUID;
 
 public class VehicleCleatEntity extends Entity {
 
-    private static final EntityDataAccessor<Byte> DATA_CLEAT_FLAGS_ID = SynchedEntityData.defineId(VehicleCleatEntity.class, EntityDataSerializers.BYTE);
-
     public static final String LEASH_TAG = "Leash";
+    private static final EntityDataAccessor<Byte> DATA_CLEAT_FLAGS_ID = SynchedEntityData.defineId(VehicleCleatEntity.class, EntityDataSerializers.BYTE);
     @Nullable
     private Entity leashHolder;
     private int delayedLeashHolderId;
@@ -56,7 +55,7 @@ public class VehicleCleatEntity extends Entity {
             this.dropLeash(true, !pPlayer.getAbilities().instabuild);
             this.gameEvent(GameEvent.ENTITY_INTERACT, pPlayer);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
-        }else if (this.getLeashHolder() == pPlayer) {
+        } else if (this.getLeashHolder() == pPlayer) {
             this.dropLeash(true, !pPlayer.getAbilities().instabuild);
             this.gameEvent(GameEvent.ENTITY_INTERACT, pPlayer);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -77,7 +76,7 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashHolder != null) {
             if (!this.isAlive() || !this.leashHolder.isAlive()) {
                 this.dropLeash(true, true);
-            } else if (this.distanceTo(this.leashHolder) > 2.0f){
+            } else if (this.distanceTo(this.leashHolder) > 2.0f) {
 
                 this.setDeltaMovement(0, 0.1, 0);
             }
@@ -98,7 +97,7 @@ public class VehicleCleatEntity extends Entity {
             }
 
             if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-                ((ServerLevel)this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, (Entity)null));
+                ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, null));
             }
         }
 
@@ -133,7 +132,7 @@ public class VehicleCleatEntity extends Entity {
         this.leashHolder = pLeashHolder;
         this.leashInfoTag = null;
         if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-            ((ServerLevel)this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
+            ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
         }
 
         if (this.isPassenger()) {
@@ -151,7 +150,7 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashInfoTag != null && this.level() instanceof ServerLevel) {
             if (this.leashInfoTag.hasUUID("UUID")) {
                 UUID uuid = this.leashInfoTag.getUUID("UUID");
-                Entity entity = ((ServerLevel)this.level()).getEntity(uuid);
+                Entity entity = ((ServerLevel) this.level()).getEntity(uuid);
                 if (entity != null) {
                     this.setLeashedTo(entity, true);
                     return;
@@ -174,9 +173,10 @@ public class VehicleCleatEntity extends Entity {
     public boolean isPickable() {
         return !this.isRemoved();
     }
+
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(DATA_CLEAT_FLAGS_ID, (byte)0);
+        this.entityData.define(DATA_CLEAT_FLAGS_ID, (byte) 0);
     }
 
     @Override
@@ -194,7 +194,7 @@ public class VehicleCleatEntity extends Entity {
                 UUID uuid = this.leashHolder.getUUID();
                 compoundtag2.putUUID("UUID", uuid);
             } else if (this.leashHolder instanceof HangingEntity) {
-                BlockPos blockpos = ((HangingEntity)this.leashHolder).getPos();
+                BlockPos blockpos = ((HangingEntity) this.leashHolder).getPos();
                 compoundtag2.putInt("X", blockpos.getX());
                 compoundtag2.putInt("Y", blockpos.getY());
                 compoundtag2.putInt("Z", blockpos.getZ());

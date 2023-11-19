@@ -54,6 +54,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
     public final BoatVariant variant;
+
     public CanoeComponentBlock(Properties properties, BoatVariant variant) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
+public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity {
 
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
@@ -22,7 +22,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
 
     @Override
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-        if(this.isPassenger() && this.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity && pPlayer.isSecondaryUseActive()){
+        if (this.isPassenger() && this.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity && pPlayer.isSecondaryUseActive()) {
             this.stopRiding();
         }
         return InteractionResult.PASS;
