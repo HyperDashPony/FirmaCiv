@@ -51,7 +51,7 @@ public class BoatRendererMixin extends EntityRenderer<Boat> {
         ResourceLocation resourcelocation = pair.getFirst();
         ListModel<Boat> listmodel = pair.getSecond();
         pPoseStack.scale(-1.0F, 1.0F, 1.0F);
-        pPoseStack.translate(0.0F, 3/16F, 0.0F);
+        pPoseStack.translate(0.0F, -0.1875F, 0.0F);
         pPoseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         listmodel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(listmodel.renderType(resourcelocation));
