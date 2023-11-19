@@ -39,11 +39,11 @@ public class PlayerModelMixin <T extends LivingEntity> extends HumanoidModel<T>{
             } else if(emptyCompartmentEntity.getTrueVehicle() instanceof KayakEntity){
                 if (this.riding) {
                     this.rightLeg.xRot = -1.570796F;
-                    this.rightLeg.yRot = 0.1570796F;
+                    this.rightLeg.yRot = -0.1570796F;
                     this.rightLeg.zRot = 0F;
 
                     this.leftLeg.xRot = -1.570796F;
-                    this.leftLeg.yRot = -0.1570796F;
+                    this.leftLeg.yRot = 0.1570796F;
                     this.leftLeg.zRot = -0F;
 
                     this.rightLeg.setPos(-1.9F, 13.6F, 1F);
