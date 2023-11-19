@@ -283,6 +283,7 @@ public class FirmacivBoatEntity extends Entity {
      * Called to update the entity's position/logic.
      */
     public void tick() {
+
         if(this.getControllingPassenger() == null){
             this.deltaRotation = 0;
         }

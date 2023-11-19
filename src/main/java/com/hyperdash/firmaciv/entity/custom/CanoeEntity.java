@@ -29,6 +29,7 @@ public class CanoeEntity extends FirmacivBoatEntity{
         } else {
             return null;
         }
+
     }
 
     @Override
