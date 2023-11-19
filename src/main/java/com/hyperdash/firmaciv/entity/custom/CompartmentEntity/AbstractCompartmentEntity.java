@@ -44,6 +44,10 @@ public class AbstractCompartmentEntity extends Entity {
 
     protected VehiclePartEntity ridingThisPart = null;
 
+    public boolean getInputLeft(){return false;}
+    public boolean getInputRight(){return false;}
+    public boolean getInputUp(){return false;}
+    public boolean getInputDown(){return false;}
     public ItemStack getBlockTypeItem() {
         return (ItemStack) this.entityData.get(DATA_BLOCK_TYPE_ITEM);
     }

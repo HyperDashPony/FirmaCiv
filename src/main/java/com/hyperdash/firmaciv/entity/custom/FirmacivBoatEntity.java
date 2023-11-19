@@ -323,12 +323,12 @@ public class FirmacivBoatEntity extends Entity {
                 if (this.random.nextInt(20) == 0) {
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
                 }
-                if (Math.abs(this.deltaRotation) > 5 && (this.inputRight || this.inputLeft)) {
+                if (this.getControllingCompartment() != null && Math.abs(this.deltaRotation) > 5 && (this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputLeft())) {
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
 
 
                     Vec3 splashOffset = this.getDeltaMovement().yRot(45);
-                    if (this.inputLeft) {
+                    if (this.getControllingCompartment().getInputLeft()) {
                         splashOffset = this.getDeltaMovement().yRot(-45);
                     }
                     splashOffset.normalize();
@@ -383,23 +383,6 @@ public class FirmacivBoatEntity extends Entity {
                 this.paddlePositions[i] += ((float) Math.PI / 8F);
             } else {
                 this.paddlePositions[i] = 0.0F;
-            }
-        }
-
-        this.checkInsideBlocks();
-        List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate((double) 0.2F, (double) -0.01F, (double) 0.2F), EntitySelector.pushableBy(this));
-        if (!list.isEmpty()) {
-            boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
-
-            for (int j = 0; j < list.size(); ++j) {
-                Entity entity = list.get(j);
-                if (!entity.hasPassenger(this)) {
-                    if (flag && this.getPassengers().size() < this.getPassengerNumber() && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
-                        entity.startRiding(this);
-                    } else {
-                        this.push(entity);
-                    }
-                }
             }
         }
 
@@ -712,17 +695,21 @@ public class FirmacivBoatEntity extends Entity {
                 this.invFriction = modifiedFriction;
             }
 
+
             this.setDeltaMovement(vec3.x * (double) this.invFriction, vec3.y + d1, vec3.z * (double) this.invFriction);
 
-            double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
+            if(this.getControllingCompartment() != null){
+                double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
 
-            if (this.inputLeft || this.inputRight) {
-                //Firmaciv.LOGGER.info("keysdown");
-                this.deltaRotation *= ((this.invFriction / 3.0F));
-                this.deltaRotation *= turnSpeedFactor;
-            } else {
-                this.deltaRotation *= (this.invFriction / 2.0F);
+                if (this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputRight()) {
+                    this.deltaRotation *= ((this.invFriction / 3.0F));
+                    this.deltaRotation *= turnSpeedFactor;
+
+                } else {
+                    this.deltaRotation *= (this.invFriction / 2.0F);
+                }
             }
+
 
 
             //Firmaciv.LOGGER.info("delta: "+deltaRotation);

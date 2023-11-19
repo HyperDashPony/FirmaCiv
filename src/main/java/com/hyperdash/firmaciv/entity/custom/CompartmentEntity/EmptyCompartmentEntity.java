@@ -59,9 +59,6 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         if(pPassenger.getBbHeight() <= 0.7){
             f1 -= 0.2f;
         }
-        if(this.getTrueVehicle() instanceof KayakEntity){
-            f1 += 0.0f;
-        }
 
         double eyepos =  pPassenger.getEyePosition().get(Direction.Axis.Y);
         double thisY = this.getY()+1.1f;
