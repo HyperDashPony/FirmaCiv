@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
+import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -82,6 +83,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                     float maxSize = 1.0f;
                     if (this.getTrueVehicle() instanceof CanoeEntity) {
                         maxSize = 0.9f;
+                    } else if (this.getTrueVehicle() instanceof KayakEntity) {
+                        maxSize = 0.6f;
                     }
                     if (this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         entity.startRiding(this);
