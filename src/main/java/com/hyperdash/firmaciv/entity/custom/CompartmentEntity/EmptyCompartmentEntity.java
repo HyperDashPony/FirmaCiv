@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
+import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -57,6 +58,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity{
         }
         if(pPassenger.getBbHeight() <= 0.7){
             f1 -= 0.2f;
+        }
+        if(this.getTrueVehicle() instanceof KayakEntity){
+            f1 += 0.0f;
         }
 
         double eyepos =  pPassenger.getEyePosition().get(Direction.Axis.Y);

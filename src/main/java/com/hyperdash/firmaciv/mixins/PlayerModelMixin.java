@@ -46,7 +46,7 @@ public class PlayerModelMixin <T extends LivingEntity> extends HumanoidModel<T>{
                     this.leftLeg.yRot = -0.1570796F;
                     this.leftLeg.zRot = -0F;
 
-                    this.rightLeg.setPos(-1.9F+ 15f, 13.6F, 1F);
+                    this.rightLeg.setPos(-1.9F, 13.6F, 1F);
                     this.leftLeg.setPos(01.9F, 13.6F, 1F);
                 }
             }
