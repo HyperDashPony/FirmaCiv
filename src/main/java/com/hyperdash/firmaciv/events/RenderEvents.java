@@ -7,6 +7,7 @@ import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.KayakEntityModel;
+import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;

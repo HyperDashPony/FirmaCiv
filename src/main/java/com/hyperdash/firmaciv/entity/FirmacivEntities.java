@@ -54,9 +54,5 @@ public final class FirmacivEntities {
         ENTITY_TYPES.register(eventBus);
     }
 
-    public static class ResLocation {
-        public static final ResourceLocation CANOE_ENTITY = new ResourceLocation(Firmaciv.MOD_ID, "canoe_entity");
-    }
-
 
 }

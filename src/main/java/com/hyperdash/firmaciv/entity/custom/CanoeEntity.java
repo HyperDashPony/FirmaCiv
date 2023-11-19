@@ -20,6 +20,32 @@ import net.minecraft.world.level.Level;
 public class CanoeEntity extends FirmacivBoatEntity{
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class, EntityDataSerializers.INT);
 
+    protected final float DAMAGE_THRESHOLD = 10.0f;
+    protected final float DAMAGE_RECOVERY = 1.0f;
+
+    protected Entity getPilotPassenger() {
+        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+            return this.getPassengers().get(1);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public int getPassengerNumber(){
+        return PASSENGER_NUMBER;
+    }
+
+    @Override
+    protected float getDamageThreshold(){
+        return this.DAMAGE_THRESHOLD;
+    }
+
+    @Override
+    protected float getDamageRecovery(){
+        return this.DAMAGE_RECOVERY;
+    }
+
     public final int PASSENGER_NUMBER = 2;
     public void setType(BoatVariant pVariant) {
         this.entityData.set(DATA_ID_TYPE, pVariant.ordinal());
@@ -40,9 +66,6 @@ public class CanoeEntity extends FirmacivBoatEntity{
         String name = pEntityType.toString().split("canoe.")[1];
 
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
-
-        //EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(pLevel);
-        //addPassenger(newCompartment);
     }
 
 
@@ -96,21 +119,9 @@ public class CanoeEntity extends FirmacivBoatEntity{
         }
     }
 
-    public static ModelLayerLocation createCanoeModelName(BoatVariant pVariant) {
-        return new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "watercraft/dugout_canoe/" + pVariant.getName()), "main");
-    }
-
-    /*
-    protected boolean canAddPassenger(Entity pPassenger) {
-        if(this.getPassengers().size() == 1 && !(pPassenger instanceof Player)){
-            return false;
-        }
-        return this.getPassengers().size() < PASSENGER_NUMBER && !this.isEyeInFluid(FluidTags.WATER);
-    }*/
-
     @Override
     public ItemStack getPickResult() {
-        return null;
+        return new ItemStack(this.getDropItem());
     }
 
     public ResourceLocation getTextureLocation(){
