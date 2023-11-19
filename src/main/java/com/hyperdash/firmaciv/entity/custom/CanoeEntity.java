@@ -1,14 +1,11 @@
 package com.hyperdash.firmaciv.entity.custom;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.item.FirmacivItems;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

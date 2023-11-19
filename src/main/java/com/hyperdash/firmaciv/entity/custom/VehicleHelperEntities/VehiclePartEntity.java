@@ -1,12 +1,10 @@
-package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
+package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 

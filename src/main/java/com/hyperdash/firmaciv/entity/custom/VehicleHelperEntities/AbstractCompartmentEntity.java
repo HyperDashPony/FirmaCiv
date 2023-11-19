@@ -1,33 +1,25 @@
-package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
+package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
 import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.fluids.TFCFluids;
-import net.dries007.tfc.world.biome.TFCBiomes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
 
 public class AbstractCompartmentEntity extends Entity {
 
