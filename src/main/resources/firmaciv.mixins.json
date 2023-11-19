@@ -6,9 +6,18 @@
   "mixins": [
   ],
   "client": [
-    "LivingEntityRendererMixin",
     "LocalPlayerMixin",
-    "PlayerModelMixin"
+    "PlayerModelMixin",
+    "LivingEntityMixin",
+    "AbstractChestedHorseMixin",
+    "HorseMixin",
+    "CamelMixin",
+    "TFCChestedHorseMixin",
+    "TFCHorseMixin",
+    "MobMixin",
+    "BoatMixin",
+    "TFCBoatMixin",
+    "BoatRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

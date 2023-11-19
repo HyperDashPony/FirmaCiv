@@ -2,9 +2,9 @@ package com.hyperdash.firmaciv.entity.custom;
 
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.AbstractCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.AbstractCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.DismountHelper;
@@ -57,13 +56,13 @@ public class FirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_LEFT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
-    private static final int TIME_TO_EJECT = 60;
-    private static final float PADDLE_SPEED = (float) (Math.PI / 8);
+    protected static final int TIME_TO_EJECT = 60;
+    protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
     public final int PASSENGER_NUMBER = 2;
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float DAMAGE_RECOVERY = 0.5f;
     protected final float[] paddlePositions = new float[2];
-    protected List<VehiclePartEntity> vehicleParts = new ArrayList<VehiclePartEntity>();
+    protected List<VehiclePartEntity> vehicleParts = new ArrayList<>();
     protected float invFriction;
     protected float outOfControlTicks;
     protected float turnOutOfControlTicks;
@@ -98,6 +97,10 @@ public class FirmacivBoatEntity extends Entity {
 
     public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
         return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
+    }
+
+    public int getPassengerNumber() {
+        return PASSENGER_NUMBER;
     }
 
     @Override
@@ -261,6 +264,10 @@ public class FirmacivBoatEntity extends Entity {
     @Override
     public void tick() {
 
+        if (this.getControllingPassenger() == null) {
+            this.deltaRotation = 0;
+        }
+
         this.oldStatus = this.status;
         this.status = this.getStatus();
         if (this.status != FirmacivBoatEntity.Status.UNDER_WATER && this.status != FirmacivBoatEntity.Status.UNDER_FLOWING_WATER) {
@@ -271,7 +278,7 @@ public class FirmacivBoatEntity extends Entity {
 
 
         if (!this.level().isClientSide) {
-            if (this.getPassengers().size() < PASSENGER_NUMBER) {
+            if (this.getPassengers().size() < this.getPassengerNumber()) {
                 final VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
                 newPart.setPos(this.getX(), this.getY(), this.getZ());
                 this.level().addFreshEntity(newPart);
@@ -296,12 +303,12 @@ public class FirmacivBoatEntity extends Entity {
                 if (this.random.nextInt(20) == 0) {
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
                 }
-                if (Math.abs(this.deltaRotation) > 5 && (this.inputRight || this.inputLeft)) {
+                if (this.getControllingCompartment() != null && Math.abs(this.deltaRotation) > 5 && (this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputLeft())) {
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
 
 
                     Vec3 splashOffset = this.getDeltaMovement().yRot(45);
-                    if (this.inputLeft) {
+                    if (this.getControllingCompartment().getInputLeft()) {
                         splashOffset = this.getDeltaMovement().yRot(-45);
                     }
                     splashOffset.normalize();
@@ -364,29 +371,18 @@ public class FirmacivBoatEntity extends Entity {
         if (!list.isEmpty()) {
             boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
 
-            for (int j = 0; j < list.size(); ++j) {
-                Entity entity = list.get(j);
-                if (!entity.hasPassenger(this)) {
-                    if (flag && this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
-                        entity.startRiding(this);
-                    } else {
-                        this.push(entity);
-                    }
-                }
-            }
         }
-
     }
 
-    private float getXForPart(float yaw, float degree) {
+    protected float getXForPart(float yaw, float degree) {
         return Mth.sin((float) (yaw + Math.toRadians(degree)));
     }
 
-    private float getZForPart(float yaw, float degree) {
+    protected float getZForPart(float yaw, float degree) {
         return -Mth.cos((float) (yaw + Math.toRadians(degree)));
     }
 
-    private void tickBubbleColumn() {
+    protected void tickBubbleColumn() {
         if (this.level().isClientSide) {
             int i = this.getBubbleTime();
             if (i > 0) {
@@ -442,7 +438,7 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
-    private void tickLerp() {
+    protected void tickLerp() {
         if (this.isControlledByLocalInstance()) {
             this.lerpSteps = 0;
             this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
@@ -473,7 +469,7 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Determines whether the boat is in water, gliding on land, or in air
      */
-    private FirmacivBoatEntity.Status getStatus() {
+    protected FirmacivBoatEntity.Status getStatus() {
         final FirmacivBoatEntity.Status firmacivboat$status = this.isUnderwater();
         if (firmacivboat$status != null) {
             this.waterLevel = this.getBoundingBox().maxY;
@@ -567,7 +563,7 @@ public class FirmacivBoatEntity extends Entity {
         return f / k1;
     }
 
-    private boolean checkInWater() {
+    protected boolean checkInWater() {
         AABB aabb = this.getBoundingBox();
         int i = Mth.floor(aabb.minX);
         int j = Mth.ceil(aabb.maxX);
@@ -600,7 +596,7 @@ public class FirmacivBoatEntity extends Entity {
      * Decides whether the boat is currently underwater.
      */
     @Nullable
-    private FirmacivBoatEntity.Status isUnderwater() {
+    protected FirmacivBoatEntity.Status isUnderwater() {
         AABB aabb = this.getBoundingBox();
         double d0 = aabb.maxY + 0.001D;
         int i = Mth.floor(aabb.minX);
@@ -634,7 +630,7 @@ public class FirmacivBoatEntity extends Entity {
     /**
      * Update the boat's speed, based on momentum.
      */
-    private void floatBoat() {
+    protected void floatBoat() {
         double d0 = -0.04F;
         double d1 = this.isNoGravity() ? 0.0D : (double) -0.04F;
         double d2 = 0.0D;
@@ -686,16 +682,19 @@ public class FirmacivBoatEntity extends Entity {
                 this.invFriction = modifiedFriction;
             }
 
+
             this.setDeltaMovement(vec3.x * (double) this.invFriction, vec3.y + d1, vec3.z * (double) this.invFriction);
 
-            double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
+            if (this.getControllingCompartment() != null) {
+                double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
 
-            if (this.inputLeft || this.inputRight) {
-                //Firmaciv.LOGGER.info("keysdown");
-                this.deltaRotation *= ((this.invFriction / 3.0F));
-                this.deltaRotation *= turnSpeedFactor;
-            } else {
-                this.deltaRotation *= (this.invFriction / 2.0F);
+                if (this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputRight()) {
+                    this.deltaRotation *= ((this.invFriction / 3.0F));
+                    this.deltaRotation *= turnSpeedFactor;
+
+                } else {
+                    this.deltaRotation *= (this.invFriction / 2.0F);
+                }
             }
 
 
@@ -708,6 +707,19 @@ public class FirmacivBoatEntity extends Entity {
                 this.setDeltaMovement(vec31.x, (vec31.y + d2 * 0.06153846016296973D) * 0.75D, vec31.z);
             }
         }
+    }
+
+    public final List<Entity> getTruePassengers() {
+        final List<Entity> truePassengers = Lists.newArrayList();
+
+        for (final Entity vehiclePart : this.getPassengers()) {
+            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity abstractCompartmentEntity) {
+                if (abstractCompartmentEntity.isVehicle()) {
+                    truePassengers.add(abstractCompartmentEntity.getFirstPassenger());
+                }
+            }
+        }
+        return truePassengers;
     }
 
     protected void controlBoat() {
@@ -763,10 +775,10 @@ public class FirmacivBoatEntity extends Entity {
                 f1 += 0.25F;
             }
 
-            final Vec3 vec3 = (new Vec3(f, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+            final Vec3 vec3 = (new Vec3(f, 0, 0)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
-            if (passenger instanceof VehiclePartEntity) {
+            if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
                 passenger.setYRot(this.getYRot());
             } else {
                 passenger.setYRot(passenger.getYRot() + this.deltaRotation);
@@ -831,7 +843,8 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     @Override
-    protected void checkFallDamage(final double fallDistance, final boolean onGround, final BlockState blockState, final BlockPos blockPos) {
+    protected void checkFallDamage(final double fallDistance, final boolean onGround, final BlockState blockState,
+                                   final BlockPos blockPos) {
         this.lastYd = this.getDeltaMovement().y;
         if (this.isPassenger()) return;
 
@@ -898,12 +911,16 @@ public class FirmacivBoatEntity extends Entity {
         this.entityData.set(DATA_ID_HURT, hurtTime);
     }
 
-    private int getBubbleTime() {
+    protected int getBubbleTime() {
         return this.entityData.get(DATA_ID_BUBBLE_TIME);
     }
 
     private void setBubbleTime(final int bubbleTime) {
         this.entityData.set(DATA_ID_BUBBLE_TIME, bubbleTime);
+    }
+
+    public float getBubbleAngle(final float partialTicks) {
+        return Mth.lerp(partialTicks, this.bubbleAngleO, this.bubbleAngle);
     }
 
     /**
@@ -930,7 +947,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     protected boolean canAddPassenger(final Entity passenger) {
-        return this.getPassengers().size() < 2;
+        return this.getPassengers().size() < this.getPassengerNumber();
     }
 
     @Nullable
@@ -960,7 +977,8 @@ public class FirmacivBoatEntity extends Entity {
 
         if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) return null;
 
-        if (!(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity)) return null;
+        if (!(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity))
+            return null;
 
         if (!emptyCompartmentEntity.isVehicle() || !(emptyCompartmentEntity.getFirstPassenger() instanceof LocalPlayer))
             return null;
@@ -969,14 +987,15 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     @Nullable
-    private Entity getPilotPassenger() {
+    protected Entity getPilotPassenger() {
         if (this.isVehicle() && this.getPassengers().size() == this.PASSENGER_NUMBER) {
             return this.getPassengers().get(1);
         }
         return null;
     }
 
-    public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp, final boolean inputDown) {
+    public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
+                         final boolean inputDown) {
         this.inputLeft = inputLeft;
         this.inputRight = inputRight;
         this.inputUp = inputUp;

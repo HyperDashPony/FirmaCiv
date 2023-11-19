@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.entity.FirmacivEntityRenderer;
 
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.VehiclePartEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;

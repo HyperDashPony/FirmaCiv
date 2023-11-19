@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
-package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
+package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;

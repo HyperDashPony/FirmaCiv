@@ -1,9 +1,11 @@
-package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
+package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -40,7 +42,23 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
         super.positionRider(passenger, moveFunction);
-        moveFunction.accept(passenger, this.getX() + 0f, this.getY() - 0.57f, this.getZ() + 0f);
+
+        double f1 = ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+        if (passenger instanceof Player) {
+            f1 = 0;
+        }
+        if (passenger.getBbHeight() <= 0.7) {
+            f1 -= 0.2f;
+        }
+
+        final double eyepos = passenger.getEyePosition().get(Direction.Axis.Y);
+        final double thisY = this.getY() + 1.1f;
+        if (eyepos < thisY) {
+            f1 += (float) Math.abs(eyepos - thisY);
+        }
+
+        moveFunction.accept(passenger, this.getX(), this.getY() - 0.57f + f1, this.getZ() + 0f);
+
         if (passenger instanceof LivingEntity livingEntity) {
             livingEntity.setYBodyRot(this.getYRot());
             livingEntity.setYHeadRot(livingEntity.getYHeadRot() + this.getYRot());
@@ -61,7 +79,11 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
                 if (!entity.hasPassenger(this)) {
 
-                    if (this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                    float maxSize = 1.0f;
+                    if (this.getTrueVehicle() instanceof CanoeEntity) {
+                        maxSize = 0.9f;
+                    }
+                    if (this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         entity.startRiding(this);
                     }
                 }
@@ -124,9 +146,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         if (!item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
-            } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
+            }  /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
-            }
+            } */
         }
 
         if (ridingThisPart == null) return InteractionResult.PASS;

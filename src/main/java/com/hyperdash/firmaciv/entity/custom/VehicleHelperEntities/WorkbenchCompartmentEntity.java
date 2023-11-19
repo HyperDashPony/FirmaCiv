@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
+package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -188,7 +188,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     }
 
     @Override
-    public void stopOpen(Player pPlayer) {
-        this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(pPlayer));
+    public void stopOpen(final Player player) {
+        this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(player));
     }
 }

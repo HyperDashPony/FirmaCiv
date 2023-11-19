@@ -1,12 +1,10 @@
 package com.hyperdash.firmaciv.entity.FirmacivEntityRenderer;
 
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.AbstractCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.ChestCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.EmptyCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.CompartmentEntity.WorkbenchCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.AbstractCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.ChestCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.dries007.tfc.common.TFCTags;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,16 +13,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntity> {

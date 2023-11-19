@@ -44,6 +44,15 @@
 
   "entity.firmaciv.kayak": "Kayak",
 
+  "entity.firmaciv.vehicle_part": "Vehicle Part",
+  "entity.firmaciv.vehicle_cleat": "Cleat",
+
+  "entity.firmaciv.compartment_chest": "Chest Compartment",
+  "entity.firmaciv.compartment_workbench": "Workbench Compartment",
+  "entity.firmaciv.compartment_log_pile": "Log Pile Compartment",
+  "entity.firmaciv.compartment_large_vessel": "Large Vessel Compartment",
+  "entity.firmaciv.compartment_empty": "Empty Compartment",
+
   "block.firmaciv.boat_frame": "Watercraft Frame",
 
   "block.firmaciv.thatch_roofing": "Thatch Roofing",
@@ -60,6 +69,7 @@
   "itemGroup.firmaciv": "Firma: Civilization",
   "creativetab.firmaciv_tab": "Firma: Civilization",
   "creativetab.watercraft_tab": "Watercraft",
+  "creativetab.navigation_tab": "Navigation",
   
   "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_olive": "Large Waterproof Hide",
   "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_tallow": "Large Waterproof Hide",
@@ -82,8 +92,7 @@
   "firmaciv.advancements.sextant.title": "The Stars Will Aid",
   "firmaciv.advancements.sextant.description": "Craft a Sextant",
   "firmaciv.advancements.barometer.title": "Surf and/or Turf",
-  "firmaciv.advancements.barometer.description": "Craft a Barometer",
-  "creativetab.navigation_tab": "Navigation"
+  "firmaciv.advancements.barometer.description": "Craft a Barometer"
 
 
 

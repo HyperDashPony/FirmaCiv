@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
+package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.container.RestrictedChestContainer;

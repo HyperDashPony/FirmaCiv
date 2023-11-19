@@ -1,5 +1,7 @@
-package com.hyperdash.firmaciv.entity.custom.CompartmentEntity;
+package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
+import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
+import com.hyperdash.firmaciv.entity.custom.KayakEntity;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -37,6 +39,22 @@ public class AbstractCompartmentEntity extends Entity {
 
     public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
+    }
+
+    public boolean getInputLeft() {
+        return false;
+    }
+
+    public boolean getInputRight() {
+        return false;
+    }
+
+    public boolean getInputUp() {
+        return false;
+    }
+
+    public boolean getInputDown() {
+        return false;
     }
 
     public ItemStack getBlockTypeItem() {
@@ -84,6 +102,19 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
+    public double getPassengersRidingOffset() {
+        return super.getPassengersRidingOffset();
+    }
+
+    @Nullable
+    public FirmacivBoatEntity getTrueVehicle() {
+        if (ridingThisPart != null && ridingThisPart.isPassenger() && ridingThisPart.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity) {
+            return firmacivBoatEntity;
+        }
+        return null;
+    }
+
+    @Override
     public void tick() {
         if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity) {
             ridingThisPart = (VehiclePartEntity) this.getVehicle();
@@ -93,7 +124,7 @@ public class AbstractCompartmentEntity extends Entity {
 
             if (!(this instanceof EmptyCompartmentEntity)) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
-                if (this.isInWater() || this.getY() < 63 && this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
+                if (this.isInWater() || this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
                     this.setDeltaMovement(0.0D, -0.01D, 0.0D);
                     this.setYRot(this.getYRot() + 0.4f);
                 }
@@ -173,7 +204,7 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if (!(this instanceof EmptyCompartmentEntity)) {
+        if (!(this instanceof EmptyCompartmentEntity) || this.getTrueVehicle() instanceof KayakEntity) {
             if (this.isInvulnerableTo(pSource)) {
                 return false;
             } else if (!this.level().isClientSide && !this.isRemoved()) {
@@ -187,8 +218,13 @@ public class AbstractCompartmentEntity extends Entity {
                     if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         this.destroy(pSource);
                     }
-
+                    if (this.getTrueVehicle() instanceof KayakEntity kayakEntity) {
+                        kayakEntity.spawnAtLocation(kayakEntity.getDropItem());
+                        kayakEntity.kill();
+                        this.getVehicle().kill();
+                    }
                     this.discard();
+
                 }
 
                 return true;
