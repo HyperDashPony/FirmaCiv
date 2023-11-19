@@ -1,23 +1,20 @@
 package com.hyperdash.firmaciv.block.blockentity.custom;
 
-import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
+import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.mojang.logging.LogUtils;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.config.TFCConfig;
-import net.dries007.tfc.util.advancements.TFCAdvancements;
 import net.dries007.tfc.util.calendar.Calendars;
-import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 
-import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.*;
+import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.CANOE_CARVED;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
 
 public class CanoeComponentBlockEntity extends TFCBlockEntity {
@@ -31,18 +28,10 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         super(FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
-    public boolean isLit() {
-        return this.isLit;
-    }
-
-    public long getLitTick() {
-        return this.litTick;
-    }
-
     public static void serverTick(Level level, BlockPos pos, BlockState state, CanoeComponentBlockEntity canoeBlock) {
 
         if (canoeBlock.isLit) {
-            long remainingTicks = (long) (Integer) TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlock.litTick);
+            long remainingTicks = (long) TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlock.litTick);
 
             if (remainingTicks <= 0L) {
 
@@ -55,6 +44,13 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
 
     }
 
+    public boolean isLit() {
+        return this.isLit;
+    }
+
+    public long getLitTick() {
+        return this.litTick;
+    }
 
     @VisibleForTesting
     public void light() {
@@ -92,6 +88,6 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
     public long getTicksLeft() {
         assert this.level != null;
 
-        return this.litTick + (long) (Integer) TFCConfig.SERVER.pitKilnTicks.get() - Calendars.get(this.level).getTicks();
+        return this.litTick + (long) TFCConfig.SERVER.pitKilnTicks.get() - Calendars.get(this.level).getTicks();
     }
 }

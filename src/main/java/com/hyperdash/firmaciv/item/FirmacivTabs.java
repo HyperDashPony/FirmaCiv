@@ -30,7 +30,7 @@ public class FirmacivTabs {
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME.get());
                         pOutput.accept(FirmacivBlocks.THATCH_ROOFING.get());
 
-            }).build());
+                    }).build());
 
 
     public static void register(IEventBus eventBus) {

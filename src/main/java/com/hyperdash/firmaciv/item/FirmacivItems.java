@@ -1,8 +1,10 @@
 package com.hyperdash.firmaciv.item;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.item.custom.*;
+import com.hyperdash.firmaciv.item.custom.BarometerItem;
+import com.hyperdash.firmaciv.item.custom.ClockItem;
+import com.hyperdash.firmaciv.item.custom.KayakItem;
+import com.hyperdash.firmaciv.item.custom.SextantItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -35,7 +37,7 @@ public class FirmacivItems {
     public static final RegistryObject<Item> KAYAK = ITEMS.register("kayak",
             () -> new KayakItem(new Item.Properties().stacksTo(1)));
 
-    public static void  register(IEventBus eventBus) {
+    public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
 }

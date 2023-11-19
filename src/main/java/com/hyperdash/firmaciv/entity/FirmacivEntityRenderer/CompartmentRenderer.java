@@ -31,15 +31,15 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
     public void render(AbstractCompartmentEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
-        if(!(pEntity instanceof EmptyCompartmentEntity)){
+        if (!(pEntity instanceof EmptyCompartmentEntity)) {
             BlockState blockstate = null;
             if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
                 blockstate = bi.getBlock().defaultBlockState();
-                if(pEntity instanceof ChestCompartmentEntity){
+                if (pEntity instanceof ChestCompartmentEntity) {
                     blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
                 }
             }
-            if(blockstate != null){
+            if (blockstate != null) {
                 pPoseStack.pushPose();
                 pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - pEntityYaw));
                 pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));

@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class ClockItem extends AbstractNavItem{
+public class ClockItem extends AbstractNavItem {
     public ClockItem(Item.Properties pProperties) {
         super(pProperties);
     }
@@ -17,7 +17,7 @@ public class ClockItem extends AbstractNavItem{
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
 
-        pLevel.playSound((Player)null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SPYGLASS_USE, SoundSource.NEUTRAL, 1F, 1F);
+        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SPYGLASS_USE, SoundSource.NEUTRAL, 1F, 1F);
 
         return super.use(pLevel, pPlayer, pHand, NavType.LON);
     }

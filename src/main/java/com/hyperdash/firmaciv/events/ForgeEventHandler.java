@@ -14,16 +14,14 @@ public class ForgeEventHandler {
 
 
     @SubscribeEvent
-    public static void onWorldLoad(LevelEvent.Load event)
-    {
-        if   (event.getLevel() instanceof final ServerLevel level)
-        {
+    public static void onWorldLoad(LevelEvent.Load event) {
+        if (event.getLevel() instanceof final ServerLevel level) {
 
             final MinecraftServer server = level.getServer();
 
             final GameRules rules = level.getGameRules();
 
-            if(FirmacivConfig.SERVER.forceReducedDebugInfo.get()){
+            if (FirmacivConfig.SERVER.forceReducedDebugInfo.get()) {
                 rules.getRule(GameRules.RULE_REDUCEDDEBUGINFO).set(true, server);
             }
 

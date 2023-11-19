@@ -10,7 +10,10 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,109 +30,109 @@ public class AbstractCompartmentEntity extends Entity {
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
-
-    public int lifespan = 6000;
-
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
-
-
+    public int lifespan = 6000;
+    @Nullable
     protected VehiclePartEntity ridingThisPart = null;
+    private int notRidingTicks = 0;
 
-    public boolean getInputLeft(){return false;}
-    public boolean getInputRight(){return false;}
-    public boolean getInputUp(){return false;}
-    public boolean getInputDown(){return false;}
+    public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
+        super(entityType, level);
+    }
+
+    public boolean getInputLeft() {
+        return false;
+    }
+
+    public boolean getInputRight() {
+        return false;
+    }
+
+    public boolean getInputUp() {
+        return false;
+    }
+
+    public boolean getInputDown() {
+        return false;
+    }
+
     public ItemStack getBlockTypeItem() {
-        return (ItemStack) this.entityData.get(DATA_BLOCK_TYPE_ITEM);
+        return this.entityData.get(DATA_BLOCK_TYPE_ITEM);
     }
 
-    public void setBlockTypeItem(ItemStack stack) {
-        this.entityData.set(DATA_BLOCK_TYPE_ITEM, stack.copy());
+    public void setBlockTypeItem(final ItemStack itemStack) {
+        this.entityData.set(DATA_BLOCK_TYPE_ITEM, itemStack.copy());
     }
 
-    public AbstractCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-        this.setNoGravity(false);
-        notRidingTicks = 0;
+    @Override
+    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
+        this.setBlockTypeItem(ItemStack.of(compoundTag.getCompound("dataBlockTypeItem")));
     }
 
-    public void remove(RemovalReason pReason) {
-        super.remove(pReason);
-    }
-
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        this.setBlockTypeItem(ItemStack.of(tag.getCompound("dataBlockTypeItem")));
-    }
-
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    @Override
+    protected void addAdditionalSaveData(final CompoundTag tag) {
         tag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
         tag.putInt("Lifespan", this.lifespan);
         tag.putInt("notRidingTicks", this.notRidingTicks);
     }
 
-
     public Item getDropItem() {
         return this.getBlockTypeItem().getItem();
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         if (this instanceof EmptyCompartmentEntity) {
-            Entity entity = this.getFirstPassenger();
-            LivingEntity livingentity1;
+            final Entity entity = this.getFirstPassenger();
             if (entity instanceof LivingEntity livingentity) {
-                livingentity1 = livingentity;
+                return livingentity;
             } else {
-                livingentity1 = null;
+                return null;
             }
-
-            return livingentity1;
-        } else {
-            return null;
         }
 
+        return null;
     }
 
+    @Override
     public double getMyRidingOffset() {
         return 0.125D;
     }
 
+    @Override
     public double getPassengersRidingOffset() {
         return super.getPassengersRidingOffset();
     }
 
-    public FirmacivBoatEntity getTrueVehicle(){
-        if(ridingThisPart != null && ridingThisPart.isPassenger() && ridingThisPart.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity){
+    @Nullable
+    public FirmacivBoatEntity getTrueVehicle() {
+        if (ridingThisPart != null && ridingThisPart.isPassenger() && ridingThisPart.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity) {
             return firmacivBoatEntity;
-        } else {
-            return null;
         }
+        return null;
     }
 
-    private int notRidingTicks = 0;
-
+    @Override
     public void tick() {
-
-
         if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity) {
             ridingThisPart = (VehiclePartEntity) this.getVehicle();
         }
 
         if (!this.isPassenger()) {
 
-            if(!(this instanceof EmptyCompartmentEntity)){
+            if (!(this instanceof EmptyCompartmentEntity)) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
-                if (this.isInWater() ||
-                        this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
+                if (this.isInWater() || this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
                     this.setDeltaMovement(0.0D, -0.01D, 0.0D);
                     this.setYRot(this.getYRot() + 0.4f);
                 }
-                if (!this.onGround() || this.getDeltaMovement().horizontalDistanceSqr() > (double)1.0E-5F || (this.tickCount + this.getId()) % 4 == 0) {
+                if (!this.onGround() || this.getDeltaMovement().horizontalDistanceSqr() > (double) 1.0E-5F || (this.tickCount + this.getId()) % 4 == 0) {
                     this.move(MoverType.SELF, this.getDeltaMovement());
                     float f1 = 0.98F;
 
-                    this.setDeltaMovement(this.getDeltaMovement().multiply((double)f1, 0.98D, (double)f1));
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(f1, 0.98D, f1));
                     if (this.onGround()) {
                         Vec3 vec31 = this.getDeltaMovement();
                         if (vec31.y < 0.0D) {
@@ -137,7 +140,7 @@ public class AbstractCompartmentEntity extends Entity {
                         }
                     }
                 }
-                if(!this.level().isClientSide()){
+                if (!this.level().isClientSide()) {
                     notRidingTicks++;
                     if (notRidingTicks > lifespan) {
                         this.spawnAtLocation(this.getDropItem());
@@ -146,14 +149,14 @@ public class AbstractCompartmentEntity extends Entity {
                 }
 
                 this.updateInWaterStateAndDoFluidPushing();
-            } else if(!this.level().isClientSide()) {
+            } else if (!this.level().isClientSide()) {
                 notRidingTicks++;
                 if (notRidingTicks > 1) {
                     this.spawnAtLocation(this.getDropItem());
                     this.discard();
                 }
             }
-        } else if (this.level().isClientSide()){
+        } else if (this.level().isClientSide()) {
             notRidingTicks = 0;
         }
 
@@ -165,23 +168,25 @@ public class AbstractCompartmentEntity extends Entity {
             this.setDamage(this.getDamage() - DAMAGE_RECOVERY);
         }
 
-
         super.tick();
     }
 
-    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+    protected SoundEvent getHurtSound(final DamageSource damageSource) {
         return SoundEvents.WOOD_HIT;
     }
 
-    protected void playHurtSound(DamageSource pSource) {
+    protected void playHurtSound(final DamageSource pSource) {
         SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
-        }
-
+        this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
     }
 
-    protected AbstractCompartmentEntity swapCompartments(AbstractCompartmentEntity newCompartment) {
+    /**
+     * Replaces this object with the passed in CompartmentEntity
+     *
+     * @param newCompartment The compartment entity which is replacing this object
+     * @return The compartment passed in
+     */
+    protected AbstractCompartmentEntity swapCompartments(final AbstractCompartmentEntity newCompartment) {
         this.spawnAtLocation(this.getDropItem());
         this.stopRiding();
         this.discard();
@@ -193,6 +198,7 @@ public class AbstractCompartmentEntity extends Entity {
         return newCompartment;
     }
 
+    @Override
     public ItemStack getPickResult() {
         return getBlockTypeItem();
     }
@@ -212,7 +218,7 @@ public class AbstractCompartmentEntity extends Entity {
                     if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         this.destroy(pSource);
                     }
-                    if(this.getTrueVehicle() instanceof KayakEntity kayakEntity){
+                    if (this.getTrueVehicle() instanceof KayakEntity kayakEntity) {
                         kayakEntity.spawnAtLocation(kayakEntity.getDropItem());
                         kayakEntity.kill();
                         this.getVehicle().kill();
@@ -237,29 +243,24 @@ public class AbstractCompartmentEntity extends Entity {
         this.entityData.define(DATA_BLOCK_TYPE_ITEM, ItemStack.EMPTY);
     }
 
-    public void setDamage(float pDamageTaken) {
-        this.entityData.set(DATA_ID_DAMAGE, pDamageTaken);
-    }
-
-
     public float getDamage() {
         return this.entityData.get(DATA_ID_DAMAGE);
     }
 
-    public void setHurtTime(int pHurtTime) {
-        this.entityData.set(DATA_ID_HURT, pHurtTime);
+    public void setDamage(final float damageTaken) {
+        this.entityData.set(DATA_ID_DAMAGE, damageTaken);
     }
 
     public int getHurtTime() {
         return this.entityData.get(DATA_ID_HURT);
     }
 
-    protected void destroy(DamageSource pDamageSource) {
-        this.spawnAtLocation(this.getDropItem());
+    public void setHurtTime(final int hurtTime) {
+        this.entityData.set(DATA_ID_HURT, hurtTime);
     }
 
-    public void setHurtDir(int pHurtDirection) {
-        this.entityData.set(DATA_ID_HURTDIR, pHurtDirection);
+    protected void destroy(final DamageSource damageSource) {
+        this.spawnAtLocation(this.getDropItem());
     }
 
     /**
@@ -269,15 +270,12 @@ public class AbstractCompartmentEntity extends Entity {
         return this.entityData.get(DATA_ID_HURTDIR);
     }
 
-
-    public boolean isPushable() {
-        return false;
+    public void setHurtDir(final int pHurtDirection) {
+        this.entityData.set(DATA_ID_HURTDIR, pHurtDirection);
     }
 
-
+    @Override
     public boolean isPickable() {
         return !this.isRemoved();
     }
-
-
 }

@@ -1,10 +1,13 @@
 package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.*;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.SlotAccess;
@@ -16,172 +19,158 @@ import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
 public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implements HasCustomInventoryScreen, ContainerEntity {
-
-
     private static final int CONTAINER_SIZE = 18;
     private NonNullList<ItemStack> itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
     @Nullable
     private ResourceLocation lootTable;
     private long lootTableSeed;
+    private LazyOptional<?> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
-    public WorkbenchCompartmentEntity(EntityType<?> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+    public WorkbenchCompartmentEntity(final EntityType<?> entityType, final Level level) {
+        super(entityType, level);
     }
 
-    public void remove(RemovalReason pReason) {
-        if (!this.level().isClientSide && pReason.shouldDestroy()) {
-            this.playSound(SoundEvents.WOOD_BREAK, 1.0F, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
+    @Override
+    public void remove(final RemovalReason removalReason) {
+        if (!this.level().isClientSide && removalReason.shouldDestroy()) {
+            this.playSound(SoundEvents.WOOD_BREAK, 1, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
             Containers.dropContents(this.level(), this, this);
         }
 
-        super.remove(pReason);
+        super.remove(removalReason);
     }
 
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
-        super.addAdditionalSaveData(pCompound);
-        this.addChestVehicleSaveData(pCompound);
+    @Override
+    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+        this.addChestVehicleSaveData(compoundTag);
     }
 
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
-        this.readChestVehicleSaveData(pCompound);
+    @Override
+    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
+        super.readAdditionalSaveData(compoundTag);
+        this.readChestVehicleSaveData(compoundTag);
     }
 
-    public boolean isPushable() {
-        return false;
-    }
+    @Override
+    public InteractionResult interact(final Player player, final InteractionHand hand) {
+        final InteractionResult interactionResult = this.interactWithContainerVehicle(player);
 
-    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-
-        InteractionResult interactionresult = this.interactWithContainerVehicle(pPlayer);
-        if (interactionresult.consumesAction()) {
-
-            this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
-
+        if (interactionResult.consumesAction()) {
+            this.gameEvent(GameEvent.CONTAINER_OPEN, player);
         }
 
-        return interactionresult;
+        return interactionResult;
     }
 
-    public boolean isPickable() {
-        return !this.isRemoved();
-    }
-
-
-    public void openCustomInventoryScreen(Player pPlayer) {
-        pPlayer.openMenu(this);
-        if (!pPlayer.level().isClientSide) {
-            this.gameEvent(GameEvent.CONTAINER_OPEN, pPlayer);
+    @Override
+    public void openCustomInventoryScreen(final Player player) {
+        player.openMenu(this);
+        if (!player.level().isClientSide) {
+            this.gameEvent(GameEvent.CONTAINER_OPEN, player);
         }
-
     }
 
+    @Override
     public void clearContent() {
         this.clearChestVehicleContent();
     }
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
+    @Override
     public int getContainerSize() {
         return CONTAINER_SIZE;
     }
 
-    /**
-     * Returns the stack in the given slot.
-     */
-    public ItemStack getItem(int pSlot) {
-        return this.getChestVehicleItem(pSlot);
+    @Override
+    public ItemStack getItem(final int slotIndex) {
+        return this.getChestVehicleItem(slotIndex);
     }
 
-    /**
-     * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
-     */
-    public ItemStack removeItem(int pSlot, int pAmount) {
-        return this.removeChestVehicleItem(pSlot, pAmount);
+    @Override
+    public ItemStack removeItem(final int slotIndex, final int amount) {
+        return this.removeChestVehicleItem(slotIndex, amount);
     }
 
-    /**
-     * Removes a stack from the given slot and returns it.
-     */
-    public ItemStack removeItemNoUpdate(int pSlot) {
-        return this.removeChestVehicleItemNoUpdate(pSlot);
+    @Override
+    public ItemStack removeItemNoUpdate(final int slotIndex) {
+        return this.removeChestVehicleItemNoUpdate(slotIndex);
     }
 
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
-    public void setItem(int pSlot, ItemStack pStack) {
-        this.setChestVehicleItem(pSlot, pStack);
+    @Override
+    public void setItem(final int slotIndex, final ItemStack itemStack) {
+        this.setChestVehicleItem(slotIndex, itemStack);
     }
 
-    public SlotAccess getSlot(int pSlot) {
-        return this.getChestVehicleSlot(pSlot);
+    @Override
+    public SlotAccess getSlot(final int slotIndex) {
+        return this.getChestVehicleSlot(slotIndex);
     }
 
-    /**
-     * For block entities, ensures the chunk containing the block entity is saved to disk later - the game won't think it
-     * hasn't changed and skip it.
-     */
+    @Override
     public void setChanged() {
     }
 
-    /**
-     * Don't rename this method to canInteractWith due to conflicts with Container
-     */
-    public boolean stillValid(Player pPlayer) {
-        return this.isChestVehicleStillValid(pPlayer);
+    @Override
+    public boolean stillValid(final Player player) {
+        return this.isChestVehicleStillValid(player);
     }
 
     @Nullable
-    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+    @Override
+    public AbstractContainerMenu createMenu(final int windowId, final Inventory inventory, final Player player) {
         if (this.getLootTable() != null && player.isSpectator()) {
             return null;
-        } else {
-            return new CraftingMenu(windowId, inv);
         }
 
+        return new CraftingMenu(windowId, inventory);
     }
 
-    public void unpackLootTable(@Nullable Player pPlayer) {
-        this.unpackChestVehicleLootTable(pPlayer);
+    public void unpackLootTable(final @Nullable Player player) {
+        this.unpackChestVehicleLootTable(player);
     }
 
     @Nullable
+    @Override
     public ResourceLocation getLootTable() {
         return this.lootTable;
     }
 
-    public void setLootTable(@Nullable ResourceLocation pLootTable) {
-        this.lootTable = pLootTable;
+    @Override
+    public void setLootTable(final @Nullable ResourceLocation lootTable) {
+        this.lootTable = lootTable;
     }
 
+    @Override
     public long getLootTableSeed() {
         return this.lootTableSeed;
     }
 
-    public void setLootTableSeed(long pLootTableSeed) {
-        this.lootTableSeed = pLootTableSeed;
+    @Override
+    public void setLootTableSeed(final long lootTableSeed) {
+        this.lootTableSeed = lootTableSeed;
     }
 
+    @Override
     public NonNullList<ItemStack> getItemStacks() {
         return this.itemStacks;
     }
 
+    @Override
     public void clearItemStacks() {
         this.itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
     }
 
-    // Forge Start
-    private net.minecraftforge.common.util.LazyOptional<?> itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(this));
-
     @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.core.Direction facing) {
-        if (this.isAlive() && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER)
+    public <T> LazyOptional<T> getCapability(final Capability<T> capability, final @Nullable Direction facing) {
+        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER)
             return itemHandler.cast();
         return super.getCapability(capability, facing);
     }
@@ -195,11 +184,11 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     @Override
     public void reviveCaps() {
         super.reviveCaps();
-        itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(this));
+        itemHandler = LazyOptional.of(() -> new InvWrapper(this));
     }
 
-    public void stopOpen(Player pPlayer) {
-        this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(pPlayer));
+    @Override
+    public void stopOpen(final Player player) {
+        this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(player));
     }
-
 }

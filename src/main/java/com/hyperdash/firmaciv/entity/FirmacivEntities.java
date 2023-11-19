@@ -3,24 +3,18 @@ package com.hyperdash.firmaciv.entity;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.*;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
-import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.common.entities.TFCEntities;
-import net.dries007.tfc.common.entities.misc.TFCBoat;
-import net.dries007.tfc.common.items.TFCItems;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.*;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 public final class FirmacivEntities {
 

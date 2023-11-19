@@ -14,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Boat.class)
 public class BoatMixin extends Entity {
 
-    @Inject(method = "canAddPassenger", at = @At("HEAD"))
-    public void injectPassengerAddFailure(Entity pPassenger, CallbackInfoReturnable<Boolean> cir){
-        cir.setReturnValue(false);
-    }
-
     public BoatMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    @Inject(method = "canAddPassenger", at = @At("HEAD"))
+    public void injectPassengerAddFailure(Entity pPassenger, CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(false);
     }
 
     @Shadow
