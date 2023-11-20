@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
+import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
@@ -10,78 +11,69 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class VehiclePartEntity extends Entity {
+    protected float compartmentRotation = 0;
+    private int selfDestructTicks = 0;
 
-    private int emptyTicks = 0;
-    private int selfDestructTicks = 5;
-
-    protected float compartmentRotation;
-
-    public VehiclePartEntity(EntityType<?> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-        emptyTicks = 0;
-        selfDestructTicks = 5;
-        compartmentRotation = 0;
+    public VehiclePartEntity(final EntityType<?> entityType, final Level level) {
+        super(entityType, level);
     }
 
     @Override
     public void tick() {
-        if(tickCount < 10){
-            if(this.getVehicle() instanceof RowboatEntity rowboatEntity){
-                if(rowboatEntity.getPilotVehiclePartAsEntity() == this){
+        super.tick();
+
+        if (tickCount < 10) {
+            if (this.getVehicle() instanceof RowboatEntity rowboatEntity) {
+                if (rowboatEntity.getPilotVehiclePartAsEntity() == this) {
                     compartmentRotation = 180;
                 }
             }
         }
 
+        // Try not to be empty
         if (this.getPassengers().isEmpty()) {
-            emptyTicks++;
-            if (emptyTicks > 2) {
-                this.ejectPassengers();
-                EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get().create(this.level());
+            final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
+                    .create(this.level());
+
+            // Can maybe just assert not null? Doesn't really matter I guess
+            if (newCompartment != null) {
                 newCompartment.setYRot(this.getYRot() + compartmentRotation);
                 newCompartment.setPos(this.getX(), this.getY(), this.getZ());
-                newCompartment.startRiding(this);
+                if (!newCompartment.startRiding(this)) {
+                    Firmaciv.LOGGER.error("New Compartment: {} unable to ride Vehicle Part: {}", newCompartment, this);
+                }
                 this.level().addFreshEntity(newCompartment);
             }
-        } else {
-            emptyTicks = 0;
         }
 
-
+        // Try remove ourselves if we don't have any passengers
         if (!this.isPassenger()) {
-            selfDestructTicks--;
-            if (selfDestructTicks == 0) {
+            if (selfDestructTicks++ >= 5) {
                 this.ejectPassengers();
                 this.remove(RemovalReason.DISCARDED);
             }
-
         }
-
-        super.tick();
-
-    }
-
-
-    public void ejectMyCompartmentsPassenger() {
-
     }
 
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
-        if (this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity) {
-            if (this.hasPassenger(passenger)) {
-                final float f = 0.0F;
-                final float f1 = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
-                final Vec3 vec3 = (new Vec3(f, 0, 0)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-                moveFunction.accept(passenger, this.getX(), this.getY() + (double) f1, this.getZ());
-                passenger.setPos(this.getX(), this.getY() + (double) f1, this.getZ());
-                if (passenger instanceof AbstractCompartmentEntity) {
-                    passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
-                    float thingy = passenger.getYRot() + firmacivBoatEntity.getDeltaRotation() + compartmentRotation;
-                    if (Math.abs((passenger.getYRot()) - (firmacivBoatEntity.getYRot()+compartmentRotation)) > 1 && (tickCount < 10 || this.getVehicle().getControllingPassenger() == null)) {
-                        this.setYRot(this.getVehicle().getYRot());
-                        passenger.setYRot(this.getYRot() + compartmentRotation);
-                    }
+        // Ensure we ride our boats
+        if (!(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity)) return;
+
+        // Make sure we have this passenger
+        if (!this.hasPassenger(passenger)) return;
+
+        final double riderOffset = ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+        final Vec3 vec3 = (new Vec3(0, 0, 0)).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
+        moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
+        passenger.setPos(this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
+        if (passenger instanceof AbstractCompartmentEntity) {
+            passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
+
+            if (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 1) {
+                if (tickCount < 10 || this.getVehicle().getControllingPassenger() == null) {
+                    this.setYRot(this.getVehicle().getYRot());
+                    passenger.setYRot(this.getYRot() + compartmentRotation);
                 }
             }
         }
