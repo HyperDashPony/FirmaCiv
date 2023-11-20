@@ -4,6 +4,7 @@ import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
+import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.*;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +26,11 @@ public final class FirmacivEntities {
             Helpers.mapOfKeys(BoatVariant.class, variant -> ENTITY_TYPES.register("dugout_canoe/" + variant.getName(),
                     () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.625F)
                             .build(new ResourceLocation(Firmaciv.MOD_ID, "dugout_canoe/" + variant.getName()).toString())));
+
+    public static final Map<BoatVariant, RegistryObject<EntityType<RowboatEntity>>> ROWBOATS =
+            Helpers.mapOfKeys(BoatVariant.class, variant -> ENTITY_TYPES.register("rowboat/" + variant.getName(),
+                    () -> EntityType.Builder.of(RowboatEntity::new, MobCategory.MISC).sized(1.875F, 0.625F)
+                            .build(new ResourceLocation(Firmaciv.MOD_ID, "rowboat/" + variant.getName()).toString())));
 
     /*
     public static final Map<Wood, RegistryObject<EntityType<TFCBoat>>> BOATS = Helpers.mapOfKeys(Wood .class, (wood) -> {
