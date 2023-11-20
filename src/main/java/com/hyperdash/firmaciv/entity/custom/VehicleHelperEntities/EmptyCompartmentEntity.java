@@ -19,6 +19,7 @@ import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -43,10 +44,6 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     @Override
     protected boolean canAddPassenger(final Entity passenger) {
         return this.getPassengers().isEmpty() && !this.isRemoved();
-    }
-
-    protected int getMaxPassengers() {
-        return 1;
     }
 
     @Override
@@ -237,5 +234,15 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         }
 
         return super.getDismountLocationForPassenger(passenger);
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        final Entity entity = this.getFirstPassenger();
+
+        if (!(entity instanceof LivingEntity livingentity)) return null;
+
+        return livingentity;
     }
 }
