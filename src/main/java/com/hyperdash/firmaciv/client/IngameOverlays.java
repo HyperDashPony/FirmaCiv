@@ -20,6 +20,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -55,7 +56,7 @@ public enum IngameOverlays {
     }
 
     private static void renderCompartmentStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
-        /*
+
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player player = mc.player;
@@ -65,7 +66,14 @@ public enum IngameOverlays {
                 stack.pushPose();
                 stack.translate((float) width / 2.0F, (float) height / 2.0F - 45.0F, 0.0F);
                 stack.scale(1.5F, 1.5F, 1.5F);
-                String string = "Place Chest";
+                String string = "";
+                /*
+                if(entity instanceof LivingEntity livingEntity){
+                    if(livingEntity.getVehicle() instanceof EmptyCompartmentEntity){
+                        string = "Press" + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject rider";
+                    }
+                }
+
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
                     if (emptyCompartmentEntity.getTrueVehicle() != null) {
                         if (emptyCompartmentEntity.getTrueVehicle().getControllingCompartment() != null && emptyCompartmentEntity.getTrueVehicle().getControllingCompartment().is(emptyCompartmentEntity)) {
@@ -79,13 +87,15 @@ public enum IngameOverlays {
                         }
                     }
                 }
+
+                 */
                 graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), false);
                 stack.popPose();
             }
 
         }
 
-         */
+
     }
 
     public static boolean setup(ForgeGui gui, Minecraft minecraft) {
