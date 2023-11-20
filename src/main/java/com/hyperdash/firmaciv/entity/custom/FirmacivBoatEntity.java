@@ -757,29 +757,14 @@ public class FirmacivBoatEntity extends Entity {
                     f = -0.7F;
                 }
 
-                if (passenger instanceof Animal) {
-                    f += 0.2F;
-                }
-
             }
-            if (passenger instanceof AbstractCompartmentEntity) {
-                f1 += 0.25F;
-            }
-
             final Vec3 vec3 = (new Vec3(f, 0, 0)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
                 passenger.setYRot(this.getYRot());
             } else {
-                passenger.setYRot(passenger.getYRot() + this.deltaRotation);
-                passenger.setYHeadRot(passenger.getYHeadRot() + this.deltaRotation);
-                this.clampRotation(passenger);
-            }
-            if (passenger instanceof Animal && this.getPassengers().size() > 1) {
-                int j = passenger.getId() % 2 == 0 ? 90 : 270;
-                passenger.setYBodyRot(((Animal) passenger).yBodyRot + (float) j);
-                passenger.setYHeadRot(passenger.getYHeadRot() + (float) j);
+                super.positionRider(passenger, moveFunction);
             }
         }
     }
