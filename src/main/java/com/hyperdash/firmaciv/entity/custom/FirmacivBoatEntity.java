@@ -669,10 +669,6 @@ public class FirmacivBoatEntity extends Entity {
             if (Math.abs(deltaRotation) > 0) {
                 float rotationalFriction = (Math.abs(deltaRotation) / 48.0F);
 
-                //String info = ""+rotationalFriction;
-                //Firmaciv.LOGGER.info(info);
-                //Firmaciv.LOGGER.info("rotFriction: "+rotationalFriction);
-
                 float modifiedFriction = this.invFriction - rotationalFriction;
                 if (modifiedFriction > 2.0F) {
                     modifiedFriction = 2.0F;
@@ -696,11 +692,6 @@ public class FirmacivBoatEntity extends Entity {
                     this.deltaRotation *= (this.invFriction / 2.0F);
                 }
             }
-
-
-            //Firmaciv.LOGGER.info("delta: "+deltaRotation);
-            //Firmaciv.LOGGER.info("factor: "+turnSpeedFactor);
-            //Firmaciv.LOGGER.info("invFriction: "+this.invFriction);
 
             if (d2 > 0.0D) {
                 Vec3 vec31 = this.getDeltaMovement();

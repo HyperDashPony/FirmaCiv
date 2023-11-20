@@ -67,15 +67,15 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
         PartDefinition oars = partdefinition.addOrReplaceChild("oars", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition oar_starboard = oars.addOrReplaceChild("oar_starboard", CubeListBuilder.create().texOffs(129, 194).addBox(-8.875F, -0.5F, -0.5F, 30.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(129, 189).addBox(21.125F, -0.5F, -1.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(129, 202).addBox(-22.875F, -0.5F, -2.5F, 11.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
-                .texOffs(115, 197).addBox(-11.875F, -0.5F, -1.5F, 3.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-22.4971F, -9.2364F, 7.7712F, -0.3441F, 0.8192F, -0.456F));
+        PartDefinition oar_starboard = oars.addOrReplaceChild("oar_starboard", CubeListBuilder.create().texOffs(129, 194).addBox(-21.875F, -0.5F, -0.5F, 30.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(129, 189).addBox(8.125F, -0.5F, -1.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(129, 202).addBox(-35.875F, -0.5F, -2.5F, 11.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(115, 197).addBox(-24.875F, -0.5F, -1.5F, 3.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-14.4971F, -13.2364F, -1.2288F, -0.3441F, 0.8192F, -0.456F));
 
-        PartDefinition oar_port = oars.addOrReplaceChild("oar_port", CubeListBuilder.create().texOffs(65, 194).addBox(-21.125F, -0.5F, -0.5F, 30.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(119, 189).addBox(-22.125F, -0.5F, -1.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(95, 202).addBox(11.875F, -0.5F, -2.5F, 11.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
-                .texOffs(129, 197).addBox(8.875F, -0.5F, -1.5F, 3.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(22.4971F, -9.2364F, 7.7712F, -0.3441F, -0.8192F, 0.456F));
+        PartDefinition oar_port = oars.addOrReplaceChild("oar_port", CubeListBuilder.create().texOffs(65, 194).addBox(-8.125F, -0.5F, -0.5F, 30.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(119, 189).addBox(-9.125F, -0.5F, -1.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(95, 202).addBox(24.875F, -0.5F, -2.5F, 11.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(129, 197).addBox(21.875F, -0.5F, -1.5F, 3.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(14.4971F, -13.2364F, -1.2288F, -0.3441F, -0.8192F, 0.456F));
 
         PartDefinition bow_floor = partdefinition.addOrReplaceChild("bow_floor", CubeListBuilder.create(), PartPose.offset(0.0F, 19.8333F, -13.1111F));
 
@@ -91,32 +91,38 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
         PartDefinition seats = partdefinition.addOrReplaceChild("seats", CubeListBuilder.create(), PartPose.offset(0.0F, 15.5F, -13.9286F));
 
-        PartDefinition mid_seat_r1 = seats.addOrReplaceChild("mid_seat_r1", CubeListBuilder.create().texOffs(0, 233).addBox(10.875F, -0.5F, -11.0F, 6.0F, 1.0F, 22.0F, new CubeDeformation(0.0F))
-                .texOffs(5, 209).addBox(-3.375F, -0.5F, -11.0F, 2.0F, 1.0F, 22.0F, new CubeDeformation(0.0F))
-                .texOffs(8, 187).addBox(-5.375F, -0.5F, -10.0F, 2.0F, 1.0F, 20.0F, new CubeDeformation(0.0F))
-                .texOffs(7, 167).addBox(-8.375F, -0.5F, -9.0F, 3.0F, 1.0F, 18.0F, new CubeDeformation(0.0F))
-                .texOffs(17, 139).addBox(-12.375F, -0.5F, -6.0F, 1.0F, 1.0F, 12.0F, new CubeDeformation(0.0F))
-                .texOffs(14, 153).addBox(-11.375F, -0.5F, -6.0F, 3.0F, 1.0F, 12.0F, new CubeDeformation(0.0F))
-                .texOffs(17, 127).addBox(-15.375F, -0.5F, -5.0F, 3.0F, 1.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 5.0536F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition mid_seat_r1 = seats.addOrReplaceChild("mid_seat_r1", CubeListBuilder.create().texOffs(0, 233).addBox(-3.0F, -0.5F, -11.0F, 6.0F, 1.0F, 22.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 18.9286F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition cube_r6 = seats.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(5, 209).addBox(-1.0F, -0.5F, -11.0F, 2.0F, 1.0F, 22.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 2.6786F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition cube_r7 = seats.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(8, 187).addBox(-1.0F, -0.5F, -10.0F, 2.0F, 1.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.6786F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition cube_r8 = seats.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(7, 167).addBox(-1.5F, -0.5F, -9.0F, 3.0F, 1.0F, 18.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -1.8214F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition cube_r9 = seats.addOrReplaceChild("cube_r9", CubeListBuilder.create().texOffs(17, 139).addBox(-0.5F, -0.5F, -6.0F, 1.0F, 1.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -6.8214F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition cube_r10 = seats.addOrReplaceChild("cube_r10", CubeListBuilder.create().texOffs(14, 153).addBox(-1.5F, -0.5F, -6.0F, 3.0F, 1.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -4.8214F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition cube_r11 = seats.addOrReplaceChild("cube_r11", CubeListBuilder.create().texOffs(17, 127).addBox(-1.5F, -0.5F, -5.0F, 3.0F, 1.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -8.8214F, 0.0F, -1.5708F, 0.0F));
 
         PartDefinition bow = partdefinition.addOrReplaceChild("bow", CubeListBuilder.create().texOffs(21, 34).addBox(-1.5F, 4.6527F, 1.5894F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 15.0973F, -27.5894F));
 
-        PartDefinition cube_r6 = bow.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(99, 9).addBox(-6.8433F, 0.8391F, -3.0F, 7.0F, 4.0F, 6.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r12 = bow.addOrReplaceChild("cube_r12", CubeListBuilder.create().texOffs(99, 9).addBox(-6.8433F, 0.8391F, -3.0F, 7.0F, 4.0F, 6.0F, new CubeDeformation(0.0F))
                 .texOffs(9, 7).addBox(-4.3433F, -6.1609F, -5.0F, 7.0F, 7.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0636F, -0.2538F, 0.0F, 1.5708F, 0.0F));
 
-        PartDefinition cube_r7 = bow.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(212, 229).addBox(-1.0F, -0.3045F, -11.7929F, 2.0F, 4.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0636F, -0.2538F, -0.9599F, 0.0F, 0.0F));
+        PartDefinition cube_r13 = bow.addOrReplaceChild("cube_r13", CubeListBuilder.create().texOffs(217, 234).addBox(-1.0F, -0.3045F, -6.7929F, 2.0F, 4.0F, 15.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0636F, -0.2538F, -0.9599F, 0.0F, 0.0F));
 
-        PartDefinition cube_r8 = bow.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(0, 29).addBox(-2.0F, -6.0347F, -12.1899F, 4.0F, 4.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0636F, -0.2538F, -0.5236F, 0.0F, 0.0F));
+        PartDefinition cube_r14 = bow.addOrReplaceChild("cube_r14", CubeListBuilder.create().texOffs(4, 33).addBox(-2.0F, -5.7847F, -7.6899F, 4.0F, 4.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0636F, -0.2538F, -0.2182F, 0.0F, 0.0F));
 
         PartDefinition port_bow = partdefinition.addOrReplaceChild("port_bow", CubeListBuilder.create(), PartPose.offset(4.7771F, 18.625F, -15.5328F));
 
-        PartDefinition cube_r9 = port_bow.addOrReplaceChild("cube_r9", CubeListBuilder.create().texOffs(129, 150).addBox(-10.9973F, 4.75F, -7.9375F, 6.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r15 = port_bow.addOrReplaceChild("cube_r15", CubeListBuilder.create().texOffs(129, 150).addBox(-10.9973F, 4.75F, -7.9375F, 6.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 128).addBox(-4.9973F, 4.75F, -6.9375F, 3.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(117, 141).addBox(2.0027F, 4.75F, -4.9375F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(113, 135).addBox(-1.9973F, 4.75F, -5.9375F, 4.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(79, 123).addBox(-11.2473F, 4.75F, -2.9375F, 22.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5197F, -2.125F, 0.7505F, 0.0F, 1.8762F, 0.0F));
 
-        PartDefinition cube_r10 = port_bow.addOrReplaceChild("cube_r10", CubeListBuilder.create().texOffs(79, 106).addBox(-11.9803F, 3.75F, -2.6886F, 20.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r16 = port_bow.addOrReplaceChild("cube_r16", CubeListBuilder.create().texOffs(79, 106).addBox(-11.9803F, 3.75F, -2.6886F, 20.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 146).addBox(8.0197F, 3.75F, 0.3114F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(67, 96).addBox(-13.2303F, -1.25F, 0.0614F, 26.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(71, 91).addBox(-13.2303F, -2.25F, 1.5614F, 26.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
@@ -126,13 +132,13 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
         PartDefinition starboard_bow = partdefinition.addOrReplaceChild("starboard_bow", CubeListBuilder.create(), PartPose.offset(-4.7771F, 18.625F, -15.5328F));
 
-        PartDefinition cube_r11 = starboard_bow.addOrReplaceChild("cube_r11", CubeListBuilder.create().texOffs(105, 150).addBox(4.9973F, 4.75F, -7.9375F, 6.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r17 = starboard_bow.addOrReplaceChild("cube_r17", CubeListBuilder.create().texOffs(105, 150).addBox(4.9973F, 4.75F, -7.9375F, 6.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(113, 128).addBox(1.9973F, 4.75F, -6.9375F, 3.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 135).addBox(-2.0027F, 4.75F, -5.9375F, 4.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 141).addBox(-5.0027F, 4.75F, -4.9375F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 123).addBox(-10.7527F, 4.75F, -2.9375F, 22.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5197F, -2.125F, 0.7505F, 0.0F, -1.8762F, 0.0F));
 
-        PartDefinition cube_r12 = starboard_bow.addOrReplaceChild("cube_r12", CubeListBuilder.create().texOffs(117, 146).addBox(-12.0197F, 3.75F, 0.3114F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r18 = starboard_bow.addOrReplaceChild("cube_r18", CubeListBuilder.create().texOffs(117, 146).addBox(-12.0197F, 3.75F, 0.3114F, 4.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 106).addBox(-8.0197F, 3.75F, -2.6886F, 20.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 96).addBox(-12.7697F, -1.25F, 0.0614F, 26.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 91).addBox(-12.7697F, -2.25F, 1.5614F, 26.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
@@ -142,14 +148,14 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
         PartDefinition port = partdefinition.addOrReplaceChild("port", CubeListBuilder.create(), PartPose.offset(13.375F, 15.375F, 7.0F));
 
-        PartDefinition cube_r13 = port.addOrReplaceChild("cube_r13", CubeListBuilder.create().texOffs(67, 76).addBox(-13.25F, -1.0F, -2.5F, 28.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r19 = port.addOrReplaceChild("cube_r19", CubeListBuilder.create().texOffs(67, 76).addBox(-13.25F, -1.0F, -2.5F, 28.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(75, 80).addBox(-8.25F, 0.0F, -3.5F, 21.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(91, 67).addBox(-0.25F, -4.0F, -0.5F, 14.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(93, 57).addBox(-13.25F, -5.0F, -1.5F, 13.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.125F, 0.625F, 0.75F, 0.0F, 1.5708F, 0.0F));
 
         PartDefinition starboard = partdefinition.addOrReplaceChild("starboard", CubeListBuilder.create(), PartPose.offset(-13.375F, 15.375F, 7.0F));
 
-        PartDefinition cube_r14 = starboard.addOrReplaceChild("cube_r14", CubeListBuilder.create().texOffs(129, 80).addBox(-14.25F, -0.75F, 9.75F, 21.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r20 = starboard.addOrReplaceChild("cube_r20", CubeListBuilder.create().texOffs(129, 80).addBox(-14.25F, -0.75F, 9.75F, 21.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 76).addBox(-16.25F, -1.75F, 10.75F, 28.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 67).addBox(-15.25F, -4.75F, 12.75F, 14.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(129, 57).addBox(-1.25F, -5.75F, 11.75F, 13.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(13.125F, 1.375F, 2.25F, 0.0F, -1.5708F, 0.0F));
@@ -166,8 +172,6 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
         PartDefinition transom = partdefinition.addOrReplaceChild("transom", CubeListBuilder.create().texOffs(190, 146).addBox(-13.0F, 0.25F, -5.25F, 26.0F, 5.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(193, 159).addBox(-13.0F, -5.75F, -0.25F, 26.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 15.75F, 21.25F));
-
-
 
         return LayerDefinition.create(meshdefinition, 256, 256);
     }
