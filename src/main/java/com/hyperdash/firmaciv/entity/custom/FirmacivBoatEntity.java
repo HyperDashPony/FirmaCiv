@@ -72,10 +72,6 @@ public class FirmacivBoatEntity extends Entity {
     protected double lerpZ;
     protected double lerpYRot;
     protected double lerpXRot;
-    protected boolean inputLeft;
-    protected boolean inputRight;
-    protected boolean inputUp;
-    protected boolean inputDown;
     protected double waterLevel;
     protected float landFriction;
     protected Status status;
@@ -717,30 +713,34 @@ public class FirmacivBoatEntity extends Entity {
     protected void controlBoat() {
         if (this.isVehicle()) {
             if (getControllingCompartment() != null) {
+                boolean inputUp = this.getControllingCompartment().getInputUp();
+                boolean inputDown = this.getControllingCompartment().getInputDown();
+                boolean inputLeft = this.getControllingCompartment().getInputLeft();
+                boolean inputRight = this.getControllingCompartment().getInputRight();
                 float f = 0.0F;
-                if (this.getControllingCompartment().getInputLeft()) {
+                if (inputLeft) {
                     --this.deltaRotation;
                 }
 
-                if (this.getControllingCompartment().getInputRight()) {
+                if (inputRight) {
                     ++this.deltaRotation;
                 }
 
-                if (this.getControllingCompartment().getInputRight() != this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputUp() && !this.getControllingCompartment().getInputDown()) {
+                if (inputRight != inputLeft && !inputUp && !inputDown) {
                     f += 0.005F;
                 }
 
                 this.setYRot(this.getYRot() + this.deltaRotation);
-                if (this.getControllingCompartment().getInputUp()) {
+                if (inputUp) {
                     f += 0.055F;
                 }
 
-                if (this.getControllingCompartment().getInputDown()) {
+                if (inputDown) {
                     f -= 0.025F;
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
-                this.setPaddleState(this.getControllingCompartment().getInputRight() && !this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputUp(), this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputUp());
+                this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
         }
     }
@@ -975,14 +975,6 @@ public class FirmacivBoatEntity extends Entity {
             return this.getPassengers().get(1);
         }
         return null;
-    }
-
-    public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
-                         final boolean inputDown) {
-        this.inputLeft = inputLeft;
-        this.inputRight = inputRight;
-        this.inputUp = inputUp;
-        this.inputDown = inputDown;
     }
 
     @Override

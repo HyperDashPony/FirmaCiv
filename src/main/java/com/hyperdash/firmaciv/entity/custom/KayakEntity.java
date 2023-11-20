@@ -52,40 +52,42 @@ public class KayakEntity extends FirmacivBoatEntity {
     @Override
     protected void controlBoat() {
         if (this.isVehicle() && this.getControllingPassenger() instanceof Player player) {
+            if (getControllingCompartment() != null) {
+                boolean inputUp = this.getControllingCompartment().getInputUp();
+                boolean inputDown = this.getControllingCompartment().getInputDown();
+                boolean inputLeft = this.getControllingCompartment().getInputLeft();
+                boolean inputRight = this.getControllingCompartment().getInputRight();
+                float f = 0.0f;
+                float paddleMultiplier = 1.0f;
+                if (player.isHolding(FirmacivItems.KAYAK_PADDLE.get())) {
+                    paddleMultiplier = 2.0f;
+                }
 
-            float f = 0.0f;
-            float paddleMultiplier = 1.0f;
-            if (player.isHolding(FirmacivItems.KAYAK_PADDLE.get())) {
-                paddleMultiplier = 2.0f;
+                if (inputLeft) {
+                    --this.deltaRotation;
+                }
+
+                if (inputRight) {
+                    ++this.deltaRotation;
+                }
+
+                if (inputRight != inputLeft && !inputUp && !inputDown) {
+                    f += 0.0025F * paddleMultiplier;
+                }
+
+                this.setYRot(this.getYRot() + this.deltaRotation);
+
+                if (inputUp) {
+                    f += 0.0275F * paddleMultiplier;
+                }
+
+                if (inputDown) {
+                    f -= 0.0125F * paddleMultiplier;
+                }
+
+                this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
-
-            if (this.getControllingCompartment().getInputLeft()) {
-                --this.deltaRotation;
-            }
-
-            if (this.getControllingCompartment().getInputRight()) {
-                ++this.deltaRotation;
-            }
-
-            if (this.getControllingCompartment().getInputRight()
-                    != this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputUp() && !this.getControllingCompartment().getInputDown()) {
-                f += 0.0025F * paddleMultiplier;
-            }
-
-            this.setYRot(this.getYRot() + this.deltaRotation);
-
-            if (this.getControllingCompartment().getInputUp()) {
-                f += 0.0275F * paddleMultiplier;
-            }
-
-            if (this.getControllingCompartment().getInputDown()) {
-                f -= 0.0125F * paddleMultiplier;
-            }
-
-            this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
-            this.setPaddleState(this.getControllingCompartment().getInputRight()
-                    && !this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputUp(), this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputRight()
-                    || this.getControllingCompartment().getInputUp());
         }
     }
 
