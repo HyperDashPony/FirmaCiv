@@ -85,9 +85,6 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
 
     @Deprecated // forge: override getModelWithLocation to change the texture / model
     public ResourceLocation getTextureLocation(RowboatEntity pEntity) {
-        int id = pEntity.getId();
-        ResourceLocation resloc = pEntity.getTextureLocation();
-        resloc = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/rowboat/" + pEntity.getVariant() + ".png");
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/rowboat/" + pEntity.getVariant() + ".png");
     }
 

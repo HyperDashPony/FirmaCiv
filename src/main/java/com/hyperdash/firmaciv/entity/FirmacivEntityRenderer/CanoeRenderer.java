@@ -85,9 +85,6 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     @Deprecated // forge: override getModelWithLocation to change the texture / model
     public ResourceLocation getTextureLocation(CanoeEntity pEntity) {
-        int id = pEntity.getId();
-        ResourceLocation resloc = pEntity.getTextureLocation();
-        resloc = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
     }
 
