@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -24,11 +23,11 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class AbstractCompartmentEntity extends Entity {
+public abstract class AbstractCompartmentEntity extends Entity {
 
     private static final EntityDataAccessor<ItemStack> DATA_BLOCK_TYPE_ITEM = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_HURT_DIR = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
@@ -39,22 +38,6 @@ public class AbstractCompartmentEntity extends Entity {
 
     public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
-    }
-
-    public boolean getInputLeft() {
-        return false;
-    }
-
-    public boolean getInputRight() {
-        return false;
-    }
-
-    public boolean getInputUp() {
-        return false;
-    }
-
-    public boolean getInputDown() {
-        return false;
     }
 
     public ItemStack getBlockTypeItem() {
@@ -79,21 +62,6 @@ public class AbstractCompartmentEntity extends Entity {
 
     public Item getDropItem() {
         return this.getBlockTypeItem().getItem();
-    }
-
-    @Override
-    @Nullable
-    public LivingEntity getControllingPassenger() {
-        if (this instanceof EmptyCompartmentEntity) {
-            final Entity entity = this.getFirstPassenger();
-            if (entity instanceof LivingEntity livingentity) {
-                return livingentity;
-            } else {
-                return null;
-            }
-        }
-
-        return null;
     }
 
     @Override
@@ -199,47 +167,43 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
-    public ItemStack getPickResult() {
-        return getBlockTypeItem();
-    }
+    public boolean hurt(final DamageSource damageSource, final float amount) {
+        if (this instanceof EmptyCompartmentEntity && !(this.getTrueVehicle() instanceof KayakEntity)) return false;
 
-    public boolean hurt(DamageSource pSource, float pAmount) {
-        if (!(this instanceof EmptyCompartmentEntity) || this.getTrueVehicle() instanceof KayakEntity) {
-            if (this.isInvulnerableTo(pSource)) {
-                return false;
-            } else if (!this.level().isClientSide && !this.isRemoved()) {
-                this.setHurtDir(-this.getHurtDir());
-                this.setHurtTime(10);
-                this.setDamage(this.getDamage() + pAmount * 8.0F);
-                this.markHurt();
-                this.gameEvent(GameEvent.ENTITY_DAMAGE, pSource.getEntity());
-                boolean flag = pSource.getEntity() instanceof Player && ((Player) pSource.getEntity()).getAbilities().instabuild;
-                if (flag || this.getDamage() > 10.0F) {
-                    if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                        this.destroy(pSource);
-                    }
-                    if (this.getTrueVehicle() instanceof KayakEntity kayakEntity) {
-                        kayakEntity.spawnAtLocation(kayakEntity.getDropItem());
-                        kayakEntity.kill();
-                        this.getVehicle().kill();
-                    }
-                    this.discard();
+        if (this.isInvulnerableTo(damageSource)) return false;
 
-                }
+        if (this.level().isClientSide || this.isRemoved()) return true;
 
-                return true;
-            } else {
-                return true;
-            }
+        this.setHurtDir(-this.getHurtDir());
+        this.setHurtTime(10);
+        this.setDamage(this.getDamage() + amount * 8);
+        this.markHurt();
+        this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+        final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
+
+        // Don't kill
+        if (!instantKill && !(this.getDamage() > 10)) return true;
+
+        if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+            this.destroy(damageSource);
         }
-        return false;
+
+        if (this.getRootVehicle() instanceof KayakEntity kayakEntity) {
+            kayakEntity.spawnAtLocation(kayakEntity.getDropItem());
+            kayakEntity.remove(RemovalReason.KILLED);
+            kayakEntity.kill();
+            this.getVehicle().kill();
+        }
+
+        this.discard();
+        return true;
     }
 
     @Override
     protected void defineSynchedData() {
         this.entityData.define(DATA_ID_HURT, 0);
-        this.entityData.define(DATA_ID_HURTDIR, 1);
-        this.entityData.define(DATA_ID_DAMAGE, 0.0F);
+        this.entityData.define(DATA_ID_HURT_DIR, 1);
+        this.entityData.define(DATA_ID_DAMAGE, 0F);
         this.entityData.define(DATA_BLOCK_TYPE_ITEM, ItemStack.EMPTY);
     }
 
@@ -267,11 +231,11 @@ public class AbstractCompartmentEntity extends Entity {
      * Gets the forward direction of the entity.
      */
     public int getHurtDir() {
-        return this.entityData.get(DATA_ID_HURTDIR);
+        return this.entityData.get(DATA_ID_HURT_DIR);
     }
 
     public void setHurtDir(final int pHurtDirection) {
-        this.entityData.set(DATA_ID_HURTDIR, pHurtDirection);
+        this.entityData.set(DATA_ID_HURT_DIR, pHurtDirection);
     }
 
     @Override
