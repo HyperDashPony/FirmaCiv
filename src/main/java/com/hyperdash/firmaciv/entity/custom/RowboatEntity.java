@@ -3,6 +3,9 @@ package com.hyperdash.firmaciv.entity.custom;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -72,30 +75,43 @@ public class RowboatEntity extends FirmacivBoatEntity {
     protected void controlBoat() {
         if (this.isVehicle()) {
             if (getControllingCompartment() != null) {
+                boolean inputUp = this.getControllingCompartment().getInputUp();
+                boolean inputDown = this.getControllingCompartment().getInputDown();
+                boolean inputLeft = this.getControllingCompartment().getInputLeft();
+                boolean inputRight = this.getControllingCompartment().getInputRight();
+                if (getControllingPassenger() instanceof LocalPlayer localPlayer){
+                    Minecraft mc = Minecraft.getInstance();
+                    if(mc.options.getCameraType() != CameraType.THIRD_PERSON_FRONT){
+                        inputDown = this.getControllingCompartment().getInputUp();
+                        inputUp = this.getControllingCompartment().getInputDown();
+                        inputLeft = this.getControllingCompartment().getInputRight();
+                        inputRight = this.getControllingCompartment().getInputLeft();
+                    }
+                }
                 float f = 0.0F;
-                if (this.getControllingCompartment().getInputLeft()) {
+                if (inputLeft) {
                     --this.deltaRotation;
                 }
 
-                if (this.getControllingCompartment().getInputRight()) {
+                if (inputRight) {
                     ++this.deltaRotation;
                 }
 
-                if (this.getControllingCompartment().getInputRight() != this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputUp() && !this.getControllingCompartment().getInputDown()) {
+                if (inputRight != inputLeft && !inputUp && !inputDown) {
                     f += 0.005F;
                 }
 
                 this.setYRot(this.getYRot() + this.deltaRotation);
-                if (this.getControllingCompartment().getInputUp()) {
+                if (inputUp) {
                     f += 0.055F;
                 }
 
-                if (this.getControllingCompartment().getInputDown()) {
+                if (inputDown) {
                     f -= 0.025F;
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
-                this.setPaddleState(this.getControllingCompartment().getInputRight() && !this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputUp(), this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputUp());
+                this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
         }
     }
