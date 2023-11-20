@@ -96,7 +96,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         }
 
         this.checkInsideBlocks();
-        final List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
+        final List<Entity> list = this.level()
+                .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
 
         if (!list.isEmpty() && this.canAddNonPlayers) {
             for (final Entity entity : list) {
@@ -113,7 +114,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                     } else if (this.getTrueVehicle() instanceof RowboatEntity) {
                         maxSize = 1.4f;
                     }
-                    if (this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                    if (this.getPassengers()
+                            .size() < 2 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         entity.startRiding(this);
                     }
                 }
@@ -132,7 +134,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     }
 
 
-    public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp, final boolean inputDown) {
+    public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
+                         final boolean inputDown) {
         this.inputLeft = inputLeft;
         this.inputRight = inputRight;
         this.inputUp = inputUp;
@@ -200,7 +203,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     @Override
     public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
-        final Vec3 escapeVector = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO, passenger.getBbWidth(), passenger.getYRot());
+        final Vec3 escapeVector = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO,
+                passenger.getBbWidth(), passenger.getYRot());
 
         final double escapeX = this.getX() + escapeVector.x;
         final double escapeZ = this.getZ() + escapeVector.z;

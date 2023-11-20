@@ -33,7 +33,8 @@ public class KayakRenderer extends EntityRenderer<KayakEntity> {
     }
 
     @Override
-    public void render(KayakEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(KayakEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
+                       MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.5D, 0.0D);
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
@@ -49,7 +50,9 @@ public class KayakRenderer extends EntityRenderer<KayakEntity> {
 
         float f2 = pEntity.getBubbleAngle(pPartialTicks);
         if (!Mth.equal(f2, 0.0F)) {
-            pMatrixStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F), 1.0F, 0.0F, 1.0F));
+            pMatrixStack.mulPose(
+                    (new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F),
+                            1.0F, 0.0F, 1.0F));
         }
 
         Pair<ResourceLocation, KayakEntityModel> pair = kayakResources;
@@ -61,11 +64,13 @@ public class KayakRenderer extends EntityRenderer<KayakEntity> {
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         kayakModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(kayakModel.renderType(resourcelocation));
-        kayakModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        kayakModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
+                1.0F, 1.0F);
 
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            kayakModel.getWaterocclusion().render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            kayakModel.getWaterocclusion()
+                    .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
         if (!pEntity.getTruePassengers().isEmpty()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(kayakModel.renderType(resourcelocation));

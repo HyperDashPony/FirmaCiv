@@ -28,7 +28,8 @@ import java.util.UUID;
 public class VehicleCleatEntity extends Entity {
 
     public static final String LEASH_TAG = "Leash";
-    private static final EntityDataAccessor<Byte> DATA_CLEAT_FLAGS_ID = SynchedEntityData.defineId(VehicleCleatEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> DATA_CLEAT_FLAGS_ID = SynchedEntityData.defineId(
+            VehicleCleatEntity.class, EntityDataSerializers.BYTE);
     @Nullable
     private Entity leashHolder;
     private int delayedLeashHolderId;
@@ -97,7 +98,8 @@ public class VehicleCleatEntity extends Entity {
             }
 
             if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-                ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, null));
+                ((ServerLevel) this.level()).getChunkSource()
+                        .broadcast(this, new ClientboundSetEntityLinkPacket(this, null));
             }
         }
 
@@ -132,7 +134,8 @@ public class VehicleCleatEntity extends Entity {
         this.leashHolder = pLeashHolder;
         this.leashInfoTag = null;
         if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-            ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
+            ((ServerLevel) this.level()).getChunkSource()
+                    .broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
         }
 
         if (this.isPassenger()) {
@@ -155,7 +158,8 @@ public class VehicleCleatEntity extends Entity {
                     this.setLeashedTo(entity, true);
                     return;
                 }
-            } else if (this.leashInfoTag.contains("X", 99) && this.leashInfoTag.contains("Y", 99) && this.leashInfoTag.contains("Z", 99)) {
+            } else if (this.leashInfoTag.contains("X", 99) && this.leashInfoTag.contains("Y",
+                    99) && this.leashInfoTag.contains("Z", 99)) {
                 BlockPos blockpos = NbtUtils.readBlockPos(this.leashInfoTag);
                 this.setLeashedTo(LeashFenceKnotEntity.getOrCreateKnot(this.level(), blockpos), true);
                 return;

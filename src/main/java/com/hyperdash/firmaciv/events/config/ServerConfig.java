@@ -13,8 +13,10 @@ public class ServerConfig {
             return innerBuilder.translation("firmaciv.config.server." + name);
         };
         innerBuilder.push("general");
-        this.canoeWoodRestriction = builder.apply("canoeWoodRestriction").comment("Force creation of canoes from specified wood types.").define("canoeWoodRestriction", true);
-        this.forceReducedDebugInfo = builder.apply("forceReducedDebugInfo").comment("Force reduceDebugInfo gamerule.").define("forceReducedDebugInfo", true);
+        this.canoeWoodRestriction = builder.apply("canoeWoodRestriction")
+                .comment("Force creation of canoes from specified wood types.").define("canoeWoodRestriction", true);
+        this.forceReducedDebugInfo = builder.apply("forceReducedDebugInfo").comment("Force reduceDebugInfo gamerule.")
+                .define("forceReducedDebugInfo", true);
 
     }
 }

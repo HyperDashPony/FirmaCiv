@@ -38,13 +38,15 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         this.canoeResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
             return variant;
         }, (type) -> {
-            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + type.getName() + ".png"),
+            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID,
+                            "textures/entity/watercraft/dugout_canoe/" + type.getName() + ".png"),
                     new CanoeEntityModel());
         }));
     }
 
     @Override
-    public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
+                       MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
@@ -60,7 +62,9 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
 
         float f2 = pEntity.getBubbleAngle(pPartialTicks);
         if (!Mth.equal(f2, 0.0F)) {
-            pMatrixStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F), 1.0F, 0.0F, 1.0F));
+            pMatrixStack.mulPose(
+                    (new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F),
+                            1.0F, 0.0F, 1.0F));
         }
 
         Pair<ResourceLocation, CanoeEntityModel> pair = getModelWithLocation(pEntity);
@@ -71,11 +75,13 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         canoeModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(canoeModel.renderType(getTextureLocation(pEntity)));
-        canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
+                1.0F, 1.0F);
 
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            canoeModel.getWaterocclusion().render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            canoeModel.getWaterocclusion()
+                    .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
 
         pMatrixStack.popPose();
@@ -84,7 +90,8 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     @Deprecated // forge: override getModelWithLocation to change the texture / model
     public ResourceLocation getTextureLocation(CanoeEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
+        return new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
     }
 
     public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) {

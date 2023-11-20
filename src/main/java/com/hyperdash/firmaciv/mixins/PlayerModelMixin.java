@@ -21,7 +21,8 @@ public class PlayerModelMixin<T extends LivingEntity> extends HumanoidModel<T> {
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
-    void injectRidingPoseChange(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
+    void injectRidingPoseChange(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
+                                float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
         if (pEntity.isPassenger() && pEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
             if ((emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity)
                     || (emptyCompartmentEntity.getTrueVehicle() instanceof RowboatEntity && emptyCompartmentEntity.canAddNonPlayers())) {

@@ -18,8 +18,10 @@ public class NavToolkitItem extends AbstractNavItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
 
-        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SPYGLASS_USE, SoundSource.NEUTRAL, 1F, 1);
-        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.HONEY_DRINK, SoundSource.NEUTRAL, 0.75F, 1);
+        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SPYGLASS_USE,
+                SoundSource.NEUTRAL, 1F, 1);
+        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.HONEY_DRINK,
+                SoundSource.NEUTRAL, 0.75F, 1);
 
         if (!pLevel.isClientSide) {
             Vec3 positionClicked = pPlayer.getEyePosition();

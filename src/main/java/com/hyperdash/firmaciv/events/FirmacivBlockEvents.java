@@ -48,14 +48,17 @@ public final class FirmacivBlockEvents {
     @SubscribeEvent
     public static void registerToolModificationEvents(BlockEvent.BlockToolModificationEvent event) {
 
-        if (event.getToolAction() == ToolActions.AXE_STRIP && (event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE) || (!FirmacivConfig.SERVER.canoeWoodRestriction.get() && event.getState().is(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED))) &&
+        if (event.getToolAction() == ToolActions.AXE_STRIP && (event.getState()
+                .is(FirmacivTags.Blocks.CAN_MAKE_CANOE) || (!FirmacivConfig.SERVER.canoeWoodRestriction.get() && event.getState()
+                .is(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED))) &&
                 event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS)) {
             if (event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()) {
                 convertLogToCanoeComponent(event);
             }
         }
 
-        if (event.getToolAction() == ToolActions.AXE_STRIP && (event.getState().is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))) {
+        if (event.getToolAction() == ToolActions.AXE_STRIP && (event.getState()
+                .is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))) {
             if (event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()) {
                 processCanoeComponent(event);
             }
@@ -87,7 +90,8 @@ public final class FirmacivBlockEvents {
 
             }
 
-        } else if (canoeComponentBlockState.getValue(CANOE_CARVED) >= 5 && canoeComponentBlockState.getValue(CANOE_CARVED) < 11 &&
+        } else if (canoeComponentBlockState.getValue(CANOE_CARVED) >= 5 && canoeComponentBlockState.getValue(
+                CANOE_CARVED) < 11 &&
                 event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.AXES)) {
 
             BlockPos blockPos1 = thisBlockPos.relative(axis, -2);
@@ -98,7 +102,8 @@ public final class FirmacivBlockEvents {
             int row = 0;
             for (int i = -2; i <= 2; ++i) {
                 blockPos1 = thisBlockPos.relative(axis, i);
-                if ((world.getBlockState(blockPos1).is(canoeComponentBlock) && world.getBlockState(blockPos1).getValue(CANOE_CARVED) >= 5)) {
+                if ((world.getBlockState(blockPos1).is(canoeComponentBlock) && world.getBlockState(blockPos1)
+                        .getValue(CANOE_CARVED) >= 5)) {
                     row++;
                     flag = row >= 3;
                 } else {
@@ -133,14 +138,17 @@ public final class FirmacivBlockEvents {
             canoeComponentBlock.defaultBlockState().setValue(AXIS, Direction.Axis.Z);
             Direction.Axis axis = event.getState().getValue(AXIS);
 
-            world.setBlock(thisBlockPos, CanoeComponentBlock.getStateForPlacement(level, strippedLogBlock, thisBlockPos), 2);
+            world.setBlock(thisBlockPos,
+                    CanoeComponentBlock.getStateForPlacement(level, strippedLogBlock, thisBlockPos), 2);
 
             BlockPos blockPos1 = thisBlockPos.relative(axis, 1);
             BlockPos blockPos2 = thisBlockPos.relative(axis, -1);
 
-            if (world.getBlockState(blockPos1).is(canoeComponentBlock) && world.getBlockState(blockPos2).is(canoeComponentBlock)) {
+            if (world.getBlockState(blockPos1).is(canoeComponentBlock) && world.getBlockState(blockPos2)
+                    .is(canoeComponentBlock)) {
                 CanoeComponentBlock.setEndPieces(event.getPlayer().level(), thisBlockPos, canoeComponentBlock, true);
-                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), thisBlockPos.relative(axis, -1), canoeComponentBlock, false);
+                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), thisBlockPos.relative(axis, -1),
+                        canoeComponentBlock, false);
             } else if (level.getBlockState(blockPos1).is(canoeComponentBlock)) {
                 setEndPieces(level, blockPos1, canoeComponentBlock, true);
             } else {

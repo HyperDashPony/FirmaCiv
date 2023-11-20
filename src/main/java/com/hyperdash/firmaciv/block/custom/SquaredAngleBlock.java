@@ -44,7 +44,8 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     protected static final VoxelShape OCTET_PPN = Block.box(8.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
     protected static final VoxelShape OCTET_PPP = Block.box(8.0D, 8.0D, 8.0D, 16.0D, 16.0D, 16.0D);
     protected static final VoxelShape[] TOP_SHAPES = makeShapes(TOP_AABB, OCTET_NNN, OCTET_PNN, OCTET_NNP, OCTET_PNP);
-    protected static final VoxelShape[] BOTTOM_SHAPES = makeShapes(BOTTOM_AABB, OCTET_NPN, OCTET_PPN, OCTET_NPP, OCTET_PPP);
+    protected static final VoxelShape[] BOTTOM_SHAPES = makeShapes(BOTTOM_AABB, OCTET_NPN, OCTET_PPN, OCTET_NPP,
+            OCTET_PPP);
     private static final int[] SHAPE_BY_STATE = new int[]{12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
     private final Block base;
     private final BlockState baseState;
@@ -54,7 +55,9 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     @Deprecated // Forge: Use the other constructor that takes a Supplier
     public SquaredAngleBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
         super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
+        this.registerDefaultState(
+                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
+                        .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
         this.base = pBaseState.getBlock();
         this.baseState = pBaseState;
         this.stateSupplier = () -> pBaseState;
@@ -62,13 +65,16 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
 
     public SquaredAngleBlock(java.util.function.Supplier<BlockState> state, BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
+        this.registerDefaultState(
+                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
+                        .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
         this.base = Blocks.AIR; // These are unused, fields are redirected
         this.baseState = Blocks.AIR.defaultBlockState();
         this.stateSupplier = state;
     }
 
-    private static VoxelShape[] makeShapes(VoxelShape pSlabShape, VoxelShape pNwCorner, VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
+    private static VoxelShape[] makeShapes(VoxelShape pSlabShape, VoxelShape pNwCorner, VoxelShape pNeCorner,
+                                           VoxelShape pSwCorner, VoxelShape pSeCorner) {
         return IntStream.range(0, 16).mapToObj((p_56945_) -> {
             return makeStairShape(p_56945_, pSlabShape, pNwCorner, pNeCorner, pSwCorner, pSeCorner);
         }).toArray((p_56949_) -> {
@@ -79,7 +85,8 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     /**
      * Combines the shapes according to the mode set in the bitfield
      */
-    private static VoxelShape makeStairShape(int pBitfield, VoxelShape pSlabShape, VoxelShape pNwCorner, VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
+    private static VoxelShape makeStairShape(int pBitfield, VoxelShape pSlabShape, VoxelShape pNwCorner,
+                                             VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
 
         double move = -0.5D;
         if (pSlabShape == TOP_AABB) {
@@ -124,7 +131,8 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         BlockState blockstate = pLevel.getBlockState(pPos.relative(direction));
         if (isRoof(blockstate) && pState.getValue(HALF) == blockstate.getValue(HALF)) {
             Direction direction1 = blockstate.getValue(FACING);
-            if (direction1.getAxis() != pState.getValue(FACING).getAxis() && canTakeShape(pState, pLevel, pPos, direction1.getOpposite())) {
+            if (direction1.getAxis() != pState.getValue(FACING).getAxis() && canTakeShape(pState, pLevel, pPos,
+                    direction1.getOpposite())) {
                 if (direction1 == direction.getCounterClockWise()) {
                     return StairsShape.OUTER_LEFT;
                 }
@@ -136,7 +144,8 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         BlockState blockstate1 = pLevel.getBlockState(pPos.relative(direction.getOpposite()));
         if (isRoof(blockstate1) && pState.getValue(HALF) == blockstate1.getValue(HALF)) {
             Direction direction2 = blockstate1.getValue(FACING);
-            if (direction2.getAxis() != pState.getValue(FACING).getAxis() && canTakeShape(pState, pLevel, pPos, direction2)) {
+            if (direction2.getAxis() != pState.getValue(FACING).getAxis() && canTakeShape(pState, pLevel, pPos,
+                    direction2)) {
                 if (direction2 == direction.getCounterClockWise()) {
                     return StairsShape.INNER_LEFT;
                 }
@@ -150,7 +159,8 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
 
     private static boolean canTakeShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pFace) {
         BlockState blockstate = pLevel.getBlockState(pPos.relative(pFace));
-        return !isRoof(blockstate) || blockstate.getValue(FACING) != pState.getValue(FACING) || blockstate.getValue(HALF) != pState.getValue(HALF);
+        return !isRoof(blockstate) || blockstate.getValue(FACING) != pState.getValue(FACING) || blockstate.getValue(
+                HALF) != pState.getValue(HALF);
     }
 
     public static boolean isRoof(BlockState pState) {
@@ -162,7 +172,8 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return (pState.getValue(HALF) == Half.TOP ? TOP_SHAPES : BOTTOM_SHAPES)[SHAPE_BY_STATE[this.getShapeIndex(pState)]];
+        return (pState.getValue(HALF) == Half.TOP ? TOP_SHAPES : BOTTOM_SHAPES)[SHAPE_BY_STATE[this.getShapeIndex(
+                pState)]];
     }
 
     private int getShapeIndex(BlockState pState) {
@@ -211,7 +222,8 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         return this.base.isRandomlyTicking(pState);
     }
 
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
+                                 BlockHitResult pHit) {
         return this.baseState.use(pLevel, pPlayer, pHand, pHit);
     }
 
@@ -226,7 +238,10 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         Direction direction = pContext.getClickedFace();
         BlockPos blockpos = pContext.getClickedPos();
         FluidState fluidstate = pContext.getLevel().getFluidState(blockpos);
-        BlockState blockstate = this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection()).setValue(HALF, direction != Direction.DOWN && (direction == Direction.UP || !(pContext.getClickLocation().y - (double) blockpos.getY() > 0.5D)) ? Half.BOTTOM : Half.TOP).setValue(WATERLOGGED, Boolean.valueOf(fluidstate.getType() == Fluids.WATER));
+        BlockState blockstate = this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection())
+                .setValue(HALF,
+                        direction != Direction.DOWN && (direction == Direction.UP || !(pContext.getClickLocation().y - (double) blockpos.getY() > 0.5D)) ? Half.BOTTOM : Half.TOP)
+                .setValue(WATERLOGGED, Boolean.valueOf(fluidstate.getType() == Fluids.WATER));
         return blockstate.setValue(SHAPE, getStairsShape(blockstate, pContext.getLevel(), blockpos));
     }
 
@@ -236,12 +251,15 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
      * returns its solidified counterpart.
      * Note that this method should ideally consider only the specific direction passed in.
      */
-    public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
+    public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel,
+                                  BlockPos pCurrentPos, BlockPos pFacingPos) {
         if (pState.getValue(WATERLOGGED)) {
             pLevel.scheduleTick(pCurrentPos, Fluids.WATER, Fluids.WATER.getTickDelay(pLevel));
         }
 
-        return pFacing.getAxis().isHorizontal() ? pState.setValue(SHAPE, getStairsShape(pState, pLevel, pCurrentPos)) : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+        return pFacing.getAxis().isHorizontal() ? pState.setValue(SHAPE,
+                getStairsShape(pState, pLevel, pCurrentPos)) : super.updateShape(pState, pFacing, pFacingState, pLevel,
+                pCurrentPos, pFacingPos);
     }
 
     public BlockState rotate(BlockState pState, Rotation pRot) {

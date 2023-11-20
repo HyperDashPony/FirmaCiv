@@ -25,10 +25,14 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractCompartmentEntity extends Entity {
 
-    private static final EntityDataAccessor<ItemStack> DATA_BLOCK_TYPE_ITEM = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
-    private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> DATA_ID_HURT_DIR = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<ItemStack> DATA_BLOCK_TYPE_ITEM = SynchedEntityData.defineId(
+            AbstractCompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
+            AbstractCompartmentEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_HURT_DIR = SynchedEntityData.defineId(
+            AbstractCompartmentEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(
+            AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
     public int lifespan = 6000;
@@ -92,11 +96,13 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
             if (!(this instanceof EmptyCompartmentEntity)) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
-                if (this.isInWater() || this.level().getFluidState(this.blockPosition()).is(TFCFluids.SALT_WATER.getSource())) {
+                if (this.isInWater() || this.level().getFluidState(this.blockPosition())
+                        .is(TFCFluids.SALT_WATER.getSource())) {
                     this.setDeltaMovement(0.0D, -0.01D, 0.0D);
                     this.setYRot(this.getYRot() + 0.4f);
                 }
-                if (!this.onGround() || this.getDeltaMovement().horizontalDistanceSqr() > (double) 1.0E-5F || (this.tickCount + this.getId()) % 4 == 0) {
+                if (!this.onGround() || this.getDeltaMovement()
+                        .horizontalDistanceSqr() > (double) 1.0E-5F || (this.tickCount + this.getId()) % 4 == 0) {
                     this.move(MoverType.SELF, this.getDeltaMovement());
                     float f1 = 0.98F;
 

@@ -83,7 +83,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             // check two blocks in each direction and look for a row of 3 blocks
 
             blockPos0 = pPos.relative(axis, i);
-            if (world.getBlockState(blockPos0).is(strippedLogBlock) || world.getBlockState(blockPos0).is(canoeComponentBlock)) {
+            if (world.getBlockState(blockPos0).is(strippedLogBlock) || world.getBlockState(blockPos0)
+                    .is(canoeComponentBlock)) {
 
                 if (world.getBlockState(blockPos0).getValue(AXIS) == axis) {
                     row++;
@@ -143,10 +144,12 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         BlockPos blockPos1 = pPos.relative(axis, 1);
 
-        if ((pLevel.getBlockState(blockPos1).is(canoeComponentBlock) || pLevel.getBlockState(blockPos1).is(strippedLogBlock)
+        if ((pLevel.getBlockState(blockPos1).is(canoeComponentBlock) || pLevel.getBlockState(blockPos1)
+                .is(strippedLogBlock)
                 && pLevel.getBlockState(blockPos1).getValue(AXIS) == axis)) {
             // if it's a valid block and rotation positive, then flip it
-            finalBlockState = finalBlockState.setValue(FACING, ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
+            finalBlockState = finalBlockState.setValue(FACING,
+                    ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
         }
 
         return finalBlockState;
@@ -164,7 +167,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         BlockPos blockPos1 = pPos.relative(axis, (positiveDir ? 1 : -1));
 
-        if (pLevel.getBlockState(blockPos1).is(canoeComponentBlock) && pLevel.getBlockState(blockPos1).getValue(AXIS) == axis) {
+        if (pLevel.getBlockState(blockPos1).is(canoeComponentBlock) && pLevel.getBlockState(blockPos1)
+                .getValue(AXIS) == axis) {
 
             thisBlockState = thisBlockState.setValue(END, false);
             pLevel.setBlock(pPos, thisBlockState, 4);
@@ -174,9 +178,11 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             thisBlockState = thisBlockState.setValue(END, true);
 
             if (positiveDir) {
-                thisBlockState = thisBlockState.setValue(FACING, ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
+                thisBlockState = thisBlockState.setValue(FACING,
+                        ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
             } else {
-                thisBlockState = thisBlockState.setValue(FACING, ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
+                thisBlockState = thisBlockState.setValue(FACING,
+                        ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
             }
 
             pLevel.setBlock(pPos, thisBlockState, 4);
@@ -227,7 +233,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             return;
         }
 
-        BlockPattern.BlockPatternMatch blockpattern$blockpatternmatch = createCanoeFull(canoeComponentBlock).find(pLevel, pPos);
+        BlockPattern.BlockPatternMatch blockpattern$blockpatternmatch = createCanoeFull(canoeComponentBlock).find(
+                pLevel, pPos);
         if (blockpattern$blockpatternmatch != null) {
 
             Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
@@ -244,14 +251,17 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.variant).get().create(pLevel);
 
             if (axis == Direction.Axis.X) {
-                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D, (double) middleblockpos.getZ() + 0.5D, 90.0F, 0.0F);
+                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
+                        (double) middleblockpos.getZ() + 0.5D, 90.0F, 0.0F);
             } else {
-                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D, (double) middleblockpos.getZ() + 0.5D, 0.0F, 0.0F);
+                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
+                        (double) middleblockpos.getZ() + 0.5D, 0.0F, 0.0F);
             }
 
             pLevel.addFreshEntity(canoe);
 
-            for (ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class, canoe.getBoundingBox().inflate(5.0D))) {
+            for (ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class,
+                    canoe.getBoundingBox().inflate(5.0D))) {
                 CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, canoe);
             }
 
@@ -277,7 +287,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             double z = (float) pos.getZ() + rand.nextFloat();
 
             for (int i = 0; i < rand.nextInt(3); ++i) {
-                level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0.0, 0.1F + rand.nextFloat() / 8.0F, 0.0);
+                level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0.0,
+                        0.1F + rand.nextFloat() / 8.0F, 0.0);
             }
         }
     }
@@ -295,7 +306,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+                                                                  BlockEntityType<T> pBlockEntityType) {
         return createTickerHelper(pBlockEntityType, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(),
                 CanoeComponentBlockEntity::serverTick);
     }
@@ -326,7 +338,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()).setValue(AXIS, pContext.getHorizontalDirection().getAxis());
+        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite())
+                .setValue(AXIS, pContext.getHorizontalDirection().getAxis());
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
@@ -352,10 +365,12 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             Block ccb = pState.getBlock();
             Direction.Axis axis = pState.getValue(AXIS);
 
-            if (pLevel.getBlockState(pPos.relative(axis, 1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, 1)).getValue(AXIS) == axis) {
+            if (pLevel.getBlockState(pPos.relative(axis, 1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, 1))
+                    .getValue(AXIS) == axis) {
                 pLevel.destroyBlock(pPos.relative(axis, 1), true);
             }
-            if (pLevel.getBlockState(pPos.relative(axis, -1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, -1)).getValue(AXIS) == axis) {
+            if (pLevel.getBlockState(pPos.relative(axis, -1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, -1))
+                    .getValue(AXIS) == axis) {
                 pLevel.destroyBlock(pPos.relative(axis, -1), true);
             }
         }

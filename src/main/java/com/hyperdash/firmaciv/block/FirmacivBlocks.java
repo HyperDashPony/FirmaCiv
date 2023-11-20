@@ -26,22 +26,29 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class FirmacivBlocks {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Firmaciv.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
+            Firmaciv.MOD_ID);
 
     public static final Map<BoatVariant, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS =
-            Helpers.mapOfKeys(BoatVariant.class, boatVariant -> registerBlockWithoutItem("canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
-                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(), boatVariant)));
+            Helpers.mapOfKeys(BoatVariant.class, boatVariant -> registerBlockWithoutItem(
+                    "canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
+                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
+                            boatVariant)));
 
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
             () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
-                    BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH).noCollission()));
+                    BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
+                            .sound(TFCSounds.THATCH).noCollission()));
 
     public static final RegistryObject<Block> THATCH_ROOFING_STAIRS = registerBlockWithItem("thatch_roofing_stairs",
             () -> new StairBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
-                    BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH).noCollission()));
+                    BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
+                            .sound(TFCSounds.THATCH).noCollission()));
 
     public static final RegistryObject<Block> THATCH_ROOFING_SLAB = registerBlockWithItem("thatch_roofing_slab",
-            () -> new SlabBlock(BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH).noCollission()));
+            () -> new SlabBlock(
+                    BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
+                            .sound(TFCSounds.THATCH).noCollission()));
 
     public static final RegistryObject<Block> BOAT_FRAME = registerBlockWithItem("boat_frame",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));

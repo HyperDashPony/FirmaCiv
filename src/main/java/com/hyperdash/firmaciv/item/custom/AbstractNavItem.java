@@ -42,8 +42,10 @@ public class AbstractNavItem extends Item {
         DecimalFormat df = new DecimalFormat("###.##");
 
         String latStr = "Latitude: " + df.format(Math.abs(latitude)) + " Degrees " + (latitude > 0 ? "South" : "North");
-        String lonStr = "Longitude: " + df.format(Math.abs(longitude)) + " Degrees " + (longitude > 0 ? "East" : "West");
-        String altStr = "Altitude: " + dfAlt.format(Math.abs(altitude)) + " Meters " + (altitude > 0 ? "Above" : "Below") + " Sea Level";
+        String lonStr = "Longitude: " + df.format(
+                Math.abs(longitude)) + " Degrees " + (longitude > 0 ? "East" : "West");
+        String altStr = "Altitude: " + dfAlt.format(
+                Math.abs(altitude)) + " Meters " + (altitude > 0 ? "Above" : "Below") + " Sea Level";
 
         String latSim = "Lat: " + df.format(Math.abs(latitude)) + " " + (latitude > 0 ? "S" : "N");
         String lonSim = "Lon: " + df.format(Math.abs(longitude)) + " " + (longitude > 0 ? "E" : "W");
@@ -53,7 +55,8 @@ public class AbstractNavItem extends Item {
 
     }
 
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand, NavType navType) {
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand,
+                                                  NavType navType) {
 
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
 
@@ -108,7 +111,8 @@ public class AbstractNavItem extends Item {
 
 
         Component locationMessage = Component.literal(
-                locationText).withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, finalSimpleLocationText))
+                locationText).withStyle(style -> style.withClickEvent(
+                        new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, finalSimpleLocationText))
                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, finalCopyMessage)));
 
 

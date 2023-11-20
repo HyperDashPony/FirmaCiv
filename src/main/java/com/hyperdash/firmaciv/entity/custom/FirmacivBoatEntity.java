@@ -48,13 +48,20 @@ public class FirmacivBoatEntity extends Entity {
     public static final int PADDLE_RIGHT = 1;
     public static final double PADDLE_SOUND_TIME = Math.PI / 4;
     public static final int BUBBLE_TIME = 60;
-    protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
-    protected static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_LEFT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
+            FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(
+            FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(
+            FirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(
+            FirmacivBoatEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_LEFT = SynchedEntityData.defineId(
+            FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(
+            FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Integer> DATA_ID_BUBBLE_TIME = SynchedEntityData.defineId(
+            FirmacivBoatEntity.class, EntityDataSerializers.INT);
     protected static final int TIME_TO_EJECT = 60;
     protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
     public final int PASSENGER_NUMBER = 2;
@@ -159,7 +166,8 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     protected Vec3 getRelativePortalPosition(final Direction.Axis axis, final BlockUtil.FoundRectangle portal) {
-        return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, portal));
+        return LivingEntity.resetForwardDirectionOfRelativePortalPosition(
+                super.getRelativePortalPosition(axis, portal));
     }
 
     @Override
@@ -200,9 +208,11 @@ public class FirmacivBoatEntity extends Entity {
             }
         }
 
-        this.level().addParticle(ParticleTypes.SPLASH, this.getX() + this.random.nextDouble(), this.getY() + 0.7, this.getZ() + this.random.nextDouble(), 0, 0, 0);
+        this.level().addParticle(ParticleTypes.SPLASH, this.getX() + this.random.nextDouble(), this.getY() + 0.7,
+                this.getZ() + this.random.nextDouble(), 0, 0, 0);
         if (this.random.nextInt(20) == 0) {
-            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSplashSound(), this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat(), false);
+            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSplashSound(),
+                    this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat(), false);
         }
 
         this.gameEvent(GameEvent.SPLASH, this.getControllingPassenger());
@@ -244,7 +254,8 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     @Override
-    public void lerpTo(final double posX, final double posY, final double posZ, final float yaw, final float pitch, final int pPosRotationIncrements, final boolean teleport) {
+    public void lerpTo(final double posX, final double posY, final double posZ, final float yaw, final float pitch,
+                       final int pPosRotationIncrements, final boolean teleport) {
         this.lerpX = posX;
         this.lerpY = posY;
         this.lerpZ = posZ;
@@ -296,12 +307,18 @@ public class FirmacivBoatEntity extends Entity {
 
         if (this.status == Status.IN_WATER && !this.getPassengers().isEmpty()) {
             if (Math.abs(this.deltaRotation) > 2) {
-                this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
+                this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(),
+                        this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
                 if (this.random.nextInt(20) == 0) {
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(),
+                            this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
                 }
-                if (this.getControllingCompartment() != null && Math.abs(this.deltaRotation) > 5 && (this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputLeft())) {
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(), this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
+                if (this.getControllingCompartment() != null && Math.abs(
+                        this.deltaRotation) > 5 && (this.getControllingCompartment()
+                        .getInputRight() || this.getControllingCompartment().getInputLeft())) {
+                    this.level()
+                            .playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(),
+                                    this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
 
 
                     Vec3 splashOffset = this.getDeltaMovement().yRot(45);
@@ -311,15 +328,25 @@ public class FirmacivBoatEntity extends Entity {
                     splashOffset.normalize();
 
                     for (int i = 0; i < 8; i++) {
-                        this.level().addParticle(ParticleTypes.BUBBLE_POP, this.getX() + (double) this.random.nextFloat() + splashOffset.x * 2 + this.getDeltaMovement().x * i, this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat() + splashOffset.z * 2 + this.getDeltaMovement().x * i, 0.0D, 0.0D, 0.0D);
-                        this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat() + splashOffset.x * 2 + this.getDeltaMovement().x * i, this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat() + splashOffset.z * 2 + this.getDeltaMovement().x * i, 0.0D, 0.0D, 0.0D);
+                        this.level().addParticle(ParticleTypes.BUBBLE_POP,
+                                this.getX() + (double) this.random.nextFloat() + splashOffset.x * 2 + this.getDeltaMovement().x * i,
+                                this.getY() + 0.7D,
+                                this.getZ() + (double) this.random.nextFloat() + splashOffset.z * 2 + this.getDeltaMovement().x * i,
+                                0.0D, 0.0D, 0.0D);
+                        this.level().addParticle(ParticleTypes.SPLASH,
+                                this.getX() + (double) this.random.nextFloat() + splashOffset.x * 2 + this.getDeltaMovement().x * i,
+                                this.getY() + 0.7D,
+                                this.getZ() + (double) this.random.nextFloat() + splashOffset.z * 2 + this.getDeltaMovement().x * i,
+                                0.0D, 0.0D, 0.0D);
                     }
                 }
 
             } else if (this.getDeltaMovement().length() > 0.10) {
                 if (this.random.nextInt(8) == 0) {
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(), this.getSoundSource(), 0.1F, 0.8F + 0.4F * this.random.nextFloat(), false);
-                    this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(), this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(),
+                            this.getSoundSource(), 0.1F, 0.8F + 0.4F * this.random.nextFloat(), false);
+                    this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(),
+                            this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
                 }
             }
         }
@@ -333,7 +360,8 @@ public class FirmacivBoatEntity extends Entity {
             this.floatBoat();
             if (this.level().isClientSide) {
                 this.controlBoat();
-                this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
+                this.level().sendPacketToServer(
+                        new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
 
             this.move(MoverType.SELF, this.getDeltaMovement());
@@ -352,8 +380,10 @@ public class FirmacivBoatEntity extends Entity {
                         Vec3 vec3 = this.getViewVector(1.0F);
                         double d0 = i == 1 ? -vec3.z : vec3.z;
                         double d1 = i == 1 ? vec3.x : -vec3.x;
-                        this.level().playSound(null, this.getX() + d0, this.getY(), this.getZ() + d1, soundevent, this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
-                        this.level().gameEvent(this.getControllingPassenger(), GameEvent.SPLASH, new BlockPos((int) (this.getX() + d0), (int) this.getY(), (int) (this.getZ() + d1)));
+                        this.level().playSound(null, this.getX() + d0, this.getY(), this.getZ() + d1, soundevent,
+                                this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
+                        this.level().gameEvent(this.getControllingPassenger(), GameEvent.SPLASH,
+                                new BlockPos((int) (this.getX() + d0), (int) this.getY(), (int) (this.getZ() + d1)));
                     }
                 }
 
@@ -364,7 +394,8 @@ public class FirmacivBoatEntity extends Entity {
         }
 
         this.checkInsideBlocks();
-        final List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
+        final List<Entity> list = this.level()
+                .getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
         if (!list.isEmpty()) {
             boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
 
@@ -390,7 +421,8 @@ public class FirmacivBoatEntity extends Entity {
 
             this.bubbleMultiplier = Mth.clamp(this.bubbleMultiplier, 0.0F, 1.0F);
             this.bubbleAngleO = this.bubbleAngle;
-            this.bubbleAngle = 10.0F * (float) Math.sin(0.5F * (float) this.level().getGameTime()) * this.bubbleMultiplier;
+            this.bubbleAngle = 10.0F * (float) Math.sin(
+                    0.5F * (float) this.level().getGameTime()) * this.bubbleMultiplier;
         } else {
             if (!this.isAboveBubbleColumn) {
                 this.setBubbleTime(0);
@@ -460,7 +492,8 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     public float getRowingTime(int pSide, float pLimbSwing) {
-        return this.getPaddleState(pSide) ? Mth.clampedLerp(this.paddlePositions[pSide] - ((float) Math.PI / 8F), this.paddlePositions[pSide], pLimbSwing) : 0.0F;
+        return this.getPaddleState(pSide) ? Mth.clampedLerp(this.paddlePositions[pSide] - ((float) Math.PI / 8F),
+                this.paddlePositions[pSide], pLimbSwing) : 0.0F;
     }
 
     /**
@@ -547,7 +580,9 @@ public class FirmacivBoatEntity extends Entity {
                         if (j2 <= 0 || k2 != k && k2 != l - 1) {
                             blockpos$mutableblockpos.set(l1, k2, i2);
                             BlockState blockstate = this.level().getBlockState(blockpos$mutableblockpos);
-                            if (!(blockstate.getBlock() instanceof WaterlilyBlock) && Shapes.joinIsNotEmpty(blockstate.getCollisionShape(this.level(), blockpos$mutableblockpos).move(l1, k2, i2), voxelshape, BooleanOp.AND)) {
+                            if (!(blockstate.getBlock() instanceof WaterlilyBlock) && Shapes.joinIsNotEmpty(
+                                    blockstate.getCollisionShape(this.level(), blockpos$mutableblockpos)
+                                            .move(l1, k2, i2), voxelshape, BooleanOp.AND)) {
                                 f += blockstate.getFriction(this.level(), blockpos$mutableblockpos, this);
                                 ++k1;
                             }
@@ -610,7 +645,9 @@ public class FirmacivBoatEntity extends Entity {
                 for (int i2 = i1; i2 < j1; ++i2) {
                     blockpos$mutableblockpos.set(k1, l1, i2);
                     FluidState fluidstate = this.level().getFluidState(blockpos$mutableblockpos);
-                    if (fluidstate.is(FluidTags.WATER) && d0 < (double) ((float) blockpos$mutableblockpos.getY() + fluidstate.getHeight(this.level(), blockpos$mutableblockpos))) {
+                    if (fluidstate.is(
+                            FluidTags.WATER) && d0 < (double) ((float) blockpos$mutableblockpos.getY() + fluidstate.getHeight(
+                            this.level(), blockpos$mutableblockpos))) {
                         if (!fluidstate.isSource()) {
                             return FirmacivBoatEntity.Status.UNDER_FLOWING_WATER;
                         }
@@ -681,7 +718,8 @@ public class FirmacivBoatEntity extends Entity {
             if (this.getControllingCompartment() != null) {
                 double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
 
-                if (this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputRight()) {
+                if (this.getControllingCompartment().getInputLeft() || this.getControllingCompartment()
+                        .getInputRight()) {
                     this.deltaRotation *= ((this.invFriction / 3.0F));
                     this.deltaRotation *= turnSpeedFactor;
 
@@ -739,8 +777,11 @@ public class FirmacivBoatEntity extends Entity {
                     f -= 0.025F;
                 }
 
-                this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
-                this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                this.setPaddleState(
+                        inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
         }
     }
@@ -759,7 +800,8 @@ public class FirmacivBoatEntity extends Entity {
                 }
 
             }
-            final Vec3 vec3 = (new Vec3(f, 0, 0)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+            final Vec3 vec3 = (new Vec3(f, 0, 0)).yRot(
+                    -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
@@ -778,7 +820,8 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
-        final Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO, passenger.getBbWidth(), passenger.getYRot());
+        final Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO,
+                passenger.getBbWidth(), passenger.getYRot());
         final double d0 = this.getX() + vec3.x;
         final double d1 = this.getZ() + vec3.z;
         final BlockPos blockpos = BlockPos.containing(d0, this.getBoundingBox().maxY, d1);
@@ -863,7 +906,8 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     public boolean getPaddleState(final int side) {
-        return this.entityData.<Boolean>get(side == 0 ? DATA_ID_PADDLE_LEFT : DATA_ID_PADDLE_RIGHT) && this.getControllingPassenger() != null;
+        return this.entityData.<Boolean>get(
+                side == 0 ? DATA_ID_PADDLE_LEFT : DATA_ID_PADDLE_RIGHT) && this.getControllingPassenger() != null;
     }
 
     /**

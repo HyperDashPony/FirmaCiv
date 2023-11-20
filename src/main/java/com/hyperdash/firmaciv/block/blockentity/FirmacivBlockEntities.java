@@ -35,11 +35,15 @@ public class FirmacivBlockEntities {
     public FirmacivBlockEntities() {
     }
 
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, Supplier<? extends Block> block) {
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name,
+                                                                                       BlockEntityType.BlockEntitySupplier<T> factory,
+                                                                                       Supplier<? extends Block> block) {
         return RegistrationHelpers.register(BLOCK_ENTITIES, name, factory, block);
     }
 
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, Stream<? extends Supplier<? extends Block>> blocks) {
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name,
+                                                                                       BlockEntityType.BlockEntitySupplier<T> factory,
+                                                                                       Stream<? extends Supplier<? extends Block>> blocks) {
         return RegistrationHelpers.register(BLOCK_ENTITIES, name, factory, blocks);
     }
 

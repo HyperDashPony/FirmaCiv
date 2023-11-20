@@ -35,7 +35,8 @@ public class KayakItem extends Item {
         } else {
             Vec3 vec3 = pPlayer.getViewVector(1.0F);
             double d0 = 5.0D;
-            List<Entity> list = pLevel.getEntities(pPlayer, pPlayer.getBoundingBox().expandTowards(vec3.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
+            List<Entity> list = pLevel.getEntities(pPlayer,
+                    pPlayer.getBoundingBox().expandTowards(vec3.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
             if (!list.isEmpty()) {
                 Vec3 vec31 = pPlayer.getEyePosition();
 

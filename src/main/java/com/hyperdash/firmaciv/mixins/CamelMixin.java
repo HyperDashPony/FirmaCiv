@@ -25,8 +25,10 @@ public class CamelMixin extends AbstractHorse implements PlayerRideableJumping, 
     }
 
     @Inject(method = "mobInteract", at = @At("HEAD"))
-    public void injectEjectEntity(Player pPlayer, InteractionHand pHand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!this.level().isClientSide() && this.isPassenger() && this.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity && pPlayer.isSecondaryUseActive()) {
+    public void injectEjectEntity(Player pPlayer, InteractionHand pHand,
+                                  CallbackInfoReturnable<InteractionResult> cir) {
+        if (!this.level()
+                .isClientSide() && this.isPassenger() && this.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity && pPlayer.isSecondaryUseActive()) {
             this.stopRiding();
             cir.setReturnValue(InteractionResult.SUCCESS);
         }

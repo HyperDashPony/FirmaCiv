@@ -15,7 +15,8 @@ public class BarometerItem extends AbstractNavItem {
 
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
 
-        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.HONEY_DRINK, SoundSource.NEUTRAL, 1F, 1);
+        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.HONEY_DRINK,
+                SoundSource.NEUTRAL, 1F, 1);
         return super.use(pLevel, pPlayer, pHand, NavType.ALT);
     }
 }

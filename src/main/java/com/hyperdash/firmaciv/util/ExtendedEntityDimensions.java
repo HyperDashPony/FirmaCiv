@@ -34,7 +34,8 @@ public class ExtendedEntityDimensions {
     public AABB makeBoundingBox(double pX, double pY, double pZ) {
         float distanceFrom = this.width / 2.0F;
         float f1 = this.height;
-        return new AABB(pX - (double) distanceFrom, pY, pZ - (double) distanceFrom, pX + (double) distanceFrom, pY + (double) f1, pZ + (double) distanceFrom);
+        return new AABB(pX - (double) distanceFrom, pY, pZ - (double) distanceFrom, pX + (double) distanceFrom,
+                pY + (double) f1, pZ + (double) distanceFrom);
     }
 
     public String toString() {

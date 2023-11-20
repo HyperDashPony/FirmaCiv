@@ -17,7 +17,8 @@ public class ClockItem extends AbstractNavItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
 
-        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SPYGLASS_USE, SoundSource.NEUTRAL, 1F, 1F);
+        pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SPYGLASS_USE,
+                SoundSource.NEUTRAL, 1F, 1F);
 
         return super.use(pLevel, pPlayer, pHand, NavType.LON);
     }
