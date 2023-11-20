@@ -21,7 +21,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.DismountHelper;
@@ -763,10 +762,16 @@ public class FirmacivBoatEntity extends Entity {
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
                 passenger.setYRot(this.getYRot());
-            } else {
+            } else if (!(passenger instanceof VehiclePartEntity)){
                 super.positionRider(passenger, moveFunction);
             }
         }
+    }
+
+    protected Vec3 positionVehicleEntityLocally(float localX, float localY, float localZ){
+        Vec3 vec3 = (new Vec3(localX, 0, localZ)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+
+        return vec3;
     }
 
     @Override
@@ -929,7 +934,7 @@ public class FirmacivBoatEntity extends Entity {
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        Entity entity = this.getPilotPassenger();
+        Entity entity = this.getPilotVehiclePartAsEntity();
         if (entity instanceof VehiclePartEntity vehiclePart) {
             entity = vehiclePart.getFirstPassenger();
             if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
@@ -949,7 +954,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Nullable
     public EmptyCompartmentEntity getControllingCompartment() {
-        final Entity vehiclePart = this.getPilotPassenger();
+        final Entity vehiclePart = this.getPilotVehiclePartAsEntity();
 
         if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) return null;
 
@@ -963,8 +968,8 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     @Nullable
-    protected Entity getPilotPassenger() {
-        if (this.isVehicle() && this.getPassengers().size() == this.PASSENGER_NUMBER) {
+    public Entity getPilotVehiclePartAsEntity() {
+        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
             return this.getPassengers().get(1);
         }
         return null;

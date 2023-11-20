@@ -82,7 +82,7 @@ public class CanoeEntity extends FirmacivBoatEntity {
 
     @Nullable
     @Override
-    protected Entity getPilotPassenger() {
+    public Entity getPilotVehiclePartAsEntity() {
         if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
             return this.getPassengers().get(1);
         }

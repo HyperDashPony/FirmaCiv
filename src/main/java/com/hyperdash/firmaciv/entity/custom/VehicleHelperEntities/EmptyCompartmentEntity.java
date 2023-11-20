@@ -27,8 +27,12 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected boolean inputUp;
     protected boolean inputDown;
 
+    protected boolean canOnlyPlayersEnter;
+
+
     public EmptyCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
+        canOnlyPlayersEnter = true;
     }
 
     @Override
@@ -70,10 +74,16 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     @Override
     public void tick() {
+        if(this.getTrueVehicle() != null){
+            if(tickCount < 10 && this.getTrueVehicle().getPilotVehiclePartAsEntity() != null && !(this.getTrueVehicle() instanceof CanoeEntity)){
+                canOnlyPlayersEnter = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
+            }
+        }
+
         this.checkInsideBlocks();
         final List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
 
-        if (!list.isEmpty()) {
+        if (!list.isEmpty() && !this.canOnlyPlayersEnter) {
             for (final Entity entity : list) {
                 final boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
                 if (!flag) break;
@@ -146,10 +156,13 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         }
 
         AbstractCompartmentEntity newCompartment = null;
-        if (!item.isEmpty() && this.getPassengers().isEmpty()) {
+        if (canOnlyPlayersEnter && !item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
-            }  /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
+            }
+
+
+            /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
             } */
         }
@@ -158,7 +171,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
         if (newCompartment != null) {
             swapCompartments(newCompartment);
-            newCompartment.setYRot(newCompartment.ridingThisPart.getYRot());
+            newCompartment.setYRot(newCompartment.ridingThisPart.getYRot() + ridingThisPart.compartmentRotation);
             newCompartment.setBlockTypeItem(item.split(1));
             this.playSound(SoundEvents.WOOD_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
             return InteractionResult.sidedSuccess(this.level().isClientSide);

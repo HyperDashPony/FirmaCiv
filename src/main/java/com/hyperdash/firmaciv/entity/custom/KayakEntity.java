@@ -26,7 +26,7 @@ public class KayakEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    protected Entity getPilotPassenger() {
+    public Entity getPilotVehiclePartAsEntity() {
         if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
             return this.getPassengers().get(0);
         } else {
