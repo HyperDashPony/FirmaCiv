@@ -64,7 +64,6 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         }
 
         Pair<ResourceLocation, RowboatEntityModel> pair = getModelWithLocation(pEntity);
-        ResourceLocation resourcelocation = pair.getFirst();
         RowboatEntityModel rowboatEntityModel = pair.getSecond();
 
         pMatrixStack.translate(0.0f, 1.0625f, 0f);

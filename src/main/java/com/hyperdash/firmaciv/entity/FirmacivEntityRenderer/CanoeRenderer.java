@@ -64,7 +64,6 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         }
 
         Pair<ResourceLocation, CanoeEntityModel> pair = getModelWithLocation(pEntity);
-        ResourceLocation resourcelocation = pair.getFirst();
         CanoeEntityModel canoeModel = pair.getSecond();
 
         pMatrixStack.translate(0.0f, 1.0625f, 0f);
