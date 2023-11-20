@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.KayakEntity;
+import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,17 +28,21 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected boolean inputUp;
     protected boolean inputDown;
 
-    protected boolean canOnlyPlayersEnter;
+    protected boolean canAddNonPlayers;
 
 
     public EmptyCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
-        canOnlyPlayersEnter = true;
+        canAddNonPlayers = true;
+    }
+
+    public boolean canAddNonPlayers(){
+        return canAddNonPlayers;
     }
 
     @Override
     protected boolean canAddPassenger(final Entity passenger) {
-        return this.getPassengers().isEmpty();
+        return this.getPassengers().isEmpty() && !this.isRemoved();
     }
 
     protected int getMaxPassengers() {
@@ -47,22 +52,31 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
         super.positionRider(passenger, moveFunction);
-
-        double f1 = ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+        float localX = 0.0F;
+        float localZ = 0.0F;
+        float localY = (float)((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
         if (passenger instanceof Player) {
-            f1 = 0;
+            localY = 0;
+            if(this.getTrueVehicle() instanceof RowboatEntity rowboatEntity){
+                localY = 0.25f;
+                if(rowboatEntity.getPilotVehiclePartAsEntity() != ridingThisPart){
+                    localX = -0.25f;
+                }
+            }
         }
         if (passenger.getBbHeight() <= 0.7) {
-            f1 -= 0.2f;
+            localY -= 0.2f;
+        } if(passenger.getBbWidth() > 0.9f && !(passenger instanceof Player)){
+            localX += 0.2f;
         }
 
         final double eyepos = passenger.getEyePosition().get(Direction.Axis.Y);
         final double thisY = this.getY() + 1.1f;
         if (eyepos < thisY) {
-            f1 += (float) Math.abs(eyepos - thisY);
+            localY += (float) Math.abs(eyepos - thisY);
         }
-
-        moveFunction.accept(passenger, this.getX(), this.getY() - 0.57f + f1, this.getZ() + 0f);
+        final Vec3 vec3 = this.positionPassengerLocally(localX, localY - 0.57f, localZ);
+        moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() - 0.57 + localY, this.getZ() + vec3.z);
 
         if (passenger instanceof LivingEntity livingEntity) {
             livingEntity.setYBodyRot(this.getYRot());
@@ -72,18 +86,22 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         this.clampRotation(passenger);
     }
 
+    protected Vec3 positionPassengerLocally(float localX, float localY, float localZ){
+        return (new Vec3(localX, localY, localZ)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+    }
+
     @Override
     public void tick() {
         if(this.getTrueVehicle() != null){
             if(tickCount < 10 && this.getTrueVehicle().getPilotVehiclePartAsEntity() != null && !(this.getTrueVehicle() instanceof CanoeEntity)){
-                canOnlyPlayersEnter = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
+                canAddNonPlayers = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
             }
         }
 
         this.checkInsideBlocks();
         final List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
 
-        if (!list.isEmpty() && !this.canOnlyPlayersEnter) {
+        if (!list.isEmpty() && this.canAddNonPlayers) {
             for (final Entity entity : list) {
                 final boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
                 if (!flag) break;
@@ -95,6 +113,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                         maxSize = 0.9f;
                     } else if (this.getTrueVehicle() instanceof KayakEntity) {
                         maxSize = 0.6f;
+                    } else if (this.getTrueVehicle() instanceof RowboatEntity) {
+                        maxSize = 1.4f;
                     }
                     if (this.getPassengers().size() < 2 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         entity.startRiding(this);
@@ -156,15 +176,12 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         }
 
         AbstractCompartmentEntity newCompartment = null;
-        if (canOnlyPlayersEnter && !item.isEmpty() && this.getPassengers().isEmpty()) {
+        if (canAddNonPlayers && !item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
-            }
-
-
-            /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
+            }  else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
-            } */
+            }
         }
 
         if (ridingThisPart == null) return InteractionResult.PASS;

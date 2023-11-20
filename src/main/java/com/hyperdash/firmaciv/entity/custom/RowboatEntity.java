@@ -2,9 +2,7 @@ package com.hyperdash.firmaciv.entity.custom;
 
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
-import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -12,10 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -49,26 +44,58 @@ public class RowboatEntity extends FirmacivBoatEntity {
             if (this.getPassengers().size() > 1) {
                 switch (this.getPassengers().indexOf(passenger)) {
                     case 0 -> {
-                        localX = 0.7f;
+                        localX = 1.0f;
                         localZ = 0.0f;
                     }
                     case 1 -> {
-                        localX = -1.0f;
-                        localZ = 0.7f;
+                        localX = -0.95f;
+                        localZ = 0.4f;
                     }
-                    case 3 -> {
-                        localX = -1.0f;
-                        localZ = -0.7f;
+                    case 2 -> {
+                        localX = -0.95f;
+                        localZ = -0.4f;
                     }
                 }
             }
-            final Vec3 vec3 = this.positionVehicleEntityLocally(localX, localY, localZ);
+            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
                 passenger.setYRot(this.getYRot());
             } else if (!(passenger instanceof VehiclePartEntity)){
                 super.positionRider(passenger, moveFunction);
+            }
+        }
+    }
+
+    @Override
+    protected void controlBoat() {
+        if (this.isVehicle()) {
+            if (getControllingCompartment() != null) {
+                float f = 0.0F;
+                if (this.getControllingCompartment().getInputLeft()) {
+                    --this.deltaRotation;
+                }
+
+                if (this.getControllingCompartment().getInputRight()) {
+                    ++this.deltaRotation;
+                }
+
+                if (this.getControllingCompartment().getInputRight() != this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputUp() && !this.getControllingCompartment().getInputDown()) {
+                    f += 0.005F;
+                }
+
+                this.setYRot(this.getYRot() + this.deltaRotation);
+                if (this.getControllingCompartment().getInputUp()) {
+                    f += 0.055F;
+                }
+
+                if (this.getControllingCompartment().getInputDown()) {
+                    f -= 0.025F;
+                }
+
+                this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                this.setPaddleState(this.getControllingCompartment().getInputRight() && !this.getControllingCompartment().getInputLeft() || this.getControllingCompartment().getInputUp(), this.getControllingCompartment().getInputLeft() && !this.getControllingCompartment().getInputRight() || this.getControllingCompartment().getInputUp());
             }
         }
     }

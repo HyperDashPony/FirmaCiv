@@ -102,6 +102,8 @@ public class FirmacivBoatEntity extends Entity {
         return PASSENGER_NUMBER;
     }
 
+    protected int getMaxPassengers(){return this.getPassengerNumber();}
+
     @Override
     protected float getEyeHeight(final Pose pose, final EntityDimensions entityDimensions) {
         return entityDimensions.height;
@@ -768,7 +770,7 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
-    protected Vec3 positionVehicleEntityLocally(float localX, float localY, float localZ){
+    protected Vec3 positionVehiclePartEntityLocally(float localX, float localY, float localZ){
         Vec3 vec3 = (new Vec3(localX, 0, localZ)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
 
         return vec3;
@@ -928,7 +930,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     protected boolean canAddPassenger(final Entity passenger) {
-        return this.getPassengers().size() < this.getPassengerNumber();
+        return this.getPassengers().size() < this.getPassengerNumber() && !this.isRemoved();
     }
 
     @Nullable

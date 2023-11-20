@@ -76,7 +76,7 @@ public class VehiclePartEntity extends Entity {
                 moveFunction.accept(passenger, this.getX(), this.getY() + (double) f1, this.getZ());
                 passenger.setPos(this.getX(), this.getY() + (double) f1, this.getZ());
                 if (passenger instanceof AbstractCompartmentEntity) {
-                    passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation() + compartmentRotation);
+                    passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
                     float thingy = passenger.getYRot() + firmacivBoatEntity.getDeltaRotation() + compartmentRotation;
                     if (Math.abs((passenger.getYRot()) - (firmacivBoatEntity.getYRot()+compartmentRotation)) > 1 && (tickCount < 10 || this.getVehicle().getControllingPassenger() == null)) {
                         this.setYRot(this.getVehicle().getYRot());
