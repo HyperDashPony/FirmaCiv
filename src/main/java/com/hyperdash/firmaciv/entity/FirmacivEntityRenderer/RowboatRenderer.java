@@ -34,7 +34,7 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
 
     public RowboatRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
-        this.shadowRadius = 1.6f;
+        this.shadowRadius = 1.0f;
         this.rowboatResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
             return variant;
         }, (type) -> {

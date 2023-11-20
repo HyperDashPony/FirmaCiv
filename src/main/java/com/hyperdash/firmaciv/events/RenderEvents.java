@@ -31,8 +31,10 @@ public final class RenderEvents {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(FirmacivEntities.CANOES.get(Stream.of(BoatVariant.values()).findFirst().get()).get(), CanoeRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(Stream.of(BoatVariant.values()).findFirst().get()).get(), RowboatRenderer::new);
+        for (final BoatVariant boatVariant : BoatVariant.values()) {
+            event.registerEntityRenderer(FirmacivEntities.CANOES.get(boatVariant).get(), CanoeRenderer::new);
+            event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(boatVariant).get(), RowboatRenderer::new);
+        }
         event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), KayakRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
