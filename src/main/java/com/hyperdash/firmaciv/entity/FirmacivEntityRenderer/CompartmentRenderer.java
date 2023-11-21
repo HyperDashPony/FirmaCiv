@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.entity.FirmacivEntityRenderer;
 
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.CompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.ChestCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.CompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

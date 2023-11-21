@@ -1,6 +1,5 @@
 package com.hyperdash.firmaciv.mixins;
 
-import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.multiplayer.ClientLevel;

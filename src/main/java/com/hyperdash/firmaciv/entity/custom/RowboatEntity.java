@@ -2,11 +2,8 @@ package com.hyperdash.firmaciv.entity.custom;
 
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.AbstractCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
 import com.hyperdash.firmaciv.item.FirmacivItems;
-import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -17,7 +14,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -31,15 +27,12 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 
 public class RowboatEntity extends FirmacivBoatEntity {
+
+    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(RowboatEntity.class,
+            EntityDataSerializers.INT);
+    private static final EntityDataAccessor<ItemStack> DATA_OARS = SynchedEntityData.defineId(RowboatEntity.class,
+            EntityDataSerializers.ITEM_STACK);
     public final int PASSENGER_NUMBER = 3;
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(RowboatEntity.class, EntityDataSerializers.INT);
-
-    private static final EntityDataAccessor<ItemStack> DATA_OARS = SynchedEntityData.defineId(RowboatEntity.class, EntityDataSerializers.ITEM_STACK);
-
-    @Override
-    public int getPassengerNumber() {
-        return PASSENGER_NUMBER;
-    }
 
     public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -47,6 +40,11 @@ public class RowboatEntity extends FirmacivBoatEntity {
         final String name = entityType.toString().split("rowboat.")[1];
 
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
+    }
+
+    @Override
+    public int getPassengerNumber() {
+        return PASSENGER_NUMBER;
     }
 
     @Override
@@ -76,7 +74,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
                 passenger.setYRot(this.getYRot());
-            } else if (!(passenger instanceof VehiclePartEntity)){
+            } else if (!(passenger instanceof VehiclePartEntity)) {
                 super.positionRider(passenger, moveFunction);
             }
         }
@@ -101,9 +99,9 @@ public class RowboatEntity extends FirmacivBoatEntity {
                 boolean inputDown = this.getControllingCompartment().getInputDown();
                 boolean inputLeft = this.getControllingCompartment().getInputLeft();
                 boolean inputRight = this.getControllingCompartment().getInputRight();
-                if (getControllingPassenger() instanceof LocalPlayer){
+                if (getControllingPassenger() instanceof LocalPlayer) {
                     Minecraft mc = Minecraft.getInstance();
-                    if(mc.options.getCameraType() != CameraType.THIRD_PERSON_FRONT){
+                    if (mc.options.getCameraType() != CameraType.THIRD_PERSON_FRONT) {
                         inputDown = this.getControllingCompartment().getInputUp();
                         inputUp = this.getControllingCompartment().getInputDown();
                         inputLeft = this.getControllingCompartment().getInputRight();
@@ -113,8 +111,8 @@ public class RowboatEntity extends FirmacivBoatEntity {
                 float paddleMultiplier = 1.0f;
                 if (this.getOars().getCount() > 0) {
                     paddleMultiplier = 1.6f;
-                    if(this.getOars().getCount() == 1){
-                        if(this.getDeltaMovement().length() > 0.1f){
+                    if (this.getOars().getCount() == 1) {
+                        if (this.getDeltaMovement().length() > 0.1f) {
                             ++this.deltaRotation;
                         }
 
@@ -143,12 +141,13 @@ public class RowboatEntity extends FirmacivBoatEntity {
                     f -= 0.025F;
                 }
 
-                this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
                 this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
         }
     }
-
 
 
     @Override
@@ -196,7 +195,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     public void addOar() {
         ItemStack newItemStack = this.getOars();
         int numberOfOars = newItemStack.getCount();
-        newItemStack = new ItemStack(FirmacivItems.OAR.get(), numberOfOars+1);
+        newItemStack = new ItemStack(FirmacivItems.OAR.get(), numberOfOars + 1);
         this.setOars(newItemStack);
     }
 
@@ -219,7 +218,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     }
 
     public ResourceLocation getTextureLocation() {
-        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/rowboat/" + getVariant().getName() + ".png");
+        return new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/rowboat/" + getVariant().getName() + ".png");
     }
-
 }

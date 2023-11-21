@@ -17,7 +17,8 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 
 public class CanoeEntity extends FirmacivBoatEntity {
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
+            EntityDataSerializers.INT);
     public final int PASSENGER_NUMBER = 2;
     protected final float DAMAGE_THRESHOLD = 10.0f;
     protected final float DAMAGE_RECOVERY = 1.0f;
@@ -76,7 +77,9 @@ public class CanoeEntity extends FirmacivBoatEntity {
                     f -= 0.0125F * paddleMultiplier;
                 }
 
-                this.setDeltaMovement(this.getDeltaMovement().add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
                 this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
 
@@ -127,6 +130,7 @@ public class CanoeEntity extends FirmacivBoatEntity {
     }
 
     public ResourceLocation getTextureLocation() {
-        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + getVariant().getName() + ".png");
+        return new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/dugout_canoe/" + getVariant().getName() + ".png");
     }
 }

@@ -37,7 +37,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         canAddNonPlayers = true;
     }
 
-    public boolean canAddNonPlayers(){
+    public boolean canAddNonPlayers() {
         return canAddNonPlayers;
     }
 
@@ -51,19 +51,20 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         super.positionRider(passenger, moveFunction);
         float localX = 0.0F;
         float localZ = 0.0F;
-        float localY = (float)((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+        float localY = (float) ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
         if (passenger instanceof Player) {
             localY = 0;
-            if(this.getTrueVehicle() instanceof RowboatEntity rowboatEntity){
+            if (this.getTrueVehicle() instanceof RowboatEntity rowboatEntity) {
                 localY = 0.25f;
-                if(rowboatEntity.getPilotVehiclePartAsEntity() != ridingThisPart){
+                if (rowboatEntity.getPilotVehiclePartAsEntity() != ridingThisPart) {
                     localX = -0.25f;
                 }
             }
         }
         if (passenger.getBbHeight() <= 0.7) {
             localY -= 0.2f;
-        } if(passenger.getBbWidth() > 0.9f && !(passenger instanceof Player)){
+        }
+        if (passenger.getBbWidth() > 0.9f && !(passenger instanceof Player)) {
             localX += 0.2f;
         }
 
@@ -83,14 +84,16 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         this.clampRotation(passenger);
     }
 
-    protected Vec3 positionPassengerLocally(float localX, float localY, float localZ){
-        return (new Vec3(localX, localY, localZ)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+    protected Vec3 positionPassengerLocally(float localX, float localY, float localZ) {
+        return (new Vec3(localX, localY, localZ)).yRot(
+                -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
     }
 
     @Override
     public void tick() {
-        if(this.getTrueVehicle() != null){
-            if(tickCount < 10 && this.getTrueVehicle().getPilotVehiclePartAsEntity() != null && !(this.getTrueVehicle() instanceof CanoeEntity)){
+        if (this.getTrueVehicle() != null) {
+            if (tickCount < 10 && this.getTrueVehicle()
+                    .getPilotVehiclePartAsEntity() != null && !(this.getTrueVehicle() instanceof CanoeEntity)) {
                 canAddNonPlayers = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
             }
         }
