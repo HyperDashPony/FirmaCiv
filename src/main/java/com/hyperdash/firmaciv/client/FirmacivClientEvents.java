@@ -2,7 +2,7 @@ package com.hyperdash.firmaciv.client;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.CanoeRenderer;
+import com.hyperdash.firmaciv.client.render.entity.CanoeRenderer;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import com.hyperdash.firmaciv.item.custom.AbstractNavItem;

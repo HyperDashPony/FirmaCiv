@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.FirmacivEntityRenderer;
+package com.hyperdash.firmaciv.client.render.entity;
 
 import com.google.common.collect.ImmutableMap;
 import com.hyperdash.firmaciv.Firmaciv;

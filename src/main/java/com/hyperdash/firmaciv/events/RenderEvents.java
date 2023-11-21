@@ -1,8 +1,8 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.client.render.entity.*;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.FirmacivEntityRenderer.*;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.CanoeEntityModel;
 import com.hyperdash.firmaciv.entity.custom.entitymodel.KayakEntityModel;
