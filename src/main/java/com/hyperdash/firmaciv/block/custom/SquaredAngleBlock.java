@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.stream.IntStream;
 
-public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
+public abstract class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final EnumProperty<StairsShape> SHAPE = BlockStateProperties.STAIRS_SHAPE;
@@ -46,10 +46,10 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     protected static final VoxelShape[] TOP_SHAPES = makeShapes(TOP_AABB, OCTET_NNN, OCTET_PNN, OCTET_NNP, OCTET_PNP);
     protected static final VoxelShape[] BOTTOM_SHAPES = makeShapes(BOTTOM_AABB, OCTET_NPN, OCTET_PPN, OCTET_NPP, OCTET_PPP);
     private static final int[] SHAPE_BY_STATE = new int[]{12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
-    private final Block base;
-    private final BlockState baseState;
+    protected final Block base;
+    protected final BlockState baseState;
     // Forge Start
-    private final java.util.function.Supplier<BlockState> stateSupplier;
+    protected final java.util.function.Supplier<BlockState> stateSupplier;
 
     @Deprecated // Forge: Use the other constructor that takes a Supplier
     public SquaredAngleBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
@@ -58,6 +58,14 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         this.base = pBaseState.getBlock();
         this.baseState = pBaseState;
         this.stateSupplier = () -> pBaseState;
+    }
+
+    @Deprecated // Forge: Use the other constructor that takes a Supplier
+    public SquaredAngleBlock(BlockBehaviour.Properties pProperties) {
+        super(pProperties);
+        this.base = Blocks.AIR; // These are unused, fields are redirected
+        this.baseState = Blocks.AIR.defaultBlockState();
+        this.stateSupplier = () -> baseState;
     }
 
     public SquaredAngleBlock(java.util.function.Supplier<BlockState> state, BlockBehaviour.Properties properties) {

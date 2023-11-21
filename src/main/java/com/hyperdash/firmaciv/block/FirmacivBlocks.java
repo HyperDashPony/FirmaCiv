@@ -33,9 +33,11 @@ public class FirmacivBlocks {
             Helpers.mapOfKeys(BoatVariant.class, boatVariant -> registerBlockWithoutItem("canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(), boatVariant)));
 
+    /*
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
             () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
                     BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH).noCollission()));
+     */
 
     public static final RegistryObject<Block> THATCH_ROOFING_STAIRS = registerBlockWithItem("thatch_roofing_stairs",
             () -> new StairBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
