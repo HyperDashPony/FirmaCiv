@@ -82,7 +82,9 @@ public class FirmacivBoatEntity extends Entity {
     protected double lerpXRot;
     protected double waterLevel;
     protected float landFriction;
+    @Nullable
     protected Status status;
+    @Nullable
     protected Status oldStatus;
     protected double lastYd;
     protected boolean isAboveBubbleColumn;
@@ -819,10 +821,8 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     protected Vec3 positionVehiclePartEntityLocally(float localX, float localY, float localZ) {
-        Vec3 vec3 = (new Vec3(localX, 0, localZ)).yRot(
+        return (new Vec3(localX, 0, localZ)).yRot(
                 -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-
-        return vec3;
     }
 
     @Override
