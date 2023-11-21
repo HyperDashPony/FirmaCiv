@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.mixins;
 
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.boatpart.EmptyCompartmentEntity;
 import net.dries007.tfc.common.entities.livestock.horse.TFCChestedHorse;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

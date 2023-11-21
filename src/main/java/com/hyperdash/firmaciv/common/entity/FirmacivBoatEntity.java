@@ -2,9 +2,9 @@ package com.hyperdash.firmaciv.common.entity;
 
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.CompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
+import com.hyperdash.firmaciv.common.entity.boatpart.CompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.boatpart.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.boatpart.VehiclePartEntity;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;

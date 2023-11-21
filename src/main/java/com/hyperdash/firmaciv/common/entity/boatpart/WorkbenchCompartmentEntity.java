@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
+package com.hyperdash.firmaciv.common.entity.boatpart;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;

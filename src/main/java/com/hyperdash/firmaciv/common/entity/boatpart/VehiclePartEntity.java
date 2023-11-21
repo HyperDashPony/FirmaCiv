@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
+package com.hyperdash.firmaciv.common.entity.boatpart;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;

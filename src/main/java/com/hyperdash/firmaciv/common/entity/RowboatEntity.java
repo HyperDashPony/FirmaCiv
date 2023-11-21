@@ -2,7 +2,7 @@ package com.hyperdash.firmaciv.common.entity;
 
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
+import com.hyperdash.firmaciv.common.entity.boatpart.VehiclePartEntity;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
