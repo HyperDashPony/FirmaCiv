@@ -2,6 +2,7 @@ package com.hyperdash.firmaciv.block;
 
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
+import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
 import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -74,13 +76,10 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (!pOldState.is(pState.getBlock())) {
-            this.trySpawnRowboat(pLevel, pPos);
+            if (checkOppositeOarlock(pLevel, pPos, pState) && checkFrameBlocks(pLevel, pPos, pState)) {
+                spawnRowboat(pLevel, pPos, pState);
+            }
         }
-        String yay = "not yay.";
-        if (checkOppositeOarlock(pLevel, pPos, pState) && checkFrameBlocks(pLevel, pPos, pState)) {
-            destroyMultiblock(pLevel, pPos, pState);
-        }
-        yay = yay;
     }
 
     public void destroyMultiblock(Level level, BlockPos thispos, BlockState blockState) {
@@ -98,49 +97,29 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
         level.destroyBlock(thispos.relative(axis, -1), false);
     }
 
-    private void trySpawnRowboat(Level pLevel, BlockPos pPos) {
-        BlockPattern.BlockPatternMatch blockpattern$blockpatternmatch = this.createRowboat(this).find(pLevel, pPos);
-        if (blockpattern$blockpatternmatch != null) {
-            RowboatEntity rowboat = FirmacivEntities.ROWBOATS.get(BoatVariant.MAPLE).get().create(pLevel);
-            if (rowboat != null) {
-                spawnRowboat(pLevel, blockpattern$blockpatternmatch, rowboat, blockpattern$blockpatternmatch.getBlock(0, 2, 0).getPos());
-            }
+
+    private void spawnRowboat(Level pLevel, BlockPos thispos, BlockState blockState) {
+        Direction direction = blockState.getValue(FACING);
+        Direction.Axis axis = direction.getClockWise().getAxis();
+
+        RowboatEntity rowboat = FirmacivEntities.ROWBOATS.get(BoatVariant.MAPLE).get().create(pLevel);
+        rowboat.moveTo(getSpawnPosition(pLevel, thispos, blockState));
+        if (axis == Direction.Axis.X) {
+            rowboat.setYRot(90F);
         }
 
+        pLevel.addFreshEntity(rowboat);
+        destroyMultiblock(pLevel, thispos, blockState);
     }
 
-    private static void spawnRowboat(Level pLevel, BlockPattern.BlockPatternMatch pPatternMatch, Entity pGolem, BlockPos pPos) {
-        clearPatternBlocks(pLevel, pPatternMatch);
-        pGolem.moveTo((double) pPos.getX() + 0.5D, (double) pPos.getY() + 0.05D, (double) pPos.getZ() + 0.5D, 0.0F, 0.0F);
-        pLevel.addFreshEntity(pGolem);
-
-        for (ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class, pGolem.getBoundingBox().inflate(5.0D))) {
-            CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, pGolem);
-        }
-
-        updatePatternBlocks(pLevel, pPatternMatch);
+    private static Vec3 getSpawnPosition(Level pLevel, BlockPos thispos, BlockState blockState){
+        Direction direction = blockState.getValue(FACING);
+        thispos = thispos.below();
+        BlockPos otherpos = thispos.relative(direction.getOpposite());
+        Vec3 origin =  new Vec3 (((thispos.getX() + otherpos.getX())/2.0f) + 0.5f, thispos.getY() + 0.5f, ((thispos.getZ() + otherpos.getZ())/2.0f)+0.5f);
+        return origin;
     }
 
-    public static void clearPatternBlocks(Level pLevel, BlockPattern.BlockPatternMatch pPatternMatch) {
-        for (int i = 0; i < pPatternMatch.getWidth(); ++i) {
-            for (int j = 0; j < pPatternMatch.getHeight(); ++j) {
-                BlockInWorld blockinworld = pPatternMatch.getBlock(i, j, 0);
-                pLevel.setBlock(blockinworld.getPos(), Blocks.AIR.defaultBlockState(), 2);
-                pLevel.levelEvent(2001, blockinworld.getPos(), Block.getId(blockinworld.getState()));
-            }
-        }
-
-    }
-
-    public static void updatePatternBlocks(Level pLevel, BlockPattern.BlockPatternMatch pPatternMatch) {
-        for (int i = 0; i < pPatternMatch.getWidth(); ++i) {
-            for (int j = 0; j < pPatternMatch.getHeight(); ++j) {
-                BlockInWorld blockinworld = pPatternMatch.getBlock(i, j, 0);
-                pLevel.blockUpdated(blockinworld.getPos(), Blocks.AIR);
-            }
-        }
-
-    }
 
     public boolean checkOppositeOarlock(Level level, BlockPos thispos, BlockState blockState) {
         Direction direction = blockState.getValue(FACING);
@@ -220,21 +199,6 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
     @Override
     public boolean useShapeForLightOcclusion(BlockState pState) {
         return true;
-    }
-
-    private BlockPattern getOrCreateRowboat() {
-        if (this.rowboatPattern == null) {
-            this.rowboatPattern = BlockPatternBuilder.start().aisle("#", "#", "#").aisle("#", "#", "#").where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
-        }
-
-        return this.rowboatPattern;
-    }
-
-    private static BlockPattern createRowboat(Block oarlockBlock) {
-        BlockPattern rowboat = BlockPatternBuilder.start().aisle("#", "#", "#").aisle("#", "#", "#").where('#',
-                BlockInWorld.hasState(BlockStatePredicate.forBlock(oarlockBlock))).build();
-
-        return rowboat;
     }
 
 }
