@@ -34,6 +34,9 @@ public class FirmacivItems {
     public static final RegistryObject<Item> CANOE_PADDLE = ITEMS.register("canoe_paddle",
             () -> new Item(new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> OAR = ITEMS.register("oar",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<Item> KAYAK = ITEMS.register("kayak",
             () -> new KayakItem(new Item.Properties().stacksTo(1)));
 

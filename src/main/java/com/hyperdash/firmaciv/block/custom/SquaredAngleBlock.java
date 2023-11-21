@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.block;
+package com.hyperdash.firmaciv.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

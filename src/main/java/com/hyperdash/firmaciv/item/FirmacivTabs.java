@@ -26,6 +26,7 @@ public class FirmacivTabs {
                         pOutput.accept(FirmacivItems.KAYAK.get());
                         pOutput.accept(FirmacivItems.KAYAK_PADDLE.get());
                         pOutput.accept(FirmacivItems.CANOE_PADDLE.get());
+                        pOutput.accept(FirmacivItems.OAR.get());
 
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME.get());
                         pOutput.accept(FirmacivBlocks.THATCH_ROOFING.get());

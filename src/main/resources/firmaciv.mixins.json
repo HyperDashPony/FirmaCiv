@@ -16,8 +16,7 @@
     "TFCHorseMixin",
     "MobMixin",
     "BoatMixin",
-    "TFCBoatMixin",
-    "BoatRendererMixin"
+    "TFCBoatMixin"
   ],
   "injectors": {
     "defaultRequire": 1

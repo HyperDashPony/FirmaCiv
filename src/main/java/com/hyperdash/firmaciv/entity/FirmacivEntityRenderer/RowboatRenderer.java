@@ -44,10 +44,10 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
     }
 
     @Override
-    public void render(RowboatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        pMatrixStack.pushPose();
-        pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
-        pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
+    public void render(RowboatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack poseStack, MultiBufferSource pBuffer, int pPackedLight) {
+        poseStack.pushPose();
+        poseStack.translate(0.0D, 0.4375D, 0.0D);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
         float f = (float) pEntity.getHurtTime() - pPartialTicks;
         float f1 = pEntity.getDamage() - pPartialTicks;
         if (f1 < 0.0F) {
@@ -55,31 +55,36 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         }
 
         if (f > 0.0F) {
-            pMatrixStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
+            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
         float f2 = pEntity.getBubbleAngle(pPartialTicks);
         if (!Mth.equal(f2, 0.0F)) {
-            pMatrixStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F), 1.0F, 0.0F, 1.0F));
+            poseStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F), 1.0F, 0.0F, 1.0F));
         }
 
         Pair<ResourceLocation, RowboatEntityModel> pair = getModelWithLocation(pEntity);
         RowboatEntityModel rowboatEntityModel = pair.getSecond();
 
-        pMatrixStack.translate(0.0f, 1.0625f, 0f);
-        pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
-        pMatrixStack.mulPose(Axis.YP.rotationDegrees(0.0F));
+        poseStack.translate(0.0f, 1.0625f, 0f);
+        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         rowboatEntityModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
-        rowboatEntityModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-
+        rowboatEntityModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        if(pEntity.getOars().getCount() >= 1){
+            rowboatEntityModel.getOarStarboard().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
+        if(pEntity.getOars().getCount() == 2){
+            rowboatEntityModel.getOarPort().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            rowboatEntityModel.getWaterocclusion().render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            rowboatEntityModel.getWaterocclusion().render(poseStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
 
-        pMatrixStack.popPose();
-        super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+        poseStack.popPose();
+        super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
     }
 
     @Deprecated // forge: override getModelWithLocation to change the texture / model

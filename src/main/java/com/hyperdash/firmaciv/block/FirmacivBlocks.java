@@ -2,11 +2,13 @@ package com.hyperdash.firmaciv.block;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
+import com.hyperdash.firmaciv.block.custom.SquaredAngleBlock;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.Metal;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -41,9 +43,14 @@ public class FirmacivBlocks {
     public static final RegistryObject<Block> THATCH_ROOFING_SLAB = registerBlockWithItem("thatch_roofing_slab",
             () -> new SlabBlock(BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never).sound(TFCSounds.THATCH).noCollission()));
 
-
     public static final RegistryObject<Block> BOAT_FRAME = registerBlockWithItem("boat_frame",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
+
+    public static final RegistryObject<Block> WATERCRAFT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
+            () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
+
+    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
+            () -> new OarlockBlock(BlockBehaviour.Properties.copy(TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);

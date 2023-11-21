@@ -42,6 +42,27 @@
   "entity.firmaciv.dugout_canoe.white_cedar": "White Cedar Dugout Canoe",
   "entity.firmaciv.dugout_canoe.willow": "Willow Dugout Canoe",
 
+
+  "entity.firmaciv.rowboat.acacia": "Acacia Rowboat",
+  "entity.firmaciv.rowboat.ash": "Ash Rowboat",
+  "entity.firmaciv.rowboat.aspen": "Aspen Rowboat",
+  "entity.firmaciv.rowboat.birch": "Birch Rowboat",
+  "entity.firmaciv.rowboat.blackwood": "Blackwood Rowboat",
+  "entity.firmaciv.rowboat.chestnut": "Chestnut Rowboat",
+  "entity.firmaciv.rowboat.douglas_fir": "Douglas Fir Rowboat",
+  "entity.firmaciv.rowboat.hickory": "Hickory Rowboat",
+  "entity.firmaciv.rowboat.kapok": "KapokRowboat",
+  "entity.firmaciv.rowboat.maple": "Maple Rowboat",
+  "entity.firmaciv.rowboat.oak": "Oak Rowboat",
+  "entity.firmaciv.rowboat.palm": "Palm Rowboat",
+  "entity.firmaciv.rowboat.pine": "Pine Rowboat",
+  "entity.firmaciv.rowboat.rosewood": "Rosewood Rowboat",
+  "entity.firmaciv.rowboat.sequoia": "Sequoia Rowboat",
+  "entity.firmaciv.rowboat.spruce": "Spruce Rowboat",
+  "entity.firmaciv.rowboat.sycamore": "Sycamore Rowboat",
+  "entity.firmaciv.rowboat.white_cedar": "White Cedar Rowboat",
+  "entity.firmaciv.rowboat.willow": "Willow Rowboat",
+
   "entity.firmaciv.kayak": "Kayak",
 
   "entity.firmaciv.vehicle_part": "Vehicle Part",
@@ -65,6 +86,7 @@
   "item.firmaciv.kayak": "Kayak",
   "item.firmaciv.kayak_paddle": "Kayak Paddle",
   "item.firmaciv.canoe_paddle": "Canoe Paddle",
+  "item.firmaciv.oar": "Oar",
 
   "itemGroup.firmaciv": "Firma: Civilization",
   "creativetab.firmaciv_tab": "Firma: Civilization",

@@ -71,10 +71,10 @@ public class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
-    protected void addAdditionalSaveData(final CompoundTag tag) {
-        tag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
-        tag.putInt("Lifespan", this.lifespan);
-        tag.putInt("notRidingTicks", this.notRidingTicks);
+    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
+        compoundTag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
+        compoundTag.putInt("Lifespan", this.lifespan);
+        compoundTag.putInt("notRidingTicks", this.notRidingTicks);
     }
 
     public Item getDropItem() {

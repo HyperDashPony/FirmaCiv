@@ -64,8 +64,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         this.lumberItem = variant.getLumber();
     }
 
-    //public final CanoeWoodType woodType;
-
     public static Block getByStripped(Block strippedLogBlock) {
         return CANOE_COMPONENT_BLOCKS.values().stream()
                 .filter(registryObject -> registryObject.get().strippedBlock.get() == strippedLogBlock)
@@ -321,15 +319,10 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         int canoeCarvedState = pstate.getValue(CANOE_CARVED);
 
-        switch (canoeCarvedState) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                return SHAPE_1;
-            default:
-                return SHAPE_FINAL;
-        }
+        return switch (canoeCarvedState) {
+            case 1, 2, 3, 4 -> SHAPE_1;
+            default -> SHAPE_FINAL;
+        };
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {

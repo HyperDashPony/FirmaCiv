@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "firmaciv:block/oarlock",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "firmaciv:block/oarlock"
+    },
+    "facing=south": {
+      "model": "firmaciv:block/oarlock",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "firmaciv:block/oarlock",
+      "y": 270
+    }
+  }
+}
