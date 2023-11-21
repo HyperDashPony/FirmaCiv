@@ -26,7 +26,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
-public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implements HasCustomInventoryScreen, ContainerEntity {
+public class WorkbenchCompartmentEntity extends CompartmentEntity implements HasCustomInventoryScreen, ContainerEntity {
     private static final int CONTAINER_SIZE = 18;
     private NonNullList<ItemStack> itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
     @Nullable

@@ -23,16 +23,16 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractCompartmentEntity extends Entity {
+public abstract class CompartmentEntity extends Entity {
 
     private static final EntityDataAccessor<ItemStack> DATA_BLOCK_TYPE_ITEM = SynchedEntityData.defineId(
-            AbstractCompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
+            CompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
-            AbstractCompartmentEntity.class, EntityDataSerializers.INT);
+            CompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT_DIR = SynchedEntityData.defineId(
-            AbstractCompartmentEntity.class, EntityDataSerializers.INT);
+            CompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(
-            AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
+            CompartmentEntity.class, EntityDataSerializers.FLOAT);
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
     public int lifespan = 6000;
@@ -40,7 +40,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
     protected VehiclePartEntity ridingThisPart = null;
     private int notRidingTicks = 0;
 
-    public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
+    public CompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
     }
 
@@ -160,7 +160,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
      * @param newCompartment The compartment entity which is replacing this object
      * @return The compartment passed in
      */
-    protected AbstractCompartmentEntity swapCompartments(final AbstractCompartmentEntity newCompartment) {
+    protected CompartmentEntity swapCompartments(final CompartmentEntity newCompartment) {
         this.spawnAtLocation(this.getDropItem());
         this.stopRiding();
         this.discard();

@@ -2,7 +2,7 @@ package com.hyperdash.firmaciv.entity.custom;
 
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.AbstractCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.CompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehiclePartEntity;
 import net.minecraft.BlockUtil;
@@ -739,9 +739,9 @@ public class FirmacivBoatEntity extends Entity {
         final List<Entity> truePassengers = Lists.newArrayList();
 
         for (final Entity vehiclePart : this.getPassengers()) {
-            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity abstractCompartmentEntity) {
-                if (abstractCompartmentEntity.isVehicle()) {
-                    truePassengers.add(abstractCompartmentEntity.getFirstPassenger());
+            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof CompartmentEntity compartmentEntity) {
+                if (compartmentEntity.isVehicle()) {
+                    truePassengers.add(compartmentEntity.getFirstPassenger());
                 }
             }
         }

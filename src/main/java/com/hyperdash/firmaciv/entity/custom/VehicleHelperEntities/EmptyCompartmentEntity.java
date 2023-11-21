@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
+public class EmptyCompartmentEntity extends CompartmentEntity {
     protected boolean inputLeft;
     protected boolean inputRight;
     protected boolean inputUp;
@@ -175,7 +175,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             return InteractionResult.PASS;
         }
 
-        AbstractCompartmentEntity newCompartment = null;
+        CompartmentEntity newCompartment = null;
         if (canAddNonPlayers && !item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());

@@ -67,7 +67,7 @@ public class VehiclePartEntity extends Entity {
         final Vec3 vec3 = (new Vec3(0, 0, 0)).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
         moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
         passenger.setPos(this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
-        if (passenger instanceof AbstractCompartmentEntity) {
+        if (passenger instanceof CompartmentEntity) {
             passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
 
             if (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 1) {

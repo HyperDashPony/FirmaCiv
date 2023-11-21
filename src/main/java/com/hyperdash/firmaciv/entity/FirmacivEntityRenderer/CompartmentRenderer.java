@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.entity.FirmacivEntityRenderer;
 
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.AbstractCompartmentEntity;
+import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.CompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.ChestCompartmentEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -19,7 +19,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntity> {
+public class CompartmentRenderer extends EntityRenderer<CompartmentEntity> {
     private final BlockRenderDispatcher blockRenderer;
 
     public CompartmentRenderer(EntityRendererProvider.Context pContext/*, ModelLayerLocation pLayer*/) {
@@ -28,7 +28,7 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
         this.blockRenderer = pContext.getBlockRenderDispatcher();
     }
 
-    public void render(AbstractCompartmentEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
+    public void render(CompartmentEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
                        MultiBufferSource pBuffer, int pPackedLight) {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
@@ -55,11 +55,11 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
     }
 
     @Override
-    public ResourceLocation getTextureLocation(AbstractCompartmentEntity pEntity) {
+    public ResourceLocation getTextureLocation(CompartmentEntity pEntity) {
         return null;
     }
 
-    protected void renderCompartmentContents(AbstractCompartmentEntity pEntity, float pPartialTicks, BlockState pState,
+    protected void renderCompartmentContents(CompartmentEntity pEntity, float pPartialTicks, BlockState pState,
                                              PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         this.blockRenderer.renderSingleBlock(pState, pPoseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
     }
