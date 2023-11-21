@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
+import com.hyperdash.firmaciv.common.blockentities.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.events.config.FirmacivConfig;
 import com.hyperdash.firmaciv.util.FirmacivTags;

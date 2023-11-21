@@ -1,8 +1,8 @@
 package com.hyperdash.firmaciv.block.custom;
 
 import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
-import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
-import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
+import com.hyperdash.firmaciv.common.blockentities.FirmacivBlockEntities;
+import com.hyperdash.firmaciv.common.blockentities.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.common.entity.CanoeEntity;

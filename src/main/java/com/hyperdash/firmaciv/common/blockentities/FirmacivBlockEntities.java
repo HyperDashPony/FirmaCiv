@@ -1,7 +1,6 @@
-package com.hyperdash.firmaciv.block.blockentity;
+package com.hyperdash.firmaciv.common.blockentities;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.world.level.block.Block;

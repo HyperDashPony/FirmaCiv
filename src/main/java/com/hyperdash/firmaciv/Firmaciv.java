@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv;
 
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
-import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
+import com.hyperdash.firmaciv.common.blockentities.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.client.FirmacivClientEvents;
 import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.events.config.FirmacivConfig;

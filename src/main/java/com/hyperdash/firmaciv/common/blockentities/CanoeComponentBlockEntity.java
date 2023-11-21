@@ -1,6 +1,5 @@
-package com.hyperdash.firmaciv.block.blockentity.custom;
+package com.hyperdash.firmaciv.common.blockentities;
 
-import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.mojang.logging.LogUtils;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;

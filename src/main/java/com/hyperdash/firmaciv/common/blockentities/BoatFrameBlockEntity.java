@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.block.blockentity.custom;
+package com.hyperdash.firmaciv.common.blockentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
