@@ -1,10 +1,10 @@
 package com.hyperdash.firmaciv.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.BoatVariant;
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.KayakEntity;
-import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
+import com.hyperdash.firmaciv.common.entity.BoatVariant;
+import com.hyperdash.firmaciv.common.entity.CanoeEntity;
+import com.hyperdash.firmaciv.common.entity.KayakEntity;
+import com.hyperdash.firmaciv.common.entity.RowboatEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.*;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;

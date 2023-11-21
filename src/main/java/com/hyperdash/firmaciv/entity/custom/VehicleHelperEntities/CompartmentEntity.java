@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities;
 
-import com.hyperdash.firmaciv.entity.custom.FirmacivBoatEntity;
-import com.hyperdash.firmaciv.entity.custom.KayakEntity;
+import com.hyperdash.firmaciv.common.entity.FirmacivBoatEntity;
+import com.hyperdash.firmaciv.common.entity.KayakEntity;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

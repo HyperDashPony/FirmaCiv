@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.client.render.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.KayakEntity;
+import com.hyperdash.firmaciv.common.entity.KayakEntity;
 import com.hyperdash.firmaciv.client.model.entity.KayakEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

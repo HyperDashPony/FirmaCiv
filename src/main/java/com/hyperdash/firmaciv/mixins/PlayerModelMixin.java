@@ -1,8 +1,8 @@
 package com.hyperdash.firmaciv.mixins;
 
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.KayakEntity;
-import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
+import com.hyperdash.firmaciv.common.entity.CanoeEntity;
+import com.hyperdash.firmaciv.common.entity.KayakEntity;
+import com.hyperdash.firmaciv.common.entity.RowboatEntity;
 import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;

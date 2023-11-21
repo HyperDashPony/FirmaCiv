@@ -2,8 +2,8 @@ package com.hyperdash.firmaciv.client.render.entity;
 
 import com.google.common.collect.ImmutableMap;
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.BoatVariant;
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
+import com.hyperdash.firmaciv.common.entity.BoatVariant;
+import com.hyperdash.firmaciv.common.entity.CanoeEntity;
 import com.hyperdash.firmaciv.client.model.entity.CanoeEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

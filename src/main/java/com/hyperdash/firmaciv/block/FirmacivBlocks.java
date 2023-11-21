@@ -3,7 +3,7 @@ package com.hyperdash.firmaciv.block;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
 import com.hyperdash.firmaciv.block.custom.SquaredAngleBlock;
-import com.hyperdash.firmaciv.entity.custom.BoatVariant;
+import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -54,10 +54,12 @@ public class FirmacivBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final RegistryObject<Block> WATERCRAFT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
-            () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
+            () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
+                    BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
-            () -> new OarlockBlock(BlockBehaviour.Properties.copy(TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
+            () -> new OarlockBlock(BlockBehaviour.Properties.copy(
+                    TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);

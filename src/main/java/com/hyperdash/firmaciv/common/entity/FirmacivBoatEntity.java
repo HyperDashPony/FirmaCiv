@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom;
+package com.hyperdash.firmaciv.common.entity;
 
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;

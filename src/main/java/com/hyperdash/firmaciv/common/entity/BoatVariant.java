@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom;
+package com.hyperdash.firmaciv.common.entity;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;

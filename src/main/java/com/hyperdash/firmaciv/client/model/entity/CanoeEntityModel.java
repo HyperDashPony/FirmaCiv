@@ -4,7 +4,7 @@ package com.hyperdash.firmaciv.client.model.entity;// Made with Blockbench 4.5.2
 
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
+import com.hyperdash.firmaciv.common.entity.CanoeEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
