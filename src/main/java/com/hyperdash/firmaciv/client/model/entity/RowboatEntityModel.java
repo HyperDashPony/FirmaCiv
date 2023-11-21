@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom.entitymodel;// Made with Blockbench 4.8.3
+package com.hyperdash.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 
 import com.hyperdash.firmaciv.Firmaciv;

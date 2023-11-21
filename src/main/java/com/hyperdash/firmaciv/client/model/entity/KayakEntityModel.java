@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.entity.custom.entitymodel;
+package com.hyperdash.firmaciv.client.model.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.mojang.blaze3d.vertex.PoseStack;

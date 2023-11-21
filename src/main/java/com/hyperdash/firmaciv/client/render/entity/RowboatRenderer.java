@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.entity.custom.BoatVariant;
 import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
-import com.hyperdash.firmaciv.entity.custom.entitymodel.RowboatEntityModel;
+import com.hyperdash.firmaciv.client.model.entity.RowboatEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
