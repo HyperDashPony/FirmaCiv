@@ -23,6 +23,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.Boat.Status;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -94,7 +95,6 @@ public class FirmacivBoatEntity extends Entity {
     public FirmacivBoatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
-        spawnTicks = 0;
     }
 
     public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
@@ -273,14 +273,13 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     public void tick() {
-
         if (this.getControllingPassenger() == null) {
             this.deltaRotation = 0;
         }
 
         this.oldStatus = this.status;
         this.status = this.getStatus();
-        if (this.status != FirmacivBoatEntity.Status.UNDER_WATER && this.status != FirmacivBoatEntity.Status.UNDER_FLOWING_WATER) {
+        if (this.status != Status.UNDER_WATER && this.status != Status.UNDER_FLOWING_WATER) {
             this.outOfControlTicks = 0.0F;
         } else {
             ++this.outOfControlTicks;
@@ -499,26 +498,30 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     /**
-     * Determines whether the boat is in water, gliding on land, or in air
+     * Determines the current status of the boat
+     *
+     * @return The current status of the boat
      */
-    protected FirmacivBoatEntity.Status getStatus() {
-        final FirmacivBoatEntity.Status firmacivboat$status = this.isUnderwater();
-        if (firmacivboat$status != null) {
+    protected Status getStatus() {
+        final Status underwater = this.isUnderwater();
+
+        if (underwater != null) {
             this.waterLevel = this.getBoundingBox().maxY;
-            return firmacivboat$status;
+            return underwater;
         }
 
         if (this.checkInWater()) {
-            return FirmacivBoatEntity.Status.IN_WATER;
+            return Status.IN_WATER;
         }
 
         final float groundFriction = this.getGroundFriction();
+
         if (0 < groundFriction) {
             this.landFriction = groundFriction;
-            return FirmacivBoatEntity.Status.ON_LAND;
+            return Status.ON_LAND;
         }
 
-        return FirmacivBoatEntity.Status.IN_AIR;
+        return Status.IN_AIR;
     }
 
     public float getWaterLevelAbove() {
@@ -627,40 +630,41 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     /**
-     * Decides whether the boat is currently underwater.
+     * Determines if the boat is underwater
+     *
+     * @return {@link Status#UNDER_FLOWING_WATER}, {@link Status#UNDER_WATER} or null
      */
     @Nullable
-    protected FirmacivBoatEntity.Status isUnderwater() {
-        AABB aabb = this.getBoundingBox();
-        double d0 = aabb.maxY + 0.001D;
-        int i = Mth.floor(aabb.minX);
-        int j = Mth.ceil(aabb.maxX);
-        int k = Mth.floor(aabb.maxY);
-        int l = Mth.ceil(d0);
-        int i1 = Mth.floor(aabb.minZ);
-        int j1 = Mth.ceil(aabb.maxZ);
-        boolean flag = false;
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+    protected Status isUnderwater() {
+        final AABB aabb = this.getBoundingBox();
+        final double d0 = aabb.maxY + 0.001D;
+        final int i = Mth.floor(aabb.minX);
+        final int j = Mth.ceil(aabb.maxX);
+        final int k = Mth.floor(aabb.maxY);
+        final int l = Mth.ceil(d0);
+        final int i1 = Mth.floor(aabb.minZ);
+        final int j1 = Mth.ceil(aabb.maxZ);
+        boolean isUnderwater = false;
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
         for (int k1 = i; k1 < j; ++k1) {
             for (int l1 = k; l1 < l; ++l1) {
                 for (int i2 = i1; i2 < j1; ++i2) {
-                    blockpos$mutableblockpos.set(k1, l1, i2);
-                    FluidState fluidstate = this.level().getFluidState(blockpos$mutableblockpos);
-                    if (fluidstate.is(
-                            FluidTags.WATER) && d0 < (double) ((float) blockpos$mutableblockpos.getY() + fluidstate.getHeight(
-                            this.level(), blockpos$mutableblockpos))) {
+                    mutableBlockPos.set(k1, l1, i2);
+                    final FluidState fluidstate = this.level().getFluidState(mutableBlockPos);
+                    if (fluidstate.is(FluidTags.WATER) &&
+                            d0 < mutableBlockPos.getY() + fluidstate.getHeight(this.level(), mutableBlockPos)) {
                         if (!fluidstate.isSource()) {
-                            return FirmacivBoatEntity.Status.UNDER_FLOWING_WATER;
+                            return Status.UNDER_FLOWING_WATER;
                         }
 
-                        flag = true;
+                        isUnderwater = true;
                     }
                 }
             }
         }
 
-        return flag ? FirmacivBoatEntity.Status.UNDER_WATER : null;
+        return isUnderwater ? Status.UNDER_WATER : null;
     }
 
     /**
@@ -671,25 +675,25 @@ public class FirmacivBoatEntity extends Entity {
         double d1 = this.isNoGravity() ? 0.0D : (double) -0.04F;
         double d2 = 0.0D;
         this.invFriction = 0.05F;
-        if (this.oldStatus == FirmacivBoatEntity.Status.IN_AIR && this.status != FirmacivBoatEntity.Status.IN_AIR && this.status != FirmacivBoatEntity.Status.ON_LAND) {
+        if (this.oldStatus == Status.IN_AIR && this.status != Status.IN_AIR && this.status != Status.ON_LAND) {
             this.waterLevel = this.getY(1.0D);
             this.setPos(this.getX(), (double) (this.getWaterLevelAbove() - this.getBbHeight()) + 0.101D, this.getZ());
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
             this.lastYd = 0.0D;
-            this.status = FirmacivBoatEntity.Status.IN_WATER;
+            this.status = Status.IN_WATER;
         } else {
-            if (this.status == FirmacivBoatEntity.Status.IN_WATER) {
+            if (this.status == Status.IN_WATER) {
                 d2 = (this.waterLevel - this.getY()) / (double) this.getBbHeight();
                 this.invFriction = 0.9F;
-            } else if (this.status == FirmacivBoatEntity.Status.UNDER_FLOWING_WATER) {
+            } else if (this.status == Status.UNDER_FLOWING_WATER) {
                 d1 = -7.0E-4D;
                 this.invFriction = 0.9F;
-            } else if (this.status == FirmacivBoatEntity.Status.UNDER_WATER) {
+            } else if (this.status == Status.UNDER_WATER) {
                 d2 = 0.01F;
                 this.invFriction = 0.45F;
-            } else if (this.status == FirmacivBoatEntity.Status.IN_AIR) {
+            } else if (this.status == Status.IN_AIR) {
                 this.invFriction = 0.9F;
-            } else if (this.status == FirmacivBoatEntity.Status.ON_LAND) {
+            } else if (this.status == Status.ON_LAND) {
                 this.invFriction = this.landFriction;
                 if (invFriction > 0.5F) {
                     invFriction = 0.5F;
@@ -1042,13 +1046,5 @@ public class FirmacivBoatEntity extends Entity {
     @Override
     public ItemStack getPickResult() {
         return new ItemStack(this.getDropItem());
-    }
-
-    public enum Status {
-        IN_WATER,
-        UNDER_WATER,
-        UNDER_FLOWING_WATER,
-        ON_LAND,
-        IN_AIR
     }
 }
