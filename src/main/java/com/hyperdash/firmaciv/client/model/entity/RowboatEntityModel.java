@@ -2,6 +2,7 @@ package com.hyperdash.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.common.entity.RowboatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -10,6 +11,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
@@ -18,7 +20,8 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
             new ResourceLocation(Firmaciv.MOD_ID, "rowboat_entity"), "main");
     private final ModelPart waterocclusion;
     private final ModelPart hull;
-    private final ModelPart oars;
+    private final ModelPart oar_port;
+    private final ModelPart oar_starboard;
     private final ModelPart bow_floor;
     private final ModelPart seats;
     private final ModelPart bow;
@@ -34,7 +37,8 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         ModelPart root = createBodyLayer().bakeRoot();
         this.waterocclusion = root.getChild("waterocclusion");
         this.hull = root.getChild("hull");
-        this.oars = root.getChild("oars");
+        this.oar_port = root.getChild("oar_port");
+        this.oar_starboard = root.getChild("oar_starboard");
         this.bow_floor = root.getChild("bow_floor");
         this.seats = root.getChild("seats");
         this.bow = root.getChild("bow");
@@ -46,7 +50,6 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         this.keel = root.getChild("keel");
         this.transom = root.getChild("transom");
     }
-
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
@@ -76,23 +79,20 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
                         .addBox(-12.5F, -0.25F, 1.0F, 27.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)),
                 PartPose.offsetAndRotation(0.0F, -0.25F, 0.3333F, 0.0F, 1.5708F, 0.0F));
 
-        PartDefinition oars = partdefinition.addOrReplaceChild("oars", CubeListBuilder.create(),
-                PartPose.offset(0.0F, 24.0F, 0.0F));
-
-        PartDefinition oar_starboard = oars.addOrReplaceChild("oar_starboard",
+        PartDefinition oar_starboard = partdefinition.addOrReplaceChild("oar_starboard",
                 CubeListBuilder.create().texOffs(129, 194)
                         .addBox(-21.875F, -0.5F, -0.5F, 30.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
                         .texOffs(129, 189).addBox(8.125F, -0.5F, -1.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
                         .texOffs(129, 202).addBox(-35.875F, -0.5F, -2.5F, 11.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
                         .texOffs(115, 197).addBox(-24.875F, -0.5F, -1.5F, 3.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)),
-                PartPose.offsetAndRotation(-14.4971F, -13.2364F, -1.2288F, -0.3441F, 0.8192F, -0.456F));
+                PartPose.offsetAndRotation(-14.4971F, 10.7636F, -1.2288F, -0.3441F, 0.8192F, -0.456F));
 
-        PartDefinition oar_port = oars.addOrReplaceChild("oar_port", CubeListBuilder.create().texOffs(65, 194)
+        PartDefinition oar_port = partdefinition.addOrReplaceChild("oar_port", CubeListBuilder.create().texOffs(65, 194)
                         .addBox(-8.125F, -0.5F, -0.5F, 30.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
                         .texOffs(119, 189).addBox(-9.125F, -0.5F, -1.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
                         .texOffs(95, 202).addBox(24.875F, -0.5F, -2.5F, 11.0F, 1.0F, 5.0F, new CubeDeformation(0.0F))
                         .texOffs(129, 197).addBox(21.875F, -0.5F, -1.5F, 3.0F, 1.0F, 3.0F, new CubeDeformation(0.0F)),
-                PartPose.offsetAndRotation(14.4971F, -13.2364F, -1.2288F, -0.3441F, -0.8192F, 0.456F));
+                PartPose.offsetAndRotation(14.4971F, 10.7636F, -1.2288F, 2.7975F, -0.8192F, 0.456F));
 
         PartDefinition bow_floor = partdefinition.addOrReplaceChild("bow_floor", CubeListBuilder.create(),
                 PartPose.offset(0.0F, 19.8333F, -13.1111F));
@@ -246,9 +246,27 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         return LayerDefinition.create(meshdefinition, 256, 256);
     }
 
+    private static void animatePaddle(RowboatEntity pBoat, int pSide, ModelPart pPaddle, float pLimbSwing) {
+        float f = pBoat.getRowingTime(pSide, pLimbSwing);
+        if (pSide == 0) {
+            pPaddle.xRot = -Mth.clampedLerp(-2.0471975512f, -1.2617994F,
+                    -(Mth.sin(-f) + 1.0F) / 2.0F);
+            pPaddle.yRot = Mth.clampedLerp(0.7853981634f, -0.7853981634f,
+                    (Mth.sin(-f + 1.0F) + 1.0F) / 2.0F);
+        }
+        if (pSide == 1) {
+            pPaddle.xRot = -Mth.clampedLerp(-2.0471975512f, -1.2617994F,
+                    (Mth.sin(-f) + 1.0F) / 2.0F);
+            pPaddle.yRot = Mth.clampedLerp(0.7853981634f, -0.7853981634f,
+                    (Mth.sin(-f + 1.0F) + 1.0F) / 2.0F);
+            pPaddle.yRot = -pPaddle.yRot;
+        }
+
+    }
+
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-                          float headPitch) {
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw,
+                          float pHeadPitch) {
 
     }
 
@@ -256,11 +274,24 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         return this.waterocclusion;
     }
 
+    public ModelPart getOarPort() {
+        return this.oar_port;
+    }
+
+    public ModelPart getOarStarboard() {
+        return this.oar_starboard;
+    }
+
+    public void setupAnim(RowboatEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
+                          float pNetHeadYaw, float pHeadPitch) {
+        animatePaddle(pEntity, 0, this.getOarPort(), pLimbSwing);
+        animatePaddle(pEntity, 1, this.getOarStarboard(), pLimbSwing);
+    }
+
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
                                float red, float green, float blue, float alpha) {
         hull.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        oars.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         bow_floor.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         seats.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         bow.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
