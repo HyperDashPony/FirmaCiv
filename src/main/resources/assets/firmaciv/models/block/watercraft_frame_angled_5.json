@@ -1,0 +1,9 @@
+{
+  "parent": "firmaciv:block/watercraft_frame_angled/template/watercraft_frame_angled_5",
+  "textures": {
+    "2": "tfc:block/wood/planks/maple",
+    "3": "tfc:block/wood/planks/maple",
+    "4": "tfc:block/metal/block/copper",
+    "particle": "tfc:block/wood/planks/maple"
+  }
+}

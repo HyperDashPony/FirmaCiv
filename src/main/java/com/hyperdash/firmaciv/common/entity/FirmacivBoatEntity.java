@@ -68,6 +68,7 @@ public class FirmacivBoatEntity extends Entity {
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float DAMAGE_RECOVERY = 0.5f;
     protected final float[] paddlePositions = new float[2];
+    private final int spawnTicks = 0;
     protected List<VehiclePartEntity> vehicleParts = new ArrayList<>();
     protected float invFriction;
     protected float outOfControlTicks;
@@ -91,7 +92,6 @@ public class FirmacivBoatEntity extends Entity {
     protected float bubbleMultiplier;
     protected float bubbleAngle;
     protected float bubbleAngleO;
-    private final int spawnTicks = 0;
 
     public FirmacivBoatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);

@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -32,11 +33,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.hyperdash.firmaciv.common.blocks.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
+
 
 public class CanoeComponentBlock extends BaseEntityBlock {
 
@@ -100,8 +101,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         }
 
-        return row == 3;
-
+        return false;
     }
 
     private static BlockPos getMiddleBlockPos(Level pLevel, BlockPos pPos, Block canoeComponentBlock) {
@@ -224,8 +224,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         return false;
     }
 
-    // static methods and fields below
-
     public static void trySpawnCanoe(Level pLevel, BlockPos pPos, Block canoeComponentBlock) {
 
         if (!areValidBlockStates(pLevel, pPos, canoeComponentBlock)) {
@@ -272,6 +270,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
     }
 
+    // static methods and fields below
+
     private static BlockPattern createCanoeFull(Block canoeComponentBlock) {
         BlockPattern canoeFull = BlockPatternBuilder.start().aisle("#", "#", "#").where('#',
                 BlockInWorld.hasState(BlockStatePredicate.forBlock(canoeComponentBlock))).build();
@@ -279,15 +279,16 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         return canoeFull;
     }
 
-    public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
-        if (stateIn.getValue(CANOE_CARVED) == 12) {
-            double x = (float) pos.getX() + rand.nextFloat();
-            double y = (float) pos.getY() + rand.nextFloat();
-            double z = (float) pos.getZ() + rand.nextFloat();
+    @Override
+    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+        if (pState.getValue(CANOE_CARVED) == 12) {
+            double x = (float) pPos.getX() + pRandom.nextFloat();
+            double y = (float) pPos.getY() + pRandom.nextFloat();
+            double z = (float) pPos.getZ() + pRandom.nextFloat();
 
-            for (int i = 0; i < rand.nextInt(3); ++i) {
-                level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0.0,
-                        0.1F + rand.nextFloat() / 8.0F, 0.0);
+            for (int i = 0; i < pRandom.nextInt(3); ++i) {
+                pLevel.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0.0,
+                        0.1F + pRandom.nextFloat() / 8.0F, 0.0);
             }
         }
     }
@@ -326,6 +327,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         return 5;
     }
 
+    @Override
     public VoxelShape getShape(BlockState pstate, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
 
         int canoeCarvedState = pstate.getValue(CANOE_CARVED);
@@ -336,11 +338,13 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         };
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite())
                 .setValue(AXIS, pContext.getHorizontalDirection().getAxis());
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING);
         pBuilder.add(AXIS);
@@ -356,6 +360,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         return strippedBlock.get();
     }
 
+    @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
             pLevel.removeBlockEntity(pPos);
@@ -373,7 +378,5 @@ public class CanoeComponentBlock extends BaseEntityBlock {
                 pLevel.destroyBlock(pPos.relative(axis, -1), true);
             }
         }
-
     }
-
 }

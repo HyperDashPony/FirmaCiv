@@ -1,8 +1,0 @@
-{
-  "parent": "firmaciv:block/roofing_outer",
-  "textures": {
-    "bottom": "tfc:block/wood/planks/maple",
-    "top": "tfc:block/wood/planks/maple",
-    "side": "tfc:block/wood/planks/maple"
-  }
-}

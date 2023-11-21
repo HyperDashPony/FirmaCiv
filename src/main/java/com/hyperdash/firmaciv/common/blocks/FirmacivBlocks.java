@@ -33,10 +33,12 @@ public class FirmacivBlocks {
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
                             boatVariant)));
 
+    /*
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
             () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
                     BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
                             .sound(TFCSounds.THATCH).noCollission()));
+     */
 
     public static final RegistryObject<Block> THATCH_ROOFING_STAIRS = registerBlockWithItem("thatch_roofing_stairs",
             () -> new StairBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
@@ -52,7 +54,7 @@ public class FirmacivBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final RegistryObject<Block> WATERCRAFT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
-            () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
+            () -> new AngledWatercraftFrameBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
                     BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
