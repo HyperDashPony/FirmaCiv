@@ -223,14 +223,15 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-        /*
-        if(pState.hasBlockEntity() && pLevel.getBlockEntity(pPos, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get())){
+        if (pState.getValue(CANOE_CARVED) == 12) {
+            double x = (float) pPos.getX() + pRandom.nextFloat();
+            double y = (float) pPos.getY() + pRandom.nextFloat();
+            double z = (float) pPos.getZ() + pRandom.nextFloat();
 
-        }*/
-        double d0 = (double) pPos.getX() + 0.5D;
-        double d1 = (double) pPos.getY() + 0.7D;
-        double d2 = (double) pPos.getZ() + 0.5D;
-        pLevel.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            for (int i = 0; i < pRandom.nextInt(3); ++i) {
+                pLevel.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0.0, 0.1F + pRandom.nextFloat() / 8.0F, 0.0);
+            }
+        }
     }
 
     // static methods and fields below
@@ -284,17 +285,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         return canoeFull;
     }
 
-    public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
-        if (stateIn.getValue(CANOE_CARVED) == 12) {
-            double x = (float) pos.getX() + rand.nextFloat();
-            double y = (float) pos.getY() + rand.nextFloat();
-            double z = (float) pos.getZ() + rand.nextFloat();
 
-            for (int i = 0; i < rand.nextInt(3); ++i) {
-                level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0.0, 0.1F + rand.nextFloat() / 8.0F, 0.0);
-            }
-        }
-    }
 
     @Nullable
     @Override
