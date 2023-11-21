@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.common.entity.boatpart;
 
 import com.google.common.collect.Lists;
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.common.entity.CanoeEntity;
 import com.hyperdash.firmaciv.common.entity.KayakEntity;
 import com.hyperdash.firmaciv.common.entity.RowboatEntity;

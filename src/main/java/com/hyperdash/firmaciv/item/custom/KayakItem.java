@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.item.custom;
 
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.common.entity.KayakEntity;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
