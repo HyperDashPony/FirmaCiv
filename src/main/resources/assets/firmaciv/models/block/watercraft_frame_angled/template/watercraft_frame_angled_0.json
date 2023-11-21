@@ -1,8 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"2": "maple",
-		"particle": "maple"
+		"2": "tfc:block/wood/planks/maple"
 	},
 	"elements": [
 		{

@@ -3,9 +3,13 @@ package com.hyperdash.firmaciv.block.custom;
 import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
 import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.blockentity.custom.WatercraftFrameBlockEntity;
+import com.hyperdash.firmaciv.item.FirmacivItems;
+import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -19,14 +23,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.StairsShape;
@@ -40,10 +43,10 @@ import javax.annotation.Nullable;
 public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements EntityBlock {
 
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_8;
-    @Deprecated // Forge: Use the other constructor that takes a Supplier
+    @Deprecated
     public AngledWatercraftFrameBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
-        super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
+        super(pBaseState, pProperties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM).setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.FALSE).setValue(FRAME_PROCESSED, 0));
     }
 
     @Override
@@ -51,6 +54,13 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
         if (pLevel.getBlockState(pPos.above()).is(FirmacivBlocks.OARLOCK.get())){
             pLevel.destroyBlock(pPos.above(), true);
         }
+        //((WatercraftFrameBlockEntity)pLevel.getBlockEntity(pPos)).ejectInventory();
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
     }
 
     @Override
@@ -61,21 +71,24 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
                 ItemStack held = player.getItemInHand(hand);
                 Item item = held.getItem();
                 int processState = state.getValue(FRAME_PROCESSED);
-                if(processState < 4){
+                if(processState < 4 && item.getDefaultInstance().is(FirmacivTags.Items.PLANKS)){
                     level.setBlock(pos, (BlockState)state.setValue(FRAME_PROCESSED, processState + 1), 10);
-                    frameBlockEntity.addPlankItems(held.split(1), processState + 1);
-                    level.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1f, level.getRandom().nextFloat() * 0.1F + 0.9F);
-                } if (processState > 4 && processState < 8){
+                    frameBlockEntity.addPlankItems(held.split(1), processState);
+
+                } if (processState >= 4 && processState < 8 && item.getDefaultInstance().is(FirmacivItems.COPPER_BOLT.get())){
+
                     level.setBlock(pos, (BlockState)state.setValue(FRAME_PROCESSED, processState + 1), 10);
-                    frameBlockEntity.addBoltItems(held.split(1), processState + 1);
-                    level.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5f, level.getRandom().nextFloat() * 0.1F + 0.9F);
+                    frameBlockEntity.addBoltItems(held.split(1), processState - 4);
+
+                    //level.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5f, level.getRandom().nextFloat() * 0.1F + 0.9F);
+
                 } else if(held.isEmpty()){
                     NonNullList<ItemStack> plankItems = frameBlockEntity.getPlankItems();
                     NonNullList<ItemStack> boltItems = frameBlockEntity.getBoltItems();
                     ItemStack dropStack = ItemStack.EMPTY;
                     if (processState >= 5) {
-                        dropStack = ((ItemStack)boltItems.get(processState - 4)).copy();
-                        frameBlockEntity.deleteBoltItems(processState - 4);
+                        dropStack = ((ItemStack)boltItems.get(processState - 5)).copy();
+                        frameBlockEntity.deleteBoltItems(processState - 5);
                     } else {
                         dropStack = ((ItemStack)plankItems.get(processState)).copy();
                         frameBlockEntity.deletePlankItems(processState);
@@ -90,9 +103,12 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
         return InteractionResult.SUCCESS;
     }
 
+
+
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return super.getStateForPlacement(pContext).setValue(FRAME_PROCESSED, 0);
+        BlockState blockState = super.getStateForPlacement(pContext);
+        return blockState.setValue(FRAME_PROCESSED, 0);
     }
 
     @org.jetbrains.annotations.Nullable
@@ -103,7 +119,7 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
 
     @Override
     public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.INVISIBLE;
+        return RenderShape.MODEL;
     }
 
     @Override

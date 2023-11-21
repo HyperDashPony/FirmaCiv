@@ -1,11 +1,14 @@
 package com.hyperdash.firmaciv.block.blockentity.custom;
 
 import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
+import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -38,6 +41,15 @@ public class WatercraftFrameBlockEntity extends BlockEntity {
         super.load(tag);
     }
 
+    public void ejectInventory() {
+        assert this.level != null;
+        this.boltItems.forEach((stack) -> {
+            Helpers.spawnItem(this.level, this.worldPosition, stack);
+        });
+        this.plankItems.forEach((stack) -> {
+            Helpers.spawnItem(this.level, this.worldPosition, stack);
+        });
+    }
 
 
     public void deletePlankItems(int slot) {
