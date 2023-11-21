@@ -5,31 +5,17 @@
 
 package com.hyperdash.firmaciv.client;
 
-import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.VehicleCleatEntity;
-import com.hyperdash.firmaciv.util.FirmacivTags;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.dries007.tfc.common.entities.livestock.MammalProperties;
-import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
-import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties.Age;
-import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.awt.*;
 import java.util.Locale;
@@ -55,7 +41,8 @@ public enum IngameOverlays {
         event.registerAbove(vanilla.id(), overlay.id, overlay.overlay);
     }
 
-    private static void renderCompartmentStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
+    private static void renderCompartmentStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width,
+                                                int height) {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {

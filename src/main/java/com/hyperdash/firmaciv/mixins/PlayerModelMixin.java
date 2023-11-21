@@ -1,9 +1,9 @@
 package com.hyperdash.firmaciv.mixins;
 
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.KayakEntity;
-import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
-import com.hyperdash.firmaciv.entity.custom.VehicleHelperEntities.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.CanoeEntity;
+import com.hyperdash.firmaciv.common.entity.KayakEntity;
+import com.hyperdash.firmaciv.common.entity.RowboatEntity;
+import com.hyperdash.firmaciv.common.entity.boatpart.EmptyCompartmentEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -21,7 +21,8 @@ public class PlayerModelMixin<T extends LivingEntity> extends HumanoidModel<T> {
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
-    void injectRidingPoseChange(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
+    void injectRidingPoseChange(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
+                                float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
         if (pEntity.isPassenger() && pEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
             if ((emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity)
                     || (emptyCompartmentEntity.getTrueVehicle() instanceof RowboatEntity && emptyCompartmentEntity.canAddNonPlayers())) {
