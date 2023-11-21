@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.item;
+package com.hyperdash.firmaciv.common.items;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.common.blocks.FirmacivBlocks;

@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.item.custom;
+package com.hyperdash.firmaciv.common.items;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

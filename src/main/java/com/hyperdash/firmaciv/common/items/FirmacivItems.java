@@ -1,10 +1,6 @@
-package com.hyperdash.firmaciv.item;
+package com.hyperdash.firmaciv.common.items;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.item.custom.BarometerItem;
-import com.hyperdash.firmaciv.item.custom.ClockItem;
-import com.hyperdash.firmaciv.item.custom.KayakItem;
-import com.hyperdash.firmaciv.item.custom.SextantItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

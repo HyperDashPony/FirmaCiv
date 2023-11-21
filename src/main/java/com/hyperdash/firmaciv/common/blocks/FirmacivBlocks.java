@@ -2,7 +2,7 @@ package com.hyperdash.firmaciv.common.blocks;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
-import com.hyperdash.firmaciv.item.FirmacivItems;
+import com.hyperdash.firmaciv.common.items.FirmacivItems;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
