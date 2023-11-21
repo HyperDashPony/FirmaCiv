@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.item;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.block.FirmacivBlocks;
+import com.hyperdash.firmaciv.common.blocks.FirmacivBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

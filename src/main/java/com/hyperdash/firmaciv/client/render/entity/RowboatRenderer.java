@@ -2,9 +2,9 @@ package com.hyperdash.firmaciv.client.render.entity;
 
 import com.google.common.collect.ImmutableMap;
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.client.model.entity.RowboatEntityModel;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.common.entity.RowboatEntity;
-import com.hyperdash.firmaciv.client.model.entity.RowboatEntityModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -38,13 +38,15 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         this.rowboatResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
             return variant;
         }, (type) -> {
-            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/rowboat/" + type.getName() + ".png"),
+            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID,
+                            "textures/entity/watercraft/rowboat/" + type.getName() + ".png"),
                     new RowboatEntityModel());
         }));
     }
 
     @Override
-    public void render(RowboatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack poseStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(RowboatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack poseStack,
+                       MultiBufferSource pBuffer, int pPackedLight) {
         poseStack.pushPose();
         poseStack.translate(0.0D, 0.4375D, 0.0D);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
@@ -60,7 +62,9 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
 
         float f2 = pEntity.getBubbleAngle(pPartialTicks);
         if (!Mth.equal(f2, 0.0F)) {
-            poseStack.mulPose((new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F), 1.0F, 0.0F, 1.0F));
+            poseStack.mulPose(
+                    (new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F),
+                            1.0F, 0.0F, 1.0F));
         }
 
         Pair<ResourceLocation, RowboatEntityModel> pair = getModelWithLocation(pEntity);
@@ -71,16 +75,19 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         rowboatEntityModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
-        rowboatEntityModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        if(pEntity.getOars().getCount() >= 1){
-            rowboatEntityModel.getOarStarboard().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        rowboatEntityModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F,
+                1.0F, 1.0F, 1.0F);
+        if (pEntity.getOars().getCount() >= 1) {
+            rowboatEntityModel.getOarStarboard()
+                    .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
-        if(pEntity.getOars().getCount() == 2){
+        if (pEntity.getOars().getCount() == 2) {
             rowboatEntityModel.getOarPort().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            rowboatEntityModel.getWaterocclusion().render(poseStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            rowboatEntityModel.getWaterocclusion()
+                    .render(poseStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
 
         poseStack.popPose();
@@ -89,7 +96,8 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
 
     @Deprecated // forge: override getModelWithLocation to change the texture / model
     public ResourceLocation getTextureLocation(RowboatEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/rowboat/" + pEntity.getVariant() + ".png");
+        return new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/rowboat/" + pEntity.getVariant() + ".png");
     }
 
     public Pair<ResourceLocation, RowboatEntityModel> getModelWithLocation(RowboatEntity rowboat) {

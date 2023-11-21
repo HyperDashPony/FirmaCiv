@@ -1,31 +1,19 @@
-package com.hyperdash.firmaciv.block;
+package com.hyperdash.firmaciv.common.blocks;
 
-import com.hyperdash.firmaciv.block.custom.SquaredAngleBlock;
-import com.hyperdash.firmaciv.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.entity.custom.BoatVariant;
-import com.hyperdash.firmaciv.entity.custom.CanoeEntity;
-import com.hyperdash.firmaciv.entity.custom.RowboatEntity;
-import net.minecraft.advancements.CriteriaTriggers;
+import com.hyperdash.firmaciv.common.entity.BoatVariant;
+import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.common.entity.RowboatEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
-import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
-import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.Vec3;
@@ -39,29 +27,34 @@ import java.util.stream.Stream;
 
 public class OarlockBlock extends HorizontalDirectionalBlock {
 
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private static final VoxelShape SHAPE_NORTH = Stream.of(
                     Block.box(3, 0, 0, 13, 3, 3))
             .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-
     private static final VoxelShape SHAPE_SOUTH = Stream.of(
                     Block.box(3, 0, 13, 13, 3, 16))
             .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-
     private static final VoxelShape SHAPE_EAST = Stream.of(
                     Block.box(0, 0, 3, 3, 3, 13))
             .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-
     private static final VoxelShape SHAPE_WEST = Stream.of(
                     Block.box(13, 0, 3, 16, 3, 13))
             .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-
     @Nullable
     private BlockPattern rowboatPattern;
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     protected OarlockBlock(Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    private static Vec3 getSpawnPosition(Level pLevel, BlockPos thispos, BlockState blockState) {
+        Direction direction = blockState.getValue(FACING);
+        thispos = thispos.below();
+        BlockPos otherpos = thispos.relative(direction.getOpposite());
+        Vec3 origin = new Vec3(((thispos.getX() + otherpos.getX()) / 2.0f) + 0.5f, thispos.getY() + 0.5f,
+                ((thispos.getZ() + otherpos.getZ()) / 2.0f) + 0.5f);
+        return origin;
     }
 
     @Override
@@ -99,7 +92,6 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
         level.destroyBlock(thispos.relative(axis, -1), false);
     }
 
-
     private void spawnRowboat(Level pLevel, BlockPos thispos, BlockState blockState) {
         Direction direction = blockState.getValue(FACING);
         Direction.Axis axis = direction.getClockWise().getAxis();
@@ -113,15 +105,6 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
         pLevel.addFreshEntity(rowboat);
         destroyMultiblock(pLevel, thispos, blockState);
     }
-
-    private static Vec3 getSpawnPosition(Level pLevel, BlockPos thispos, BlockState blockState) {
-        Direction direction = blockState.getValue(FACING);
-        thispos = thispos.below();
-        BlockPos otherpos = thispos.relative(direction.getOpposite());
-        Vec3 origin = new Vec3(((thispos.getX() + otherpos.getX()) / 2.0f) + 0.5f, thispos.getY() + 0.5f, ((thispos.getZ() + otherpos.getZ()) / 2.0f) + 0.5f);
-        return origin;
-    }
-
 
     public boolean checkOppositeOarlock(Level level, BlockPos thispos, BlockState blockState) {
         Direction direction = blockState.getValue(FACING);
@@ -154,24 +137,33 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
                     }
                     if (frameState1.is(FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get())) {
                         if (frameState1.getValue(FACING) == positiveDirection1
-                                || (frameState1.getValue(FACING).getAxis() != structureAxis && (frameState1.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
+                                || (frameState1.getValue(FACING).getAxis() != structureAxis && (frameState1.getValue(
+                                SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(
+                                SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
                             if (frameState2.is(FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get())) {
                                 if (frameState2.getValue(FACING) == negativeDirection2
-                                        || (frameState2.getValue(FACING).getAxis() != structureAxis && (frameState2.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState2.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
+                                        || (frameState2.getValue(FACING)
+                                        .getAxis() != structureAxis && (frameState2.getValue(
+                                        SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState2.getValue(
+                                        SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
                                     //the bottom of the boat has been fully validated
                                     thispos = thispos.relative(direction.getOpposite());
                                     frameState1 = level.getBlockState(thispos.relative(structureAxis, 1));
                                     frameState2 = level.getBlockState(thispos.relative(structureAxis, -1));
                                     if (frameState1.is(FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get())) {
                                         if (frameState1.getValue(FACING) == positiveDirection1
-                                                || (frameState1.getValue(FACING).getAxis() != structureAxis && (frameState1.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
+                                                || (frameState1.getValue(FACING)
+                                                .getAxis() != structureAxis && (frameState1.getValue(
+                                                SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(
+                                                SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
                                             if (frameState2.is(FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get())) {
-                                                if (frameState2.getValue(FACING) == negativeDirection2
-                                                        || (frameState2.getValue(FACING).getAxis() != structureAxis && (frameState2.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState2.getValue(SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
-                                                    //the top of the boat has been fully validated
-                                                    //the WHOLE BOAT has been validated
-                                                    return true;
-                                                }
+                                                //the top of the boat has been fully validated
+                                                //the WHOLE BOAT has been validated
+                                                return frameState2.getValue(FACING) == negativeDirection2
+                                                        || (frameState2.getValue(FACING)
+                                                        .getAxis() != structureAxis && (frameState2.getValue(
+                                                        SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState2.getValue(
+                                                        SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT));
                                             }
                                         }
                                     }

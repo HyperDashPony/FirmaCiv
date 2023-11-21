@@ -2,7 +2,7 @@ package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.common.blockentities.CanoeComponentBlockEntity;
-import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
+import com.hyperdash.firmaciv.common.blocks.CanoeComponentBlock;
 import com.hyperdash.firmaciv.events.config.FirmacivConfig;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.events.StartFireEvent;
@@ -21,7 +21,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.hyperdash.firmaciv.block.custom.CanoeComponentBlock.*;
+import static com.hyperdash.firmaciv.common.blocks.CanoeComponentBlock.*;
 
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class FirmacivBlockEvents {

@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.hyperdash.firmaciv.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
+import static com.hyperdash.firmaciv.common.blocks.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 
 public class FirmacivBlockEntities {
 

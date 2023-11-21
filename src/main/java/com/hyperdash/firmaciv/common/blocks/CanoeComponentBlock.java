@@ -1,11 +1,10 @@
-package com.hyperdash.firmaciv.block.custom;
+package com.hyperdash.firmaciv.common.blocks;
 
-import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
-import com.hyperdash.firmaciv.common.blockentities.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.common.blockentities.CanoeComponentBlockEntity;
-import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
+import com.hyperdash.firmaciv.common.blockentities.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.common.entity.CanoeEntity;
+import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +36,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.hyperdash.firmaciv.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
+import static com.hyperdash.firmaciv.common.blocks.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 
 public class CanoeComponentBlock extends BaseEntityBlock {
 

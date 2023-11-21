@@ -1,8 +1,6 @@
-package com.hyperdash.firmaciv.block;
+package com.hyperdash.firmaciv.common.blocks;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.block.custom.CanoeComponentBlock;
-import com.hyperdash.firmaciv.block.custom.SquaredAngleBlock;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.item.FirmacivItems;
 import net.dries007.tfc.client.TFCSounds;

@@ -1,8 +1,8 @@
 package com.hyperdash.firmaciv.common.entity.boatpart;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.common.entity.FirmacivBoatEntity;
+import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.common.entity.RowboatEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;

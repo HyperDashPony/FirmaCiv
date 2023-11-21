@@ -1,10 +1,6 @@
 package com.hyperdash.firmaciv.common.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.common.entity.BoatVariant;
-import com.hyperdash.firmaciv.common.entity.CanoeEntity;
-import com.hyperdash.firmaciv.common.entity.KayakEntity;
-import com.hyperdash.firmaciv.common.entity.RowboatEntity;
 import com.hyperdash.firmaciv.common.entity.boatpart.*;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;

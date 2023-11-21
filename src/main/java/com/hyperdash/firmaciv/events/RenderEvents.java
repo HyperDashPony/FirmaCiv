@@ -1,12 +1,12 @@
 package com.hyperdash.firmaciv.events;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.client.render.entity.*;
-import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.client.model.entity.CanoeEntityModel;
 import com.hyperdash.firmaciv.client.model.entity.KayakEntityModel;
 import com.hyperdash.firmaciv.client.model.entity.RowboatEntityModel;
+import com.hyperdash.firmaciv.client.render.entity.*;
+import com.hyperdash.firmaciv.common.entity.BoatVariant;
+import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

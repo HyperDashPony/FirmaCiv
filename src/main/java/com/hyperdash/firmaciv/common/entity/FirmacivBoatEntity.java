@@ -91,7 +91,7 @@ public class FirmacivBoatEntity extends Entity {
     protected float bubbleMultiplier;
     protected float bubbleAngle;
     protected float bubbleAngleO;
-    private int spawnTicks = 0;
+    private final int spawnTicks = 0;
 
     public FirmacivBoatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
