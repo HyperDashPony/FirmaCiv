@@ -226,7 +226,7 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         Direction direction = pContext.getClickedFace();
         BlockPos blockpos = pContext.getClickedPos();
         FluidState fluidstate = pContext.getLevel().getFluidState(blockpos);
-        BlockState blockstate = this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection()).setValue(HALF, direction != Direction.DOWN && (direction == Direction.UP || !(pContext.getClickLocation().y - (double) blockpos.getY() > 0.5D)) ? Half.BOTTOM : Half.TOP).setValue(WATERLOGGED, Boolean.valueOf(fluidstate.getType() == Fluids.WATER));
+        BlockState blockstate = this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection()).setValue(HALF, Half.BOTTOM).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
         return blockstate.setValue(SHAPE, getStairsShape(blockstate, pContext.getLevel(), blockpos));
     }
 

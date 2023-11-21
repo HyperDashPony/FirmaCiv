@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv.block.custom;
 
 import com.hyperdash.firmaciv.block.FirmacivBlockStateProperties;
+import com.hyperdash.firmaciv.block.FirmacivBlocks;
 import com.hyperdash.firmaciv.block.blockentity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.block.blockentity.custom.CanoeComponentBlockEntity;
 import com.hyperdash.firmaciv.entity.FirmacivEntities;
@@ -11,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -217,6 +219,18 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         }
 
         return false;
+    }
+
+    @Override
+    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+        /*
+        if(pState.hasBlockEntity() && pLevel.getBlockEntity(pPos, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get())){
+
+        }*/
+        double d0 = (double) pPos.getX() + 0.5D;
+        double d1 = (double) pPos.getY() + 0.7D;
+        double d2 = (double) pPos.getZ() + 0.5D;
+        pLevel.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
     }
 
     // static methods and fields below

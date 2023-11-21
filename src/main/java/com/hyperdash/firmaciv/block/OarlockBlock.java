@@ -9,6 +9,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -16,10 +17,9 @@ import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -37,7 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public class OarlockBlock extends HorizontalDirectionalBlock {
+public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
 
     private static final VoxelShape SHAPE_NORTH = Stream.of(
                     Block.box(3, 0, 0, 13, 3, 3))
@@ -77,6 +77,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
 
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
+
         if (!pOldState.is(pState.getBlock())) {
             if (checkOppositeOarlock(pLevel, pPos, pState) && checkFrameBlocks(pLevel, pPos, pState)) {
                 spawnRowboat(pLevel, pPos, pState);
@@ -98,7 +99,13 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
         level.destroyBlock(thispos.relative(axis, 1), false);
         level.destroyBlock(thispos.relative(axis, -1), false);
     }
-
+    public static boolean isSupportedByWatercraftFrame(LevelReader pLevel, BlockPos thispos) {
+        return pLevel.getBlockState(thispos.below()).is(FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get());
+    }
+    @Override
+    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+        return isSupportedByWatercraftFrame(pLevel, pPos);
+    }
 
     private void spawnRowboat(Level pLevel, BlockPos thispos, BlockState blockState) {
         Direction direction = blockState.getValue(FACING);
@@ -189,7 +196,14 @@ public class OarlockBlock extends HorizontalDirectionalBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        Direction direction = pContext.getClickedFace();
+        BlockPos blockpos = pContext.getClickedPos();
+        LevelAccessor level = pContext.getLevel();
+        BlockState blockstate = this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        if(level.getBlockState(blockpos.below()).is(FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get())){
+            blockstate = blockstate.setValue(FACING, level.getBlockState(blockpos.below()).getValue(FACING));
+        }
+        return blockstate;
     }
 
     @Override
