@@ -28,7 +28,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = 'FirmaCivilization-0.0.43-alpha-1.18.2'
+version = 'FirmaCivilization-0.0.44-alpha-1.18.2'
 group = 'com.hyperdash.' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = ''
 
