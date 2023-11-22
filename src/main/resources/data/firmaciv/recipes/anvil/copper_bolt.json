@@ -1,0 +1,16 @@
+{
+  "type": "tfc:anvil",
+  "input": {
+    "tag": "forge:rods/copper"
+  },
+  "result": {
+    "item": "firmaciv:copper_bolt",
+    "count": 2
+  },
+  "tier": 2,
+  "rules": [
+    "hit_last",
+    "punch_second_last",
+    "hit_third_last"
+  ]
+}

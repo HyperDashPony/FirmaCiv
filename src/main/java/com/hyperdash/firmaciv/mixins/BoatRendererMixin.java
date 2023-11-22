@@ -18,6 +18,7 @@ public class BoatRendererMixin extends EntityRenderer<Boat> {
         super(pContext);
     }
 
+
     public void injectUpsideDownBoat(Boat pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
                                      MultiBufferSource pBuffer, int pPackedLight) {
         pPoseStack.scale(0F, -1.0F, 0F);

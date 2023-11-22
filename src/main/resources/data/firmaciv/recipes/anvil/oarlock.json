@@ -1,14 +1,14 @@
 {
   "type": "tfc:anvil",
   "input": {
-    "tag": "forge:double_sheets/brass"
+    "tag": "forge:double_ingots/wrought_iron"
   },
   "result": {
-    "item": "firmaciv:unfinished_nav_clock"
+    "item": "firmaciv:oarlock"
   },
   "tier": 2,
   "rules": [
-    "upset_last",
+    "bend_last",
     "hit_second_last",
     "hit_third_last"
   ]

@@ -62,6 +62,7 @@ public class VehicleCleatEntity extends Mob {
         this.level().getProfiler().pop();
     }
 
+    /*
     @Override
     public void setLeashedTo(Entity pLeashHolder, boolean pBroadcastPacket) {
         super.setLeashedTo(pLeashHolder, pBroadcastPacket);
@@ -80,7 +81,7 @@ public class VehicleCleatEntity extends Mob {
         return thisAsEntity.startRiding(pVehicle,pForce);
     }
 
-
+     */
     @Override
     public void playHurtSound(DamageSource pSource) {
     }

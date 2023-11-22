@@ -1,0 +1,11 @@
+{
+  "type": "tfc:heating",
+  "ingredient": {
+    "item": "firmaciv:unfinished_nav_clock"
+  },
+  "result_fluid": {
+    "fluid": "tfc:metal/brass",
+    "amount": 400
+  },
+  "temperature": 930
+}

@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "item": "firmaciv:copper_bolt"
+  },
+  "heat_capacity": 0.71425,
+  "forging_temperature": 558,
+  "welding_temperature": 744
+}

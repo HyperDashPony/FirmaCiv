@@ -1,7 +1,7 @@
 {
   "type": "tfc:anvil",
   "input": {
-    "tag": "tfc:metal/rod/brass"
+    "tag": "forge:double_ingots/brass"
   },
   "result": {
     "item": "firmaciv:unfinished_sextant"

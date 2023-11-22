@@ -19,7 +19,7 @@ public class FirmacivItems {
             () -> new SextantItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> NAV_CLOCK = ITEMS.register("nav_clock",
-            () -> new ClockItem(new Item.Properties().stacksTo(1)));
+            () -> new NavClockItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> UNFINISHED_NAV_CLOCK = ITEMS.register("unfinished_nav_clock",
             () -> new Item(new Item.Properties().stacksTo(64)));
@@ -43,7 +43,6 @@ public class FirmacivItems {
 
     public static final RegistryObject<Item> COPPER_BOLT = ITEMS.register("copper_bolt",
             () -> new Item(new Item.Properties().stacksTo(64)));
-
 
 
     public static final RegistryObject<Item> KAYAK = ITEMS.register("kayak",

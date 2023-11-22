@@ -9,8 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class ClockItem extends AbstractNavItem {
-    public ClockItem(Item.Properties pProperties) {
+public class NavClockItem extends AbstractNavItem {
+    public NavClockItem(Item.Properties pProperties) {
         super(pProperties);
     }
 
