@@ -1,21 +1,22 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "GX ",
-    "X@X",
-    " X@"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:sheets/brass"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "firmaciv:unfinished_nav_clock"
     },
-    "G": {
-      "item": "minecraft:glass_pane"
+    {
+      "item": "tfc:lens"
     },
-    "@": {
+    {
+      "item": "tfc:brass_mechanisms"
+    },
+    {
+      "item": "tfc:brass_mechanisms"
+    },
+    {
       "item": "tfc:brass_mechanisms"
     }
-  },
+  ],
   "result": {
     "item": "firmaciv:nav_clock"
   }

@@ -1,0 +1,15 @@
+{
+  "type": "tfc:anvil",
+  "input": {
+    "tag": "tfc:metal/double_sheet/brass"
+  },
+  "result": {
+    "item": "firmaciv:unfinished_nav_clock"
+  },
+  "tier": 2,
+  "rules": [
+    "upset_last",
+    "hit_second_last",
+    "hit_third_last"
+  ]
+}

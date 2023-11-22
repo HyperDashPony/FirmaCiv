@@ -1,0 +1,15 @@
+{
+  "type": "tfc:anvil",
+  "input": {
+    "tag": "tfc:metal/sheet/brass"
+  },
+  "result": {
+    "item": "firmaciv:unfinished_barometer"
+  },
+  "tier": 2,
+  "rules": [
+    "hit_last",
+    "draw_second_last",
+    "upset_third_last"
+  ]
+}

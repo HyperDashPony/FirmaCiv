@@ -1,28 +1,23 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#G ",
-    "#GU",
-    "#G@"
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:ingots/brass"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "firmaciv:unfinished_barometer"
     },
-    "@": {
+    {
       "item": "tfc:brass_mechanisms"
     },
-    "G": {
-      "item": "minecraft:glass"
+    {
+      "item": "tfc:lens"
     },
-    "U": {
+    {
       "type": "tfc:fluid_item",
       "fluid_ingredient": {
         "ingredient": "minecraft:water",
         "amount": 100
       }
     }
-  },
+  ],
   "result": {
     "item": "firmaciv:barometer"
   }

@@ -1,24 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " GB",
-    "#@ ",
-    "## "
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:ingots/brass"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "firmaciv:unfinished_sextant"
     },
-    "@": {
+    {
+      "item": "tfc:lens"
+    },
+    {
       "item": "tfc:brass_mechanisms"
-    },
-    "B": {
-      "item": "tfc:metal/rod/brass"
-    },
-    "G": {
-      "item": "minecraft:glass_pane"
     }
-  },
+  ],
   "result": {
     "item": "firmaciv:sextant"
   }

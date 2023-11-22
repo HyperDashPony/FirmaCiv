@@ -1,0 +1,15 @@
+{
+  "type": "tfc:anvil",
+  "input": {
+    "tag": "tfc:metal/rod/brass"
+  },
+  "result": {
+    "item": "firmaciv:unfinished_sextant"
+  },
+  "tier": 2,
+  "rules": [
+    "hit_last",
+    "bend_second_last",
+    "bend_third_last"
+  ]
+}
