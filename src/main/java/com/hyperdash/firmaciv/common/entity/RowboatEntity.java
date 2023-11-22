@@ -32,7 +32,9 @@ public class RowboatEntity extends FirmacivBoatEntity {
             EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> DATA_OARS = SynchedEntityData.defineId(RowboatEntity.class,
             EntityDataSerializers.ITEM_STACK);
-    public final int PASSENGER_NUMBER = 3;
+    public final int PASSENGER_NUMBER = 4;
+
+    public final int[] CLEATS = {3};
 
     public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -44,8 +46,11 @@ public class RowboatEntity extends FirmacivBoatEntity {
 
     @Override
     public int getPassengerNumber() {
-        return PASSENGER_NUMBER;
+        return this.PASSENGER_NUMBER;
     }
+
+    @Override
+    public int[] getCleats(){return this.CLEATS;}
 
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
@@ -66,6 +71,11 @@ public class RowboatEntity extends FirmacivBoatEntity {
                     case 2 -> {
                         localX = -0.95f;
                         localZ = -0.4f;
+                    }
+                    case 3 ->{
+                        localX = 1.5f;
+                        localZ = 0f;
+                        localY += 0.5f;
                     }
                 }
             }

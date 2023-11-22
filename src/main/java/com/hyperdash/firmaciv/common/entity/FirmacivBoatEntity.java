@@ -65,6 +65,8 @@ public class FirmacivBoatEntity extends Entity {
     protected static final int TIME_TO_EJECT = 60;
     protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
     public final int PASSENGER_NUMBER = 2;
+
+    public final int[] CLEATS = {};
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float DAMAGE_RECOVERY = 0.5f;
     protected final float[] paddlePositions = new float[2];
@@ -105,6 +107,8 @@ public class FirmacivBoatEntity extends Entity {
     public int getPassengerNumber() {
         return PASSENGER_NUMBER;
     }
+    
+    public int[] getCleats(){return CLEATS;}
 
     protected int getMaxPassengers() {
         return this.getPassengerNumber();
