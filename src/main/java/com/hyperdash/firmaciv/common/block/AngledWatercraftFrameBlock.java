@@ -6,10 +6,10 @@ import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +19,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -45,12 +43,6 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
                         .setValue(FRAME_PROCESSED, 0));
     }
 
-    @Nullable
-    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(
-            BlockEntityType<A> pServerType, BlockEntityType<E> pClientType, BlockEntityTicker<? super E> pTicker) {
-        return pClientType == pServerType ? (BlockEntityTicker<A>) pTicker : null;
-    }
-
     @Override
     public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
                          final BlockState newState, final boolean isMoving) {
@@ -68,7 +60,7 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
     }
 
@@ -135,35 +127,27 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        BlockState blockState = super.getStateForPlacement(pContext);
+    public BlockState getStateForPlacement(final BlockPlaceContext blockPlaceContext) {
+        final BlockState blockState = super.getStateForPlacement(blockPlaceContext);
         return blockState.setValue(FRAME_PROCESSED, 0);
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new WatercraftFrameBlockEntity(pPos, pState);
+    public BlockEntity newBlockEntity(final BlockPos blockPos, final BlockState blockState) {
+        return new WatercraftFrameBlockEntity(blockPos, blockState);
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState pState) {
+    public RenderShape getRenderShape(final BlockState blockState) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public boolean triggerEvent(BlockState pState, Level pLevel, BlockPos pPos, int pId, int pParam) {
-        super.triggerEvent(pState, pLevel, pPos, pId, pParam);
-        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+    public boolean triggerEvent(final BlockState blockState, final Level level, final BlockPos blockPos, final int pId,
+                                int pParam) {
+        super.triggerEvent(blockState, level, blockPos, pId, pParam);
+        final BlockEntity blockentity = level.getBlockEntity(blockPos);
         return blockentity != null && blockentity.triggerEvent(pId, pParam);
     }
-
-    @Override
-    @javax.annotation.Nullable
-    public MenuProvider getMenuProvider(BlockState pState, Level pLevel, BlockPos pPos) {
-        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-        return blockentity instanceof MenuProvider ? (MenuProvider) blockentity : null;
-    }
-
-
 }
