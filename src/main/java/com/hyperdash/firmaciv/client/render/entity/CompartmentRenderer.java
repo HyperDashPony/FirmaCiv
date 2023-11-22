@@ -1,8 +1,8 @@
 package com.hyperdash.firmaciv.client.render.entity;
 
-import com.hyperdash.firmaciv.common.entity.boatpart.ChestCompartmentEntity;
-import com.hyperdash.firmaciv.common.entity.boatpart.CompartmentEntity;
-import com.hyperdash.firmaciv.common.entity.boatpart.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.ChestCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;

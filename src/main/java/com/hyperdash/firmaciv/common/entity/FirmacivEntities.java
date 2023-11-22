@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.common.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.common.entity.boatpart.*;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.*;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;

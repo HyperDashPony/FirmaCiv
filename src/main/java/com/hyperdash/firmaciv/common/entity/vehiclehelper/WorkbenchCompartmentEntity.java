@@ -1,8 +1,5 @@
-package com.hyperdash.firmaciv.common.entity.boatpart;
+package com.hyperdash.firmaciv.common.entity.vehiclehelper;
 
-import com.hyperdash.firmaciv.util.FirmacivTags;
-import net.dries007.tfc.common.container.RestrictedChestContainer;
-import net.dries007.tfc.common.container.TFCContainerTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -14,11 +11,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -29,7 +26,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
-public class ChestCompartmentEntity extends CompartmentEntity implements HasCustomInventoryScreen, ContainerEntity {
+public class WorkbenchCompartmentEntity extends CompartmentEntity implements HasCustomInventoryScreen, ContainerEntity {
     private static final int CONTAINER_SIZE = 18;
     private NonNullList<ItemStack> itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
     @Nullable
@@ -37,20 +34,19 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
     private long lootTableSeed;
     private LazyOptional<?> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
-    public ChestCompartmentEntity(final EntityType<?> entityType, final Level level) {
+    public WorkbenchCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
     }
 
     @Override
     public void remove(final RemovalReason removalReason) {
         if (!this.level().isClientSide && removalReason.shouldDestroy()) {
-            this.playSound(SoundEvents.WOOD_BREAK, 1.0F, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            this.playSound(SoundEvents.WOOD_BREAK, 1, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
             Containers.dropContents(this.level(), this, this);
         }
 
         super.remove(removalReason);
     }
-
 
     @Override
     protected void addAdditionalSaveData(final CompoundTag compoundTag) {
@@ -67,11 +63,9 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
         final InteractionResult interactionResult = this.interactWithContainerVehicle(player);
+
         if (interactionResult.consumesAction()) {
             this.gameEvent(GameEvent.CONTAINER_OPEN, player);
-            if (this.getBlockTypeItem().is(FirmacivTags.Items.CHESTS)) {
-                PiglinAi.angerNearbyPiglins(player, true);
-            }
         }
 
         return interactionResult;
@@ -82,7 +76,6 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
         player.openMenu(this);
         if (!player.level().isClientSide) {
             this.gameEvent(GameEvent.CONTAINER_OPEN, player);
-            PiglinAi.angerNearbyPiglins(player, true);
         }
     }
 
@@ -91,6 +84,7 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
         this.clearChestVehicleContent();
     }
 
+    @Override
     public int getContainerSize() {
         return CONTAINER_SIZE;
     }
@@ -129,20 +123,22 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
         return this.isChestVehicleStillValid(player);
     }
 
+    @Nullable
     @Override
     public AbstractContainerMenu createMenu(final int windowId, final Inventory inventory, final Player player) {
-        if (this.getLootTable() != null && player.isSpectator()) return null;
+        if (this.getLootTable() != null && player.isSpectator()) {
+            return null;
+        }
 
-        this.unpackLootTable(inventory.player);
-        return new RestrictedChestContainer(TFCContainerTypes.CHEST_9x2.get(), windowId, inventory, this, 2);
+        return new CraftingMenu(windowId, inventory);
     }
 
     public void unpackLootTable(final @Nullable Player player) {
         this.unpackChestVehicleLootTable(player);
     }
 
-    @Override
     @Nullable
+    @Override
     public ResourceLocation getLootTable() {
         return this.lootTable;
     }
@@ -152,6 +148,7 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
         this.lootTable = lootTable;
     }
 
+    @Override
     public long getLootTableSeed() {
         return this.lootTableSeed;
     }
@@ -173,7 +170,8 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
 
     @Override
     public <T> LazyOptional<T> getCapability(final Capability<T> capability, final @Nullable Direction facing) {
-        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER) return itemHandler.cast();
+        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER)
+            return itemHandler.cast();
         return super.getCapability(capability, facing);
     }
 

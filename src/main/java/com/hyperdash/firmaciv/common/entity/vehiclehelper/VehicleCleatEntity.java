@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.common.entity.boatpart;
+package com.hyperdash.firmaciv.common.entity.vehiclehelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

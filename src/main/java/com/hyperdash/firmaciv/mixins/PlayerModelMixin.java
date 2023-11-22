@@ -3,7 +3,7 @@ package com.hyperdash.firmaciv.mixins;
 import com.hyperdash.firmaciv.common.entity.CanoeEntity;
 import com.hyperdash.firmaciv.common.entity.KayakEntity;
 import com.hyperdash.firmaciv.common.entity.RowboatEntity;
-import com.hyperdash.firmaciv.common.entity.boatpart.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;

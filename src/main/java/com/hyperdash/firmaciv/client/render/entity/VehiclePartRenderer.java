@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.client.render.entity;
 
-import com.hyperdash.firmaciv.common.entity.boatpart.VehiclePartEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;

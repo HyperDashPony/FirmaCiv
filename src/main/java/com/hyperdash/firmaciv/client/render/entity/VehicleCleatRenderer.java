@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.client.render.entity;
 
-import com.hyperdash.firmaciv.common.entity.boatpart.VehicleCleatEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LightTexture;

@@ -1,6 +1,6 @@
 package com.hyperdash.firmaciv.mixins;
 
-import com.hyperdash.firmaciv.common.entity.boatpart.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import org.spongepowered.asm.mixin.Mixin;
