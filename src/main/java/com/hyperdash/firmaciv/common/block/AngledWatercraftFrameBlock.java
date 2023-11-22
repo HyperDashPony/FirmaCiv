@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.common.block;
 import com.hyperdash.firmaciv.common.blockentity.WatercraftFrameBlockEntity;
 import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -51,11 +52,19 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (pLevel.getBlockState(pPos.above()).is(FirmacivBlocks.OARLOCK.get())) {
-            pLevel.destroyBlock(pPos.above(), true);
+    public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
+                         final BlockState newState, final boolean isMoving) {
+        if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
+            if (!Helpers.isBlock(blockState, newState.getBlock())) {
+                frameBlockEntity.ejectInventory();
+            }
         }
-        //((WatercraftFrameBlockEntity)pLevel.getBlockEntity(pPos)).ejectInventory();
+
+        if (blockState.hasBlockEntity() && (!blockState.is(newState.getBlock()) || !newState.hasBlockEntity())) {
+            level.removeBlockEntity(blockPos);
+        }
+
+        super.onRemove(blockState, level, blockPos, newState, isMoving);
     }
 
     @Override
