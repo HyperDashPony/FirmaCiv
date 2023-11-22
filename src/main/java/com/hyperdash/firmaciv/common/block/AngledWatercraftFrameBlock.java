@@ -73,46 +73,65 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult hit) {
-        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
-            BlockEntity thisBlockEntity = level.getBlockEntity(pos);
-            if (thisBlockEntity instanceof WatercraftFrameBlockEntity frameBlockEntity) {
-                ItemStack held = player.getItemInHand(hand);
-                Item item = held.getItem();
-                int processState = state.getValue(FRAME_PROCESSED);
-                if (processState < 4 && item.getDefaultInstance().is(FirmacivTags.Items.PLANKS)) {
-                    level.setBlock(pos, state.setValue(FRAME_PROCESSED, processState + 1), 10);
-                    frameBlockEntity.addPlankItems(held.split(1), processState);
+    public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
+                                 final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
 
-                }
-                if (processState >= 4 && processState < 8 && item.getDefaultInstance()
-                        .is(FirmacivItems.COPPER_BOLT.get())) {
-
-                    level.setBlock(pos, state.setValue(FRAME_PROCESSED, processState + 1), 10);
-                    frameBlockEntity.addBoltItems(held.split(1), processState - 4);
-
-                    //level.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5f, level.getRandom().nextFloat() * 0.1F + 0.9F);
-
-                } else if (held.isEmpty()) {
-                    NonNullList<ItemStack> plankItems = frameBlockEntity.getPlankItems();
-                    NonNullList<ItemStack> boltItems = frameBlockEntity.getBoltItems();
-                    ItemStack dropStack = ItemStack.EMPTY;
-                    if (processState >= 5) {
-                        dropStack = boltItems.get(processState - 5).copy();
-                        frameBlockEntity.deleteBoltItems(processState - 5);
-                    } else {
-                        dropStack = plankItems.get(processState).copy();
-                        frameBlockEntity.deletePlankItems(processState);
-                    }
-                    if (!dropStack.isEmpty()) {
-                        ItemHandlerHelper.giveItemToPlayer(player, dropStack);
-                    }
-                }
-            }
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        } else if (hand != InteractionHand.MAIN_HAND) {
+            return InteractionResult.FAIL;
         }
 
-        return InteractionResult.SUCCESS;
+        final WatercraftFrameBlockEntity frameBlockEntity;
+        {
+            final BlockEntity blockEntity = level.getBlockEntity(blockPos);
+            if (!(blockEntity instanceof WatercraftFrameBlockEntity)) {
+                return InteractionResult.FAIL;
+            } else frameBlockEntity = (WatercraftFrameBlockEntity) blockEntity;
+        }
+
+        final ItemStack held = player.getItemInHand(hand);
+        final Item item = held.getItem();
+        final int processState = blockState.getValue(FRAME_PROCESSED);
+
+        // Try extract
+        if (held.isEmpty()) {
+            final ItemStack dropStack;
+
+            if (4 < processState) {
+                dropStack = frameBlockEntity.getBoltItems().get(processState - 5).copy();
+                frameBlockEntity.deleteBoltItems(processState - 5);
+            } else {
+                dropStack = frameBlockEntity.getPlankItems().get(processState - 1).copy();
+                frameBlockEntity.deletePlankItems(processState - 1);
+            }
+
+            if (!dropStack.isEmpty()) {
+                ItemHandlerHelper.giveItemToPlayer(player, dropStack);
+            }
+
+            if (0 != processState) {
+                level.setBlock(blockPos, blockState.setValue(FRAME_PROCESSED, processState - 1), 10);
+            }
+
+            return InteractionResult.SUCCESS;
+        }
+
+        if (4 > processState && item.getDefaultInstance().is(FirmacivTags.Items.PLANKS)) {
+            frameBlockEntity.addPlankItems(held.split(1), processState);
+            level.setBlock(blockPos, blockState.setValue(FRAME_PROCESSED, processState + 1), 10);
+            level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
+                    level.getRandom().nextFloat() * 0.1F + 0.9F);
+            return InteractionResult.SUCCESS;
+        }
+
+        if (4 <= processState && processState < 8 && item.getDefaultInstance().is(FirmacivItems.COPPER_BOLT.get())) {
+            frameBlockEntity.addBoltItems(held.split(1), processState - 4);
+            level.setBlock(blockPos, blockState.setValue(FRAME_PROCESSED, processState + 1), 10);
+            return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.FAIL;
     }
 
     @Override
