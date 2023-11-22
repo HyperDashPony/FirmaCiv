@@ -1,11 +1,14 @@
 {
+  "parent": "firmaciv:canoe",
   "criteria": {
-    "barrels": {
+    "oar": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "firmaciv:oar"
+            "items": [
+              "firmaciv:oar"
+            ]
           }
         ]
       }
@@ -26,5 +29,10 @@
     "announce_to_chat": true,
     "hidden": false,
     "background": "tfc:textures/block/rock/mossy_cobble/diorite.png"
-  }
+  },
+  "requirements": [
+    [
+      "oar"
+    ]
+  ]
 }
