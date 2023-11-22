@@ -14,12 +14,12 @@
     {
       "type": "patchouli:text",
       "title": "Longitude",
-      "text": "To find your Longitude, that is, your distance from the Prime Meridian, you need a clock! Specifically, you need a precise timepiece that keeps itself synchronized with the solar time at the Prime Meridian."
+      "text": "To find your Longitude, that is, your distance from the Prime Meridian, you need a clock! Specifically, you need a precise timepiece that keeps itself synchronized with the solar time at the Prime Meridian.$(br2) Smith an Unfinished Navigator's Timepiece from a Brass Double Sheet before completing it with recipe on the right."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "firmaciv:nav_clock",
-      "text": "Once you craft your Navigator's Timepiece, you can hold it and press $(item)$(k:key.use)$() to determine your Longitude. Remember that your Longitude is measured in Degrees East or West, meaning 0 Degrees at the Prime Meridian, and 360 Degrees for an identical climate."
+      "text": "Once you craft your Navigator's Timepiece, you can hold it and press $(item)$(k:key.use)$() to determine your Longitude. Remember that your Longitude is measured in Degrees East or West, meaning 0 Degrees at the Prime Meridian, and 360 Degrees for an identical climate.$(br2) Smith an Unfinished Sextant from a Brass Double Ingot before completing it with recipe on the right."
     },
     {
       "type": "patchouli:text",
@@ -34,7 +34,7 @@
     {
       "type": "patchouli:text",
       "title": "Altitude",
-      "text": "To find your Altitude, that is, your vertical distance from the Sea Level datum, you need to measure atmospheric pressure. Specifically, you need a device containing a compressible fluid, and you need to measure the volume of that fluid to determine the pressure."
+      "text": "To find your Altitude, that is, your vertical distance from the Sea Level datum, you need to measure atmospheric pressure. Specifically, you need a device containing a compressible fluid, and you need to measure the volume of that fluid to determine the pressure.$(br2) Smith an Unfinished Barometer from a Brass Sheet before completing it with recipe on the right."
     },
     {
       "type": "patchouli:crafting",
@@ -48,5 +48,5 @@
     }
   ],
   "read_by_default": true,
-  "sortnum": 8
+  "sortnum": 20
 }

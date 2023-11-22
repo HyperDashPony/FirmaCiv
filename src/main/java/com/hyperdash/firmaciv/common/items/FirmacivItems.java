@@ -46,7 +46,19 @@ public class FirmacivItems {
 
 
     public static final RegistryObject<Item> KAYAK = ITEMS.register("kayak",
-            () -> new KayakItem(new Item.Properties().stacksTo(1)));
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> KAYAK_WITH_PADDLE_ICON_ONLY = ITEMS.register("kayak_with_paddle_icon_only",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> CANOE_ICON_ONLY = ITEMS.register("canoe_icon_only",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> CANOE_WITH_PADDLE_ICON_ONLY = ITEMS.register("canoe_with_paddle_icon_only",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> ROWBOAT_ICON_ONLY = ITEMS.register("rowboat_icon_only",
+            () -> new Item(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

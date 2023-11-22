@@ -1,5 +1,5 @@
 {
-  "parent": "firmaciv:canoe",
+  "parent": "firmaciv:oarlock",
   "criteria": {
     "oar": {
       "trigger": "minecraft:inventory_changed",

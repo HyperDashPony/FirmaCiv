@@ -1,13 +1,13 @@
 {
-  "parent": "tfc:story/saw",
+  "parent": "tfc:story/iron_age",
   "criteria": {
-    "kayak": {
+    "oarlock": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "firmaciv:kayak"
+              "firmaciv:oarlock"
             ]
           }
         ]
@@ -16,13 +16,13 @@
   },
   "display": {
     "icon": {
-      "item": "firmaciv:kayak"
+      "item": "firmaciv:oarlock"
     },
     "title": {
-      "translate": "firmaciv.advancements.kayak.title"
+      "translate": "firmaciv.advancements.oarlock.title"
     },
     "description": {
-      "translate": "firmaciv.advancements.kayak.description"
+      "translate": "firmaciv.advancements.oarlock.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -32,7 +32,7 @@
   },
   "requirements": [
     [
-      "kayak"
+      "oarlock"
     ]
   ]
 }

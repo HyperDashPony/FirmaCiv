@@ -1,0 +1,45 @@
+{
+  "name": "Rowboats",
+  "category": "tfc:firmaciv",
+  "icon": "firmaciv:rowboat_icon_only",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "So, you've reached the Iron Age and you want an upgrade? Well, the rowboat is for you. It has three seats, so it can hold 3 players, or up to 2 animals, including horses! As always, you can also replace seats with containers of your choosing."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "In the rowboat, unlike other boats, you'll be sitting backwards when you're piloting the boat. It gives you a mechanical advantage so you can really put your back into those oars! You can, of course, pilot it in first-person, but if you may find it more intuitive in third-person."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "To build a rowboat, you'll need to start with shipwright's scaffolding. These allow you to keep the boat materials in place while you build. (RECIPE FOR FRAMES)$(br2)Then, you'll place them facing inward in a 2 by 4 area."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "(SCAFFOLDING MULTIBLOCK)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Once you place your scaffolding in the correct shape, you'll need to add planking. This comes in the form of plank blocks, and you'll have to make sure you use a hardwood."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "(LIST OF HARDWOODS)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Add four planks to each scaffold."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Add four copper bolts to each scaffold."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Finally, add the oarlocks to the center of the boat. The structure will be completed and you will be presented with the rowboat. Now, add oars to the oarlocks and you'll be on your way!"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 3
+}

@@ -4,22 +4,30 @@
     "special_condition": {
       "trigger": "minecraft:item_used_on_block",
       "conditions": {
-        "location": {
-          "block": {
-            "tag": "firmaciv:canoe_component_blocks"
+        "location": [
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": [
+                "tfc:firestarter"
+              ]
+            }
+          },
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "tag": "firmaciv:canoe_component_blocks"
+              }
+            }
           }
-        },
-        "item": {
-          "items": [
-            "tfc:firestarter"
-          ]
-        }
+        ]
       }
     }
   },
   "display": {
     "icon": {
-      "item": "firmaciv:canoe_paddle"
+      "item": "firmaciv:canoe_icon_only"
     },
     "title": {
       "translate": "firmaciv.advancements.canoe.title"

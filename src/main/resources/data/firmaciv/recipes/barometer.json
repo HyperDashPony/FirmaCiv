@@ -8,7 +8,7 @@
       "item": "tfc:brass_mechanisms"
     },
     {
-      "item": "tfc:lens"
+      "tag": "tfc:glass_bottles"
     },
     {
       "type": "tfc:fluid_item",

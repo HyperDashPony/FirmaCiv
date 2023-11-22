@@ -93,6 +93,11 @@
   "item.firmaciv.canoe_paddle": "Canoe Paddle",
   "item.firmaciv.oar": "Oar",
 
+  "item.firmaciv.canoe_icon_only": "ICON ONLY",
+  "item.firmaciv.canoe_with_paddle_icon_only": "ICON ONLY",
+  "item.firmaciv.kayak_with_paddle_icon_only": "ICON ONLY",
+  "item.firmaciv.rowboat_icon_only": "ICON ONLY",
+
   "itemGroup.firmaciv": "Firma: Civilization",
   "creativetab.firmaciv_tab": "Firma: Civilization",
   "creativetab.watercraft_tab": "Watercraft",
@@ -119,10 +124,9 @@
   "firmaciv.advancements.sextant.title": "The Stars Will Aid",
   "firmaciv.advancements.sextant.description": "Craft a Sextant",
   "firmaciv.advancements.barometer.title": "Surf and/or Turf",
-  "firmaciv.advancements.barometer.description": "Craft a Barometer"
-
-
-
+  "firmaciv.advancements.barometer.description": "Craft a Barometer",
+  "firmaciv.advancements.oarlock.title": "The Montlake Cut",
+  "firmaciv.advancements.oarlock.description": "Smith an Oarlock"
 
 
 }
