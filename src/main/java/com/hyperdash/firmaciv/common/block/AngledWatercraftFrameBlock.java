@@ -11,13 +11,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,18 +31,20 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
 
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_8;
 
-    @Deprecated
-    public AngledWatercraftFrameBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
-        super(pBaseState, pProperties);
+    public AngledWatercraftFrameBlock(final BlockState blockState, final BlockBehaviour.Properties properties) {
+        super(blockState, properties);
         this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
-                        .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.FALSE)
+                this.getStateDefinition().any()
+                        .setValue(FACING, Direction.NORTH)
+                        .setValue(HALF, Half.BOTTOM)
+                        .setValue(SHAPE, StairsShape.STRAIGHT)
+                        .setValue(WATERLOGGED, false)
                         .setValue(FRAME_PROCESSED, 0));
     }
 
     @Override
     public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
-                         final BlockState newState, final boolean isMoving) {
+            final BlockState newState, final boolean isMoving) {
         if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
             if (!Helpers.isBlock(blockState, newState.getBlock())) {
                 frameBlockEntity.ejectContents();
@@ -104,7 +103,7 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
         if (heldStack.is(FirmacivTags.Items.PLANKS)) {
             // TODO ensure the stored planks and the planks we are trying to add are the same.
             //  block also needs to be swapped to reflect the stored wood
-            
+
             // Must be [0,4)
             if (4 > processState) {
                 frameBlockEntity.insertPlanks(heldStack.split(1));
@@ -136,18 +135,5 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
     @Override
     public BlockEntity newBlockEntity(final BlockPos blockPos, final BlockState blockState) {
         return new WatercraftFrameBlockEntity(blockPos, blockState);
-    }
-
-    @Override
-    public RenderShape getRenderShape(final BlockState blockState) {
-        return RenderShape.MODEL;
-    }
-
-    @Override
-    public boolean triggerEvent(final BlockState blockState, final Level level, final BlockPos blockPos, final int pId,
-                                int pParam) {
-        super.triggerEvent(blockState, level, blockPos, pId, pParam);
-        final BlockEntity blockentity = level.getBlockEntity(blockPos);
-        return blockentity != null && blockentity.triggerEvent(pId, pParam);
     }
 }
