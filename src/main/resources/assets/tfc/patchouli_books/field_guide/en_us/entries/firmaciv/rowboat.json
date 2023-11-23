@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "So, you've reached the Iron Age and you want an upgrade? Well, the rowboat is for you. It has three seats, so it can hold 3 players, or up to 2 animals, including horses! As always, you can also replace seats with containers of your choosing."
+      "text": "So, you've reached the Iron Age and you want an upgrade? Well, the rowboat is for you. It has three seats, so it can hold 3 players, or up to 2 animals, including horses! As always, you can also replace seats (except for the pilot seat) with containers of your choosing."
     },
     {
       "type": "patchouli:text",

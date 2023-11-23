@@ -139,16 +139,17 @@ public class RowboatEntity extends FirmacivBoatEntity {
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    f += 0.005F;
+                    f += 0.0025F * paddleMultiplier;
                 }
 
                 this.setYRot(this.getYRot() + this.deltaRotation);
+
                 if (inputUp) {
-                    f += 0.055F;
+                    f += 0.0275F * paddleMultiplier;
                 }
 
                 if (inputDown) {
-                    f -= 0.025F;
+                    f -= 0.0125F * paddleMultiplier;
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement()

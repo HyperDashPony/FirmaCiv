@@ -21,14 +21,19 @@ public class FirmacivTabs {
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(FirmacivItems.SEXTANT.get());
                         pOutput.accept(FirmacivItems.UNFINISHED_SEXTANT.get());
+
                         pOutput.accept(FirmacivItems.NAV_CLOCK.get());
                         pOutput.accept(FirmacivItems.UNFINISHED_NAV_CLOCK.get());
+
                         pOutput.accept(FirmacivItems.BAROMETER.get());
                         pOutput.accept(FirmacivItems.UNFINISHED_BAROMETER.get());
 
+                        pOutput.accept(FirmacivItems.LARGE_WATERPROOF_HIDE.get());
                         pOutput.accept(FirmacivItems.KAYAK.get());
                         pOutput.accept(FirmacivItems.KAYAK_PADDLE.get());
+
                         pOutput.accept(FirmacivItems.CANOE_PADDLE.get());
+
                         pOutput.accept(FirmacivItems.OAR.get());
                         pOutput.accept(FirmacivBlocks.OARLOCK.get());
                         pOutput.accept(FirmacivItems.COPPER_BOLT.get());
