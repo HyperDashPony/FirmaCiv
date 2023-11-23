@@ -19,12 +19,12 @@
     {
       "type": "patchouli:crafting",
       "recipe": "firmaciv:nav_clock",
-      "text": "Once you craft your Navigator's Timepiece, you can hold it and press $(item)$(k:key.use)$() to determine your Longitude. Remember that your Longitude is measured in Degrees East or West, meaning 0 Degrees at the Prime Meridian, and 360 Degrees for an identical climate.$(br2) Smith an Unfinished Sextant from a Brass Double Ingot before completing it with recipe on the right."
+      "text": "Once you craft your Navigator's Timepiece, you can hold it and press $(item)$(k:key.use)$() to determine your Longitude. Remember that your Longitude is measured in Degrees East or West, meaning 0 Degrees at the Prime Meridian, and 360 Degrees for an identical climate."
     },
     {
       "type": "patchouli:text",
       "title": "Latitude",
-      "text": "To find your Latitude, that is, your distance from the Equator, you need to determine the degrees at which you view either Polaris, the North Star, or the Sun. Specifically, you need a precise mechanism for viewing astronomical features and measuring their angular distance from the horizon."
+      "text": "To find your Latitude, that is, your distance from the Equator, you need to determine the degrees at which you view either Polaris, the North Star, or the Sun. Specifically, you need a precise mechanism for viewing astronomical features and measuring their angular distance from the horizon.$(br2) Smith an Unfinished Sextant from a Brass Double Ingot before completing it with recipe on the right."
     },
     {
       "type": "patchouli:crafting",
