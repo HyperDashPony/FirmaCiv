@@ -3,11 +3,11 @@
   "values": [
     "tfc:wood/stripped_log/douglas_fir",
     "tfc:wood/stripped_log/pine",
-    "tfc:wood/stripped_log/chestnut",
+    "tfc:wood/stripped_log/palm",
+    "tfc:wood/stripped_log/sequoia",
     "tfc:wood/stripped_log/spruce",
-    "tfc:wood/stripped_log/aspen",
     "tfc:wood/stripped_log/kapok",
-    "tfc:wood/stripped_log/rosewood",
+    "tfc:wood/stripped_log/mangrove",
     "tfc:wood/stripped_log/white_cedar",
     "tfc:wood/stripped_log/willow"
   ]

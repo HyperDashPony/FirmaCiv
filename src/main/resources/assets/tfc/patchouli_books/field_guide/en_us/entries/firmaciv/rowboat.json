@@ -21,11 +21,11 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Once you place your scaffolding in the correct shape, you'll need to add planking. This comes in the form of plank blocks, and you'll have to make sure you use a hardwood."
+      "text": "Once you place your scaffolding in the correct shape, you'll need to add planking. This comes in the form of plank blocks, and you'll have to make sure you use a suitably strong hardwood of uniform type."
     },
     {
       "type": "patchouli:text",
-      "text": "(LIST OF HARDWOODS)."
+      "text": "Woods that are suitable for rowboats:$(br2)Acacia$(br)Ash$(br)Aspen$(br)Birch($br)Blackwood$(br)Chestnut$(br)Hickory$(br)Maple$(br)Oak$(br)Rosewood$(br)Sycamore"
     },
     {
       "type": "patchouli:text",

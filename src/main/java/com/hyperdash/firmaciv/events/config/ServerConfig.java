@@ -7,6 +7,7 @@ import java.util.function.Function;
 public class ServerConfig {
     public final ForgeConfigSpec.BooleanValue canoeWoodRestriction;
     public final ForgeConfigSpec.BooleanValue forceReducedDebugInfo;
+    public final ForgeConfigSpec.BooleanValue disableVanillaBoatFunctionality;
 
     ServerConfig(ForgeConfigSpec.Builder innerBuilder) {
         Function<String, ForgeConfigSpec.Builder> builder = (name) -> {
@@ -17,6 +18,8 @@ public class ServerConfig {
                 .comment("Force creation of canoes from specified wood types.").define("canoeWoodRestriction", true);
         this.forceReducedDebugInfo = builder.apply("forceReducedDebugInfo").comment("Force reduceDebugInfo gamerule.")
                 .define("forceReducedDebugInfo", true);
+        this.disableVanillaBoatFunctionality = builder.apply("disableVanillaBoatFunctionality").comment("Disables vanilla boat from working.")
+                .define("disableVanillaBoatFunctionality", true);
 
     }
 }

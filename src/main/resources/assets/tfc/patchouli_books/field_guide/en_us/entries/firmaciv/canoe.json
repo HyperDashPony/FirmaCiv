@@ -18,7 +18,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Wood types:$(br2)Carving out a Dugout Canoe requires a softer wood, and as a result, only some logs are workable:$(br2)Douglas Fir$(br)Pine$(br)Chestnut$(br)Spruce$(br)Aspen$(br)Kapok$(br)Rosewood$(br)White Cedar$(br)Willow"
+      "text": "Wood types:$(br2)Carving out a Dugout Canoe requires a softer wood, and as a result, only some logs are workable:$(br2)Douglas Fir$(br)Pine$(br)Palm(br)Spruce$(br)Sequoia(br)Kapok(br)Mangrove(br)White Cedar$(br)Willow"
     },
     {
       "type": "patchouli:multiblock",
