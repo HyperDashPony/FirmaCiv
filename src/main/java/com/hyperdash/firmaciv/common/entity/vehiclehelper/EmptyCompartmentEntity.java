@@ -31,14 +31,21 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
 
     protected boolean canAddNonPlayers;
 
+    protected boolean canAddOnlyBlocks;
+
 
     public EmptyCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
         canAddNonPlayers = true;
+        canAddOnlyBlocks = false;
     }
 
     public boolean canAddNonPlayers() {
         return canAddNonPlayers;
+    }
+
+    public boolean canAddOnlyBLocks() {
+        return canAddOnlyBlocks;
     }
 
     @Override
@@ -96,13 +103,22 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                     .getPilotVehiclePartAsEntity() != null && !(this.getTrueVehicle() instanceof CanoeEntity)) {
                 canAddNonPlayers = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
             }
+            if (tickCount < 10 && this.isPassenger()) {
+                for(int i : this.getTrueVehicle().getCanAddOnlyBlocks()){
+                    if(this.getTrueVehicle().getPassengers().size() == this.getTrueVehicle().getPassengerNumber()){
+                        if(this.getTrueVehicle().getPassengers().get(i) == this.getVehicle()){
+                            canAddOnlyBlocks = true;
+                        }
+                    }
+                }
+            }
         }
 
         this.checkInsideBlocks();
         final List<Entity> list = this.level()
                 .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
 
-        if (!list.isEmpty() && this.canAddNonPlayers) {
+        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks()) {
             for (final Entity entity : list) {
                 final boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
                 if (!flag) break;
@@ -179,7 +195,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         }
 
         CompartmentEntity newCompartment = null;
-        if (canAddNonPlayers && !item.isEmpty() && this.getPassengers().isEmpty()) {
+        if (this.canAddNonPlayers() && !item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
             } /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
@@ -197,7 +213,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide && !this.canAddOnlyBLocks()) {
             return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
         }
 

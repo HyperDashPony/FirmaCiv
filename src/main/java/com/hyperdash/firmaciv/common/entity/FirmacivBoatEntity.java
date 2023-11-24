@@ -67,6 +67,7 @@ public class FirmacivBoatEntity extends Entity {
     public final int PASSENGER_NUMBER = 2;
 
     public final int[] CLEATS = {};
+    public final int[] CAN_ADD_ONLY_BLOCKS = {};
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float DAMAGE_RECOVERY = 0.5f;
     protected final float[] paddlePositions = new float[2];
@@ -109,6 +110,8 @@ public class FirmacivBoatEntity extends Entity {
     }
     
     public int[] getCleats(){return CLEATS;}
+
+    public int[] getCanAddOnlyBlocks(){return CAN_ADD_ONLY_BLOCKS;}
 
     protected int getMaxPassengers() {
         return this.getPassengerNumber();

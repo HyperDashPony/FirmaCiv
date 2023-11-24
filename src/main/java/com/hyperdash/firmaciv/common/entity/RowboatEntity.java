@@ -32,9 +32,11 @@ public class RowboatEntity extends FirmacivBoatEntity {
             EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> DATA_OARS = SynchedEntityData.defineId(RowboatEntity.class,
             EntityDataSerializers.ITEM_STACK);
-    public final int PASSENGER_NUMBER = 4;
+    public final int PASSENGER_NUMBER = 6;
 
-    public final int[] CLEATS = {3};
+    public final int[] CLEATS = {5};
+
+    public final int[] CAN_ADD_ONLY_BLOCKS = {3,4};
 
     public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -53,6 +55,9 @@ public class RowboatEntity extends FirmacivBoatEntity {
     public int[] getCleats(){return this.CLEATS;}
 
     @Override
+    public int[] getCanAddOnlyBlocks(){return CAN_ADD_ONLY_BLOCKS;}
+
+    @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
         if (this.hasPassenger(passenger)) {
             float localX = 0.0F;
@@ -61,7 +66,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
             if (this.getPassengers().size() > 1) {
                 switch (this.getPassengers().indexOf(passenger)) {
                     case 0 -> {
-                        localX = 1.0f;
+                        localX = 1.1f;
                         localZ = 0.0f;
                     }
                     case 1 -> {
@@ -72,7 +77,15 @@ public class RowboatEntity extends FirmacivBoatEntity {
                         localX = -0.95f;
                         localZ = -0.4f;
                     }
-                    case 3 ->{
+                    case 3 -> {
+                        localX = -0.1f;
+                        localZ = 0.4f;
+                    }
+                    case 4 -> {
+                        localX = -0.1f;
+                        localZ = -0.4f;
+                    }
+                    case 5 ->{
                         localX = 1.5f;
                         localZ = 0f;
                         localY += 0.5f;
