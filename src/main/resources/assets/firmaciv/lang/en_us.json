@@ -92,7 +92,7 @@
   "item.firmaciv.kayak_paddle": "Kayak Paddle",
   "item.firmaciv.canoe_paddle": "Canoe Paddle",
   "item.firmaciv.oar": "Oar",
-  "item.firmaciv.firmaciv_compass": "Compass",
+  "item.firmaciv.firmaciv_compass": "Compass (Declination: True North)",
 
   "item.firmaciv.canoe_icon_only": "ICON ONLY",
   "item.firmaciv.canoe_with_paddle_icon_only": "ICON ONLY",
