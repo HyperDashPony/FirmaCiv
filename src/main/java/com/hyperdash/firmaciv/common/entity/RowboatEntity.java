@@ -36,7 +36,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
 
     public final int[] CLEATS = {5};
 
-    public final int[] CAN_ADD_ONLY_BLOCKS = {3,4};
+    public final int[] CAN_ADD_ONLY_BLOCKS = {1,2};
 
     public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);

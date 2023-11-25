@@ -181,6 +181,10 @@ public class FirmacivBoatEntity extends Entity {
                 super.getRelativePortalPosition(axis, portal));
     }
 
+    public boolean canIAcceptLargePassengers(EmptyCompartmentEntity compartmentEntity){
+        return true;
+    }
+
     @Override
     public double getPassengersRidingOffset() {
         return 0;
@@ -922,30 +926,18 @@ public class FirmacivBoatEntity extends Entity {
                 side == 0 ? DATA_ID_PADDLE_LEFT : DATA_ID_PADDLE_RIGHT) && this.getControllingPassenger() != null;
     }
 
-    /**
-     * Gets the damage taken from the last hit.
-     */
     public float getDamage() {
         return this.entityData.get(DATA_ID_DAMAGE);
     }
 
-    /**
-     * Sets the damage taken from the last hit.
-     */
     public void setDamage(final float damage) {
         this.entityData.set(DATA_ID_DAMAGE, damage);
     }
 
-    /**
-     * Gets the time since the last hit.
-     */
     public int getHurtTime() {
         return this.entityData.get(DATA_ID_HURT);
     }
 
-    /**
-     * Sets the time to count down from since the last time entity was hit.
-     */
     public void setHurtTime(final int hurtTime) {
         this.entityData.set(DATA_ID_HURT, hurtTime);
     }

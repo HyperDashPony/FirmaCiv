@@ -1,13 +1,12 @@
 package com.hyperdash.firmaciv.common.entity.vehiclehelper;
 
 import com.google.common.collect.Lists;
-import com.hyperdash.firmaciv.common.block.CanoeComponentBlock;
 import com.hyperdash.firmaciv.common.entity.*;
 import com.hyperdash.firmaciv.util.FirmacivTags;
-import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,13 +20,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static com.hyperdash.firmaciv.common.block.CanoeComponentBlock.CANOE_CARVED;
 
 public class EmptyCompartmentEntity extends CompartmentEntity {
     protected boolean inputLeft;
@@ -41,7 +37,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
 
     protected final long stillTick = 8000;
 
-    protected static final EntityDataAccessor<Long> DATA_ID_STILL_TICK = SynchedEntityData.defineId(
+    protected static final EntityDataAccessor<Long> DATA_ID_PASSENGER_RIDE_TICK = SynchedEntityData.defineId(
             EmptyCompartmentEntity.class, EntityDataSerializers.LONG);
 
 
@@ -50,6 +46,21 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         canAddNonPlayers = true;
         canAddOnlyBlocks = false;
     }
+
+    @Override
+    protected void defineSynchedData() {
+        this.entityData.define(DATA_ID_PASSENGER_RIDE_TICK, Long.MAX_VALUE);
+        super.defineSynchedData();
+    }
+
+    public long getPassengerRideTick() {
+        return this.entityData.get(DATA_ID_PASSENGER_RIDE_TICK);
+    }
+
+    public void setPassengerRideTick(final long stillTick) {
+        this.entityData.set(DATA_ID_PASSENGER_RIDE_TICK, stillTick);
+    }
+
 
     public boolean canAddNonPlayers() {
         return canAddNonPlayers;
@@ -84,7 +95,11 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         }
         if (passenger.getBbWidth() > 0.9f && !(passenger instanceof Player)) {
             localX += 0.2f;
+            if(this.getTrueVehicle() instanceof RowboatEntity){
+                localX -= 0.6f;
+            }
         }
+
 
         final double eyepos = passenger.getEyePosition().get(Direction.Axis.Y);
         final double thisY = this.getY() + 1.1f;
@@ -145,26 +160,47 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                         maxSize = 1.4f;
                     }
                     if (this.getPassengers()
-                            .size() < 2 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                            .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         entity.startRiding(this);
+                        this.setPassengerRideTick(Calendars.SERVER.getTicks());
                     }
                 }
             }
         }
 
-        //TODO eject animals after the boat has been still for a while
-
-        /*
         if(this.isVehicle() && !(this.getFirstPassenger() instanceof Player)){
-            long remainingTicks = (long) 8000 - (Calendars.SERVER.getTicks() - this.stillTick);
+            long remainingTicks = (long) 8000 - (Calendars.SERVER.getTicks() - this.getPassengerRideTick());
 
             if (remainingTicks <= 0L) {
                 this.ejectPassengers();
             }
         }
-        */
+
+        /*
+        if(!this.level().isClientSide()){
+            if(this.isVehicle() && this.getDeltaMovement().length() == 0f && this.getPassengerRideTick() > Calendars.SERVER.getTicks()){
+                this.setPassengerRideTick(Calendars.SERVER.getTicks());
+            } else {
+                this.setPassengerRideTick(Long.MAX_VALUE);
+            }
+
+
+        }*/
+
 
         super.tick();
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag pCompound) {
+        this.setPassengerRideTick(pCompound.getLong("passengerRideTick"));
+        super.readAdditionalSaveData(pCompound);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag pCompound) {
+        pCompound.putLong("passengerRideTick", this.getPassengerRideTick());
+        super.readAdditionalSaveData(pCompound);
     }
 
     protected void clampRotation(final Entity entity) {

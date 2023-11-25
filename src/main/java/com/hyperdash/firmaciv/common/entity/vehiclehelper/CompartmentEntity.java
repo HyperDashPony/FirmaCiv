@@ -55,6 +55,8 @@ public abstract class CompartmentEntity extends Entity {
     @Override
     protected void readAdditionalSaveData(final CompoundTag compoundTag) {
         this.setBlockTypeItem(ItemStack.of(compoundTag.getCompound("dataBlockTypeItem")));
+        this.lifespan = compoundTag.getInt("Lifespan");
+        this.notRidingTicks = compoundTag.getInt("notRidingTicks");
     }
 
     @Override
