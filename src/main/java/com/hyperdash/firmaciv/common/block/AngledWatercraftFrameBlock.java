@@ -3,23 +3,19 @@ package com.hyperdash.firmaciv.common.block;
 import com.hyperdash.firmaciv.common.blockentity.WatercraftFrameBlockEntity;
 import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -35,107 +31,109 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
 
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_8;
 
-    @Deprecated
-    public AngledWatercraftFrameBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
-        super(pBaseState, pProperties);
+    public AngledWatercraftFrameBlock(final BlockState blockState, final BlockBehaviour.Properties properties) {
+        super(blockState, properties);
         this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
-                        .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.FALSE)
+                this.getStateDefinition().any()
+                        .setValue(FACING, Direction.NORTH)
+                        .setValue(HALF, Half.BOTTOM)
+                        .setValue(SHAPE, StairsShape.STRAIGHT)
+                        .setValue(WATERLOGGED, false)
                         .setValue(FRAME_PROCESSED, 0));
     }
 
-    @Nullable
-    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(
-            BlockEntityType<A> pServerType, BlockEntityType<E> pClientType, BlockEntityTicker<? super E> pTicker) {
-        return pClientType == pServerType ? (BlockEntityTicker<A>) pTicker : null;
-    }
-
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (pLevel.getBlockState(pPos.above()).is(FirmacivBlocks.OARLOCK.get())) {
-            pLevel.destroyBlock(pPos.above(), true);
+    public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
+            final BlockState newState, final boolean isMoving) {
+        if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
+            if (!Helpers.isBlock(blockState, newState.getBlock())) {
+                frameBlockEntity.ejectContents();
+            }
         }
-        //((WatercraftFrameBlockEntity)pLevel.getBlockEntity(pPos)).ejectInventory();
+
+        if (blockState.hasBlockEntity() && (!blockState.is(newState.getBlock()) || !newState.hasBlockEntity())) {
+            level.removeBlockEntity(blockPos);
+        }
+
+        super.onRemove(blockState, level, blockPos, newState, isMoving);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult hit) {
-        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
-            BlockEntity thisBlockEntity = level.getBlockEntity(pos);
-            if (thisBlockEntity instanceof WatercraftFrameBlockEntity frameBlockEntity) {
-                ItemStack held = player.getItemInHand(hand);
-                Item item = held.getItem();
-                int processState = state.getValue(FRAME_PROCESSED);
-                if (processState < 4 && item.getDefaultInstance().is(FirmacivTags.Items.PLANKS)) {
-                    level.setBlock(pos, state.setValue(FRAME_PROCESSED, processState + 1), 10);
-                    frameBlockEntity.addPlankItems(held.split(1), processState);
+    public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
+            final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
+        // Don't do logic on client side
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
 
-                }
-                if (processState >= 4 && processState < 8 && item.getDefaultInstance()
-                        .is(FirmacivItems.COPPER_BOLT.get())) {
+        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.FAIL;
 
-                    level.setBlock(pos, state.setValue(FRAME_PROCESSED, processState + 1), 10);
-                    frameBlockEntity.addBoltItems(held.split(1), processState - 4);
+        final WatercraftFrameBlockEntity frameBlockEntity;
+        {
+            final BlockEntity blockEntity = level.getBlockEntity(blockPos);
+            if (!(blockEntity instanceof WatercraftFrameBlockEntity)) {
+                return InteractionResult.FAIL;
+            } else frameBlockEntity = (WatercraftFrameBlockEntity) blockEntity;
+        }
 
-                    //level.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5f, level.getRandom().nextFloat() * 0.1F + 0.9F);
+        final ItemStack heldStack = player.getItemInHand(hand);
+        final int processState = blockState.getValue(FRAME_PROCESSED);
 
-                } else if (held.isEmpty()) {
-                    NonNullList<ItemStack> plankItems = frameBlockEntity.getPlankItems();
-                    NonNullList<ItemStack> boltItems = frameBlockEntity.getBoltItems();
-                    ItemStack dropStack = ItemStack.EMPTY;
-                    if (processState >= 5) {
-                        dropStack = boltItems.get(processState - 5).copy();
-                        frameBlockEntity.deleteBoltItems(processState - 5);
-                    } else {
-                        dropStack = plankItems.get(processState).copy();
-                        frameBlockEntity.deletePlankItems(processState);
-                    }
-                    if (!dropStack.isEmpty()) {
-                        ItemHandlerHelper.giveItemToPlayer(player, dropStack);
-                    }
-                }
+        // Try extract
+        if (heldStack.isEmpty()) {
+            // Extract an item
+            if (4 >= processState) {
+                ItemHandlerHelper.giveItemToPlayer(player, frameBlockEntity.extractPlanks(1));
+            } else {
+                ItemHandlerHelper.giveItemToPlayer(player, frameBlockEntity.extractBolts(1));
             }
+
+            // Update the state
+            if (0 < processState) {
+                level.setBlock(blockPos, blockState.setValue(FRAME_PROCESSED, processState - 1), 10);
+            }
+
+            return InteractionResult.SUCCESS;
+        }
+
+        // Should we do plank stuff
+        if (heldStack.is(FirmacivTags.Items.PLANKS)) {
+            // TODO ensure the stored planks and the planks we are trying to add are the same.
+            //  block also needs to be swapped to reflect the stored wood
+
+            // Must be [0,4)
+            if (4 > processState) {
+                frameBlockEntity.insertPlanks(heldStack.split(1));
+                level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
+                level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
+                        level.getRandom().nextFloat() * 0.1F + 0.9F);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        // Should we do bolt stuff
+        if (heldStack.is(FirmacivItems.COPPER_BOLT.get())) {
+            // Must be [4,8)
+            if (4 <= processState && processState < 8) {
+                frameBlockEntity.insertBolts(heldStack.split(1));
+                level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
+                level.playSound(null, blockPos, SoundEvents.METAL_PLACE, SoundSource.BLOCKS, 1.5F,
+                        level.getRandom().nextFloat() * 0.1F + 0.9F);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.SUCCESS;
     }
 
+    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        BlockState blockState = super.getStateForPlacement(pContext);
-        return blockState.setValue(FRAME_PROCESSED, 0);
+    public BlockEntity newBlockEntity(final BlockPos blockPos, final BlockState blockState) {
+        return new WatercraftFrameBlockEntity(blockPos, blockState);
     }
-
-    @org.jetbrains.annotations.Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new WatercraftFrameBlockEntity(pPos, pState);
-    }
-
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
-    }
-
-    @Override
-    public boolean triggerEvent(BlockState pState, Level pLevel, BlockPos pPos, int pId, int pParam) {
-        super.triggerEvent(pState, pLevel, pPos, pId, pParam);
-        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-        return blockentity != null && blockentity.triggerEvent(pId, pParam);
-    }
-
-    @Override
-    @javax.annotation.Nullable
-    public MenuProvider getMenuProvider(BlockState pState, Level pLevel, BlockPos pPos) {
-        BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-        return blockentity instanceof MenuProvider ? (MenuProvider) blockentity : null;
-    }
-
-
 }
