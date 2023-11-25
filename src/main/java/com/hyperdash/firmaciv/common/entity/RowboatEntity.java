@@ -2,6 +2,8 @@ package com.hyperdash.firmaciv.common.entity;
 
 
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.minecraft.client.CameraType;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class RowboatEntity extends FirmacivBoatEntity {
 
@@ -36,7 +39,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
 
     public final int[] CLEATS = {5};
 
-    public final int[] CAN_ADD_ONLY_BLOCKS = {1,2};
+    public final int[] CAN_ADD_ONLY_BLOCKS = {2,1};
 
     public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -66,26 +69,32 @@ public class RowboatEntity extends FirmacivBoatEntity {
             if (this.getPassengers().size() > 1) {
                 switch (this.getPassengers().indexOf(passenger)) {
                     case 0 -> {
+                        // front / pilot seat
                         localX = 1.1f;
                         localZ = 0.0f;
                     }
                     case 1 -> {
+                        // back right seat
                         localX = -0.95f;
                         localZ = 0.4f;
                     }
                     case 2 -> {
+                        // back left seat
                         localX = -0.95f;
                         localZ = -0.4f;
                     }
                     case 3 -> {
+                        // middle right seat
                         localX = -0.1f;
                         localZ = 0.4f;
                     }
                     case 4 -> {
+                        // middle left seat
                         localX = -0.1f;
                         localZ = -0.4f;
                     }
                     case 5 ->{
+                        // cleat
                         localX = 1.5f;
                         localZ = 0f;
                         localY += 0.5f;
@@ -172,6 +181,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
             }
         }
     }
+
 
 
     @Override

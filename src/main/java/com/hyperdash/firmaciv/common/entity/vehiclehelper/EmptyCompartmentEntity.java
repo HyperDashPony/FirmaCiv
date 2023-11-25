@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.common.entity.vehiclehelper;
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.common.entity.*;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.common.entities.predator.Predator;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -144,13 +145,11 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         final List<Entity> list = this.level()
                 .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
 
-        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks()) {
+
+        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level().isClientSide()) {
+
             for (final Entity entity : list) {
-                final boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
-                if (!flag) break;
-
                 if (!entity.hasPassenger(this)) {
-
                     float maxSize = 1.0f;
                     if (this.getTrueVehicle() instanceof CanoeEntity) {
                         maxSize = 0.9f;
@@ -161,10 +160,18 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                     }
                     if (this.getPassengers()
                             .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
-                        entity.startRiding(this);
-                        this.setPassengerRideTick(Calendars.SERVER.getTicks());
+                        if(!(entity instanceof Predator)){
+                            if(entity.getBbWidth() > 1.1f){
+                                entity.startRiding(this);
+                                this.setPassengerRideTick(Calendars.SERVER.getTicks());
+                            } else {
+                                entity.startRiding(this);
+                                this.setPassengerRideTick(Calendars.SERVER.getTicks());
+                            }
+                        }
                     }
                 }
+
             }
         }
 

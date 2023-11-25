@@ -185,6 +185,20 @@ public class FirmacivBoatEntity extends Entity {
         return true;
     }
 
+    public boolean canIAcceptPassengersOrBlocks(EmptyCompartmentEntity compartmentEntity){
+        return true;
+    }
+
+    @Nullable
+    public Entity getCompAsEntityFromIndex(int index){
+        if(this.getPassengers().size() == this.getPassengerNumber()){
+            if(this.getPassengers().get(index).isVehicle()){
+                return this.getPassengers().get(index).getFirstPassenger();
+            }
+        }
+        return null;
+    }
+
     @Override
     public double getPassengersRidingOffset() {
         return 0;

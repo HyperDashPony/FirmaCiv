@@ -35,13 +35,15 @@ public class VehiclePartEntity extends Entity {
         // Try not to be empty
         if (this.getPassengers().isEmpty()) {
             boolean shouldAddCleatInstead = false;
+            /*
             if(this.getVehicle() instanceof FirmacivBoatEntity vehicle){
+
                 if(this.getVehicle().getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()){
                     for(int i : vehicle.getCleats()){
                         if(this.getVehicle().getPassengers().get(i).is(this)){
 
                             shouldAddCleatInstead = true;
-                            /*
+
                             final VehicleCleatEntity cleat = FirmacivEntities.VEHICLE_CLEAT_ENTITY.get()
                                     .create(this.level());
                             cleat.setPos(this.getX(), this.getY(), this.getZ());
@@ -51,11 +53,12 @@ public class VehiclePartEntity extends Entity {
                             this.level().addFreshEntity(cleat);
                             break;
 
-                             */
+
                         }
                     }
                 }
             }
+            */
 
             if(!shouldAddCleatInstead){
                 final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
