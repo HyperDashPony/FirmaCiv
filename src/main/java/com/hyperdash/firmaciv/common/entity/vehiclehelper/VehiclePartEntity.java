@@ -39,7 +39,9 @@ public class VehiclePartEntity extends Entity {
                 if(this.getVehicle().getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()){
                     for(int i : vehicle.getCleats()){
                         if(this.getVehicle().getPassengers().get(i).is(this)){
+
                             shouldAddCleatInstead = true;
+                            /*
                             final VehicleCleatEntity cleat = FirmacivEntities.VEHICLE_CLEAT_ENTITY.get()
                                     .create(this.level());
                             cleat.setPos(this.getX(), this.getY(), this.getZ());
@@ -48,6 +50,8 @@ public class VehiclePartEntity extends Entity {
                             }
                             this.level().addFreshEntity(cleat);
                             break;
+
+                             */
                         }
                     }
                 }

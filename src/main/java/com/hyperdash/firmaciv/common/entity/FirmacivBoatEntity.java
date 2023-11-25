@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -877,11 +878,6 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     @Override
-    public void onPassengerTurned(Entity pEntityToUpdate) {
-        this.clampRotation(pEntityToUpdate);
-    }
-
-    @Override
     protected void checkFallDamage(final double fallDistance, final boolean onGround, final BlockState blockState,
                                    final BlockPos blockPos) {
         this.lastYd = this.getDeltaMovement().y;
@@ -895,6 +891,7 @@ public class FirmacivBoatEntity extends Entity {
         }
 
         if (this.fallDistance > 3) {
+
             if (this.status != Status.ON_LAND) {
                 this.resetFallDistance();
                 return;
@@ -902,15 +899,17 @@ public class FirmacivBoatEntity extends Entity {
 
             this.causeFallDamage(this.fallDistance, 1, this.damageSources().fall());
             if (!this.level().isClientSide && !this.isRemoved()) {
+                for(Entity passenger : this.getTruePassengers()){
+                    passenger.causeFallDamage(this.fallDistance, 1, this.damageSources().fall());
+                }
+                for(Entity passenger : this.getPassengers()) {
+                    if (passenger.isVehicle()) {
+                        passenger.getFirstPassenger().kill();
+                    }
+                }
                 this.kill();
                 if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                    for (int i = 0; i < 3; ++i) {
-                        this.spawnAtLocation(this.getBoatType().getPlanks());
-                    }
-
-                    for (int j = 0; j < 2; ++j) {
-                        this.spawnAtLocation(Items.STICK);
-                    }
+                    this.spawnAtLocation(this.getDropItem());
                 }
             }
         }

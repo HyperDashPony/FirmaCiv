@@ -1,13 +1,16 @@
 package com.hyperdash.firmaciv.common.entity.vehiclehelper;
 
 import com.google.common.collect.Lists;
-import com.hyperdash.firmaciv.common.entity.CanoeEntity;
-import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.common.entity.KayakEntity;
-import com.hyperdash.firmaciv.common.entity.RowboatEntity;
+import com.hyperdash.firmaciv.common.block.CanoeComponentBlock;
+import com.hyperdash.firmaciv.common.entity.*;
 import com.hyperdash.firmaciv.util.FirmacivTags;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -18,10 +21,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+
+import static com.hyperdash.firmaciv.common.block.CanoeComponentBlock.CANOE_CARVED;
 
 public class EmptyCompartmentEntity extends CompartmentEntity {
     protected boolean inputLeft;
@@ -32,6 +38,11 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
     protected boolean canAddNonPlayers;
 
     protected boolean canAddOnlyBlocks;
+
+    protected final long stillTick = 8000;
+
+    protected static final EntityDataAccessor<Long> DATA_ID_STILL_TICK = SynchedEntityData.defineId(
+            EmptyCompartmentEntity.class, EntityDataSerializers.LONG);
 
 
     public EmptyCompartmentEntity(final EntityType<?> entityType, final Level level) {
@@ -140,6 +151,19 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                 }
             }
         }
+
+        //TODO eject animals after the boat has been still for a while
+
+        /*
+        if(this.isVehicle() && !(this.getFirstPassenger() instanceof Player)){
+            long remainingTicks = (long) 8000 - (Calendars.SERVER.getTicks() - this.stillTick);
+
+            if (remainingTicks <= 0L) {
+                this.ejectPassengers();
+            }
+        }
+        */
+
         super.tick();
     }
 
