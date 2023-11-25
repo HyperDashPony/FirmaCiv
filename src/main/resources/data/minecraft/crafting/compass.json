@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "Y",
+    "Z"
+  ],
+  "key": {
+    "X": {
+      "item": "tfc:lens"
+    },
+    "Y": {
+      "tag": "tfc:magnetic_rocks"
+    },
+    "Z": {
+      "item": "minecraft:bowl"
+    }
+  },
+  "result": {
+    "item": "firmaciv:firmaciv_compass"
+  }
+}

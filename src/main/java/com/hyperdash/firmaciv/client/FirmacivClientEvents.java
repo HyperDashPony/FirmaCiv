@@ -4,8 +4,8 @@ import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.client.render.entity.CanoeRenderer;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
-import com.hyperdash.firmaciv.common.items.AbstractNavItem;
-import com.hyperdash.firmaciv.common.items.FirmacivItems;
+import com.hyperdash.firmaciv.common.item.AbstractNavItem;
+import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -67,6 +67,41 @@ public class FirmacivClientEvents {
                                 }
 
                                 return (float) height;
+                            }
+                        }
+                    }
+                });
+
+
+        ItemProperties.register(FirmacivItems.FIRMACIV_COMPASS.get(), new ResourceLocation(Firmaciv.MOD_ID, "firmaciv_compass_direction"),
+                new ClampedItemPropertyFunction() {
+                    private double rotation;
+                    private double rota;
+                    private long lastUpdateTick;
+
+                    public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel,
+                                               @Nullable LivingEntity livingEntity, int p_174668_) {
+
+                        Entity entity = livingEntity != null ? livingEntity : pStack.getEntityRepresentation();
+                        if (entity == null) {
+                            return 0.0F;
+                        } else {
+                            if (pLevel == null && entity.level() instanceof ClientLevel) {
+                                pLevel = (ClientLevel) entity.level();
+                            }
+
+                            if (pLevel == null) {
+                                return 0.0F;
+                            } else {
+                                double direction;
+                                if (pLevel.dimensionType().natural()) {
+                                    assert livingEntity != null;
+                                    direction = ((((entity.getYRot() + 180)%360))/360);
+                                } else {
+                                    direction = Math.random();
+                                }
+
+                                return (float) direction; //(2*3.1415926535f)
                             }
                         }
                     }

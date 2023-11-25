@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.common.items;
+package com.hyperdash.firmaciv.common.item;
 
 import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
 import com.hyperdash.firmaciv.common.entity.KayakEntity;

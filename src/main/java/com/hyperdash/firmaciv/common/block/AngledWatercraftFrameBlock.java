@@ -1,7 +1,7 @@
-package com.hyperdash.firmaciv.common.blocks;
+package com.hyperdash.firmaciv.common.block;
 
-import com.hyperdash.firmaciv.common.blockentities.WatercraftFrameBlockEntity;
-import com.hyperdash.firmaciv.common.items.FirmacivItems;
+import com.hyperdash.firmaciv.common.blockentity.WatercraftFrameBlockEntity;
+import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

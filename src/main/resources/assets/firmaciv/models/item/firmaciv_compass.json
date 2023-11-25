@@ -1,0 +1,41 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "item/compass"
+    },
+    "overrides": [
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.000000 }, "model": "item/compass" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.015625 }, "model": "item/compass_17" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.046875 }, "model": "item/compass_18" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.078125 }, "model": "item/compass_19" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.109375 }, "model": "item/compass_20" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.140625 }, "model": "item/compass_21" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.171875 }, "model": "item/compass_22" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.203125 }, "model": "item/compass_23" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.234375 }, "model": "item/compass_24" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.265625 }, "model": "item/compass_25" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.296875 }, "model": "item/compass_26" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.328125 }, "model": "item/compass_27" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.359375 }, "model": "item/compass_28" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.390625 }, "model": "item/compass_29" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.421875 }, "model": "item/compass_30" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.453125 }, "model": "item/compass_31" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.484375 }, "model": "item/compass_00" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.515625 }, "model": "item/compass_01" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.546875 }, "model": "item/compass_02" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.578125 }, "model": "item/compass_03" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.609375 }, "model": "item/compass_04" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.640625 }, "model": "item/compass_05" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.671875 }, "model": "item/compass_06" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.703125 }, "model": "item/compass_07" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.734375 }, "model": "item/compass_08" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.765625 }, "model": "item/compass_09" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.796875 }, "model": "item/compass_10" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.828125 }, "model": "item/compass_11" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.859375 }, "model": "item/compass_12" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.890625 }, "model": "item/compass_13" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.921875 }, "model": "item/compass_14" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.953125 }, "model": "item/compass_15" },
+        { "predicate": { "firmaciv:firmaciv_compass_direction": 0.984375 }, "model": "item/compass" }
+    ]
+}

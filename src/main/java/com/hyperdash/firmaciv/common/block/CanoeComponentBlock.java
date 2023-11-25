@@ -1,7 +1,7 @@
-package com.hyperdash.firmaciv.common.blocks;
+package com.hyperdash.firmaciv.common.block;
 
-import com.hyperdash.firmaciv.common.blockentities.CanoeComponentBlockEntity;
-import com.hyperdash.firmaciv.common.blockentities.FirmacivBlockEntities;
+import com.hyperdash.firmaciv.common.blockentity.CanoeComponentBlockEntity;
+import com.hyperdash.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.common.entity.CanoeEntity;
 import com.hyperdash.firmaciv.common.entity.FirmacivEntities;
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.hyperdash.firmaciv.common.blocks.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
+import static com.hyperdash.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 
 
 public class CanoeComponentBlock extends BaseEntityBlock {

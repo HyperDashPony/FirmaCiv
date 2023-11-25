@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.common.blockentities;
+package com.hyperdash.firmaciv.common.blockentity;
 
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;

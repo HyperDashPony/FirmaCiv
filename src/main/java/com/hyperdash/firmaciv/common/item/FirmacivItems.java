@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.common.items;
+package com.hyperdash.firmaciv.common.item;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import net.minecraft.world.item.Item;
@@ -29,6 +29,8 @@ public class FirmacivItems {
     public static final RegistryObject<Item> UNFINISHED_BAROMETER = ITEMS.register("unfinished_barometer",
             () -> new BarometerItem(new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> FIRMACIV_COMPASS = ITEMS.register("firmaciv_compass",
+            () -> new Item(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> LARGE_WATERPROOF_HIDE = ITEMS.register("large_waterproof_hide",
             () -> new Item(new Item.Properties()));

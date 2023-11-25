@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.common.blocks;
+package com.hyperdash.firmaciv.common.block;
 
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;

@@ -1,7 +1,7 @@
 package com.hyperdash.firmaciv.common.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.common.items.FirmacivItems;
+import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

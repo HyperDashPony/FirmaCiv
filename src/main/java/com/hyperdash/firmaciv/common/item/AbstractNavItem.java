@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.common.items;
+package com.hyperdash.firmaciv.common.item;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.ClickEvent;

@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.common.blockentities;
+package com.hyperdash.firmaciv.common.blockentity;
 
 import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.common.entity.BoatVariant;
@@ -14,8 +14,8 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.hyperdash.firmaciv.common.blocks.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
-import static com.hyperdash.firmaciv.common.blocks.FirmacivBlocks.WATERCRAFT_FRAME_ANGLED;
+import static com.hyperdash.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
+import static com.hyperdash.firmaciv.common.block.FirmacivBlocks.WATERCRAFT_FRAME_ANGLED;
 
 public class FirmacivBlockEntities {
 

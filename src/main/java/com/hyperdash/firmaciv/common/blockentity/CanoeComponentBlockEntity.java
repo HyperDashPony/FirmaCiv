@@ -1,6 +1,6 @@
-package com.hyperdash.firmaciv.common.blockentities;
+package com.hyperdash.firmaciv.common.blockentity;
 
-import com.hyperdash.firmaciv.common.blocks.CanoeComponentBlock;
+import com.hyperdash.firmaciv.common.block.CanoeComponentBlock;
 import com.mojang.logging.LogUtils;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.config.TFCConfig;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 
-import static com.hyperdash.firmaciv.common.blocks.CanoeComponentBlock.CANOE_CARVED;
+import static com.hyperdash.firmaciv.common.block.CanoeComponentBlock.CANOE_CARVED;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
 
 public class CanoeComponentBlockEntity extends TFCBlockEntity {
