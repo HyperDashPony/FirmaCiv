@@ -3,11 +3,15 @@ package com.hyperdash.firmaciv.client.render.entity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.model.LeashKnotModel;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -15,10 +19,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
+
+    private static final ResourceLocation KNOT_LOCATION = new ResourceLocation("textures/entity/lead_knot.png");
+    private final LeashKnotModel<VehicleCleatEntity> model;
+
     public VehicleCleatRenderer(EntityRendererProvider.Context pContext) {
+
         super(pContext);
+        this.model = new LeashKnotModel<VehicleCleatEntity>(pContext.bakeLayer(ModelLayers.LEASH_KNOT));
     }
 
     private static void addVertexPair(VertexConsumer pConsumer, Matrix4f pMatrix, float p_174310_, float p_174311_,
@@ -53,6 +64,12 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
         Entity entity = pEntity.getLeashHolder();
         if (entity != null) {
+            pPoseStack.pushPose();
+            pPoseStack.scale(-0.8F, -0.8F, 0.8F);
+            this.model.setupAnim(pEntity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+            VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(KNOT_LOCATION));
+            this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            pPoseStack.popPose();
             this.renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, entity);
         }
     }

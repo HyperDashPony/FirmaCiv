@@ -6,17 +6,18 @@
   "mixins": [
   ],
   "client": [
-    "LocalPlayerMixin",
-    "PlayerModelMixin",
-    "LivingEntityMixin",
-    "AbstractChestedHorseMixin",
-    "HorseMixin",
-    "CamelMixin",
-    "TFCChestedHorseMixin",
-    "TFCHorseMixin",
-    "MobMixin",
-    "BoatMixin",
-    "TFCBoatMixin"
+    "minecraft.LocalPlayerMixin",
+    "minecraft.PlayerModelMixin",
+    "minecraft.LivingEntityMixin",
+    "minecraft.AbstractChestedHorseMixin",
+    "minecraft.HorseMixin",
+    "minecraft.CamelMixin",
+    "minecraft.MobMixin",
+    "minecraft.BoatMixin",
+    "minecraft.ClientPacketListenerMixin",
+    "tfc.TFCBoatMixin",
+    "tfc.TFCChestedHorseMixin",
+    "tfc.TFCHorseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

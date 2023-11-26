@@ -5,12 +5,16 @@
 
 package com.hyperdash.firmaciv.client;
 
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -51,15 +55,21 @@ public enum IngameOverlays {
                 Entity entity = mc.crosshairPickEntity;
                 PoseStack stack = graphics.pose();
                 stack.pushPose();
-                stack.translate((float) width / 2.0F, (float) height / 2.0F - 45.0F, 0.0F);
-                stack.scale(1.5F, 1.5F, 1.5F);
+                stack.translate((float) width / 2.0F, ((float) height / 2.0F - 20.0F), 0.0F);
+                stack.scale(1.0F, 1.0F, 1.0F);
                 String string = "";
-                /*
+
                 if(entity instanceof LivingEntity livingEntity){
-                    if(livingEntity.getVehicle() instanceof EmptyCompartmentEntity){
-                        string = "Press" + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject rider";
+                    if(livingEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity){
+                        long remainingTicks = (long) (ICalendar.TICKS_IN_DAY*3) - (Calendars.SERVER.getTicks() - emptyCompartmentEntity.getPassengerRideTick());
+
+                        if (remainingTicks <= ICalendar.TICKS_IN_DAY) {
+                            string = "This rider is restless. ";
+                        }
+                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject.";
                     }
                 }
+                /*
 
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
                     if (emptyCompartmentEntity.getTrueVehicle() != null) {

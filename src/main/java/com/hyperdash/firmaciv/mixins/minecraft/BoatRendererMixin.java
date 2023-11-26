@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.mixins;
+package com.hyperdash.firmaciv.mixins.minecraft;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;

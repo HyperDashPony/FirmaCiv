@@ -35,7 +35,7 @@ public class VehiclePartEntity extends Entity {
         // Try not to be empty
         if (this.getPassengers().isEmpty()) {
             boolean shouldAddCleatInstead = false;
-            /*
+
             if(this.getVehicle() instanceof FirmacivBoatEntity vehicle){
 
                 if(this.getVehicle().getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()){
@@ -58,7 +58,7 @@ public class VehiclePartEntity extends Entity {
                     }
                 }
             }
-            */
+
 
             if(!shouldAddCleatInstead){
                 final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
@@ -89,19 +89,13 @@ public class VehiclePartEntity extends Entity {
 
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
-        // Ensure we ride our boats
         if (!(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity)) return;
-
-        // Make sure we have this passenger
-        if (!this.hasPassenger(passenger)) return;
-
         final double riderOffset = ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
         final Vec3 vec3 = (new Vec3(0, 0, 0)).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
         moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
         passenger.setPos(this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
-        if (passenger instanceof CompartmentEntity) {
+        if (passenger instanceof CompartmentEntity || passenger instanceof VehicleCleatEntity) {
             passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
-
             if (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 1) {
                 if (tickCount < 10 || this.getVehicle().getControllingPassenger() == null) {
                     this.setYRot(this.getVehicle().getYRot());

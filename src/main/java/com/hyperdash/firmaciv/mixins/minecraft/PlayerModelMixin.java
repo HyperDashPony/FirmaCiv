@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.mixins;
+package com.hyperdash.firmaciv.mixins.minecraft;
 
 import com.hyperdash.firmaciv.common.entity.CanoeEntity;
 import com.hyperdash.firmaciv.common.entity.KayakEntity;

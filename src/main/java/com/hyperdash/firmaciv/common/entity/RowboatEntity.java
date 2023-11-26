@@ -95,9 +95,9 @@ public class RowboatEntity extends FirmacivBoatEntity {
                     }
                     case 5 ->{
                         // cleat
-                        localX = 1.5f;
+                        localX = 1.7f;
                         localZ = 0f;
-                        localY += 0.5f;
+                        localY += 0.6f;
                     }
                 }
             }

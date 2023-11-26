@@ -5,6 +5,7 @@ import com.hyperdash.firmaciv.common.entity.*;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.entities.predator.Predator;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -161,13 +162,8 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                     if (this.getPassengers()
                             .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         if(!(entity instanceof Predator)){
-                            if(entity.getBbWidth() > 1.1f){
-                                entity.startRiding(this);
-                                this.setPassengerRideTick(Calendars.SERVER.getTicks());
-                            } else {
-                                entity.startRiding(this);
-                                this.setPassengerRideTick(Calendars.SERVER.getTicks());
-                            }
+                            entity.startRiding(this);
+                            this.setPassengerRideTick(Calendars.SERVER.getTicks());
                         }
                     }
                 }
@@ -176,7 +172,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         }
 
         if(this.isVehicle() && !(this.getFirstPassenger() instanceof Player)){
-            long remainingTicks = (long) 8000 - (Calendars.SERVER.getTicks() - this.getPassengerRideTick());
+            long remainingTicks = (long) (ICalendar.TICKS_IN_DAY*3) - (Calendars.SERVER.getTicks() - this.getPassengerRideTick());
 
             if (remainingTicks <= 0L) {
                 this.ejectPassengers();

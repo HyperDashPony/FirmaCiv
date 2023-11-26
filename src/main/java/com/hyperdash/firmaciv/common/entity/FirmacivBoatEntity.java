@@ -3,6 +3,7 @@ package com.hyperdash.firmaciv.common.entity;
 import com.google.common.collect.Lists;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.minecraft.BlockUtil;
@@ -121,6 +122,10 @@ public class FirmacivBoatEntity extends Entity {
     @Override
     protected float getEyeHeight(final Pose pose, final EntityDimensions entityDimensions) {
         return entityDimensions.height;
+    }
+
+    public void setDeltaRotation(float deltaRotation){
+        this.deltaRotation = deltaRotation;
     }
 
     protected float getDamageThreshold() {
@@ -300,9 +305,11 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     public void tick() {
+
         if (this.getControllingPassenger() == null) {
             this.deltaRotation = 0;
         }
+
 
         this.oldStatus = this.status;
         this.status = this.getStatus();
@@ -396,6 +403,45 @@ public class FirmacivBoatEntity extends Entity {
         } else {
             this.setDeltaMovement(Vec3.ZERO);
             this.deltaRotation = 0f;
+        }
+
+        for(int i : getCleats()){
+            if(this.getPassengers().size() == this.getPassengerNumber()){
+                if(this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat){
+                    if(vehicleCleat.getLeashHolder() instanceof Player player){
+                        if(vehicleCleat.distanceTo(vehicleCleat.getLeashHolder()) > 4f){
+                            Vec3 vectorToVehicle = player.getPosition(0).vectorTo(this.getPosition(0)).normalize();
+                            Vec3 movementVector = new Vec3(vectorToVehicle.x*-0.1f, this.getDeltaMovement().y, vectorToVehicle.z*-0.1f);
+
+                            /*
+                            float rotationTowardsPlayer = (float) Math.atan(player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).z / player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).x);
+                            float vehicleDeltaRotation = (float)Math.toDegrees((thisVehicle.getYRot() - rotationTowardsPlayer))/4.0f;
+                            thisVehicle.lookAt(thisVehicle.getX());
+
+                             */
+
+                            double d0 = player.getPosition(0).x - this.getX();
+                            double d2 = player.getPosition(0).z - this.getZ();
+                            double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+
+                            float finalRotation = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
+
+                            this.deltaRotation = finalRotation/4;
+
+                            //this.setYRot(Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F));
+
+                            double difference = (player.getY()) - this.getY();
+                            if(player.getY() > this.getY() && difference >= 0.4 && difference <= 1.0 && this.getDeltaMovement().length() < 0.02f) {
+                                this.setPos(this.getX(), this.getY()+0.55f, this.getZ());
+                            }
+                            this.setDeltaMovement(movementVector);
+
+
+                        }
+                    }
+                }
+            }
+
         }
 
         this.tickBubbleColumn();
@@ -710,7 +756,7 @@ public class FirmacivBoatEntity extends Entity {
             this.status = Status.IN_WATER;
         } else {
             if (this.status == Status.IN_WATER) {
-                d2 = (this.waterLevel - this.getY()) / (double) this.getBbHeight();
+                d2 = ((this.waterLevel - this.getY()) / (double) this.getBbHeight()) + 0.1;
                 this.invFriction = 0.9F;
             } else if (this.status == Status.UNDER_FLOWING_WATER) {
                 d1 = -7.0E-4D;

@@ -1,4 +1,4 @@
-package com.hyperdash.firmaciv.mixins;
+package com.hyperdash.firmaciv.mixins.tfc;
 
 import net.dries007.tfc.common.entities.misc.TFCBoat;
 import net.minecraft.world.InteractionHand;

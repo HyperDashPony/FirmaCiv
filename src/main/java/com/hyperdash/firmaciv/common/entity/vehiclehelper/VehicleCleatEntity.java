@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.common.entity.vehiclehelper;
 
+import com.hyperdash.firmaciv.common.entity.FirmacivBoatEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -8,30 +9,29 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.UUID;
 
 public class VehicleCleatEntity extends Entity {
 
-    private static final EntityDataAccessor<Byte> DATA_CLEAT_FLAGS_ID = SynchedEntityData.defineId(VehicleCleatEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> DATA_MOB_FLAGS_ID = SynchedEntityData.defineId(VehicleCleatEntity.class, EntityDataSerializers.BYTE);
 
     public static final String LEASH_TAG = "Leash";
     @Nullable
@@ -46,9 +46,14 @@ public class VehicleCleatEntity extends Entity {
 
 
     public void tick() {
+        if(!this.isPassenger()){
+            this.dropLeash(true,true);
+            this.kill();
+        }
         super.tick();
         if (!this.level().isClientSide) {
             this.tickLeash();
+
 
         }
 
@@ -57,10 +62,6 @@ public class VehicleCleatEntity extends Entity {
     public final InteractionResult interact(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
         if (this.getLeashHolder() == pPlayer) {
-            this.dropLeash(true, !pPlayer.getAbilities().instabuild);
-            this.gameEvent(GameEvent.ENTITY_INTERACT, pPlayer);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
-        }else if (this.getLeashHolder() == pPlayer) {
             this.dropLeash(true, !pPlayer.getAbilities().instabuild);
             this.gameEvent(GameEvent.ENTITY_INTERACT, pPlayer);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -81,12 +82,47 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashHolder != null) {
             if (!this.isAlive() || !this.leashHolder.isAlive()) {
                 this.dropLeash(true, true);
-            } else if (this.distanceTo(this.leashHolder) > 2.0f){
+            } if (this.getVehicle().isPassenger() && this.getVehicle().getVehicle() instanceof FirmacivBoatEntity && this.leashHolder instanceof Player player){
+                if(this.distanceTo(this.leashHolder) > 4f){
+                    /*
+                    FirmacivBoatEntity thisVehicle = (FirmacivBoatEntity) this.getVehicle().getVehicle();
+                    Vec3 vectorToVehicle = player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
+                    Vec3 movementVector = new Vec3(vectorToVehicle.x*-0.1f, thisVehicle.getDeltaMovement().y, vectorToVehicle.z*-0.1f);
 
-                this.setDeltaMovement(0, 0.1, 0);
+                    
+                    float rotationTowardsPlayer = (float) Math.atan(player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).z / player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).x);
+                    float vehicleDeltaRotation = (float)Math.toDegrees((thisVehicle.getYRot() - rotationTowardsPlayer))/4.0f;
+                    thisVehicle.lookAt(thisVehicle.getX());
+
+
+
+                    double d0 = player.getPosition(0).x - thisVehicle.getX();
+                    double d2 = player.getPosition(0).z - thisVehicle.getZ();
+                    double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+
+                    float finalRotation = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
+
+                    thisVehicle.setYRot(Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F));
+
+                    double difference = (player.getY()) - thisVehicle.getY();
+                    if(player.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement().length() < 0.02f) {
+                        thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY()+0.55f, thisVehicle.getZ());
+                    }
+                    thisVehicle.setDeltaMovement(movementVector);
+
+                    */
+                }
+
+
+            } if (this.distanceTo(this.leashHolder) > 10f && this.leashHolder instanceof Player player){
+                this.dropLeash(true, !player.getAbilities().instabuild);
             }
 
-
+        }
+        if (this.leashHolder != null) {
+            if (this.leashHolder.isPassenger() && this.leashHolder.getVehicle() instanceof EmptyCompartmentEntity) {
+                this.dropLeash(true, true);
+            }
         }
     }
 
@@ -114,7 +150,7 @@ public class VehicleCleatEntity extends Entity {
     }
 
     public boolean canBeLeashed(Player pPlayer) {
-        return !this.isLeashed() && !(this instanceof Enemy);
+        return !this.isLeashed();
     }
 
     public boolean isLeashed() {
@@ -138,10 +174,6 @@ public class VehicleCleatEntity extends Entity {
         this.leashInfoTag = null;
         if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
             ((ServerLevel)this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
-        }
-
-        if (this.isPassenger()) {
-            this.stopRiding();
         }
 
     }
@@ -180,7 +212,7 @@ public class VehicleCleatEntity extends Entity {
     }
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(DATA_CLEAT_FLAGS_ID, (byte)0);
+        this.entityData.define(DATA_MOB_FLAGS_ID, (byte)0);
     }
 
     @Override
