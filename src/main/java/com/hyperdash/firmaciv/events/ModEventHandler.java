@@ -12,6 +12,6 @@ public class ModEventHandler {
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event){
-        event.put(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatEntity.createAttributes().build());
+
     }
 }
