@@ -24,7 +24,7 @@
     {
       "type": "patchouli:text",
       "title": "Transporting Animals",
-      "text": "Like always, you can move animals around using boats! However, be aware that larger animals, like horses, will only fit in boats that are big enough. If an animal is riding a boat and is in your way, you only have to crouch and press $(item)$(k:key.use)$() to eject it from the boat."
+      "text": "Like always, you can move animals around using boats! However, be aware that larger animals, like horses, will only fit in boats that are big enough. If an animal is riding a boat and is in your way, you only have to crouch and press $(item)$(k:key.use)$() to eject it from the boat. Animals will get restless after 2 days in the boat and will leave the boat on their own in 3 days."
     },
     {
       "type": "patchouli:text",
@@ -40,6 +40,11 @@
       "type": "patchouli:text",
       "title": "Paddles and Oars",
       "text": "If you feel like your boat is moving slowly, double check that you're holding the appropriate paddle item, or, if your boat requires oars, that the oars have been equipped to the oarlocks. In some boats, multiple players are able to paddle or row to make the boat go faster."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Cleats and Leads",
+      "text": "Most boats have at least one cleat on them. You can attach a lead to the cleat and use it to pull the boat. You can pull boats up onto the shoreline and up slabs."
     }
   ],
   "read_by_default": true,

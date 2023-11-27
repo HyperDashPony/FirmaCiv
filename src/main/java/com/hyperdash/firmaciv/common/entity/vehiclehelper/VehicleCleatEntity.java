@@ -90,7 +90,6 @@ public class VehicleCleatEntity extends Entity {
                     Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y, vectorToVehicle.z * -0.1f);
 
 
-
                     //float rotationTowardsPlayer = (float) Math.atan(player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).z / player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).x);
                     //float vehicleDeltaRotation = (float)Math.toDegrees((thisVehicle.getYRot() - rotationTowardsPlayer))/4.0f;
 
@@ -100,7 +99,6 @@ public class VehicleCleatEntity extends Entity {
 
                     float finalRotation = Mth.wrapDegrees((float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
                     float intermediateRotation = thisVehicle.getYRot() + (Mth.wrapDegrees((finalRotation - thisVehicle.getYRot())) / 45);
-
 
 
                     double difference = (player.getY()) - thisVehicle.getY();
@@ -117,8 +115,6 @@ public class VehicleCleatEntity extends Entity {
 
                     thisVehicle.setDeltaMovement(movementVector);
                     thisVehicle.setYRot(finalRotation);
-
-
 
 
                 }
@@ -143,7 +139,7 @@ public class VehicleCleatEntity extends Entity {
     public void dropLeash(boolean pBroadcastPacket, boolean pDropLeash) {
         if (this.leashHolder != null) {
             if (!this.level().isClientSide && pDropLeash) {
-                if(leashHolder instanceof Player player){
+                if (leashHolder instanceof Player player) {
                     ItemHandlerHelper.giveItemToPlayer(player, Items.LEAD.getDefaultInstance());
                 } else {
                     this.spawnAtLocation(Items.LEAD);
@@ -242,7 +238,7 @@ public class VehicleCleatEntity extends Entity {
 
     @Override
     public Vec3 getLeashOffset(float pPartialTick) {
-        return new Vec3(0.0D, (double)this.getEyeHeight(), 0f);
+        return new Vec3(0.0D, (double) this.getEyeHeight(), 0f);
     }
 
     @Override

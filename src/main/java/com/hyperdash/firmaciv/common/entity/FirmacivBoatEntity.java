@@ -451,14 +451,6 @@ public class FirmacivBoatEntity extends Entity {
 
     }
 
-    protected float getXForPart(float yaw, float degree) {
-        return Mth.sin((float) (yaw + Math.toRadians(degree)));
-    }
-
-    protected float getZForPart(float yaw, float degree) {
-        return -Mth.cos((float) (yaw + Math.toRadians(degree)));
-    }
-
     protected void tickBubbleColumn() {
         if (this.level().isClientSide) {
             int i = this.getBubbleTime();

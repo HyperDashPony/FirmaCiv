@@ -36,7 +36,9 @@ public class CanoeEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int[] getCleats(){return CLEATS;}
+    public int[] getCleats() {
+        return CLEATS;
+    }
 
     @Override
     protected void controlBoat() {
