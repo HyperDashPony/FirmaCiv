@@ -18,25 +18,16 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             new ResourceLocation(Firmaciv.MOD_ID, "canoe_entity"), "main");
+    private final ModelPart cleat;
     private final ModelPart middle;
     private final ModelPart end;
     private final ModelPart end2;
 
     private final ModelPart waterocclusion;
 
-	/*
-	public CanoeEntityModel(ModelPart pRoot) {
-		//ModelPart root = createBodyLayer().bakeRoot();
-		this.middle = pRoot.getChild("middle");
-		this.end = pRoot.getChild("end");
-		this.end2 = pRoot.getChild("end2");
-		this.waterocclusion = pRoot.getChild("waterocclusion");
-	}
-
-	 */
-
     public CanoeEntityModel() {
         ModelPart root = createBodyLayer().bakeRoot();
+        this.cleat = root.getChild("cleat");
         this.middle = root.getChild("middle");
         this.end = root.getChild("end");
         this.end2 = root.getChild("end2");
@@ -46,6 +37,10 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
+
+        PartDefinition cleat = partdefinition.addOrReplaceChild("cleat", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+
+        PartDefinition cube_r1 = cleat.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(33, 95).addBox(-17.0F, -9.0F, -5.0F, 2.0F, 1.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         PartDefinition middle = partdefinition.addOrReplaceChild("middle", CubeListBuilder.create(),
                 PartPose.offset(0.0F, 24.0F, 0.0F));
@@ -154,6 +149,7 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
                                float red, float green, float blue, float alpha) {
+        cleat.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         middle.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         end.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         end2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

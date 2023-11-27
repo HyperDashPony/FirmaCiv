@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -53,8 +54,6 @@ public class VehicleCleatEntity extends Entity {
         super.tick();
         if (!this.level().isClientSide) {
             this.tickLeash();
-
-
         }
 
     }
@@ -143,11 +142,17 @@ public class VehicleCleatEntity extends Entity {
      */
     public void dropLeash(boolean pBroadcastPacket, boolean pDropLeash) {
         if (this.leashHolder != null) {
+            if (!this.level().isClientSide && pDropLeash) {
+                if(leashHolder instanceof Player player){
+                    ItemHandlerHelper.giveItemToPlayer(player, Items.LEAD.getDefaultInstance());
+                } else {
+                    this.spawnAtLocation(Items.LEAD);
+                }
+
+            }
             this.leashHolder = null;
             this.leashInfoTag = null;
-            if (!this.level().isClientSide && pDropLeash) {
-                this.spawnAtLocation(Items.LEAD);
-            }
+
 
             if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
                 ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, (Entity) null));
@@ -233,6 +238,11 @@ public class VehicleCleatEntity extends Entity {
         if (pCompound.contains("Leash", 10)) {
             this.leashInfoTag = pCompound.getCompound("Leash");
         }
+    }
+
+    @Override
+    public Vec3 getLeashOffset(float pPartialTick) {
+        return new Vec3(0.0D, (double)this.getEyeHeight(), 0f);
     }
 
     @Override

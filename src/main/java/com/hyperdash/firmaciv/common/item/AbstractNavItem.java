@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.common.item;
 
+import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -20,9 +21,8 @@ public class AbstractNavItem extends Item {
     }
 
     public static double[] getNavLocation(Vec3 position) {
-
-        double latitude = (Math.floor(position.get(Direction.Axis.Z) - 20000) / 40000) * 90;
-        double longitude = (Math.floor(position.get(Direction.Axis.X)) / 40000) * 90;
+        double latitude = (Math.floor(position.get(Direction.Axis.Z) - 10000) / 20000) * 90;
+        double longitude = (Math.floor(position.get(Direction.Axis.X)) / 10000) * 90;
         double altitude = (position.get(Direction.Axis.Y)) - 64;
 
         return new double[]{latitude, longitude, altitude};

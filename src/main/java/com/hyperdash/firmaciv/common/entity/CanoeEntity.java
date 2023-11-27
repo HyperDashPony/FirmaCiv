@@ -1,6 +1,7 @@
 package com.hyperdash.firmaciv.common.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -13,15 +14,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
 public class CanoeEntity extends FirmacivBoatEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
             EntityDataSerializers.INT);
-    public final int PASSENGER_NUMBER = 2;
+    public final int PASSENGER_NUMBER = 3;
     protected final float DAMAGE_THRESHOLD = 10.0f;
     protected final float DAMAGE_RECOVERY = 1.0f;
+
+    public final int[] CLEATS = {2};
 
     public CanoeEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -30,6 +34,9 @@ public class CanoeEntity extends FirmacivBoatEntity {
 
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
     }
+
+    @Override
+    public int[] getCleats(){return CLEATS;}
 
     @Override
     protected void controlBoat() {
@@ -94,6 +101,41 @@ public class CanoeEntity extends FirmacivBoatEntity {
         }
 
         return null;
+    }
+
+    @Override
+    protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
+        if (this.hasPassenger(passenger)) {
+            float localX = 0.0F;
+            float localZ = 0.0F;
+            float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+            if (this.getPassengers().size() > 1) {
+                switch (this.getPassengers().indexOf(passenger)) {
+                    case 0 -> {
+                        localX = 0.3f;
+                        localZ = 0.0f;
+                    }
+                    case 1 -> {
+                        localX = -0.7f;
+                        localZ = 0.0f;
+                    }
+                    //cleat
+                    case 2 -> {
+                        localX = 1.0f;
+                        localZ = 0.0f;
+                        localY += 0.2f;
+                    }
+                }
+            }
+            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
+            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
+            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
+            if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
+                passenger.setYRot(this.getYRot());
+            } else if (!(passenger instanceof VehiclePartEntity)) {
+                super.positionRider(passenger, moveFunction);
+            }
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.client.render.entity;
 
+import com.hyperdash.firmaciv.common.entity.CanoeEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -67,6 +68,11 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
             pPoseStack.pushPose();
             pPoseStack.scale(-0.8F, -0.8F, 0.8F);
             pPoseStack.mulPose(Axis.YP.rotationDegrees(pEntityYaw));
+            if(pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity){
+                pPoseStack.scale(0.8F, 0.8F, 0.8F);
+                pPoseStack.translate(-0.25f, -0.35f, 0.f);
+                pPoseStack.mulPose(Axis.ZP.rotationDegrees(90));
+            }
             this.model.setupAnim(pEntity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(KNOT_LOCATION));
             this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

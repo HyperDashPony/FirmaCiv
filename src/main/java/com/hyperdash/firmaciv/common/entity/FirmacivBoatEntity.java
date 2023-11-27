@@ -814,9 +814,11 @@ public class FirmacivBoatEntity extends Entity {
     }
 
     public boolean isBeingTowed(){
-        for(int i : this.getCleats()){
-            if(this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat){
-                return vehicleCleat.isLeashed() && this.getDeltaMovement().length() != 0;
+        if(this.getPassengers().size() == this.getPassengerNumber()){
+            for(int i : this.getCleats()){
+                if(this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat){
+                    return vehicleCleat.isLeashed() && this.getDeltaMovement().length() != 0;
+                }
             }
         }
         return false;
@@ -864,20 +866,24 @@ public class FirmacivBoatEntity extends Entity {
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
         if (this.hasPassenger(passenger)) {
-            float f = 0.0F;
-            float f1 = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+            float localX = 0.0F;
+            float localZ = 0.0F;
+            float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
             if (this.getPassengers().size() > 1) {
-                if (this.getPassengers().indexOf(passenger) == 0) {
-                    f = 0.3F;
-                } else {
-                    f = -0.7F;
+                switch (this.getPassengers().indexOf(passenger)) {
+                    case 0 -> {
+                        localX = 0.3f;
+                        localZ = 0.0f;
+                    }
+                    case 1 -> {
+                        localX = -0.7f;
+                        localZ = 0.0f;
+                    }
                 }
-
             }
-            final Vec3 vec3 = (new Vec3(f, 0, 0)).yRot(
-                    -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
-            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
-            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) f1, this.getZ() + vec3.z);
+            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
+            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
+            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
                 passenger.setYRot(this.getYRot());
             } else if (!(passenger instanceof VehiclePartEntity)) {

@@ -31,7 +31,7 @@ logoFile="firmaciv.png" #optional
 # A text field displayed in the mod UI
 #credits="The developers of T" #optional
 # A text field displayed in the mod UI
-authors="Hyper Dash" #optional
+authors="alekiponi" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Firma: Civilization is an addon/expansion for TerraFirmaCraft focusing on multiplayer experiences and key technologies missing from the base mod.
