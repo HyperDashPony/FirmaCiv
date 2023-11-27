@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 
@@ -34,11 +35,8 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
     public AngledWatercraftFrameBlock(final BlockState blockState, final BlockBehaviour.Properties properties) {
         super(blockState, properties);
         this.registerDefaultState(
-                this.getStateDefinition().any()
-                        .setValue(FACING, Direction.NORTH)
-                        .setValue(HALF, Half.BOTTOM)
-                        .setValue(SHAPE, StairsShape.STRAIGHT)
-                        .setValue(WATERLOGGED, false)
+                this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
+                        .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, false)
                         .setValue(FRAME_PROCESSED, 0));
     }
 
@@ -101,8 +99,25 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock implements Ent
 
         // Should we do plank stuff
         if (heldStack.is(FirmacivTags.Items.PLANKS)) {
-            // TODO ensure the stored planks and the planks we are trying to add are the same.
-            //  block also needs to be swapped to reflect the stored wood
+            // We must replace ourselves with the correct wood version
+            if (0 == processState) {
+                for (final RegistryObject<Block> registryObject : FirmacivBlocks.WOOD_WATERCRAFT_FRAMES.values()) {
+                    if (!(registryObject.get() instanceof WoodenAngledWatercraftFrameBlock woodenFrameBlock)) continue;
+
+                    // Try find
+                    if (!heldStack.is(woodenFrameBlock.getUnderlyingPlank().asItem())) continue;
+
+                    final BlockState newBlockState = woodenFrameBlock.defaultBlockState().setValue(FRAME_PROCESSED, 1)
+                            .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
+
+                    frameBlockEntity.insertPlanks(heldStack.split(1));
+                    level.setBlock(blockPos, newBlockState, 10);
+                    level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
+                            level.getRandom().nextFloat() * 0.1F + 0.9F);
+                    return InteractionResult.SUCCESS;
+                }
+                return InteractionResult.FAIL;
+            }
 
             // Must be [0,4)
             if (4 > processState) {
