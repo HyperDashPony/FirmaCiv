@@ -40,6 +40,10 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
 
+    public static final RegistryObject<EntityType<FirmacivBoatEntity>> OUTRIGGER = ENTITY_TYPES.register("outrigger",
+            () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "outrigger").toString()));
+
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
             "compartment_empty",
             () -> EntityType.Builder.of(EmptyCompartmentEntity::new, MobCategory.MISC).sized(0.8F, 0.8F)
