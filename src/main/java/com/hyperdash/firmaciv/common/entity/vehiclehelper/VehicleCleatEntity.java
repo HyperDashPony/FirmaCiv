@@ -46,8 +46,8 @@ public class VehicleCleatEntity extends Entity {
 
 
     public void tick() {
-        if(!this.isPassenger()){
-            this.dropLeash(true,true);
+        if (!this.isPassenger()) {
+            this.dropLeash(true, true);
             this.kill();
         }
         super.tick();
@@ -82,39 +82,51 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashHolder != null) {
             if (!this.isAlive() || !this.leashHolder.isAlive()) {
                 this.dropLeash(true, true);
-            } if (this.getVehicle().isPassenger() && this.getVehicle().getVehicle() instanceof FirmacivBoatEntity && this.leashHolder instanceof Player player){
-                if(this.distanceTo(this.leashHolder) > 4f){
-                    /*
+            }
+            if (this.getVehicle().isPassenger() && this.getVehicle().getVehicle() instanceof FirmacivBoatEntity && this.leashHolder instanceof Player player) {
+                if (this.distanceTo(this.leashHolder) > 4f) {
+
                     FirmacivBoatEntity thisVehicle = (FirmacivBoatEntity) this.getVehicle().getVehicle();
                     Vec3 vectorToVehicle = player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
-                    Vec3 movementVector = new Vec3(vectorToVehicle.x*-0.1f, thisVehicle.getDeltaMovement().y, vectorToVehicle.z*-0.1f);
-
-                    
-                    float rotationTowardsPlayer = (float) Math.atan(player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).z / player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).x);
-                    float vehicleDeltaRotation = (float)Math.toDegrees((thisVehicle.getYRot() - rotationTowardsPlayer))/4.0f;
-                    thisVehicle.lookAt(thisVehicle.getX());
+                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y, vectorToVehicle.z * -0.1f);
 
 
+
+                    //float rotationTowardsPlayer = (float) Math.atan(player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).z / player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).x);
+                    //float vehicleDeltaRotation = (float)Math.toDegrees((thisVehicle.getYRot() - rotationTowardsPlayer))/4.0f;
 
                     double d0 = player.getPosition(0).x - thisVehicle.getX();
                     double d2 = player.getPosition(0).z - thisVehicle.getZ();
                     double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 
-                    float finalRotation = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
+                    float finalRotation = Mth.wrapDegrees((float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
+                    float intermediateRotation = thisVehicle.getYRot() + (Mth.wrapDegrees((finalRotation - thisVehicle.getYRot())) / 45);
 
-                    thisVehicle.setYRot(Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F));
+
 
                     double difference = (player.getY()) - thisVehicle.getY();
-                    if(player.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement().length() < 0.02f) {
-                        thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY()+0.55f, thisVehicle.getZ());
+                    if (player.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement().length() < 0.02f) {
+                        thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY() + 0.55f, thisVehicle.getZ());
                     }
-                    thisVehicle.setDeltaMovement(movementVector);
 
-                    */
+                    for (Entity part : thisVehicle.getPassengers()) {
+                        part.setYRot(thisVehicle.getYRot());
+                    }
+                    for (Entity compartment : thisVehicle.getCompartments()) {
+                        compartment.setYRot(thisVehicle.getYRot());
+                    }
+
+                    thisVehicle.setDeltaMovement(movementVector);
+                    thisVehicle.setYRot(finalRotation);
+
+
+
+
                 }
 
 
-            } if (this.distanceTo(this.leashHolder) > 10f && this.leashHolder instanceof Player player){
+            }
+            if (this.distanceTo(this.leashHolder) > 10f && this.leashHolder instanceof Player player) {
                 this.dropLeash(true, !player.getAbilities().instabuild);
             }
 
@@ -138,7 +150,7 @@ public class VehicleCleatEntity extends Entity {
             }
 
             if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-                ((ServerLevel)this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, (Entity)null));
+                ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, (Entity) null));
             }
         }
 
@@ -173,7 +185,7 @@ public class VehicleCleatEntity extends Entity {
         this.leashHolder = pLeashHolder;
         this.leashInfoTag = null;
         if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-            ((ServerLevel)this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
+            ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
         }
 
     }
@@ -187,7 +199,7 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashInfoTag != null && this.level() instanceof ServerLevel) {
             if (this.leashInfoTag.hasUUID("UUID")) {
                 UUID uuid = this.leashInfoTag.getUUID("UUID");
-                Entity entity = ((ServerLevel)this.level()).getEntity(uuid);
+                Entity entity = ((ServerLevel) this.level()).getEntity(uuid);
                 if (entity != null) {
                     this.setLeashedTo(entity, true);
                     return;
@@ -210,9 +222,10 @@ public class VehicleCleatEntity extends Entity {
     public boolean isPickable() {
         return !this.isRemoved();
     }
+
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(DATA_MOB_FLAGS_ID, (byte)0);
+        this.entityData.define(DATA_MOB_FLAGS_ID, (byte) 0);
     }
 
     @Override
@@ -230,7 +243,7 @@ public class VehicleCleatEntity extends Entity {
                 UUID uuid = this.leashHolder.getUUID();
                 compoundtag2.putUUID("UUID", uuid);
             } else if (this.leashHolder instanceof HangingEntity) {
-                BlockPos blockpos = ((HangingEntity)this.leashHolder).getPos();
+                BlockPos blockpos = ((HangingEntity) this.leashHolder).getPos();
                 compoundtag2.putInt("X", blockpos.getX());
                 compoundtag2.putInt("Y", blockpos.getY());
                 compoundtag2.putInt("Z", blockpos.getZ());

@@ -33,6 +33,8 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
     private final ModelPart keel;
     private final ModelPart transom;
 
+    private final ModelPart cleat;
+
     public RowboatEntityModel() {
         ModelPart root = createBodyLayer().bakeRoot();
         this.waterocclusion = root.getChild("waterocclusion");
@@ -49,6 +51,7 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         this.oarlocks = root.getChild("oarlocks");
         this.keel = root.getChild("keel");
         this.transom = root.getChild("transom");
+        this.cleat = root.getChild("cleat");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -57,6 +60,13 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
         PartDefinition waterocclusion = partdefinition.addOrReplaceChild("waterocclusion", CubeListBuilder.create(),
                 PartPose.offset(0.0123F, 13.0F, -8.7623F));
+
+        PartDefinition cleat = partdefinition.addOrReplaceChild("cleat", CubeListBuilder.create().texOffs(115, 171).addBox(13.25F, 12.75F, -11.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(118, 178).addBox(13.25F, 12.75F, -9.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(118, 178).addBox(13.25F, 12.75F, -13.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(10.25F, -5.75F, -13.25F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition cleat2 = cleat.addOrReplaceChild("cleat2", CubeListBuilder.create().texOffs(119, 179).addBox(13.25F, 12.75F, -9.25F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(119, 179).addBox(13.25F, 12.75F, -12.25F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 1.0F, 0.0F));
 
         PartDefinition cube_r1 = waterocclusion.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(192, 50)
                         .addBox(-15.513F, -1.0F, -15.539F, 16.0F, 2.0F, 16.0F, new CubeDeformation(0.0F)),
@@ -302,5 +312,6 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         oarlocks.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         keel.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         transom.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        cleat.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }

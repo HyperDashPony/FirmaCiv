@@ -89,19 +89,28 @@ public class VehiclePartEntity extends Entity {
 
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
+
         if (!(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity)) return;
+
+        FirmacivBoatEntity thisVehicle = (FirmacivBoatEntity) this.getVehicle();
+
         final double riderOffset = ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
         final Vec3 vec3 = (new Vec3(0, 0, 0)).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
         moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
         passenger.setPos(this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
-        if (passenger instanceof CompartmentEntity || passenger instanceof VehicleCleatEntity) {
-            passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
-            if (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 1) {
-                if (tickCount < 10 || this.getVehicle().getControllingPassenger() == null) {
-                    this.setYRot(this.getVehicle().getYRot());
-                    passenger.setYRot(this.getYRot() + compartmentRotation);
+
+        if ((passenger instanceof CompartmentEntity || passenger instanceof VehicleCleatEntity)) {
+            if(thisVehicle.isBeingTowed()){
+            } else {
+                passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
+                if (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 1) {
+                    if (tickCount < 10 || thisVehicle.getControllingPassenger() == null) {
+                        this.setYRot(thisVehicle.getYRot());
+                        passenger.setYRot(thisVehicle.getYRot() + compartmentRotation);
+                    }
                 }
             }
+
         }
     }
 

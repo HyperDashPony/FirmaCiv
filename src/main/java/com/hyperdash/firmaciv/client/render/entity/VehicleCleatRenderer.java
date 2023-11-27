@@ -66,6 +66,7 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
         if (entity != null) {
             pPoseStack.pushPose();
             pPoseStack.scale(-0.8F, -0.8F, 0.8F);
+            pPoseStack.mulPose(Axis.YP.rotationDegrees(pEntityYaw));
             this.model.setupAnim(pEntity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(KNOT_LOCATION));
             this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

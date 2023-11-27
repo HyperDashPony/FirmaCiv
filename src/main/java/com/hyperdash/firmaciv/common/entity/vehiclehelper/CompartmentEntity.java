@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -36,6 +37,13 @@ public abstract class CompartmentEntity extends Entity {
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
     public int lifespan = 6000;
+
+    protected int lerpSteps;
+    protected double lerpX;
+    protected double lerpY;
+    protected double lerpZ;
+    protected double lerpYRot;
+    protected double lerpXRot;
     @Nullable
     protected VehiclePartEntity ridingThisPart = null;
     private int notRidingTicks = 0;
@@ -145,6 +153,37 @@ public abstract class CompartmentEntity extends Entity {
         }
 
         super.tick();
+        this.tickLerp();
+    }
+
+    protected void tickLerp() {
+        if (this.isControlledByLocalInstance()) {
+            this.lerpSteps = 0;
+            this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
+        }
+
+        if (this.lerpSteps > 0) {
+            double d0 = this.getX() + (this.lerpX - this.getX()) / (double) this.lerpSteps;
+            double d1 = this.getY() + (this.lerpY - this.getY()) / (double) this.lerpSteps;
+            double d2 = this.getZ() + (this.lerpZ - this.getZ()) / (double) this.lerpSteps;
+            double d3 = Mth.wrapDegrees(this.lerpYRot - (double) this.getYRot());
+            this.setYRot(this.getYRot() + (float) d3 / (float) this.lerpSteps);
+            this.setXRot(this.getXRot() + (float) (this.lerpXRot - (double) this.getXRot()) / (float) this.lerpSteps);
+            --this.lerpSteps;
+            this.setPos(d0, d1, d2);
+            this.setRot(this.getYRot(), this.getXRot());
+        }
+    }
+
+    @Override
+    public void lerpTo(final double posX, final double posY, final double posZ, final float yaw, final float pitch,
+                       final int pPosRotationIncrements, final boolean teleport) {
+        this.lerpX = posX;
+        this.lerpY = posY;
+        this.lerpZ = posZ;
+        this.lerpYRot = yaw;
+        this.lerpXRot = pitch;
+        this.lerpSteps = 10;
     }
 
     protected SoundEvent getHurtSound(final DamageSource damageSource) {

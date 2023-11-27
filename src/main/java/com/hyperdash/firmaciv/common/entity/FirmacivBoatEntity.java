@@ -310,6 +310,8 @@ public class FirmacivBoatEntity extends Entity {
             this.deltaRotation = 0;
         }
 
+        //this.deltaRotation = 20;
+
 
         this.oldStatus = this.status;
         this.status = this.getStatus();
@@ -338,8 +340,11 @@ public class FirmacivBoatEntity extends Entity {
             this.setDamage(this.getDamage() - getDamageRecovery());
         }
 
+
+
         super.tick();
 
+        // play effects based on movement
         if (this.status == Status.IN_WATER && !this.getPassengers().isEmpty()) {
             if (Math.abs(this.deltaRotation) > 2) {
                 this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(),
@@ -386,6 +391,9 @@ public class FirmacivBoatEntity extends Entity {
             }
         }
 
+
+
+
         this.tickLerp();
         if (this.isControlledByLocalInstance()) {
             if (!(this.getFirstPassenger() instanceof Player)) {
@@ -405,44 +413,9 @@ public class FirmacivBoatEntity extends Entity {
             this.deltaRotation = 0f;
         }
 
-        for(int i : getCleats()){
-            if(this.getPassengers().size() == this.getPassengerNumber()){
-                if(this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat){
-                    if(vehicleCleat.getLeashHolder() instanceof Player player){
-                        if(vehicleCleat.distanceTo(vehicleCleat.getLeashHolder()) > 4f){
-                            Vec3 vectorToVehicle = player.getPosition(0).vectorTo(this.getPosition(0)).normalize();
-                            Vec3 movementVector = new Vec3(vectorToVehicle.x*-0.1f, this.getDeltaMovement().y, vectorToVehicle.z*-0.1f);
-
-                            /*
-                            float rotationTowardsPlayer = (float) Math.atan(player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).z / player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).x);
-                            float vehicleDeltaRotation = (float)Math.toDegrees((thisVehicle.getYRot() - rotationTowardsPlayer))/4.0f;
-                            thisVehicle.lookAt(thisVehicle.getX());
-
-                             */
-
-                            double d0 = player.getPosition(0).x - this.getX();
-                            double d2 = player.getPosition(0).z - this.getZ();
-                            double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-
-                            float finalRotation = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
-
-                            this.deltaRotation = finalRotation/4;
-
-                            //this.setYRot(Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F));
-
-                            double difference = (player.getY()) - this.getY();
-                            if(player.getY() > this.getY() && difference >= 0.4 && difference <= 1.0 && this.getDeltaMovement().length() < 0.02f) {
-                                this.setPos(this.getX(), this.getY()+0.55f, this.getZ());
-                            }
-                            this.setDeltaMovement(movementVector);
 
 
-                        }
-                    }
-                }
-            }
 
-        }
 
         this.tickBubbleColumn();
 
@@ -474,6 +447,8 @@ public class FirmacivBoatEntity extends Entity {
             boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
 
         }
+
+
     }
 
     protected float getXForPart(float yaw, float degree) {
@@ -825,6 +800,26 @@ public class FirmacivBoatEntity extends Entity {
             }
         }
         return truePassengers;
+    }
+
+    public final List<Entity> getCompartments() {
+        final List<Entity> compartments = Lists.newArrayList();
+
+        for (final Entity vehiclePart : this.getPassengers()) {
+            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof CompartmentEntity compartmentEntity) {
+                compartments.add(compartmentEntity);
+            }
+        }
+        return compartments;
+    }
+
+    public boolean isBeingTowed(){
+        for(int i : this.getCleats()){
+            if(this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat){
+                return vehicleCleat.isLeashed() && this.getDeltaMovement().length() != 0;
+            }
+        }
+        return false;
     }
 
     protected void controlBoat() {
