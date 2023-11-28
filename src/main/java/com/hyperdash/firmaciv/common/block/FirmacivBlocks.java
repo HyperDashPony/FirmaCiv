@@ -5,6 +5,7 @@ import com.hyperdash.firmaciv.common.entity.BoatVariant;
 import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.world.item.BlockItem;
@@ -56,6 +57,12 @@ public class FirmacivBlocks {
     public static final RegistryObject<Block> WATERCRAFT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
             () -> new AngledWatercraftFrameBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
                     BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
+
+    public static final Map<Wood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAMES = Helpers.mapOfKeys(Wood.class, wood ->
+            registerBlockWithoutItem("wood/" + wood.getSerializedName() + "/watercraft_frame_angled",
+                    () -> new WoodenAngledWatercraftFrameBlock(wood,
+                            wood.getBlock(Wood.BlockType.STAIRS).get().defaultBlockState(),
+                            BlockBehaviour.Properties.copy(WATERCRAFT_FRAME_ANGLED.get()))));
 
     public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
             () -> new OarlockBlock(BlockBehaviour.Properties.copy(
