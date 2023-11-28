@@ -58,7 +58,7 @@ public class FirmacivBlocks {
             () -> new AngledWatercraftFrameBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
                     BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
-    public static final Map<Wood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAMES = Helpers.mapOfKeys(Wood.class, wood ->
+    public static final Map<Wood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAME_ANGLED = Helpers.mapOfKeys(Wood.class, wood ->
             registerBlockWithoutItem("wood/" + wood.getSerializedName() + "/watercraft_frame_angled",
                     () -> new WoodenAngledWatercraftFrameBlock(wood,
                             wood.getBlock(Wood.BlockType.STAIRS).get().defaultBlockState(),
