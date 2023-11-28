@@ -27,14 +27,14 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
-import static com.hyperdash.firmaciv.common.block.AngledWatercraftFrameBlock.FRAME_PROCESSED;
+import static com.hyperdash.firmaciv.common.block.AngledBoatFrameBlock.FRAME_PROCESSED;
 
-public class WoodenAngledWatercraftFrameBlock extends SquaredAngleBlock implements EntityBlock {
+public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlock {
 
     public final RegistryWood wood;
 
-    public WoodenAngledWatercraftFrameBlock(final RegistryWood wood, final BlockState blockState,
-            final Properties properties) {
+    public WoodenBoatFrameBlock(final RegistryWood wood, final BlockState blockState,
+                                final Properties properties) {
         super(blockState, properties);
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)

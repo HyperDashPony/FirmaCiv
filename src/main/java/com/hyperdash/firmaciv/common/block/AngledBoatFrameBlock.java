@@ -17,11 +17,11 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.RegistryObject;
 
-public class AngledWatercraftFrameBlock extends SquaredAngleBlock {
+public class AngledBoatFrameBlock extends SquaredAngleBlock {
 
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_8;
 
-    public AngledWatercraftFrameBlock(final BlockState blockState, final BlockBehaviour.Properties properties) {
+    public AngledBoatFrameBlock(final BlockState blockState, final BlockBehaviour.Properties properties) {
         super(blockState, properties);
     }
 
@@ -38,7 +38,7 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock {
 
         // We must replace ourselves with the correct wood version
         for (final RegistryObject<Block> registryObject : FirmacivBlocks.WOOD_WATERCRAFT_FRAME_ANGLED.values()) {
-            if (!(registryObject.get() instanceof WoodenAngledWatercraftFrameBlock woodenFrameBlock)) continue;
+            if (!(registryObject.get() instanceof WoodenBoatFrameBlock woodenFrameBlock)) continue;
 
             // Must find the right block variant for this item
             if (!heldStack.is(woodenFrameBlock.getUnderlyingPlank().asItem())) continue;

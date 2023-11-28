@@ -45,7 +45,7 @@ public final class FirmacivEntities {
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "outrigger").toString()));
 
     public static final RegistryObject<EntityType<FirmacivBoatEntity>> SLOOP = ENTITY_TYPES.register("sloop",
-            () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
+            () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(6F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
