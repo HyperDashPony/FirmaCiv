@@ -27,9 +27,11 @@ public class OutriggerEntityModel<T extends FirmacivBoatEntity> extends EntityMo
     private final ModelPart sail;
     private final ModelPart lashings;
     private final ModelPart netting;
+    private final ModelPart waterocclusion;
 
     public OutriggerEntityModel() {
         ModelPart root = createBodyLayer().bakeRoot();
+        this.waterocclusion = root.getChild("waterocclusion");
         this.hull = root.getChild("hull");
         this.cleat = root.getChild("cleat");
         this.bow = root.getChild("bow");
@@ -158,7 +160,16 @@ public class OutriggerEntityModel<T extends FirmacivBoatEntity> extends EntityMo
 
         PartDefinition netting_r2 = netting.addOrReplaceChild("netting_r2", CubeListBuilder.create().texOffs(-16, 233).addBox(-8.0F, 0.8539F, -10.8F, 17.0F, 0.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-14.6912F, 1.3969F, -0.5F, 0.0F, -1.5708F, 0.0F));
 
+        PartDefinition waterocclusion = partdefinition.addOrReplaceChild("waterocclusion", CubeListBuilder.create().texOffs(-56, -56).addBox(10.0F, -9.0F, 38.0F, 12.0F, 3.0F, 58.0F, new CubeDeformation(0.0F))
+                .texOffs(-7, -7).addBox(13.0F, -9.0F, 96.0F, 6.0F, 2.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(-7, -7).addBox(13.0F, -9.0F, 29.0F, 6.0F, 2.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, -67.0F));
+
+
         return LayerDefinition.create(meshdefinition, 256, 256);
+    }
+
+    public ModelPart getWaterocclusion() {
+        return this.waterocclusion;
     }
 
     @Override

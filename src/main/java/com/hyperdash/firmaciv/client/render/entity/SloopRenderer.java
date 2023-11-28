@@ -1,10 +1,9 @@
 package com.hyperdash.firmaciv.client.render.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.client.model.entity.KayakEntityModel;
 import com.hyperdash.firmaciv.client.model.entity.OutriggerEntityModel;
+import com.hyperdash.firmaciv.client.model.entity.SloopEntityModel;
 import com.hyperdash.firmaciv.common.entity.FirmacivBoatEntity;
-import com.hyperdash.firmaciv.common.entity.KayakEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -21,17 +20,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 @OnlyIn(Dist.CLIENT)
-public class OutriggerRenderer extends EntityRenderer<FirmacivBoatEntity> {
+public class SloopRenderer extends EntityRenderer<FirmacivBoatEntity> {
 
     private static final ResourceLocation KAYAK =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/outrigger.png");
-    private final Pair<ResourceLocation, OutriggerEntityModel> kayakResources;
+            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/sloop.png");
+    private final Pair<ResourceLocation, SloopEntityModel> kayakResources;
 
-    public OutriggerRenderer(EntityRendererProvider.Context pContext) {
+    public SloopRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 0.8f;
-        this.kayakResources = Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/outrigger.png"),
-                new OutriggerEntityModel());
+        this.kayakResources = Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/sloop.png"),
+                new SloopEntityModel());
     }
 
     @Override
@@ -57,9 +56,9 @@ public class OutriggerRenderer extends EntityRenderer<FirmacivBoatEntity> {
                             1.0F, 0.0F, 1.0F));
         }
 
-        Pair<ResourceLocation, OutriggerEntityModel> pair = kayakResources;
+        Pair<ResourceLocation, SloopEntityModel> pair = kayakResources;
         ResourceLocation resourcelocation = pair.getFirst();
-        OutriggerEntityModel kayakModel = pair.getSecond();
+        SloopEntityModel kayakModel = pair.getSecond();
 
         pMatrixStack.translate(0.0f, 1.0625f, 0f);
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
@@ -83,7 +82,7 @@ public class OutriggerRenderer extends EntityRenderer<FirmacivBoatEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(FirmacivBoatEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/outrigger.png");
+        return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/sloop.png");
     }
 
 

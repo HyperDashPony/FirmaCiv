@@ -261,9 +261,9 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         if (this.canAddNonPlayers() && !item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
-            } /* else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
+            } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
-            } */
+            }
         }
 
         if (ridingThisPart == null) return InteractionResult.PASS;
