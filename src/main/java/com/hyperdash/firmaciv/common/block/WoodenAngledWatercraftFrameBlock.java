@@ -27,7 +27,9 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
-public class WoodenAngledWatercraftFrameBlock extends AngledWatercraftFrameBlock implements EntityBlock {
+import static com.hyperdash.firmaciv.common.block.AngledWatercraftFrameBlock.FRAME_PROCESSED;
+
+public class WoodenAngledWatercraftFrameBlock extends SquaredAngleBlock implements EntityBlock {
 
     public final RegistryWood wood;
 
@@ -37,6 +39,7 @@ public class WoodenAngledWatercraftFrameBlock extends AngledWatercraftFrameBlock
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
                         .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, false)
+                        // TODO state 0 is no longer actually used as no progress is represented as a separate block
                         .setValue(FRAME_PROCESSED, 0));
         this.wood = wood;
     }
