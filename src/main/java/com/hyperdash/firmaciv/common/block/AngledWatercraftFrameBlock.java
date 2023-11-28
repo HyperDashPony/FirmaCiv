@@ -26,21 +26,6 @@ public class AngledWatercraftFrameBlock extends SquaredAngleBlock {
     }
 
     @Override
-    public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
-            final BlockState newState, final boolean isMoving) {
-
-        if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
-            if (!blockState.is(newState.getBlock())) {
-                frameBlockEntity.ejectContents();
-            }
-        }
-
-        if (blockState.hasBlockEntity() && (!blockState.is(newState.getBlock()) || !newState.hasBlockEntity())) {
-            level.removeBlockEntity(blockPos);
-        }
-    }
-
-    @Override
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
         // Don't do logic on client side

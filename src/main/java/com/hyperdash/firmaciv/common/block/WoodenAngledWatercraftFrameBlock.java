@@ -42,6 +42,20 @@ public class WoodenAngledWatercraftFrameBlock extends AngledWatercraftFrameBlock
     }
 
     @Override
+    public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
+            final BlockState newState, final boolean isMoving) {
+        if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
+            if (!blockState.is(newState.getBlock())) {
+                frameBlockEntity.ejectContents();
+            }
+        }
+
+        if (blockState.hasBlockEntity() && (!blockState.is(newState.getBlock()) || !newState.hasBlockEntity())) {
+            level.removeBlockEntity(blockPos);
+        }
+    }
+
+    @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
     }
