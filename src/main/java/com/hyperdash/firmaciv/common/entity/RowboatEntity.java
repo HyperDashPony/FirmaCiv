@@ -39,6 +39,8 @@ public class RowboatEntity extends FirmacivBoatEntity {
 
     public final int[] CLEATS = {5};
 
+    public final int[][] COMPARTMENT_ROTATIONS = {{0,180}};
+
     public final int[] CAN_ADD_ONLY_BLOCKS = {2,1};
 
     public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
@@ -47,6 +49,13 @@ public class RowboatEntity extends FirmacivBoatEntity {
         final String name = entityType.toString().split("rowboat.")[1];
 
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
+    }
+
+
+    protected final float PASSENGER_SIZE_LIMIT = 1.4F;
+    @Override
+    public float getPassengerSizeLimit(){
+        return PASSENGER_SIZE_LIMIT;
     }
 
     @Override
@@ -182,7 +191,11 @@ public class RowboatEntity extends FirmacivBoatEntity {
         }
     }
 
+    @Override
+    public int getCompartmentRotation(int i){return COMPARTMENT_ROTATIONS[i][0];}
 
+    @Override
+    public int[][] getCompartmentRotationsArray(){return COMPARTMENT_ROTATIONS;}
 
     @Override
     public Item getDropItem() {

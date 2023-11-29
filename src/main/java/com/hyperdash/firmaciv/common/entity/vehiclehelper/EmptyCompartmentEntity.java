@@ -152,22 +152,10 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                 .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
 
 
-        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level().isClientSide()) {
-
+        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level().isClientSide() && this.getTrueVehicle() != null) {
             for (final Entity entity : list) {
                 if (!entity.hasPassenger(this)) {
-                    float maxSize = 1.0f;
-
-                    // TODO make this a callback to the true vehicle
-                    if (this.getTrueVehicle() instanceof CanoeEntity) {
-                        maxSize = 0.9f;
-                    } else if (this.getTrueVehicle() instanceof KayakEntity) {
-                        maxSize = 0.6f;
-                    } else if (this.getTrueVehicle() instanceof RowboatEntity) {
-                        maxSize = 1.4f;
-                    } else if (this.getTrueVehicle() instanceof SloopEntity) {
-                        maxSize = 1.4f;
-                    }
+                    float maxSize = this.getTrueVehicle().getPassengerSizeLimit();
                     if (this.getPassengers()
                             .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         if(!(entity instanceof Predator)){

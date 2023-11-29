@@ -24,6 +24,14 @@ public class VehiclePartEntity extends Entity {
     public void tick() {
         super.tick();
 
+        if(!(this.getVehicle() instanceof FirmacivBoatEntity))
+        {
+            return;
+        }
+        FirmacivBoatEntity vehicle = (FirmacivBoatEntity)this.getVehicle();
+
+
+        /*
         if (tickCount < 10) {
             if (this.getVehicle() instanceof RowboatEntity rowboatEntity) {
                 if (rowboatEntity.getPilotVehiclePartAsEntity() == this) {
@@ -32,29 +40,36 @@ public class VehiclePartEntity extends Entity {
             }
         }
 
+         */
+
+        if (tickCount < 10) {
+            for(int[] i : vehicle.getCompartmentRotationsArray()){
+                if(vehicle.getPassengers().get(i[0]) == this){
+                    this.compartmentRotation = i[1];
+                }
+            }
+        }
+
         // Try not to be empty
         if (this.getPassengers().isEmpty()) {
             boolean shouldAddCleatInstead = false;
 
-            if(this.getVehicle() instanceof FirmacivBoatEntity vehicle){
+            if(vehicle.getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()){
+                for(int i : vehicle.getCleats()){
+                    if(vehicle.getPassengers().get(i).is(this)){
 
-                if(this.getVehicle().getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()){
-                    for(int i : vehicle.getCleats()){
-                        if(this.getVehicle().getPassengers().get(i).is(this)){
+                        shouldAddCleatInstead = true;
 
-                            shouldAddCleatInstead = true;
-
-                            final VehicleCleatEntity cleat = FirmacivEntities.VEHICLE_CLEAT_ENTITY.get()
-                                    .create(this.level());
-                            cleat.setPos(this.getX(), this.getY(), this.getZ());
-                            if (!cleat.startRiding(this)) {
-                                Firmaciv.LOGGER.error("New Cleat: {} unable to ride Vehicle Part: {}", cleat, this);
-                            }
-                            this.level().addFreshEntity(cleat);
-                            break;
-
-
+                        final VehicleCleatEntity cleat = FirmacivEntities.VEHICLE_CLEAT_ENTITY.get()
+                                .create(this.level());
+                        cleat.setPos(this.getX(), this.getY(), this.getZ());
+                        if (!cleat.startRiding(this)) {
+                            Firmaciv.LOGGER.error("New Cleat: {} unable to ride Vehicle Part: {}", cleat, this);
                         }
+                        this.level().addFreshEntity(cleat);
+                        break;
+
+
                     }
                 }
             }
