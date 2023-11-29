@@ -157,11 +157,15 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             for (final Entity entity : list) {
                 if (!entity.hasPassenger(this)) {
                     float maxSize = 1.0f;
+
+                    // TODO make this a callback to the true vehicle
                     if (this.getTrueVehicle() instanceof CanoeEntity) {
                         maxSize = 0.9f;
                     } else if (this.getTrueVehicle() instanceof KayakEntity) {
                         maxSize = 0.6f;
                     } else if (this.getTrueVehicle() instanceof RowboatEntity) {
+                        maxSize = 1.4f;
+                    } else if (this.getTrueVehicle() instanceof SloopEntity) {
                         maxSize = 1.4f;
                     }
                     if (this.getPassengers()

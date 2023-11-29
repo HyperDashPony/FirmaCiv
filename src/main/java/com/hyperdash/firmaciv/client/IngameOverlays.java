@@ -79,7 +79,7 @@ public enum IngameOverlays {
                         if (remainingTicks <= ICalendar.TICKS_IN_DAY) {
                             string = "This rider is restless. ";
                         }
-                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject.";
+                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject";
                     }
                 }
 
@@ -90,7 +90,7 @@ public enum IngameOverlays {
                         if (remainingTicks <= ICalendar.TICKS_IN_DAY) {
                             string = "This rider is restless. ";
                         }
-                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject.";
+                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject";
                     }
                 }
 
