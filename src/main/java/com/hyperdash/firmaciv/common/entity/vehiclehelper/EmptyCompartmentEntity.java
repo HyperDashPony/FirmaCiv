@@ -119,6 +119,11 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         this.clampRotation(passenger);
     }
 
+    @Override
+    public double getPassengersRidingOffset() {
+        return 0.6d * 0.75D;
+    }
+
     protected Vec3 positionPassengerLocally(float localX, float localY, float localZ) {
         return (new Vec3(localX, localY, localZ)).yRot(
                 -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));

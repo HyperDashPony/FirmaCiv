@@ -34,6 +34,8 @@ public class FirmacivTags {
         public static final TagKey<Item> CHESTS = create("chests");
         public static final TagKey<Item> WORKBENCHES = create("workbenches");
 
+        public static final TagKey<Item> CAN_PLACE_IN_COMPARTMENTS = create("can_place_in_compartments");
+
         public static TagKey<Item> getFromTFC(String id) {
             return TagKey.create(Registries.ITEM, new ResourceLocation("tfc", id));
         }
