@@ -37,7 +37,7 @@ public class CompartmentRenderer extends EntityRenderer<CompartmentEntity> {
             if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
                 blockstate = bi.getBlock().defaultBlockState();
                 if (pEntity instanceof ChestCompartmentEntity) {
-                    blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
+                    //blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
                 }
             }
             if (blockstate != null) {

@@ -37,23 +37,23 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "outrigger").toString()));
 
-    public static final RegistryObject<EntityType<FirmacivBoatEntity>> SLOOP = ENTITY_TYPES.register("sloop",
-            () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(6F, 0.625F)
+    public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
+            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(4F, 0.75F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
             "compartment_empty",
-            () -> EntityType.Builder.of(EmptyCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.6F)
+            () -> EntityType.Builder.of(EmptyCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "compartment_empty").toString()));
 
     public static final RegistryObject<EntityType<ChestCompartmentEntity>> CHEST_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
             "compartment_chest",
-            () -> EntityType.Builder.of(ChestCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.6F)
+            () -> EntityType.Builder.of(ChestCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "compartment_chest").toString()));
 
     public static final RegistryObject<EntityType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
             "compartment_workbench",
-            () -> EntityType.Builder.of(WorkbenchCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.6F)
+            () -> EntityType.Builder.of(WorkbenchCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "compartment_workbench").toString()));
 
     public static final RegistryObject<EntityType<VehiclePartEntity>> VEHICLE_PART_ENTITY = ENTITY_TYPES.register(
