@@ -5,7 +5,6 @@ import com.hyperdash.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
-import com.hyperdash.firmaciv.common.item.FirmacivItems;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -70,7 +69,11 @@ public class FirmacivBoatEntity extends Entity {
 
     public final int[] CLEATS = {};
     public final int[] CAN_ADD_ONLY_BLOCKS = {};
+
+    public final int[][] COMPARTMENT_ROTATIONS = {};
+
     protected final float DAMAGE_THRESHOLD = 80.0f;
+    protected final float PASSENGER_SIZE_LIMIT = 0.9F;
     protected final float DAMAGE_RECOVERY = 0.5f;
     protected final float[] paddlePositions = new float[2];
     private final int spawnTicks = 0;
@@ -112,6 +115,14 @@ public class FirmacivBoatEntity extends Entity {
     }
     
     public int[] getCleats(){return CLEATS;}
+
+    public int getCompartmentRotation(int i){return COMPARTMENT_ROTATIONS[i][0];}
+
+    public float getPassengerSizeLimit(){
+        return PASSENGER_SIZE_LIMIT;
+    }
+
+    public int[][] getCompartmentRotationsArray(){return COMPARTMENT_ROTATIONS;}
 
     public int[] getCanAddOnlyBlocks(){return CAN_ADD_ONLY_BLOCKS;}
 
@@ -1073,7 +1084,7 @@ public class FirmacivBoatEntity extends Entity {
     @Nullable
     public Entity getPilotVehiclePartAsEntity() {
         if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
-            return this.getPassengers().get(1);
+            return this.getPassengers().get(0);
         }
         return null;
     }

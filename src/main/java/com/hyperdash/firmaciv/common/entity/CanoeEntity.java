@@ -27,6 +27,12 @@ public class CanoeEntity extends FirmacivBoatEntity {
 
     public final int[] CLEATS = {2};
 
+    protected final float PASSENGER_SIZE_LIMIT = 0.9F;
+    @Override
+    public float getPassengerSizeLimit(){
+        return PASSENGER_SIZE_LIMIT;
+    }
+
     public CanoeEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
 
@@ -172,6 +178,8 @@ public class CanoeEntity extends FirmacivBoatEntity {
     public ItemStack getPickResult() {
         return new ItemStack(this.getDropItem());
     }
+
+
 
     public ResourceLocation getTextureLocation() {
         return new ResourceLocation(Firmaciv.MOD_ID,

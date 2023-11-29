@@ -14,7 +14,15 @@ public class SloopEntity extends FirmacivBoatEntity{
 
     public final int[] CLEATS = {};
 
+    public final int[][] COMPARTMENT_ROTATIONS = {{7,85},{8,85},{9,85},{10,-85},{11,-85},{12,-85}};
+
     public final int[] CAN_ADD_ONLY_BLOCKS = {1,2,3,4,5,6};
+
+    protected final float PASSENGER_SIZE_LIMIT = 1.4F;
+    @Override
+    public float getPassengerSizeLimit(){
+        return PASSENGER_SIZE_LIMIT;
+    }
 
     public SloopEntity(EntityType<? extends FirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
@@ -31,6 +39,11 @@ public class SloopEntity extends FirmacivBoatEntity{
     @Override
     public int[] getCanAddOnlyBlocks(){return CAN_ADD_ONLY_BLOCKS;}
 
+    @Override
+    public int getCompartmentRotation(int i){return COMPARTMENT_ROTATIONS[i][0];}
+
+    @Override
+    public int[][] getCompartmentRotationsArray(){return COMPARTMENT_ROTATIONS;}
 
     @Override
     public AABB getBoundingBoxForCulling() {
