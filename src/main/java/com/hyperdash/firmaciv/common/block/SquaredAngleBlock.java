@@ -2,14 +2,8 @@ package com.hyperdash.firmaciv.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -19,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -47,8 +40,6 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     protected static final VoxelShape[] BOTTOM_SHAPES = makeShapes(BOTTOM_AABB, OCTET_NPN, OCTET_PPN, OCTET_NPP,
             OCTET_PPP);
     private static final int[] SHAPE_BY_STATE = new int[]{12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
-    protected final Block base;
-    protected final BlockState baseState;
     // Forge Start
     protected final java.util.function.Supplier<BlockState> stateSupplier;
 
@@ -57,8 +48,6 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
                         .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
-        this.base = Blocks.AIR; // These are unused, fields are redirected
-        this.baseState = Blocks.AIR.defaultBlockState();
         this.stateSupplier = state;
     }
 
@@ -167,60 +156,6 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
 
     private int getShapeIndex(BlockState pState) {
         return pState.getValue(SHAPE).ordinal() * 4 + pState.getValue(FACING).get2DDataValue();
-    }
-
-    public void attack(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
-        this.baseState.attack(pLevel, pPos, pPlayer);
-    }
-
-    /**
-     * Called after this block has been removed by a player.
-     */
-    public void destroy(LevelAccessor pLevel, BlockPos pPos, BlockState pState) {
-        this.base.destroy(pLevel, pPos, pState);
-    }
-
-    /**
-     * @return how much this block resists an explosion
-     */
-    public float getExplosionResistance() {
-        return this.base.getExplosionResistance();
-    }
-
-    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
-        if (!pState.is(pState.getBlock())) {
-            this.baseState.neighborChanged(pLevel, pPos, Blocks.AIR, pPos, false);
-            this.base.onPlace(this.baseState, pLevel, pPos, pOldState, false);
-        }
-    }
-
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (!pState.is(pNewState.getBlock())) {
-            this.baseState.onRemove(pLevel, pPos, pNewState, pIsMoving);
-        }
-    }
-
-    public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
-        this.base.stepOn(pLevel, pPos, pState, pEntity);
-    }
-
-    /**
-     * @return whether this block needs random ticking.
-     */
-    public boolean isRandomlyTicking(BlockState pState) {
-        return this.base.isRandomlyTicking(pState);
-    }
-
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-            BlockHitResult pHit) {
-        return this.baseState.use(pLevel, pPlayer, pHand, pHit);
-    }
-
-    /**
-     * Called when this Block is destroyed by an Explosion
-     */
-    public void wasExploded(Level pLevel, BlockPos pPos, Explosion pExplosion) {
-        this.base.wasExploded(pLevel, pPos, pExplosion);
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
