@@ -20,11 +20,17 @@ import java.util.function.Supplier;
 
 public class AngledBoatFrameBlock extends SquaredAngleBlock {
 
+    @Deprecated
     public AngledBoatFrameBlock(final Supplier<BlockState> blockState, final Properties properties) {
         super(blockState, properties);
     }
 
+    public AngledBoatFrameBlock(final Properties properties) {
+        super(properties);
+    }
+
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
         // Don't do logic on client side

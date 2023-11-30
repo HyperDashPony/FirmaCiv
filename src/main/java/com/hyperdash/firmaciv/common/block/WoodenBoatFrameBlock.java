@@ -33,9 +33,18 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
 
     public final RegistryWood wood;
 
+    @Deprecated
     public WoodenBoatFrameBlock(final RegistryWood wood, final Supplier<BlockState> blockState,
             final Properties properties) {
         super(blockState, properties);
+        this.registerDefaultState(
+                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, StairsShape.STRAIGHT)
+                        .setValue(WATERLOGGED, false).setValue(FRAME_PROCESSED, 0));
+        this.wood = wood;
+    }
+
+    public WoodenBoatFrameBlock(final RegistryWood wood, final Properties properties) {
+        super(properties);
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, StairsShape.STRAIGHT)
                         .setValue(WATERLOGGED, false).setValue(FRAME_PROCESSED, 0));
