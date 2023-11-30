@@ -82,7 +82,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     }
 
     private static VoxelShape[] makeShapes(VoxelShape pSlabShape, VoxelShape pNwCorner, VoxelShape pNeCorner,
-                                           VoxelShape pSwCorner, VoxelShape pSeCorner) {
+            VoxelShape pSwCorner, VoxelShape pSeCorner) {
         return IntStream.range(0, 16).mapToObj((p_56945_) -> {
             return makeStairShape(p_56945_, pSlabShape, pNwCorner, pNeCorner, pSwCorner, pSeCorner);
         }).toArray((p_56949_) -> {
@@ -94,7 +94,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
      * Combines the shapes according to the mode set in the bitfield
      */
     private static VoxelShape makeStairShape(int pBitfield, VoxelShape pSlabShape, VoxelShape pNwCorner,
-                                             VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
+            VoxelShape pNeCorner, VoxelShape pSwCorner, VoxelShape pSeCorner) {
 
         double move = -0.5D;
         if (pSlabShape == TOP_AABB) {
@@ -231,7 +231,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-                                 BlockHitResult pHit) {
+            BlockHitResult pHit) {
         return this.baseState.use(pLevel, pPlayer, pHand, pHit);
     }
 
@@ -258,7 +258,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
      * Note that this method should ideally consider only the specific direction passed in.
      */
     public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel,
-                                  BlockPos pCurrentPos, BlockPos pFacingPos) {
+            BlockPos pCurrentPos, BlockPos pFacingPos) {
         if (pState.getValue(WATERLOGGED)) {
             pLevel.scheduleTick(pCurrentPos, Fluids.WATER, Fluids.WATER.getTickDelay(pLevel));
         }

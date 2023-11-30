@@ -33,8 +33,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
 
     public final RegistryWood wood;
 
-    public WoodenBoatFrameBlock(final RegistryWood wood, final BlockState blockState,
-            final Properties properties) {
+    public WoodenBoatFrameBlock(final RegistryWood wood, final BlockState blockState, final Properties properties) {
         super(blockState, properties);
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
@@ -92,6 +91,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
             if (0 == processState) {
                 final BlockState newState = FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get().defaultBlockState()
                         .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
+
                 level.setBlock(blockPos, newState, 10);
                 return InteractionResult.SUCCESS;
             }
