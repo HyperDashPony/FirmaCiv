@@ -52,25 +52,6 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     // Forge Start
     protected final java.util.function.Supplier<BlockState> stateSupplier;
 
-    @Deprecated // Forge: Use the other constructor that takes a Supplier
-    public SquaredAngleBlock(BlockState pBaseState, BlockBehaviour.Properties pProperties) {
-        super(pProperties);
-        this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
-                        .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, Boolean.valueOf(false)));
-        this.base = pBaseState.getBlock();
-        this.baseState = pBaseState;
-        this.stateSupplier = () -> pBaseState;
-    }
-
-    @Deprecated // Forge: Use the other constructor that takes a Supplier
-    public SquaredAngleBlock(BlockBehaviour.Properties pProperties) {
-        super(pProperties);
-        this.base = Blocks.AIR; // These are unused, fields are redirected
-        this.baseState = Blocks.AIR.defaultBlockState();
-        this.stateSupplier = () -> baseState;
-    }
-
     public SquaredAngleBlock(java.util.function.Supplier<BlockState> state, BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(
