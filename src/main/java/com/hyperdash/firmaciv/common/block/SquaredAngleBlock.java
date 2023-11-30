@@ -35,6 +35,9 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
 
     public SquaredAngleBlock(final Properties properties) {
         super(properties);
+        this.registerDefaultState(
+                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, StairsShape.STRAIGHT)
+                        .setValue(WATERLOGGED, false));
     }
 
     @SuppressWarnings("SameParameterValue")
