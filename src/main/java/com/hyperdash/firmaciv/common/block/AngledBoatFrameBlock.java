@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.common.block;
 
+import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.common.blockentity.WatercraftFrameBlockEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
@@ -11,21 +12,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.RegistryObject;
 
 public class AngledBoatFrameBlock extends SquaredAngleBlock {
 
-    public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_8;
-
-    public AngledBoatFrameBlock(final BlockState blockState, final BlockBehaviour.Properties properties) {
-        super(blockState, properties);
+    public AngledBoatFrameBlock(final Properties properties) {
+        super(properties);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
         // Don't do logic on client side
@@ -43,7 +41,7 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
             // Must find the right block variant for this item
             if (!heldStack.is(woodenFrameBlock.getUnderlyingPlank().asItem())) continue;
 
-            final BlockState newBlockState = woodenFrameBlock.defaultBlockState().setValue(FRAME_PROCESSED, 1)
+            final BlockState newBlockState = woodenFrameBlock.defaultBlockState()
                     .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
 
             level.setBlock(blockPos, newBlockState, 10);
@@ -56,6 +54,9 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
                     level.getRandom().nextFloat() * 0.1F + 0.9F);
             return InteractionResult.SUCCESS;
         }
+
+        Firmaciv.LOGGER.error("Couldn't find a frame for the item {} even though it's contained in {}",
+                heldStack.getItem(), FirmacivTags.Items.PLANKS);
 
         return InteractionResult.SUCCESS;
     }
