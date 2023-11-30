@@ -45,7 +45,7 @@ public class ChestCompartmentEntity extends CompartmentEntity implements HasCust
     public void remove(final RemovalReason removalReason) {
         if (!this.level().isClientSide && removalReason.shouldDestroy()) {
             this.playSound(SoundEvents.WOOD_BREAK, 1.0F, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            Containers.dropContents(this.level(), this, this);
+            Containers.dropContents(this.level(), this.blockPosition().above(), this);
         }
 
         super.remove(removalReason);

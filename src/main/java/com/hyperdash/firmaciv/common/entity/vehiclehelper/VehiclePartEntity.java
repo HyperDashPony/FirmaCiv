@@ -24,6 +24,14 @@ public class VehiclePartEntity extends Entity {
     public void tick() {
         super.tick();
 
+        if (!this.isPassenger()) {
+            selfDestructTicks++;
+            if (selfDestructTicks++ >= 5) {
+                this.ejectPassengers();
+                this.remove(RemovalReason.DISCARDED);
+            }
+        }
+
         if(!(this.getVehicle() instanceof FirmacivBoatEntity))
         {
             return;
@@ -42,12 +50,15 @@ public class VehiclePartEntity extends Entity {
 
          */
 
-        if (tickCount < 10) {
-            for(int[] i : vehicle.getCompartmentRotationsArray()){
-                if(vehicle.getPassengers().get(i[0]) == this){
-                    this.compartmentRotation = i[1];
+        if (tickCount < 30) {
+            if(vehicle.getPassengers().size() == vehicle.getPassengerNumber()){
+                for(int[] i : vehicle.getCompartmentRotationsArray()){
+                    if(vehicle.getPassengers().get(i[0]) == this){
+                        this.compartmentRotation = i[1];
+                    }
                 }
             }
+
         }
 
         // Try not to be empty
@@ -94,12 +105,7 @@ public class VehiclePartEntity extends Entity {
         }
 
         // Try remove if I'm not a passenger of something
-        if (!this.isPassenger()) {
-            if (selfDestructTicks++ >= 5) {
-                this.ejectPassengers();
-                this.remove(RemovalReason.DISCARDED);
-            }
-        }
+
     }
 
     @Override

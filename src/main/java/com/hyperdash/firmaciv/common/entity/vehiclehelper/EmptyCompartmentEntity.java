@@ -91,11 +91,14 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                     localX = -0.25f;
                 }
             }
+            if (this.getTrueVehicle() instanceof SloopEntity sloopEntity) {
+                localY += -0.1f;
+            }
         }
         if (passenger.getBbHeight() <= 0.7) {
             localY -= 0.2f;
         }
-        if (passenger.getBbWidth() > 0.9f && !(passenger instanceof Player)) {
+        if (passenger.getBbWidth() > 0.9f) {
             localX += 0.2f;
             if(this.getTrueVehicle() instanceof RowboatEntity){
                 localX -= 0.6f;
@@ -132,11 +135,11 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
     @Override
     public void tick() {
         if (this.getTrueVehicle() != null) {
-            if (tickCount < 10 && this.getTrueVehicle()
+            if (tickCount < 100 && this.getTrueVehicle()
                     .getPilotVehiclePartAsEntity() != null && !(this.getTrueVehicle() instanceof CanoeEntity)) {
                 canAddNonPlayers = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
             }
-            if (tickCount < 10 && this.isPassenger()) {
+            if (tickCount < 100 && this.isPassenger()) {
                 for(int i : this.getTrueVehicle().getCanAddOnlyBlocks()){
                     if(this.getTrueVehicle().getPassengers().size() == this.getTrueVehicle().getPassengerNumber()){
                         if(this.getTrueVehicle().getPassengers().get(i) == this.getVehicle()){

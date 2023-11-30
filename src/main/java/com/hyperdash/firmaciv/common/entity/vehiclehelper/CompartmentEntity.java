@@ -127,7 +127,7 @@ public abstract class CompartmentEntity extends Entity {
                 if (!this.level().isClientSide()) {
                     notRidingTicks++;
                     if (notRidingTicks > lifespan) {
-                        this.spawnAtLocation(this.getDropItem());
+                        this.spawnAtLocation(this.getDropItem(), 1);
                         this.discard();
                     }
                 }
@@ -136,7 +136,7 @@ public abstract class CompartmentEntity extends Entity {
             } else if (!this.level().isClientSide()) {
                 notRidingTicks++;
                 if (notRidingTicks > 1) {
-                    this.spawnAtLocation(this.getDropItem());
+                    this.spawnAtLocation(this.getDropItem(), 1);
                     this.discard();
                 }
             }
@@ -202,7 +202,7 @@ public abstract class CompartmentEntity extends Entity {
      * @return The compartment passed in
      */
     protected CompartmentEntity swapCompartments(final CompartmentEntity newCompartment) {
-        this.spawnAtLocation(this.getDropItem());
+        this.spawnAtLocation(this.getDropItem(), 1);
         this.stopRiding();
         this.discard();
         newCompartment.setYRot(this.getYRot());
@@ -271,7 +271,7 @@ public abstract class CompartmentEntity extends Entity {
     }
 
     protected void destroy(final DamageSource damageSource) {
-        this.spawnAtLocation(this.getDropItem());
+        this.spawnAtLocation(this.getDropItem(), 1);
     }
 
     /**

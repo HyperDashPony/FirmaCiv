@@ -7,20 +7,21 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class SloopEntity extends FirmacivBoatEntity{
+public class SloopEntity extends FirmacivBoatEntity {
 
 
-    public final int PASSENGER_NUMBER = 13;
+    public final int PASSENGER_NUMBER = 14;
 
     public final int[] CLEATS = {};
 
-    public final int[][] COMPARTMENT_ROTATIONS = {{7,85},{8,85},{9,85},{10,-85},{11,-85},{12,-85}};
+    public final int[][] COMPARTMENT_ROTATIONS = {{7, 85}, {8, 85}, {9, 85}, {10, -85}, {11, -85}, {12, -85}};
 
-    public final int[] CAN_ADD_ONLY_BLOCKS = {1,2,3,4,5,6};
+    public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
 
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
+
     @Override
-    public float getPassengerSizeLimit(){
+    public float getPassengerSizeLimit() {
         return PASSENGER_SIZE_LIMIT;
     }
 
@@ -34,22 +35,30 @@ public class SloopEntity extends FirmacivBoatEntity{
     }
 
     @Override
-    public int[] getCleats(){return this.CLEATS;}
+    public int[] getCleats() {
+        return this.CLEATS;
+    }
 
     @Override
-    public int[] getCanAddOnlyBlocks(){return CAN_ADD_ONLY_BLOCKS;}
+    public int[] getCanAddOnlyBlocks() {
+        return CAN_ADD_ONLY_BLOCKS;
+    }
 
     @Override
-    public int getCompartmentRotation(int i){return COMPARTMENT_ROTATIONS[i][0];}
+    public int getCompartmentRotation(int i) {
+        return COMPARTMENT_ROTATIONS[i][0];
+    }
 
     @Override
-    public int[][] getCompartmentRotationsArray(){return COMPARTMENT_ROTATIONS;}
+    public int[][] getCompartmentRotationsArray() {
+        return COMPARTMENT_ROTATIONS;
+    }
 
     @Override
     public AABB getBoundingBoxForCulling() {
-        Vec3 startingPoint = new Vec3(this.getX()-7, this.getY()-7, this.getZ()-7);
-        Vec3 endingPoint = new Vec3(this.getX()+7, this.getY()+7, this.getZ()+7);
-      return new AABB(startingPoint, endingPoint);
+        Vec3 startingPoint = new Vec3(this.getX() - 7, this.getY() - 7, this.getZ() - 7);
+        Vec3 endingPoint = new Vec3(this.getX() + 7, this.getY() + 7, this.getZ() + 7);
+        return new AABB(startingPoint, endingPoint);
     }
 
 
@@ -62,76 +71,89 @@ public class SloopEntity extends FirmacivBoatEntity{
             if (this.getPassengers().size() > 1) {
                 switch (this.getPassengers().indexOf(passenger)) {
                     case 0 -> {
-                        // front / pilot seat
-                        localZ = 1.1f;
-                        localX = 0.0f;
-                        localY += 5f;
+                        // aft pilot / tiller seat
+                        localZ = 0.6f;
+                        localX = -2.3f;
+                        localY += 0.6f;
                     }
                     case 1 -> {
-                        // hold lower left
+                        // hold lower port
                         localZ = -0.35f;
                         localX = -0.4f;
                         localY += -0.1f;
                     }
                     case 2 -> {
-                        // hold lower right
+                        // hold lower starboard
                         localZ = 0.35f;
                         localX = -0.4f;
                         localY += -0.1f;
                     }
                     case 3 -> {
-                        // hold middle left
+                        // hold middle port
                         localZ = -0.35f;
                         localX = 0.475f;
                         localY += -0.1f;
                     }
                     case 4 -> {
-                        //hold middle right
+                        //hold middle starboard
                         localZ = 0.35f;
                         localX = 0.475f;
                         localY += -0.1f;
                     }
-                    case 5 ->{
-                        //hold upper left
+                    case 5 -> {
+                        //hold upper port
                         localZ = -0.35f;
                         localX = 1.35f;
                         localY += -0.1f;
                     }
                     case 6 -> {
-                        //hold upper right
+                        //hold upper starboard
                         localZ = 0.35f;
                         localX = 1.35f;
                         localY += -0.1f;
                     }
                     case 7 -> {
-                        localX = -1.3f;
-                        localZ = -1.4f;
-                        localY += 0.6f;
-                    }
-                    case 8 -> {
-                        localX = -0.5f;
-                        localZ = -1.4f;
-                        localY += 0.6f;
-                    }
-                    case 9 -> {
+                        //port side fore
                         localX = 0.3f;
                         localZ = -1.4f;
                         localY += 0.6f;
                     }
+                    case 8 -> {
+                        //port side mid
+                        localX = -0.5f;
+                        localZ = -1.33f;
+                        localY += 0.6f;
+                    }
+                    case 9 -> {
+                        //port side aft
+                        localX = -1.3f;
+                        localZ = -1.26f;
+                        localY += 0.6f;
+
+                    }
                     case 10 -> {
-                        localX = 2.0f;
-                        localZ = -5f;
-                        localY += 1f;
+                        //starboard side fore
+                        localX = 0.3f;
+                        localZ = 1.4f;
+                        localY += 0.6f;
                     }
-                    case 11 ->{
-                        localX = 3.0f;
-                        localZ = -5f;
-                        localY += 1f;
+                    case 11 -> {
+                        //starboard side mid
+                        localX = -0.5f;
+                        localZ = 1.33f;
+                        localY += 0.6f;
                     }
-                    case 12 ->{
-                        localX = 4.0f;
-                        localZ = -5f;
-                        localY += 1f;
+                    case 12 -> {
+                        //starboard side aft
+                        localX = -1.3f;
+                        localZ = 1.26f;
+                        localY += 0.6f;
+                    }
+                    case 13 -> {
+                        //sailing station
+                        localZ = -0.6f;
+                        localX = -2.3f;
+                        localY += 0.6f;
                     }
                 }
             }
@@ -145,4 +167,14 @@ public class SloopEntity extends FirmacivBoatEntity{
             }
         }
     }
+
+
+
+    // sailing methods
+
+    // method to
+
+
+
+
 }
