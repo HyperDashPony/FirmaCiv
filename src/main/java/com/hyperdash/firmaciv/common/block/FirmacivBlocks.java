@@ -73,7 +73,7 @@ public final class FirmacivBlocks {
             map.put(tfcWood,
                     registerBlockWithoutItem("wood/" + tfcWood.getSerializedName() + "/watercraft_frame_angled",
                             () -> new WoodenBoatFrameBlock(tfcWood,
-                                    tfcWood.getBlock(Wood.BlockType.STAIRS).get().defaultBlockState(),
+                                    () -> tfcWood.getBlock(Wood.BlockType.STAIRS).get().defaultBlockState(),
                                     BlockBehaviour.Properties.copy(WATERCRAFT_FRAME_ANGLED.get()))));
         }
 
