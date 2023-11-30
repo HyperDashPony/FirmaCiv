@@ -1,9 +1,8 @@
 package com.hyperdash.firmaciv.client.render.entity;
 
 import com.hyperdash.firmaciv.Firmaciv;
-import com.hyperdash.firmaciv.client.model.entity.OutriggerEntityModel;
 import com.hyperdash.firmaciv.client.model.entity.SloopEntityModel;
-import com.hyperdash.firmaciv.common.entity.FirmacivBoatEntity;
+import com.hyperdash.firmaciv.common.entity.SloopEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -20,21 +19,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 @OnlyIn(Dist.CLIENT)
-public class SloopRenderer extends EntityRenderer<FirmacivBoatEntity> {
+public class SloopRenderer extends EntityRenderer<SloopEntity> {
 
-    private static final ResourceLocation KAYAK =
-            new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/sloop.png");
-    private final Pair<ResourceLocation, SloopEntityModel> kayakResources;
+    private final Pair<ResourceLocation, SloopEntityModel> sloopResources;
 
     public SloopRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 0.8f;
-        this.kayakResources = Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/sloop.png"),
+        this.sloopResources = Pair.of(new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/sloop.png"),
                 new SloopEntityModel());
     }
 
     @Override
-    public void render(FirmacivBoatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
+    public void render(SloopEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
                        MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.5D, 0.0D);
@@ -56,32 +53,31 @@ public class SloopRenderer extends EntityRenderer<FirmacivBoatEntity> {
                             1.0F, 0.0F, 1.0F));
         }
 
-        Pair<ResourceLocation, SloopEntityModel> pair = kayakResources;
+        Pair<ResourceLocation, SloopEntityModel> pair = sloopResources;
         ResourceLocation resourcelocation = pair.getFirst();
-        SloopEntityModel kayakModel = pair.getSecond();
+        SloopEntityModel sloopModel = pair.getSecond();
 
         pMatrixStack.translate(0.0f, 1.0625f, 0f);
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(0.0F));
-        kayakModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(kayakModel.renderType(resourcelocation));
-        kayakModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
+        sloopModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
+        VertexConsumer vertexconsumer = pBuffer.getBuffer(sloopModel.renderType(resourcelocation));
+        sloopModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 
 
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            kayakModel.getWaterocclusion()
+            sloopModel.getWaterocclusion()
                     .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
-
 
         pMatrixStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FirmacivBoatEntity pEntity) {
+    public ResourceLocation getTextureLocation(SloopEntity pEntity) {
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/sloop.png");
     }
 

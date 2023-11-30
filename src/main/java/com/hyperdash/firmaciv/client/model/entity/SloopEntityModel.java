@@ -4,14 +4,14 @@ package com.hyperdash.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 
 
 import com.hyperdash.firmaciv.common.entity.FirmacivBoatEntity;
+import com.hyperdash.firmaciv.common.entity.RowboatEntity;
+import com.hyperdash.firmaciv.common.entity.SloopEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
 
 public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -19,6 +19,7 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     private final ModelPart transom_starboard;
     private final ModelPart bowsprit;
     private final ModelPart hull_starboard;
+    private final ModelPart main_boom;
     private final ModelPart mast;
     private final ModelPart keel;
     private final ModelPart sidewall_starboard;
@@ -35,7 +36,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     private final ModelPart waterocclusion;
     private final ModelPart shrouds;
     private final ModelPart jibsail_1;
-    private final ModelPart bb_main;
 
     public SloopEntityModel() {
         ModelPart root = createBodyLayer().bakeRoot();
@@ -43,6 +43,7 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         this.transom_starboard = root.getChild("transom_starboard");
         this.bowsprit = root.getChild("bowsprit");
         this.hull_starboard = root.getChild("hull_starboard");
+        this.main_boom = root.getChild("main_boom");
         this.mast = root.getChild("mast");
         this.keel = root.getChild("keel");
         this.sidewall_starboard = root.getChild("sidewall_starboard");
@@ -59,7 +60,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         this.waterocclusion = root.getChild("waterocclusion");
         this.shrouds = root.getChild("shrouds");
         this.jibsail_1 = root.getChild("jibsail_1");
-        this.bb_main = root.getChild("bb_main");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -129,6 +129,40 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         PartDefinition cube_r15 = hull_starboard.addOrReplaceChild("cube_r15", CubeListBuilder.create().texOffs(0, 61).addBox(-3.1391F, 52.0476F, -66.6902F, 20.0F, 4.0F, 57.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-11.5F, -53.0F, -57.7926F, 3.1416F, -0.0873F, -3.0107F));
 
+        PartDefinition main_boom = partdefinition.addOrReplaceChild("main_boom", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -18.0F, -32.0F, 0.0F, 0.0F, 0.0F));
+
+        PartDefinition main_boom_r1 = main_boom.addOrReplaceChild("main_boom_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-61.5F, -2.0F, -1.0F, 123.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 61.9148F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition gaff = main_boom.addOrReplaceChild("gaff", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -116.4182F, 0.9159F, 0.0F, -0.2094F, 0.0F));
+
+        PartDefinition peak_halliard_r1 = gaff.addOrReplaceChild("peak_halliard_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -34.0F, -0.5F, 1.0F, 64.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -7.6163F, 27.7348F, -1.5184F, 0.0F, 0.0F));
+
+        PartDefinition gaff_r1 = gaff.addOrReplaceChild("gaff_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-33.0233F, -4.8366F, -1.0F, 70.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 2.0299F, 29.3169F, 1.5708F, -1.2392F, -1.5708F));
+
+        PartDefinition mainsail_1 = main_boom.addOrReplaceChild("mainsail_1", CubeListBuilder.create().texOffs(980, 884).addBox(-2.0F, -120.0F, 0.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -4.0F, 0.5F, 0.0F, -0.6545F, 0.0F));
+
+        PartDefinition mainsail_gaff_1_r1 = mainsail_1.addOrReplaceChild("mainsail_gaff_1_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, 43.75F, -12.625F, 0.5F, 22.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, 65.6607F, -1.2392F, 0.0F, 0.0F));
+
+        PartDefinition mainsail_2 = mainsail_1.addOrReplaceChild("mainsail_2", CubeListBuilder.create().texOffs(888, 884).addBox(-2.0F, -120.0F, 0.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 20.0F, 0.0F, 0.48F, 0.0F));
+
+        PartDefinition mainsail_gaff_2_r1 = mainsail_2.addOrReplaceChild("mainsail_gaff_2_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, 22.75F, -12.625F, 0.25F, 22.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, 45.6607F, -1.2392F, 0.0F, 0.0F));
+
+        PartDefinition mainsail_3 = mainsail_2.addOrReplaceChild("mainsail_3", CubeListBuilder.create().texOffs(796, 884).addBox(-2.0F, -120.0F, 0.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 20.0F, 0.0F, 0.3491F, 0.0F));
+
+        PartDefinition mainsail_gaff_3_r1 = mainsail_3.addOrReplaceChild("mainsail_gaff_3_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, 0.75F, -12.625F, 0.5F, 23.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, 25.6607F, -1.2392F, 0.0F, 0.0F));
+
+        PartDefinition mainsail_4 = mainsail_3.addOrReplaceChild("mainsail_4", CubeListBuilder.create().texOffs(723, 884).addBox(-2.0F, -120.0F, 0.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 20.0F, 0.0F, 0.0873F, 0.0F));
+
+        PartDefinition mainsail_leech_4_r1 = mainsail_4.addOrReplaceChild("mainsail_leech_4_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, -12.5F, -0.875F, 0.25F, 45.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, 5.6607F, 0.4637F, 0.0F, 0.0F));
+
+        PartDefinition mainsail_5 = mainsail_4.addOrReplaceChild("mainsail_5", CubeListBuilder.create().texOffs(661, 884).addBox(-2.0F, -120.0F, 0.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 20.0F, 0.0F, -0.0436F, 0.0F));
+
+        PartDefinition mainsail_leech_5_r1 = mainsail_5.addOrReplaceChild("mainsail_leech_5_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, 31.5F, -0.875F, 0.5F, 46.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, -14.3393F, 0.4637F, 0.0F, 0.0F));
+
+        PartDefinition mainsail_6 = mainsail_5.addOrReplaceChild("mainsail_6", CubeListBuilder.create().texOffs(612, 884).addBox(-2.0F, -120.0F, 0.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 20.0F, 0.0F, -0.0873F, 0.0F));
+
+        PartDefinition mainsail_leech_6_r1 = mainsail_6.addOrReplaceChild("mainsail_leech_6_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, 76.5F, -0.875F, 0.25F, 46.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, -34.3393F, 0.4637F, 0.0F, 0.0F));
+
         PartDefinition mast = partdefinition.addOrReplaceChild("mast", CubeListBuilder.create(), PartPose.offset(-2.0F, -55.0F, 41.0F));
 
         PartDefinition cube_r16 = mast.addOrReplaceChild("cube_r16", CubeListBuilder.create().texOffs(148, 341).addBox(-49.5F, -13.7926F, -3.0F, 15.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 25.5F, -63.7926F, 1.5708F, 0.0F, -1.5708F));
@@ -137,40 +171,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         PartDefinition mast2_r1 = main_mast.addOrReplaceChild("mast2_r1", CubeListBuilder.create().texOffs(0, 122).addBox(38.5F, -12.7926F, -2.0F, 75.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(154, 61).addBox(-51.5F, -12.7926F, -2.0F, 90.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 1.5708F, 0.0F, -1.5708F));
-
-        PartDefinition main_boom = mast.addOrReplaceChild("main_boom", CubeListBuilder.create(), PartPose.offset(2.0F, 37.0F, -73.0F));
-
-        PartDefinition main_boom_r1 = main_boom.addOrReplaceChild("main_boom_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-61.5F, -2.0F, -1.0F, 123.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 61.9148F, 0.0F, -1.5708F, 0.0F));
-
-        PartDefinition bone = mast.addOrReplaceChild("bone", CubeListBuilder.create(), PartPose.offset(2.0F, -77.3883F, -17.5F));
-
-        PartDefinition peak_halliard_r1 = bone.addOrReplaceChild("peak_halliard_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -34.0F, -0.5F, 1.0F, 64.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.6462F, -26.8494F, -1.5184F, 0.0F, 0.0F));
-
-        PartDefinition gaff_r1 = bone.addOrReplaceChild("gaff_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-34.0F, -2.0F, -1.0F, 70.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -25.2672F, 1.5708F, -1.2566F, -1.5708F));
-
-        PartDefinition mainsail_1 = mast.addOrReplaceChild("mainsail_1", CubeListBuilder.create().texOffs(980, 884).addBox(-2.0F, -120.0F, -55.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 33.0F, -17.5F));
-
-        PartDefinition mainsail_gaff_1_r1 = mainsail_1.addOrReplaceChild("mainsail_gaff_1_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, 43.75F, -12.625F, 0.5F, 22.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, 10.6607F, -1.2392F, 0.0F, 0.0F));
-
-        PartDefinition mainsail_2 = mainsail_1.addOrReplaceChild("mainsail_2", CubeListBuilder.create().texOffs(888, 884).addBox(-2.0F, -120.0F, -55.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 20.0F));
-
-        PartDefinition mainsail_gaff_2_r1 = mainsail_2.addOrReplaceChild("mainsail_gaff_2_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, 22.75F, -12.625F, 0.25F, 22.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, -9.3393F, -1.2392F, 0.0F, 0.0F));
-
-        PartDefinition mainsail_3 = mainsail_2.addOrReplaceChild("mainsail_3", CubeListBuilder.create().texOffs(796, 884).addBox(-2.0F, -120.0F, -55.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 20.0F));
-
-        PartDefinition mainsail_gaff_3_r1 = mainsail_3.addOrReplaceChild("mainsail_gaff_3_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, 0.75F, -12.625F, 0.5F, 23.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, -29.3393F, -1.2392F, 0.0F, 0.0F));
-
-        PartDefinition mainsail_4 = mainsail_3.addOrReplaceChild("mainsail_4", CubeListBuilder.create().texOffs(723, 884).addBox(-2.0F, -120.0F, -55.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 20.0F));
-
-        PartDefinition mainsail_leech_4_r1 = mainsail_4.addOrReplaceChild("mainsail_leech_4_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, -12.5F, -0.875F, 0.25F, 45.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, -49.3393F, 0.4637F, 0.0F, 0.0F));
-
-        PartDefinition mainsail_5 = mainsail_4.addOrReplaceChild("mainsail_5", CubeListBuilder.create().texOffs(661, 884).addBox(-2.0F, -120.0F, -55.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 20.0F));
-
-        PartDefinition mainsail_leech_5_r1 = mainsail_5.addOrReplaceChild("mainsail_leech_5_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, 31.5F, -0.875F, 0.5F, 46.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, -69.3393F, 0.4637F, 0.0F, 0.0F));
-
-        PartDefinition mainsail_6 = mainsail_5.addOrReplaceChild("mainsail_6", CubeListBuilder.create().texOffs(612, 884).addBox(-2.0F, -120.0F, -55.0F, 2.0F, 120.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 20.0F));
-
-        PartDefinition mainsail_leech_6_r1 = mainsail_6.addOrReplaceChild("mainsail_leech_6_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, 76.5F, -0.875F, 0.25F, 46.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -109.2524F, -89.3393F, 0.4637F, 0.0F, 0.0F));
 
         PartDefinition keel = partdefinition.addOrReplaceChild("keel", CubeListBuilder.create(), PartPose.offset(-0.5F, 42.0F, 32.0F));
 
@@ -406,6 +406,10 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         PartDefinition jibsail_luff_1_r1 = jibsail_1.addOrReplaceChild("jibsail_luff_1_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, -44.0F, 3.25F, 0.25F, 29.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -54.9951F, -83.1351F, -0.588F, 0.0F, 0.0F));
 
+        PartDefinition jib_sheet_r1 = jibsail_1.addOrReplaceChild("jib_sheet_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -19.0F, 2.0F, 1.0F, 32.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, 24.0725F, -52.0869F, 0.3229F, 0.0F, 0.0F));
+
+        PartDefinition forestay_r1 = jibsail_1.addOrReplaceChild("forestay_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -69.0F, 2.5F, 1.0F, 144.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -54.9951F, -82.3851F, -0.588F, 0.0F, 0.0F));
+
         PartDefinition jibsail_2 = jibsail_1.addOrReplaceChild("jibsail_2", CubeListBuilder.create().texOffs(217, 912).addBox(-0.5F, -89.0F, -71.0F, 1.0F, 96.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -16.0F));
 
         PartDefinition jibsail_luff_2_r1 = jibsail_2.addOrReplaceChild("jibsail_luff_2_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, -16.0F, 3.25F, 0.5F, 30.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -54.9951F, -67.1351F, -0.588F, 0.0F, 0.0F));
@@ -417,12 +421,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         PartDefinition jibsail_4 = jibsail_3.addOrReplaceChild("jibsail_4", CubeListBuilder.create().texOffs(263, 912).addBox(-0.5F, -89.0F, -71.0F, 1.0F, 96.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -16.0F));
 
         PartDefinition jibsail_luff_4_r1 = jibsail_4.addOrReplaceChild("jibsail_luff_4_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.25F, 42.0F, 3.25F, 0.5F, 30.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -54.9951F, -35.1351F, -0.588F, 0.0F, 0.0F));
-
-        PartDefinition bb_main = partdefinition.addOrReplaceChild("bb_main", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
-
-        PartDefinition jib_sheet_r1 = bb_main.addOrReplaceChild("jib_sheet_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -19.0F, 2.0F, 1.0F, 32.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -21.9275F, -43.3369F, 0.3229F, 0.0F, 0.0F));
-
-        PartDefinition forestay_r1 = bb_main.addOrReplaceChild("forestay_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -69.0F, 2.5F, 1.0F, 144.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -100.9951F, -73.6351F, -0.588F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 1024, 1024);
     }
@@ -436,12 +434,51 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         return this.waterocclusion;
     }
 
+    private static void animateSail(SloopEntity pBoat, ModelPart boom, ModelPart[] sails, float mastRotation) {
+
+        //boom.yRot = mastRotation;
+        if(mastRotation < 0){
+            boom.xScale = -1;
+            boom.yRot = -mastRotation;
+
+        } else {
+            boom.xScale = 1;
+            boom.yRot = -mastRotation;
+        }
+        /*
+        for(ModelPart sail : sails){
+            sail.yRot = mastRotation / 2;
+        }*/
+    }
+
+
+    public ModelPart getBoom() {
+        return this.main_boom;
+    }
+
+    public ModelPart[] getSails(){
+        ModelPart[] sails = new ModelPart[6];
+        sails[0] = this.main_boom.getChild("mainsail_1");
+        sails[1] = sails[0].getChild("mainsail_2");
+        sails[2] = sails[1].getChild("mainsail_3");
+        sails[3] = sails[2].getChild("mainsail_4");
+        sails[4] = sails[3].getChild("mainsail_5");
+        sails[5] = sails[4].getChild("mainsail_6");
+        return sails;
+    }
+
+    public void setupAnim(SloopEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
+                          float pNetHeadYaw, float pHeadPitch) {
+        animateSail(pEntity, this.getBoom(), this.getSails(), (float) Math.toRadians(pEntity.getSailRotation()));
+    }
+
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         transom_port.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         transom_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         bowsprit.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hull_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        main_boom.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         mast.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         keel.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         sidewall_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
@@ -455,8 +492,8 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         mainsheet.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         sidewall_port.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hold_netting.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        //waterocclusion.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         shrouds.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         jibsail_1.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        bb_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }

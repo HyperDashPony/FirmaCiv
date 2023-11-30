@@ -13,12 +13,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -29,7 +32,9 @@ import java.util.Locale;
 
 public enum IngameOverlays {
     COMPARTMENT_STATUS(IngameOverlays::renderCompartmentStatus),
-    PASSENGER_STATUS(IngameOverlays::renderPassengerStatus);
+    PASSENGER_STATUS(IngameOverlays::renderPassengerStatus),
+
+    SAILING_ELEMENT(IngameOverlays::renderSailingElement);
 
     public static final ResourceLocation TEXTURE = new ResourceLocation("firmaciv", "textures/gui/icons/compartment_icons.png");;
     final IGuiOverlay overlay;
@@ -46,6 +51,7 @@ public enum IngameOverlays {
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
         above(event, VanillaGuiOverlay.CROSSHAIR, COMPARTMENT_STATUS);
         above(event, VanillaGuiOverlay.CROSSHAIR, PASSENGER_STATUS);
+        above(event, VanillaGuiOverlay.CROSSHAIR, SAILING_ELEMENT);
     }
 
     private static void above(RegisterGuiOverlaysEvent event, VanillaGuiOverlay vanilla, IngameOverlays overlay) {
@@ -97,6 +103,31 @@ public enum IngameOverlays {
                 if(!string.equals("")){
                     graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), false);
                 }
+
+                stack.popPose();
+            }
+        }
+    }
+
+
+    private static void renderSailingElement(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            Player player = mc.player;
+            Vec2 windVector = Climate.getWindVector(player.level(),player.blockPosition());
+            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x/windVector.y)));
+            double speed = Math.round(windVector.length()*320*0.5399568);
+
+            if (setup(gui, mc)) {
+                PoseStack stack = graphics.pose();
+
+                stack.pushPose();
+                stack.translate((float)width / 2.0F, (float)height / 2.0F - 15.0F, 0.0F);
+                stack.scale(1.0F, 1.0F, 1.0F);
+
+                String string = "speed: " + speed + " knots, direction: " + direction;
+
+                graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), false);
 
                 stack.popPose();
             }

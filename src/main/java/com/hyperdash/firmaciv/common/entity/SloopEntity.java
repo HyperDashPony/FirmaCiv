@@ -1,11 +1,18 @@
 package com.hyperdash.firmaciv.common.entity;
 
+import com.hyperdash.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.hyperdash.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import net.dries007.tfc.util.climate.Climate;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
 
 public class SloopEntity extends FirmacivBoatEntity {
 
@@ -170,11 +177,104 @@ public class SloopEntity extends FirmacivBoatEntity {
 
 
 
-    // sailing methods
+    @Override
+    public void tick() {
+        super.tick();
+        this.sailBoat();
+    }
 
-    // method to
+    // sailing stuff
+
+    protected float sailRotation;
+
+    protected int sailState;
+
+    // method to get sailing controls
+
+    // variable for sail angle
+
+    // method for getting wind stuff?
+
+    public float getSailRotation(){
+        return sailRotation;
+    }
+
+    public float getSailWorldRotation(){
+        return sailRotation + this.getYRot();
+    }
+
+    public float[] getWindAngleAndSpeed(){
+        Vec2 windVector = Climate.getWindVector(this.level(),this.blockPosition());
+        double direction = Math.round(Math.toDegrees(Math.atan(windVector.x/windVector.y)));
+        double speed = Math.round(windVector.length()*320);
+        return new float[]{(float) direction, (float) speed};
+    }
 
 
 
+    public int getSailState(){
+        return sailState;
+    }
+
+    public void setSailState(int state){
+        sailState = state;
+    }
+
+    @Nullable
+    public Entity getSailingVehiclePartAsEntity() {
+        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+            return this.getPassengers().get(13);
+        }
+        return null;
+    }
+
+    @Nullable
+    public EmptyCompartmentEntity getSailingCompartment() {
+        final Entity vehiclePart = this.getSailingVehiclePartAsEntity();
+
+        if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) return null;
+
+        if (!(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity))
+            return null;
+
+        if (!emptyCompartmentEntity.isVehicle() || !(emptyCompartmentEntity.getFirstPassenger() instanceof LocalPlayer))
+            return null;
+
+        return emptyCompartmentEntity;
+    }
+
+    protected void sailBoat() {
+        if (this.isVehicle()) {
+            if (getSailingCompartment() != null) {
+                boolean inputUp = this.getSailingCompartment().getInputUp();
+                boolean inputDown = this.getSailingCompartment().getInputDown();
+                boolean inputLeft = this.getSailingCompartment().getInputLeft();
+                boolean inputRight = this.getSailingCompartment().getInputRight();
+                if (inputLeft) {
+                    if(sailRotation > -21){
+                        --this.sailRotation;
+                    }
+                }
+
+                if (inputRight) {
+                    if(sailRotation < 21){
+                        ++this.sailRotation;
+                    }
+                }
+
+                if (inputUp) {
+                    if(sailState < 3){
+                        sailState++;
+                    }
+                }
+
+                if (inputDown) {
+                    if(sailState > 0){
+                        sailState--;
+                    }
+                }
+            }
+        }
+    }
 
 }
