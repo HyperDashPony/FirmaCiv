@@ -145,10 +145,14 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
         return pState.getBlock() instanceof SquaredAngleBlock;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean useShapeForLightOcclusion(BlockState pState) {
         return true;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return (pState.getValue(HALF) == Half.TOP ? TOP_SHAPES : BOTTOM_SHAPES)[SHAPE_BY_STATE[this.getShapeIndex(
                 pState)]];
@@ -158,6 +162,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
         return pState.getValue(SHAPE).ordinal() * 4 + pState.getValue(FACING).get2DDataValue();
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         Direction direction = pContext.getClickedFace();
         BlockPos blockpos = pContext.getClickedPos();
@@ -167,12 +172,8 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
         return blockstate.setValue(SHAPE, getStairsShape(blockstate, pContext.getLevel(), blockpos));
     }
 
-    /**
-     * Update the provided state given the provided neighbor direction and neighbor state, returning a new state.
-     * For example, fences make their connections to the passed in state if possible, and wet concrete powder immediately
-     * returns its solidified counterpart.
-     * Note that this method should ideally consider only the specific direction passed in.
-     */
+    @Override
+    @SuppressWarnings("deprecation")
     public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel,
             BlockPos pCurrentPos, BlockPos pFacingPos) {
         if (pState.getValue(WATERLOGGED)) {
@@ -184,10 +185,14 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
                 pCurrentPos, pFacingPos);
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState pState, Rotation pRot) {
         return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public BlockState mirror(BlockState pState, Mirror pMirror) {
         Direction direction = pState.getValue(FACING);
         StairsShape stairsshape = pState.getValue(SHAPE);
@@ -228,14 +233,19 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
         return super.mirror(pState, pMirror);
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING, HALF, SHAPE, WATERLOGGED);
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState pState) {
         return pState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(pState);
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
         return false;
     }
@@ -247,5 +257,4 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     private BlockState getModelState() {
         return stateSupplier.get();
     }
-    // Forge end
 }
