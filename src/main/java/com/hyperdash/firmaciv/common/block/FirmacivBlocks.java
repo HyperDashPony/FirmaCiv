@@ -57,7 +57,7 @@ public final class FirmacivBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final RegistryObject<Block> WATERCRAFT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
-            () -> new AngledBoatFrameBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
+            () -> new AngledBoatFrameBlock(Blocks.ACACIA_STAIRS::defaultBlockState,
                     BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final Map<RegistryWood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAME_ANGLED = registerWoodenBoatFrames();
