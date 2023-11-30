@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.BlockHitResult;
@@ -38,13 +37,13 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
             final Properties properties) {
         super(blockState, properties);
         this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
-                        .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, false)
-                        .setValue(FRAME_PROCESSED, 0));
+                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, StairsShape.STRAIGHT)
+                        .setValue(WATERLOGGED, false).setValue(FRAME_PROCESSED, 0));
         this.wood = wood;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
             final BlockState newState, final boolean isMoving) {
         if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
@@ -64,6 +63,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
         // Don't do logic on client side
