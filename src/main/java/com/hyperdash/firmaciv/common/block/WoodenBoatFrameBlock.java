@@ -105,7 +105,14 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
         if (heldStack.is(FirmacivTags.Items.PLANKS)) {
             // Must be [0,3)
             if (3 > processState) {
-                frameBlockEntity.insertPlanks(heldStack.split(1));
+                final ItemStack remainder = frameBlockEntity.insertPlanks(heldStack.split(1));
+
+                // Couldn't put the item in
+                if (!remainder.isEmpty()) {
+                    heldStack.grow(1);
+                    return InteractionResult.SUCCESS;
+                }
+
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
