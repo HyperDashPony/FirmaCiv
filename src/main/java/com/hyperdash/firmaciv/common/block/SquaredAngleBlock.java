@@ -103,7 +103,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
             final BlockPos blockPos) {
         final Direction direction = blockState.getValue(FACING);
         final BlockState blockstate = blockGetter.getBlockState(blockPos.relative(direction));
-        if (isRoof(blockstate)) {
+        if (isAngledFrame(blockstate)) {
             final Direction direction1 = blockstate.getValue(FACING);
             if (direction1.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState, blockGetter,
                     blockPos, direction1.getOpposite())) {
@@ -116,7 +116,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
         }
 
         final BlockState blockstate1 = blockGetter.getBlockState(blockPos.relative(direction.getOpposite()));
-        if (isRoof(blockstate1)) {
+        if (isAngledFrame(blockstate1)) {
             final Direction direction2 = blockstate1.getValue(FACING);
             if (direction2.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState, blockGetter,
                     blockPos, direction2)) {
@@ -134,10 +134,10 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     private static boolean canTakeShape(final BlockState blockState, final BlockGetter blockGetter,
             final BlockPos blockPos, final Direction direction) {
         final BlockState blockstate = blockGetter.getBlockState(blockPos.relative(direction));
-        return !isRoof(blockstate) || blockstate.getValue(FACING) != blockState.getValue(FACING);
+        return !isAngledFrame(blockstate) || blockstate.getValue(FACING) != blockState.getValue(FACING);
     }
 
-    public static boolean isRoof(final BlockState blockState) {
+    public static boolean isAngledFrame(final BlockState blockState) {
         return blockState.getBlock() instanceof SquaredAngleBlock;
     }
 
