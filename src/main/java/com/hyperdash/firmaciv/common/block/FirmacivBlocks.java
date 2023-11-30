@@ -8,6 +8,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Metal;
+import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -20,11 +21,12 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class FirmacivBlocks {
+public final class FirmacivBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
             Firmaciv.MOD_ID);
 
@@ -58,15 +60,25 @@ public class FirmacivBlocks {
             () -> new AngledBoatFrameBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
                     BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
-    public static final Map<Wood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAME_ANGLED = Helpers.mapOfKeys(Wood.class, wood ->
-            registerBlockWithoutItem("wood/" + wood.getSerializedName() + "/watercraft_frame_angled",
-                    () -> new WoodenBoatFrameBlock(wood,
-                            wood.getBlock(Wood.BlockType.STAIRS).get().defaultBlockState(),
-                            BlockBehaviour.Properties.copy(WATERCRAFT_FRAME_ANGLED.get()))));
+    public static final Map<RegistryWood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAME_ANGLED = registerWoodenBoatFrames();
 
     public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
             () -> new OarlockBlock(BlockBehaviour.Properties.copy(
                     TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
+
+    public static Map<RegistryWood, RegistryObject<Block>> registerWoodenBoatFrames() {
+        final Map<RegistryWood, RegistryObject<Block>> map = new HashMap<>();
+
+        for (final Wood tfcWood : Wood.values()) {
+            map.put(tfcWood,
+                    registerBlockWithoutItem("wood/" + tfcWood.getSerializedName() + "/watercraft_frame_angled",
+                            () -> new WoodenBoatFrameBlock(tfcWood,
+                                    tfcWood.getBlock(Wood.BlockType.STAIRS).get().defaultBlockState(),
+                                    BlockBehaviour.Properties.copy(WATERCRAFT_FRAME_ANGLED.get()))));
+        }
+
+        return map;
+    }
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);
