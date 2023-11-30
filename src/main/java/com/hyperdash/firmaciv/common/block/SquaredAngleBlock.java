@@ -17,7 +17,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 public abstract class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
@@ -33,20 +32,9 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     protected static final VoxelShape[] BOTTOM_SHAPES = makeShapes(BOTTOM_AABB, OCTET_NPN, OCTET_PPN, OCTET_NPP,
             OCTET_PPP);
     private static final int[] SHAPE_BY_STATE = new int[]{12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
-    protected final Supplier<BlockState> stateSupplier;
-
-    @Deprecated
-    public SquaredAngleBlock(final Supplier<BlockState> stateSupplier, final Properties properties) {
-        super(properties);
-        this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, StairsShape.STRAIGHT)
-                        .setValue(WATERLOGGED, false));
-        this.stateSupplier = stateSupplier;
-    }
 
     public SquaredAngleBlock(final Properties properties) {
         super(properties);
-        stateSupplier = Blocks.AIR::defaultBlockState;
     }
 
     @SuppressWarnings("SameParameterValue")

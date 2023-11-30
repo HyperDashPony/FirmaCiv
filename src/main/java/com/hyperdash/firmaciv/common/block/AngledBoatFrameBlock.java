@@ -16,14 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.function.Supplier;
-
 public class AngledBoatFrameBlock extends SquaredAngleBlock {
-
-    @Deprecated
-    public AngledBoatFrameBlock(final Supplier<BlockState> blockState, final Properties properties) {
-        super(blockState, properties);
-    }
 
     public AngledBoatFrameBlock(final Properties properties) {
         super(properties);

@@ -26,22 +26,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlock {
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
     public final RegistryWood wood;
-
-    @Deprecated
-    public WoodenBoatFrameBlock(final RegistryWood wood, final Supplier<BlockState> blockState,
-            final Properties properties) {
-        super(blockState, properties);
-        this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, StairsShape.STRAIGHT)
-                        .setValue(WATERLOGGED, false).setValue(FRAME_PROCESSED, 0));
-        this.wood = wood;
-    }
 
     public WoodenBoatFrameBlock(final RegistryWood wood, final Properties properties) {
         super(properties);
