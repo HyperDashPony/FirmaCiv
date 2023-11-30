@@ -1,5 +1,6 @@
 package com.hyperdash.firmaciv.common.block;
 
+import com.hyperdash.firmaciv.Firmaciv;
 import com.hyperdash.firmaciv.common.blockentity.WatercraftFrameBlockEntity;
 import com.hyperdash.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
@@ -56,6 +57,9 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
                     level.getRandom().nextFloat() * 0.1F + 0.9F);
             return InteractionResult.SUCCESS;
         }
+
+        Firmaciv.LOGGER.error("Couldn't find a frame for the item {} even though it's contained in {}",
+                heldStack.getItem(), FirmacivTags.Items.PLANKS);
 
         return InteractionResult.SUCCESS;
     }
