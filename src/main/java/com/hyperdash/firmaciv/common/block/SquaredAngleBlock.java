@@ -24,17 +24,15 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<StairsShape> SHAPE = BlockStateProperties.STAIRS_SHAPE;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-
-    protected static final VoxelShape TOP_AABB = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    protected static final VoxelShape OCTET_NPN = Block.box(0.0D, 8.0D, 0.0D, 8.0D, 16.0D, 8.0D);
-    protected static final VoxelShape OCTET_NPP = Block.box(0.0D, 8.0D, 8.0D, 8.0D, 16.0D, 16.0D);
-    protected static final VoxelShape OCTET_PPN = Block.box(8.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
-    protected static final VoxelShape OCTET_PPP = Block.box(8.0D, 8.0D, 8.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape TOP_AABB = Block.box(0, 8, 0, 16, 16, 16);
+    protected static final VoxelShape BOTTOM_AABB = Block.box(0, 0, 0, 16, 8, 16);
+    protected static final VoxelShape OCTET_NPN = Block.box(0, 8, 0, 8, 16, 8);
+    protected static final VoxelShape OCTET_NPP = Block.box(0, 8, 8, 8, 16, 16);
+    protected static final VoxelShape OCTET_PPN = Block.box(8, 8, 0, 16, 16, 8);
+    protected static final VoxelShape OCTET_PPP = Block.box(8, 8, 8, 16, 16, 16);
     protected static final VoxelShape[] BOTTOM_SHAPES = makeShapes(BOTTOM_AABB, OCTET_NPN, OCTET_PPN, OCTET_NPP,
             OCTET_PPP);
     private static final int[] SHAPE_BY_STATE = new int[]{12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
-    // Forge Start
     protected final Supplier<BlockState> stateSupplier;
 
     public SquaredAngleBlock(final Supplier<BlockState> stateSupplier, final Properties properties) {
@@ -45,6 +43,7 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
         this.stateSupplier = stateSupplier;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static VoxelShape[] makeShapes(final VoxelShape slabShape, final VoxelShape northWestCorner,
             final VoxelShape northEastCorner, final VoxelShape southWestCorner, final VoxelShape southEastCorner) {
         return IntStream.range(0, 16).mapToObj(
@@ -102,25 +101,27 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     private static StairsShape getStairsShape(final BlockState blockState, final BlockGetter blockGetter,
             final BlockPos blockPos) {
         final Direction direction = blockState.getValue(FACING);
-        final BlockState blockstate = blockGetter.getBlockState(blockPos.relative(direction));
-        if (isAngledFrame(blockstate)) {
-            final Direction direction1 = blockstate.getValue(FACING);
-            if (direction1.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState, blockGetter,
-                    blockPos, direction1.getOpposite())) {
-                if (direction1 == direction.getCounterClockWise()) {
-                    return StairsShape.OUTER_LEFT;
-                }
+        {
+            final BlockState neighborBlockState = blockGetter.getBlockState(blockPos.relative(direction));
+            if (isAngledFrame(neighborBlockState)) {
+                final Direction neighborFacing = neighborBlockState.getValue(FACING);
+                if (neighborFacing.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState,
+                        blockGetter, blockPos, neighborFacing.getOpposite())) {
+                    if (neighborFacing == direction.getCounterClockWise()) {
+                        return StairsShape.OUTER_LEFT;
+                    }
 
-                return StairsShape.OUTER_RIGHT;
+                    return StairsShape.OUTER_RIGHT;
+                }
             }
         }
 
-        final BlockState blockstate1 = blockGetter.getBlockState(blockPos.relative(direction.getOpposite()));
-        if (isAngledFrame(blockstate1)) {
-            final Direction direction2 = blockstate1.getValue(FACING);
-            if (direction2.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState, blockGetter,
-                    blockPos, direction2)) {
-                if (direction2 == direction.getCounterClockWise()) {
+        final BlockState neighborBlockState = blockGetter.getBlockState(blockPos.relative(direction.getOpposite()));
+        if (isAngledFrame(neighborBlockState)) {
+            final Direction neighborFacing = neighborBlockState.getValue(FACING);
+            if (neighborFacing.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState,
+                    blockGetter, blockPos, neighborFacing)) {
+                if (neighborFacing == direction.getCounterClockWise()) {
                     return StairsShape.INNER_LEFT;
                 }
 
@@ -246,13 +247,5 @@ public abstract class SquaredAngleBlock extends Block implements SimpleWaterlogg
     public boolean isPathfindable(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
             final PathComputationType computationType) {
         return false;
-    }
-
-    private Block getModelBlock() {
-        return getModelState().getBlock();
-    }
-
-    private BlockState getModelState() {
-        return stateSupplier.get();
     }
 }
