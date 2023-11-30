@@ -21,25 +21,24 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
-import static com.hyperdash.firmaciv.common.block.AngledBoatFrameBlock.FRAME_PROCESSED;
-
 public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlock {
+    public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
     public final RegistryWood wood;
 
     public WoodenBoatFrameBlock(final RegistryWood wood, final BlockState blockState,
-                                final Properties properties) {
+            final Properties properties) {
         super(blockState, properties);
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, Half.BOTTOM)
                         .setValue(SHAPE, StairsShape.STRAIGHT).setValue(WATERLOGGED, false)
-                        // TODO state 0 is no longer actually used as no progress is represented as a separate block
                         .setValue(FRAME_PROCESSED, 0));
         this.wood = wood;
     }
@@ -83,14 +82,14 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
         // Try extract
         if (heldStack.isEmpty()) {
             // Extract an item
-            if (4 >= processState) {
+            if (3 >= processState) {
                 ItemHandlerHelper.giveItemToPlayer(player, frameBlockEntity.extractPlanks(1));
             } else {
                 ItemHandlerHelper.giveItemToPlayer(player, frameBlockEntity.extractBolts(1));
             }
 
             // Set ourselves back to our base
-            if (1 == processState) {
+            if (0 == processState) {
                 final BlockState newState = FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get().defaultBlockState()
                         .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
                 level.setBlock(blockPos, newState, 10);
@@ -104,8 +103,8 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
 
         // Should we do plank stuff
         if (heldStack.is(FirmacivTags.Items.PLANKS)) {
-            // Must be [0,4)
-            if (4 > processState) {
+            // Must be [0,3)
+            if (3 > processState) {
                 frameBlockEntity.insertPlanks(heldStack.split(1));
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
@@ -117,8 +116,8 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
 
         // Should we do bolt stuff
         if (heldStack.is(FirmacivItems.COPPER_BOLT.get())) {
-            // Must be [4,8)
-            if (4 <= processState && processState < 8) {
+            // Must be [3,7)
+            if (3 <= processState && processState < 7) {
                 frameBlockEntity.insertBolts(heldStack.split(1));
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.METAL_PLACE, SoundSource.BLOCKS, 1.5F,

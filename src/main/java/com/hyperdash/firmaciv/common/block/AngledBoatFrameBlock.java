@@ -14,13 +14,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.RegistryObject;
 
 public class AngledBoatFrameBlock extends SquaredAngleBlock {
-
-    public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_8;
 
     public AngledBoatFrameBlock(final BlockState blockState, final BlockBehaviour.Properties properties) {
         super(blockState, properties);
@@ -44,7 +41,7 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
             // Must find the right block variant for this item
             if (!heldStack.is(woodenFrameBlock.getUnderlyingPlank().asItem())) continue;
 
-            final BlockState newBlockState = woodenFrameBlock.defaultBlockState().setValue(FRAME_PROCESSED, 1)
+            final BlockState newBlockState = woodenFrameBlock.defaultBlockState()
                     .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
 
             level.setBlock(blockPos, newBlockState, 10);
