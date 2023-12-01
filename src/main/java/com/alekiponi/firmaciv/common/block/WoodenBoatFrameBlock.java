@@ -65,9 +65,6 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
         // Don't do logic on client side
-        if (level.isClientSide()) {
-            return InteractionResult.FAIL;
-        }
 
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.FAIL;
@@ -97,7 +94,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
                         .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
 
                 level.setBlock(blockPos, newState, 10);
-                return InteractionResult.SUCCESS;
+                return InteractionResult.sidedSuccess(level.isClientSide());
             }
 
             level.setBlock(blockPos, blockState.setValue(FRAME_PROCESSED, processState - 1), 10);
@@ -120,7 +117,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
-                return InteractionResult.SUCCESS;
+                return InteractionResult.sidedSuccess(level.isClientSide());
             }
             return InteractionResult.PASS;
         }
@@ -133,7 +130,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.METAL_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
-                return InteractionResult.SUCCESS;
+                return InteractionResult.sidedSuccess(level.isClientSide());
             }
             return InteractionResult.FAIL;
         }
