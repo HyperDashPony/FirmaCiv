@@ -2,6 +2,7 @@ import mcresources
 from mcresources import ResourceManager
 
 import BlockStates
+import Constants
 
 WOODS = {"acacia": "Acacia",
          "ash": "Ash",
@@ -46,6 +47,7 @@ def generateBlockModels(manager: ResourceManager):
 def main():
     resourceManager = mcresources.ResourceManager("firmaciv", "../src/main/resources",
                                                   on_error=lambda file, e: print(f"Error writing {file}\n{e}"))
+    resourceManager.lang(Constants.DEFAULT_LANG)
     generateBlockModels(resourceManager)
     resourceManager.flush()
     print("Generated stuff!")
