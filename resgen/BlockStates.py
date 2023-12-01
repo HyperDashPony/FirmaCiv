@@ -1,25 +1,125 @@
-import mcresources as mcr
+from mcresources.type_definitions import Json
 
-from mcresources import ResourceManager as rm, ItemContext, utils, block_states, loot_tables
+angledWaterCraftFrame = {
+    "facing=north,shape=straight": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight",
+        "y": 180
+    },
+    "facing=east,shape=straight": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight",
+        "y": 270
+    },
+    "facing=south,shape=straight": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight",
+    },
+    "facing=west,shape=straight": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight",
+        "y": 90
+    },
+    "facing=north,shape=inner_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 90
+    },
+    "facing=east,shape=inner_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 180
+    },
+    "facing=south,shape=inner_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 270
+    },
+    "facing=west,shape=inner_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner"
+    },
+    "facing=north,shape=outer_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 270
+    },
+    "facing=east,shape=outer_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer"
+    },
+    "facing=south,shape=outer_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 90
+    },
+    "facing=west,shape=outer_left": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 180
+    },
+    "facing=north,shape=inner_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 180
+    },
+    "facing=east,shape=inner_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 270
+    },
+    "facing=south,shape=inner_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner"
+    },
+    "facing=west,shape=inner_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 90
+    },
+    "facing=north,shape=outer_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer"
+    },
+    "facing=east,shape=outer_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 90
+    },
+    "facing=south,shape=outer_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 180
+    },
+    "facing=west,shape=outer_right": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 270
+    }}
 
 
-def ccbmodels():
+def getWoodFrameMultipart(wood: str) -> list[Json]:
+    json = [
+        ({"facing": "north", "shape": "straight"},
+         {"model": "firmaciv:block/watercraft_frame_angled/straight", "y": 180}),
+        ({"facing": "east", "shape": "straight"},
+         {"model": "firmaciv:block/watercraft_frame_angled/straight", "y": 270}),
+        ({"facing": "south", "shape": "straight"},
+         {"model": "firmaciv:block/watercraft_frame_angled/straight"}),
+        ({"facing": "west", "shape": "straight"},
+         {"model": "firmaciv:block/watercraft_frame_angled/straight", "y": 90}),
+        ({"facing": "north", "shape": "inner_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner", "y": 90}),
+        ({"facing": "east", "shape": "inner_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner", "y": 180}),
+        ({"facing": "south", "shape": "inner_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner", "y": 270}),
+        ({"facing": "west", "shape": "inner_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner"}),
+        ({"facing": "north", "shape": "outer_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer", "y": 270}),
+        ({"facing": "east", "shape": "outer_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer"}),
+        ({"facing": "south", "shape": "outer_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer", "y": 90}),
+        ({"facing": "west", "shape": "outer_left"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer", "y": 180}),
+        ({"facing": "north", "shape": "inner_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner", "y": 180}),
+        ({"facing": "east", "shape": "inner_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner", "y": 270}),
+        ({"facing": "south", "shape": "inner_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner"}),
+        ({"facing": "west", "shape": "inner_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/inner", "y": 90}),
+        ({"facing": "north", "shape": "outer_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer"}),
+        ({"facing": "east", "shape": "outer_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer", "y": 90}),
+        ({"facing": "south", "shape": "outer_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer", "y": 180}),
+        ({"facing": "west", "shape": "outer_right"},
+         {"model": "firmaciv:block/watercraft_frame_angled/outer", "y": 270})
+    ]
 
-    WOODS = {'acacia', 'ash', 'aspen', 'birch', 'blackwood', 'chestnut', 'douglas_fir', 'hickory', 'kapok', 'maple', 'oak', 'palm', 'pine', 'rosewood', 'sequoia', 'spruce', 'sycamore', 'white_cedar', 'willow'}
-
-    for wood in WOODS:
-        templatefile = open("ccb_template_state.json", "r")
-        tfdata = templatefile.read()
-
-        ccb_name = wood + '.json'
-
-        tfdata = tfdata.replace('douglas_fir', wood)
-
-        outfile = open(ccb_name, 'w')
-
-        outfile.write(tfdata)
-
-        templatefile.close()
-
-
-ccbmodels()
+    return json
