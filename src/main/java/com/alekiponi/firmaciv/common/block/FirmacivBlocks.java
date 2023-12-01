@@ -36,12 +36,10 @@ public final class FirmacivBlocks {
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
                             boatVariant)));
 
-    /*
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
-            () -> new SquaredAngleBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
-                    BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
+            () -> new SquaredAngleBlock(BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
                             .sound(TFCSounds.THATCH).noCollission()));
-     */
+
 
     public static final RegistryObject<Block> THATCH_ROOFING_STAIRS = registerBlockWithItem("thatch_roofing_stairs",
             () -> new StairBlock(Blocks.ACACIA_STAIRS.defaultBlockState(),
@@ -61,7 +59,7 @@ public final class FirmacivBlocks {
     public static final RegistryObject<Block> BOAT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
             () -> new AngledBoatFrameBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
-    public static final Map<RegistryWood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAME_ANGLED = registerWoodenBoatFrames();
+    public static final Map<RegistryWood, RegistryObject<Block>> WOODEN_BOAT_FRAME_ANGLED = registerWoodenBoatFrames();
 
     public static Map<RegistryWood, RegistryObject<Block>> registerWoodenBoatFrames() {
         final Map<RegistryWood, RegistryObject<Block>> map = new HashMap<>();

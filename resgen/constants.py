@@ -114,7 +114,7 @@ DEFAULT_LANG = {
     "entity.firmaciv.compartment_large_vessel": "Large Vessel Compartment",
     "entity.firmaciv.compartment_empty": "Empty Compartment",
 
-    "block.firmaciv.boat_frame": "Watercraft Frame",
+    "block.firmaciv.boat_frame": "Shipwright's Scaffolding",
 
     "block.firmaciv.thatch_roofing": "Thatch Roofing",
     "block.firmaciv.oarlock": "Oarlock",

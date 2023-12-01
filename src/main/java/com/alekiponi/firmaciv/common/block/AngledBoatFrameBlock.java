@@ -35,7 +35,7 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
         if (!heldStack.is(FirmacivTags.Items.PLANKS)) return InteractionResult.SUCCESS;
 
         // We must replace ourselves with the correct wood version
-        for (final RegistryObject<Block> registryObject : FirmacivBlocks.WOOD_WATERCRAFT_FRAME_ANGLED.values()) {
+        for (final RegistryObject<Block> registryObject : FirmacivBlocks.WOODEN_BOAT_FRAME_ANGLED.values()) {
             if (!(registryObject.get() instanceof WoodenBoatFrameBlock woodenFrameBlock)) continue;
 
             // Must find the right block variant for this item

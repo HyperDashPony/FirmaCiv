@@ -2,10 +2,8 @@ package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.common.blockentity.BoatFrameBlockEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
-import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
