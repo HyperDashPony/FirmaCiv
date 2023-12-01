@@ -1,78 +1,78 @@
 {
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
-    "facing=north,half=bottom,shape=straight": {
+    "facing=north,shape=straight": {
       "model": "firmaciv:block/watercraft_frame_angled/straight",
       "y": 180
     },
-    "facing=east,half=bottom,shape=straight": {
+    "facing=east,shape=straight": {
       "model": "firmaciv:block/watercraft_frame_angled/straight",
       "y": 270
     },
-    "facing=south,half=bottom,shape=straight": {
+    "facing=south,shape=straight": {
       "model": "firmaciv:block/watercraft_frame_angled/straight"
     },
-    "facing=west,half=bottom,shape=straight": {
+    "facing=west,shape=straight": {
       "model": "firmaciv:block/watercraft_frame_angled/straight",
       "y": 90
     },
-    "facing=east,half=bottom,shape=inner_left": {
+    "facing=east,shape=inner_left": {
       "model": "firmaciv:block/watercraft_frame_angled/inner",
       "y": 180
     },
-    "facing=east,half=bottom,shape=inner_right": {
+    "facing=east,shape=inner_right": {
       "model": "firmaciv:block/watercraft_frame_angled/inner",
       "y": 270
     },
-    "facing=east,half=bottom,shape=outer_left": {
+    "facing=east,shape=outer_left": {
       "model": "firmaciv:block/watercraft_frame_angled/outer"
     },
-    "facing=east,half=bottom,shape=outer_right": {
+    "facing=east,shape=outer_right": {
       "model": "firmaciv:block/watercraft_frame_angled/outer",
       "y": 90
     },
-    "facing=north,half=bottom,shape=inner_left": {
+    "facing=north,shape=inner_left": {
       "model": "firmaciv:block/watercraft_frame_angled/inner",
       "y": 90
     },
-    "facing=north,half=bottom,shape=inner_right": {
+    "facing=north,shape=inner_right": {
       "model": "firmaciv:block/watercraft_frame_angled/inner",
       "y": 180
     },
-    "facing=north,half=bottom,shape=outer_left": {
+    "facing=north,shape=outer_left": {
       "model": "firmaciv:block/watercraft_frame_angled/outer",
       "y": 270
     },
-    "facing=north,half=bottom,shape=outer_right": {
+    "facing=north,shape=outer_right": {
       "model": "firmaciv:block/watercraft_frame_angled/outer"
     },
-    "facing=south,half=bottom,shape=inner_left": {
+    "facing=south,shape=inner_left": {
       "model": "firmaciv:block/watercraft_frame_angled/inner",
       "y": 270
     },
-    "facing=south,half=bottom,shape=inner_right": {
+    "facing=south,shape=inner_right": {
       "model": "firmaciv:block/watercraft_frame_angled/inner"
     },
-    "facing=south,half=bottom,shape=outer_left": {
+    "facing=south,shape=outer_left": {
       "model": "firmaciv:block/watercraft_frame_angled/outer",
       "y": 90
     },
-    "facing=south,half=bottom,shape=outer_right": {
+    "facing=south,shape=outer_right": {
       "model": "firmaciv:block/watercraft_frame_angled/outer",
       "y": 180
     },
-    "facing=west,half=bottom,shape=inner_left": {
+    "facing=west,shape=inner_left": {
       "model": "firmaciv:block/watercraft_frame_angled/inner"
     },
-    "facing=west,half=bottom,shape=inner_right": {
+    "facing=west,shape=inner_right": {
       "model": "firmaciv:block/watercraft_frame_angled/inner",
       "y": 90
     },
-    "facing=west,half=bottom,shape=outer_left": {
+    "facing=west,shape=outer_left": {
       "model": "firmaciv:block/watercraft_frame_angled/outer",
       "y": 180
     },
-    "facing=west,half=bottom,shape=outer_right": {
+    "facing=west,shape=outer_right": {
       "model": "firmaciv:block/watercraft_frame_angled/outer",
       "y": 270
     }
