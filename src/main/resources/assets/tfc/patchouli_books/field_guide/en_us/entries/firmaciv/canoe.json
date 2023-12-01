@@ -18,7 +18,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Wood types:$(br2)Carving out a Dugout Canoe requires a softer wood, and as a result, only some logs are workable:$(br2)Douglas Fir$(br)Pine$(br)Palm(br)Spruce$(br)Sequoia(br)Kapok(br)Mangrove(br)White Cedar$(br)Willow"
+      "text": "Carving out a Dugout Canoe requires a softer wood, and as a result, only some logs are workable:$(br2)Douglas Fir$(br)Pine$(br)Palm$(br)Spruce$(br)Sequoia$(br)Kapok$(br)Mangrove$(br)White Cedar$(br)Willow"
     },
     {
       "type": "patchouli:multiblock",
@@ -81,11 +81,12 @@
       "enable_visualize": false
     },
     {
-      "type": "patchouli:entity",
-      "entity": "firmaciv:dugout_canoe/douglas_fir",
-      "scale": 0.45,
-      "name": "Dugout Canoe",
-      "text": "A completed dugout canoe."
+      "type": "patchouli:image",
+      "title": "Dugout Canoe",
+      "images": [
+        "firmaciv:textures/gui/book/canoe_isometric.png"
+      ],
+      "text": "A completed Dugout Canoe."
     },
     {
       "type": "patchouli:crafting",

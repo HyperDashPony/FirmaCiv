@@ -9,9 +9,11 @@
       "title": "Kayak"
     },
     {
-      "type": "patchouli:entity",
-      "entity": "firmaciv:kayak",
-      "scale": 0.45,
+      "type": "patchouli:image",
+      "title": "Kayak",
+      "images": [
+        "firmaciv:textures/gui/book/kayak_isometric.png"
+      ],
       "text": "Kayaks are the smallest and most portable boats."
     },
     {
