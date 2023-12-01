@@ -49,7 +49,7 @@ public enum IngameOverlays {
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
         above(event, VanillaGuiOverlay.CROSSHAIR, COMPARTMENT_STATUS);
         above(event, VanillaGuiOverlay.CROSSHAIR, PASSENGER_STATUS);
-        above(event, VanillaGuiOverlay.CROSSHAIR, SAILING_ELEMENT);
+        //above(event, VanillaGuiOverlay.CROSSHAIR, SAILING_ELEMENT);
     }
 
     private static void above(RegisterGuiOverlaysEvent event, VanillaGuiOverlay vanilla, IngameOverlays overlay) {

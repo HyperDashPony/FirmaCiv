@@ -78,7 +78,7 @@ public final class FirmacivBlockEvents {
 
         if (canoeComponentBlockState.getValue(CANOE_CARVED) < 5 &&
                 event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS)) {
-
+            event.getPlayer().swing(event.getPlayer().getUsedItemHand());
             world.setBlock(thisBlockPos, event.getState().setValue(CANOE_CARVED, nextCanoeCarvedState), 2);
             event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
             event.getPlayer().getItemInHand(event.getContext().getHand()).getUseAnimation();
@@ -93,7 +93,7 @@ public final class FirmacivBlockEvents {
         } else if (canoeComponentBlockState.getValue(CANOE_CARVED) >= 5 && canoeComponentBlockState.getValue(
                 CANOE_CARVED) < 11 &&
                 event.getPlayer().getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.AXES)) {
-
+            event.getPlayer().swing(event.getPlayer().getUsedItemHand());
             BlockPos blockPos1 = thisBlockPos.relative(axis, -2);
 
             // if there are three in a row then it's valid
@@ -131,7 +131,7 @@ public final class FirmacivBlockEvents {
 
         if (CanoeComponentBlock.isValidCanoeShape(world, strippedLogBlock, thisBlockPos)) {
             world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
-
+            event.getPlayer().swing(event.getPlayer().getUsedItemHand());
             event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, event.getState());
 
             Block canoeComponentBlock = getByStripped(strippedLogBlock);

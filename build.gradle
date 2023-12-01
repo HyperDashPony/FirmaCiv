@@ -181,13 +181,6 @@ repositories {
         name = "BlameJared"
         url = "https://maven.blamejared.com"
     }
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
 }
 
 dependencies {

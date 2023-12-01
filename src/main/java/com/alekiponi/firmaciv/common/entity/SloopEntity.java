@@ -210,7 +210,6 @@ public class SloopEntity extends FirmacivBoatEntity {
     }
 
 
-
     public int getSailState(){
         return sailState;
     }

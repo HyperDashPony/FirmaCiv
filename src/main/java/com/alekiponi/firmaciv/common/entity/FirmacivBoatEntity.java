@@ -314,6 +314,7 @@ public class FirmacivBoatEntity extends Entity {
         return this.getDirection().getClockWise();
     }
 
+
     @Override
     public void tick() {
 
