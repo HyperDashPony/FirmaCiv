@@ -16,23 +16,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.RegistryObject;
 
-public class AngledBoatFrameBlock extends SquaredAngleBlock {
-
-    public AngledBoatFrameBlock(final Properties properties) {
+public class AngledRoofingBlock extends SquaredAngleBlock{
+    public AngledRoofingBlock(Properties properties) {
         super(properties);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
-            final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
+                                 final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
         // Don't do logic on client side
-        if (level.isClientSide()) return InteractionResult.PASS;
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
 
         final ItemStack heldStack = player.getItemInHand(hand);
 
         // Should we do plank stuff
-        if (!heldStack.is(FirmacivTags.Items.PLANKS)) return InteractionResult.PASS;
+        if (!heldStack.is(FirmacivTags.Items.PLANKS)) return InteractionResult.SUCCESS;
 
         // We must replace ourselves with the correct wood version
         for (final RegistryObject<Block> registryObject : FirmacivBlocks.WOODEN_BOAT_FRAME_ANGLED.values()) {
@@ -58,6 +57,7 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
         Firmaciv.LOGGER.error("Couldn't find a frame for the item {} even though it's contained in {}",
                 heldStack.getItem(), FirmacivTags.Items.PLANKS);
 
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
+
 }

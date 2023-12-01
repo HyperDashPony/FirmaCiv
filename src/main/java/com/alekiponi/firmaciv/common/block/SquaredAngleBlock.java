@@ -95,12 +95,12 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     /**
      * Returns a stair shape property based on the surrounding stairs from the given blockstate and position
      */
-    private static StairsShape getStairsShape(final BlockState blockState, final BlockGetter blockGetter,
+    protected static StairsShape getStairsShape(final BlockState blockState, final BlockGetter blockGetter,
             final BlockPos blockPos) {
         final Direction direction = blockState.getValue(FACING);
         {
             final BlockState neighborBlockState = blockGetter.getBlockState(blockPos.relative(direction));
-            if (isAngledFrame(neighborBlockState)) {
+            if (isSquaredAngleBlock(neighborBlockState)) {
                 final Direction neighborFacing = neighborBlockState.getValue(FACING);
                 if (neighborFacing.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState,
                         blockGetter, blockPos, neighborFacing.getOpposite())) {
@@ -114,7 +114,7 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
         }
 
         final BlockState neighborBlockState = blockGetter.getBlockState(blockPos.relative(direction.getOpposite()));
-        if (isAngledFrame(neighborBlockState)) {
+        if (isSquaredAngleBlock(neighborBlockState)) {
             final Direction neighborFacing = neighborBlockState.getValue(FACING);
             if (neighborFacing.getAxis() != blockState.getValue(FACING).getAxis() && canTakeShape(blockState,
                     blockGetter, blockPos, neighborFacing)) {
@@ -132,10 +132,10 @@ public class SquaredAngleBlock extends Block implements SimpleWaterloggedBlock {
     private static boolean canTakeShape(final BlockState blockState, final BlockGetter blockGetter,
             final BlockPos blockPos, final Direction direction) {
         final BlockState blockstate = blockGetter.getBlockState(blockPos.relative(direction));
-        return !isAngledFrame(blockstate) || blockstate.getValue(FACING) != blockState.getValue(FACING);
+        return !isSquaredAngleBlock(blockstate) || blockstate.getValue(FACING) != blockState.getValue(FACING);
     }
 
-    public static boolean isAngledFrame(final BlockState blockState) {
+    public static boolean isSquaredAngleBlock(final BlockState blockState) {
         return blockState.getBlock() instanceof SquaredAngleBlock;
     }
 
