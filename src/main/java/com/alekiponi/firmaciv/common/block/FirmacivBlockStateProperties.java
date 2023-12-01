@@ -26,12 +26,10 @@ public class FirmacivBlockStateProperties {
 
     public static final IntegerProperty FRAME_PROCESSED_0;
     public static final IntegerProperty FRAME_PROCESSED_1;
-    // does nothing to the appearance of the block
     public static final IntegerProperty FRAME_PROCESSED_2;
     public static final IntegerProperty FRAME_PROCESSED_3;
     public static final IntegerProperty FRAME_PROCESSED_4;
     public static final IntegerProperty FRAME_PROCESSED_5;
-    // stops reducing the height of the block at this stage
     public static final IntegerProperty FRAME_PROCESSED_6;
     public static final IntegerProperty FRAME_PROCESSED_7;
     public static final IntegerProperty FRAME_PROCESSED_8;

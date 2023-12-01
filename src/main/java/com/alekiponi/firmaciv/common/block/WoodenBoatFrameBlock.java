@@ -65,13 +65,17 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
         // Don't do logic on client side
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
+        if (level.isClientSide()) {
+            return InteractionResult.FAIL;
+        }
 
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.FAIL;
+        if (hand != InteractionHand.MAIN_HAND) {
+            return InteractionResult.FAIL;
+        }
 
         // Quit early if we don't have the right BlockEntity
         if (!(level.getBlockEntity(blockPos) instanceof BoatFrameBlockEntity frameBlockEntity)) {
-            return InteractionResult.FAIL;
+            return InteractionResult.PASS;
         }
 
         final ItemStack heldStack = player.getItemInHand(hand);
@@ -98,7 +102,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
 
             level.setBlock(blockPos, blockState.setValue(FRAME_PROCESSED, processState - 1), 10);
 
-            return InteractionResult.SUCCESS;
+            return InteractionResult.PASS;
         }
 
         // Should we do plank stuff
@@ -110,7 +114,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
                 // Couldn't put the item in
                 if (!remainder.isEmpty()) {
                     heldStack.grow(1);
-                    return InteractionResult.SUCCESS;
+                    return InteractionResult.FAIL;
                 }
 
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
@@ -118,7 +122,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
                 return InteractionResult.SUCCESS;
             }
-            return InteractionResult.SUCCESS;
+            return InteractionResult.PASS;
         }
 
         // Should we do bolt stuff
@@ -131,10 +135,10 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
                 return InteractionResult.SUCCESS;
             }
-            return InteractionResult.SUCCESS;
+            return InteractionResult.FAIL;
         }
 
-        return InteractionResult.SUCCESS;
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -145,8 +149,12 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
         return FirmacivBlocks.BOAT_FRAME_ANGLED.get().getCloneItemStack(blockGetter, blockPos, blockState);
     }
 
-    public Block getUnderlyingPlank() {
+    public Block getPlankAsBlock() {
         return wood.getBlock(Wood.BlockType.PLANKS).get();
+    }
+
+    public ItemStack getPlankAsItemStack() {
+        return wood.getBlock(Wood.BlockType.PLANKS).get().asItem().getDefaultInstance();
     }
 
     @Nullable

@@ -16,7 +16,7 @@ public class FirmacivTags {
         public static final TagKey<Block> CANOE_COMPONENT_BLOCKS = create("canoe_component_blocks");
         public static final TagKey<Block> CAN_MAKE_CANOE_UNRESTRICTED = create("can_make_canoe_unrestricted");
 
-        public static final TagKey<Block> WOODEN_BOAT_FRAMES = create("wooden_boat_frames");
+        public static final TagKey<Block> WOODEN_BOAT_FRAMES = create("wooden_watercraft_frames");
 
         public Blocks() {
         }

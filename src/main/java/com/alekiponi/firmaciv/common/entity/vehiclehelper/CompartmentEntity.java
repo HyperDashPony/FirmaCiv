@@ -289,4 +289,9 @@ public abstract class CompartmentEntity extends Entity {
     public boolean isPickable() {
         return !this.isRemoved();
     }
+
+    @Override
+    public ItemStack getPickResult() {
+        return new ItemStack(this.getDropItem());
+    }
 }

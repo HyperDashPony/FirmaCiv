@@ -39,7 +39,7 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
             if (!(registryObject.get() instanceof WoodenBoatFrameBlock woodenFrameBlock)) continue;
 
             // Must find the right block variant for this item
-            if (!heldStack.is(woodenFrameBlock.getUnderlyingPlank().asItem())) continue;
+            if (!heldStack.is(woodenFrameBlock.getPlankAsBlock().asItem())) continue;
 
             final BlockState newBlockState = woodenFrameBlock.defaultBlockState()
                     .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));

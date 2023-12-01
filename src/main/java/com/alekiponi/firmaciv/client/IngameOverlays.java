@@ -7,6 +7,7 @@ package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -138,35 +139,35 @@ public enum IngameOverlays {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player player = mc.player;
-
             if (setup(gui, mc)) {
                 Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 5f);
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
                 stack.translate((float)width / 2.0F - 5f - 12f, (float)height / 2.0F - 4.5F, 0.0F);
-                stack.scale(0.5F, 0.5F, 0.5F);
+                stack.scale(1.0F, 1.0F, 1.0F);
 
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
 
                     if (emptyCompartmentEntity.getTrueVehicle() != null) {
                         if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger().is(emptyCompartmentEntity)) {
-                            graphics.blit(TEXTURE, 0, 0, 0, 0, 18, 18);
+                            graphics.blit(TEXTURE, 0, 0, 0, 0, 9, 9);
                             if(emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity && player.getItemInHand(player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)){
-                                graphics.blit(TEXTURE, -23, 0, 18, 0, 18, 18);
+                                graphics.blit(TEXTURE, -24, 0, 9, 0, 9, 9);
                             }
 
                         } else if (player.getItemInHand(player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)){
-                            graphics.blit(TEXTURE, 0, 0, 18, 0, 18, 18);
-
-                        } /*else if (player.getItemInHand(player.getUsedItemHand()).is(FirmacivTags.Items.WORKBENCHES)){
-                            graphics.blit(TEXTURE, 0, 0, 18, 0, 18, 18);
-
-                        } */ else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()){
-                            graphics.blit(TEXTURE, 0, 0, 72, 0, 18, 18);
+                            graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
+                        } else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()){
+                            graphics.blit(TEXTURE, 0, 0, 36, 0, 9, 9);
                         } else if (!emptyCompartmentEntity.isVehicle() && emptyCompartmentEntity.canAddOnlyBLocks()){
-                            graphics.blit(TEXTURE, 0, 0, 18, 0, 18, 18);
+                            graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
                         }
+                    }
+                } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity) {
+
+                    if (vehicleCleatEntity.getVehicle().getVehicle() != null) {
+                        graphics.blit(TEXTURE, 0, 0, 54, 0, 9, 9);
                     }
                 }
 

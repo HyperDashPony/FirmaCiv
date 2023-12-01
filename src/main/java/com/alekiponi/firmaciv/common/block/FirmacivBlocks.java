@@ -58,7 +58,7 @@ public final class FirmacivBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
      */
-    public static final RegistryObject<Block> BOAT_FRAME_ANGLED = registerBlockWithItem("boat_frame_angled",
+    public static final RegistryObject<Block> BOAT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
             () -> new AngledBoatFrameBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final Map<RegistryWood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAME_ANGLED = registerWoodenBoatFrames();
@@ -68,7 +68,7 @@ public final class FirmacivBlocks {
 
         for (final Wood tfcWood : Wood.values()) {
             map.put(tfcWood,
-                    registerBlockWithoutItem("wood/" + tfcWood.getSerializedName() + "/boat_frame_angled",
+                    registerBlockWithoutItem("wood/" + tfcWood.getSerializedName() + "/watercraft_frame_angled",
                             () -> new WoodenBoatFrameBlock(tfcWood,
                                     BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get()))));
         }
