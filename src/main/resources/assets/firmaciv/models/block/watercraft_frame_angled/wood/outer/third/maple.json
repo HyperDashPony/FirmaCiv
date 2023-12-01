@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "firmaciv:block/watercraft_frame_angled/template/outer/third",
+  "textures": {
+    "plank": "tfc:block/wood/planks/maple"
+  }
+}

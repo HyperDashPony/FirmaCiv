@@ -1,3 +1,4 @@
 {
-  "parent": "firmaciv:block/maple_watercraft_frame_angled_0"
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "firmaciv:block/watercraft_frame_angled/straight"
 }

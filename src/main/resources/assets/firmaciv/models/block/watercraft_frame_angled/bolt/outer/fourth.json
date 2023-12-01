@@ -1,0 +1,19 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"bolt": "tfc:block/metal/block/copper"
+	},
+	"elements": [
+		{
+			"from": [13, 15.25, 2],
+			"to": [14, 16.25, 3],
+			"faces": {
+				"north": {"uv": [2, 0, 3, 0.75], "texture": "#bolt"},
+				"east": {"uv": [13, 0, 14, 0.75], "texture": "#bolt"},
+				"south": {"uv": [13, 0, 14, 0.75], "texture": "#bolt"},
+				"west": {"uv": [2, 0, 3, 0.75], "texture": "#bolt"},
+				"up": {"uv": [13, 2, 14, 3], "texture": "#bolt"}
+			}
+		}
+	]
+}
