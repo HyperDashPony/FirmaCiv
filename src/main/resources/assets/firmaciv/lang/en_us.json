@@ -1,7 +1,6 @@
 {
-
+  "__comment__": "This file was automatically created by mcresources",
   "item.firmaciv.testitem": "They're waiting for you, Mr. Freeman. With the Test Item.",
-
   "block.firmaciv.canoe_component_block/acacia": "Acacia Canoe Component",
   "block.firmaciv.canoe_component_block/ash": "Ash Canoe Component",
   "block.firmaciv.canoe_component_block/aspen": "Aspen Canoe Component",
@@ -21,7 +20,6 @@
   "block.firmaciv.canoe_component_block/sycamore": "Sycamore Canoe Component",
   "block.firmaciv.canoe_component_block/white_cedar": "White Cedar Canoe Component",
   "block.firmaciv.canoe_component_block/willow": "Willow Canoe Component",
-
   "entity.firmaciv.dugout_canoe.acacia": "Acacia Dugout Canoe",
   "entity.firmaciv.dugout_canoe.ash": "Ash Dugout Canoe",
   "entity.firmaciv.dugout_canoe.aspen": "Aspen Dugout Canoe",
@@ -41,8 +39,6 @@
   "entity.firmaciv.dugout_canoe.sycamore": "Sycamore Dugout Canoe",
   "entity.firmaciv.dugout_canoe.white_cedar": "White Cedar Dugout Canoe",
   "entity.firmaciv.dugout_canoe.willow": "Willow Dugout Canoe",
-
-
   "entity.firmaciv.rowboat.acacia": "Acacia Rowboat",
   "entity.firmaciv.rowboat.ash": "Ash Rowboat",
   "entity.firmaciv.rowboat.aspen": "Aspen Rowboat",
@@ -62,8 +58,6 @@
   "entity.firmaciv.rowboat.sycamore": "Sycamore Rowboat",
   "entity.firmaciv.rowboat.white_cedar": "White Cedar Rowboat",
   "entity.firmaciv.rowboat.willow": "Willow Rowboat",
-
-
   "entity.firmaciv.sloop.acacia": "Acacia Sloop",
   "entity.firmaciv.sloop.ash": "Ash Sloop",
   "entity.firmaciv.sloop.aspen": "Aspen Sloop",
@@ -83,23 +77,17 @@
   "entity.firmaciv.sloop.sycamore": "Sycamore Sloop",
   "entity.firmaciv.sloop.white_cedar": "White Cedar Sloop",
   "entity.firmaciv.sloop.willow": "Willow Sloop",
-
   "entity.firmaciv.kayak": "Kayak",
-
   "entity.firmaciv.vehicle_part": "Vehicle Part",
   "entity.firmaciv.vehicle_cleat": "Cleat",
-
   "entity.firmaciv.compartment_chest": "Chest Compartment",
   "entity.firmaciv.compartment_workbench": "Workbench Compartment",
   "entity.firmaciv.compartment_log_pile": "Log Pile Compartment",
   "entity.firmaciv.compartment_large_vessel": "Large Vessel Compartment",
   "entity.firmaciv.compartment_empty": "Empty Compartment",
-
   "block.firmaciv.boat_frame": "Watercraft Frame",
-
   "block.firmaciv.thatch_roofing": "Thatch Roofing",
   "block.firmaciv.oarlock": "Oarlock",
-
   "item.firmaciv.barometer": "Barometer",
   "item.firmaciv.nav_clock": "Navigator's Timepiece",
   "item.firmaciv.sextant": "Sextant",
@@ -114,25 +102,20 @@
   "item.firmaciv.canoe_paddle": "Canoe Paddle",
   "item.firmaciv.oar": "Oar",
   "item.firmaciv.firmaciv_compass": "Compass (Declination: True North)",
-
   "item.firmaciv.canoe_icon_only": "ICON ONLY",
   "item.firmaciv.canoe_with_paddle_icon_only": "ICON ONLY",
   "item.firmaciv.kayak_with_paddle_icon_only": "ICON ONLY",
   "item.firmaciv.rowboat_icon_only": "ICON ONLY",
-
   "itemGroup.firmaciv": "Firma: Civilization",
   "creativetab.firmaciv_tab": "Firma: Civilization",
   "creativetab.watercraft_tab": "Watercraft",
   "creativetab.navigation_tab": "Navigation",
-  
   "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_olive": "Large Waterproof Hide",
   "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_tallow": "Large Waterproof Hide",
-
   "copy_latitude": "Copy Latitude to Clipboard",
   "copy_longitude": "Copy Longitude to Clipboard",
   "copy_latlon": "Copy Latitude and Longitude to Clipboard",
   "copy_altitude": "Copy Altitude to Clipboard",
-
   "firmaciv.advancements.kayak_paddle.title": "Double Trouble",
   "firmaciv.advancements.kayak_paddle.description": "Craft a Kayak Paddle",
   "firmaciv.advancements.canoe.title": "Burnout Paradise",
@@ -148,7 +131,26 @@
   "firmaciv.advancements.barometer.title": "Surf and/or Turf",
   "firmaciv.advancements.barometer.description": "Craft a Barometer",
   "firmaciv.advancements.oarlock.title": "The Montlake Cut",
-  "firmaciv.advancements.oarlock.description": "Smith an Oarlock"
-
-
+  "firmaciv.advancements.oarlock.description": "Smith an Oarlock",
+  "block.firmaciv.wood.acacia.watercraft_frame_angled": "Acacia Boat Frame",
+  "block.firmaciv.watercraft_frame_angled": "Angled Watercraft Frame",
+  "block.firmaciv.wood.ash.watercraft_frame_angled": "Ash Boat Frame",
+  "block.firmaciv.wood.aspen.watercraft_frame_angled": "Aspen Boat Frame",
+  "block.firmaciv.wood.birch.watercraft_frame_angled": "Birch Boat Frame",
+  "block.firmaciv.wood.blackwood.watercraft_frame_angled": "Blackwood Boat Frame",
+  "block.firmaciv.wood.chestnut.watercraft_frame_angled": "Chestnut Boat Frame",
+  "block.firmaciv.wood.douglas_fir.watercraft_frame_angled": "Douglas Fir Boat Frame",
+  "block.firmaciv.wood.hickory.watercraft_frame_angled": "Hickory Boat Frame",
+  "block.firmaciv.wood.kapok.watercraft_frame_angled": "Kapok Boat Frame",
+  "block.firmaciv.wood.mangrove.watercraft_frame_angled": "Mangrove Boat Frame",
+  "block.firmaciv.wood.maple.watercraft_frame_angled": "Maple Boat Frame",
+  "block.firmaciv.wood.oak.watercraft_frame_angled": "Oak Boat Frame",
+  "block.firmaciv.wood.palm.watercraft_frame_angled": "Palm Boat Frame",
+  "block.firmaciv.wood.pine.watercraft_frame_angled": "Pine Boat Frame",
+  "block.firmaciv.wood.rosewood.watercraft_frame_angled": "Rosewood Boat Frame",
+  "block.firmaciv.wood.sequoia.watercraft_frame_angled": "Sequoia Boat Frame",
+  "block.firmaciv.wood.spruce.watercraft_frame_angled": "Spruce Boat Frame",
+  "block.firmaciv.wood.sycamore.watercraft_frame_angled": "Sycamore Boat Frame",
+  "block.firmaciv.wood.white_cedar.watercraft_frame_angled": "White Cedar Boat Frame",
+  "block.firmaciv.wood.willow.watercraft_frame_angled": "Willow Boat Frame"
 }
