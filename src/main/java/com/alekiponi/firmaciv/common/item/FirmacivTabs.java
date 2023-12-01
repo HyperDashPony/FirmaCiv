@@ -40,10 +40,6 @@ public class FirmacivTabs {
 
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME_ANGLED.get());
 
-                        pOutput.accept(FirmacivBlocks.THATCH_ROOFING.get());
-
-                        //pOutput.accept(FirmacivBlocks.BOAT_FRAME.get());
-
 
                     }).build());
 
