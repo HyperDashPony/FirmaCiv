@@ -1,13 +1,13 @@
 import mcresources
 
-import Constants
 import assets
+import constants
 
 
 def main():
     resourceManager = mcresources.ResourceManager("firmaciv", "../src/main/resources",
                                                   on_error=lambda file, e: print(f"Error writing {file}\n{e}"))
-    resourceManager.lang(Constants.DEFAULT_LANG)
+    resourceManager.lang(constants.DEFAULT_LANG)
     assets.generate(resourceManager)
     resourceManager.flush()
     print("Generated stuff!")

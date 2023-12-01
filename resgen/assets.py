@@ -1,11 +1,11 @@
 from mcresources import ResourceManager
 
 import BlockStates
-import Constants
+import constants
 
 
 def generate(manager: ResourceManager):
-    for wood, name in Constants.TFC_WOODS.items():
+    for wood, name in constants.TFC_WOODS.items():
         # Generate models from templates
         for shape in ["straight", "inner", "outer"]:
             for progress in ["first", "second", "third", "fourth"]:
