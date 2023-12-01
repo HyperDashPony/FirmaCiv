@@ -21,43 +21,19 @@ public class AngledRoofingBlock extends SquaredAngleBlock{
         super(properties);
     }
 
+    /*
+    //TODO implement swapping between stair and angled variants
     @Override
     @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
                                  final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
-        // Don't do logic on client side
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
+        if (level.isClientSide()) return InteractionResult.PASS;
 
-        final ItemStack heldStack = player.getItemInHand(hand);
+        if(player.getItemInHand(hand).isEmpty()){
 
-        // Should we do plank stuff
-        if (!heldStack.is(FirmacivTags.Items.PLANKS)) return InteractionResult.SUCCESS;
-
-        // We must replace ourselves with the correct wood version
-        for (final RegistryObject<Block> registryObject : FirmacivBlocks.WOODEN_BOAT_FRAME_ANGLED.values()) {
-            if (!(registryObject.get() instanceof WoodenBoatFrameBlock woodenFrameBlock)) continue;
-
-            // Must find the right block variant for this item
-            if (!heldStack.is(woodenFrameBlock.getPlankAsItemStack().getItem())) continue;
-
-            final BlockState newBlockState = woodenFrameBlock.defaultBlockState()
-                    .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
-
-            level.setBlock(blockPos, newBlockState, 10);
-
-            if (level.getBlockEntity(blockPos) instanceof BoatFrameBlockEntity frameBlockEntity) {
-                frameBlockEntity.insertPlanks(heldStack.split(1));
-            }
-
-            level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
-                    level.getRandom().nextFloat() * 0.1F + 0.9F);
-            return InteractionResult.SUCCESS;
         }
 
-        Firmaciv.LOGGER.error("Couldn't find a frame for the item {} even though it's contained in {}",
-                heldStack.getItem(), FirmacivTags.Items.PLANKS);
-
-        return InteractionResult.SUCCESS;
-    }
+        return InteractionResult.PASS;
+    }*/
 
 }
