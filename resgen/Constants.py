@@ -1,3 +1,24 @@
+TFC_WOODS: dict[str, str] = {"acacia": "Acacia",
+                             "ash": "Ash",
+                             "aspen": "Aspen",
+                             "birch": "Birch",
+                             "blackwood": "Blackwood",
+                             "chestnut": "Chestnut",
+                             "douglas_fir": "Douglas Fir",
+                             "hickory": "Hickory",
+                             "kapok": "Kapok",
+                             "mangrove": "Mangrove",
+                             "maple": "Maple",
+                             "oak": "Oak",
+                             "palm": "Palm",
+                             "pine": "Pine",
+                             "rosewood": "Rosewood",
+                             "sequoia": "Sequoia",
+                             "spruce": "Spruce",
+                             "sycamore": "Sycamore",
+                             "white_cedar": "White Cedar",
+                             "willow": "Willow"}
+
 DEFAULT_LANG = {
 
     "item.firmaciv.testitem": "They're waiting for you, Mr. Freeman. With the Test Item.",

@@ -4,30 +4,9 @@ from mcresources import ResourceManager
 import BlockStates
 import Constants
 
-WOODS = {"acacia": "Acacia",
-         "ash": "Ash",
-         "aspen": "Aspen",
-         "birch": "Birch",
-         "blackwood": "Blackwood",
-         "chestnut": "Chestnut",
-         "douglas_fir": "Douglas Fir",
-         "hickory": "Hickory",
-         "kapok": "Kapok",
-         "mangrove": "Mangrove",
-         "maple": "Maple",
-         "oak": "Oak",
-         "palm": "Palm",
-         "pine": "Pine",
-         "rosewood": "Rosewood",
-         "sequoia": "Sequoia",
-         "spruce": "Spruce",
-         "sycamore": "Sycamore",
-         "white_cedar": "White Cedar",
-         "willow": "Willow"}
-
 
 def generateBlockModels(manager: ResourceManager):
-    for wood, name in WOODS.items():
+    for wood, name in Constants.TFC_WOODS.items():
         # Generate models from templates
         for shape in ["straight", "inner", "outer"]:
             for progress in ["first", "second", "third", "fourth"]:
