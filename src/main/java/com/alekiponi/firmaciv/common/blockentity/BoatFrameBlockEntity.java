@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class WatercraftFrameBlockEntity extends BlockEntity {
+public class BoatFrameBlockEntity extends BlockEntity {
 
     public static final int plankSlot = 0;
     public static final int boltSlot = 1;
@@ -32,8 +32,8 @@ public class WatercraftFrameBlockEntity extends BlockEntity {
         }
     };
 
-    public WatercraftFrameBlockEntity(final BlockPos blockPos, final BlockState blockState) {
-        super(FirmacivBlockEntities.WATERCRAFT_FRAME_BLOCK_ENTITY.get(), blockPos, blockState);
+    public BoatFrameBlockEntity(final BlockPos blockPos, final BlockState blockState) {
+        super(FirmacivBlockEntities.BOAT_FRAME_BLOCK_ENTITY.get(), blockPos, blockState);
     }
 
     @Override

@@ -53,30 +53,34 @@ public final class FirmacivBlocks {
                     BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
                             .sound(TFCSounds.THATCH).noCollission()));
 
+    /*
     public static final RegistryObject<Block> BOAT_FRAME = registerBlockWithItem("boat_frame",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
-    public static final RegistryObject<Block> WATERCRAFT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
+     */
+    public static final RegistryObject<Block> BOAT_FRAME_ANGLED = registerBlockWithItem("boat_frame_angled",
             () -> new AngledBoatFrameBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final Map<RegistryWood, RegistryObject<Block>> WOOD_WATERCRAFT_FRAME_ANGLED = registerWoodenBoatFrames();
-
-    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
-            () -> new OarlockBlock(BlockBehaviour.Properties.copy(
-                    TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
 
     public static Map<RegistryWood, RegistryObject<Block>> registerWoodenBoatFrames() {
         final Map<RegistryWood, RegistryObject<Block>> map = new HashMap<>();
 
         for (final Wood tfcWood : Wood.values()) {
             map.put(tfcWood,
-                    registerBlockWithoutItem("wood/" + tfcWood.getSerializedName() + "/watercraft_frame_angled",
+                    registerBlockWithoutItem("wood/" + tfcWood.getSerializedName() + "/boat_frame_angled",
                             () -> new WoodenBoatFrameBlock(tfcWood,
-                                    BlockBehaviour.Properties.copy(WATERCRAFT_FRAME_ANGLED.get()))));
+                                    BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get()))));
         }
 
         return map;
     }
+
+    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
+            () -> new OarlockBlock(BlockBehaviour.Properties.copy(
+                    TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
+
+
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);

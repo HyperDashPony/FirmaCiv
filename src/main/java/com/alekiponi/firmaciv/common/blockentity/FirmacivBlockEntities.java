@@ -15,14 +15,14 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
-import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.WATERCRAFT_FRAME_ANGLED;
+import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.BOAT_FRAME_ANGLED;
 
 public class FirmacivBlockEntities {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES;
 
     public static final RegistryObject<BlockEntityType<CanoeComponentBlockEntity>> CANOE_COMPONENT_BLOCK_ENTITY;
-    public static final RegistryObject<BlockEntityType<WatercraftFrameBlockEntity>> WATERCRAFT_FRAME_BLOCK_ENTITY;
+    public static final RegistryObject<BlockEntityType<BoatFrameBlockEntity>> BOAT_FRAME_BLOCK_ENTITY;
 
     static {
         BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Firmaciv.MOD_ID);
@@ -30,8 +30,8 @@ public class FirmacivBlockEntities {
         CANOE_COMPONENT_BLOCK_ENTITY = register("canoe_component_block_entity", CanoeComponentBlockEntity::new,
                 Stream.of(BoatVariant.values()).map(CANOE_COMPONENT_BLOCKS::get));
 
-        WATERCRAFT_FRAME_BLOCK_ENTITY = register("watercraft_frame_block_entity", WatercraftFrameBlockEntity::new,
-                WATERCRAFT_FRAME_ANGLED);
+        BOAT_FRAME_BLOCK_ENTITY = register("boat_frame_block_entity", BoatFrameBlockEntity::new,
+                BOAT_FRAME_ANGLED);
 
     }
 

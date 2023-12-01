@@ -16,6 +16,8 @@ public class FirmacivTags {
         public static final TagKey<Block> CANOE_COMPONENT_BLOCKS = create("canoe_component_blocks");
         public static final TagKey<Block> CAN_MAKE_CANOE_UNRESTRICTED = create("can_make_canoe_unrestricted");
 
+        public static final TagKey<Block> WOODEN_BOAT_FRAMES = create("wooden_boat_frames");
+
         public Blocks() {
         }
 
@@ -35,6 +37,8 @@ public class FirmacivTags {
         public static final TagKey<Item> WORKBENCHES = create("workbenches");
 
         public static final TagKey<Item> CAN_PLACE_IN_COMPARTMENTS = create("can_place_in_compartments");
+
+        public static final TagKey<Item> PLANKS_THAT_MAKE_SHIPS = create("planks_that_make_ships");
 
         public static TagKey<Item> getFromTFC(String id) {
             return TagKey.create(Registries.ITEM, new ResourceLocation("tfc", id));

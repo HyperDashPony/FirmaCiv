@@ -43,7 +43,7 @@ public final class RenderEvents {
         /*
         event.registerEntityRenderer(FirmacivEntities.OUTRIGGER.get(), OutriggerRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.SLOOP.get(), SloopRenderer::new);
-         */
+        */
     }
 
 

@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.blockentity.WatercraftFrameBlockEntity;
+import com.alekiponi.firmaciv.common.blockentity.BoatFrameBlockEntity;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -46,7 +46,7 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
 
             level.setBlock(blockPos, newBlockState, 10);
 
-            if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
+            if (level.getBlockEntity(blockPos) instanceof BoatFrameBlockEntity frameBlockEntity) {
                 frameBlockEntity.insertPlanks(heldStack.split(1));
             }
 

@@ -1,6 +1,6 @@
 package com.alekiponi.firmaciv.common.block;
 
-import com.alekiponi.firmaciv.common.blockentity.WatercraftFrameBlockEntity;
+import com.alekiponi.firmaciv.common.blockentity.BoatFrameBlockEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -44,7 +44,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     @SuppressWarnings("deprecation")
     public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
             final BlockState newState, final boolean isMoving) {
-        if (level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity) {
+        if (level.getBlockEntity(blockPos) instanceof BoatFrameBlockEntity frameBlockEntity) {
             if (!blockState.is(newState.getBlock())) {
                 frameBlockEntity.ejectContents();
             }
@@ -70,7 +70,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.FAIL;
 
         // Quit early if we don't have the right BlockEntity
-        if (!(level.getBlockEntity(blockPos) instanceof WatercraftFrameBlockEntity frameBlockEntity)) {
+        if (!(level.getBlockEntity(blockPos) instanceof BoatFrameBlockEntity frameBlockEntity)) {
             return InteractionResult.FAIL;
         }
 
@@ -89,7 +89,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
 
             // Set ourselves back to our base
             if (0 == processState) {
-                final BlockState newState = FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get().defaultBlockState()
+                final BlockState newState = FirmacivBlocks.BOAT_FRAME_ANGLED.get().defaultBlockState()
                         .setValue(SHAPE, blockState.getValue(SHAPE)).setValue(FACING, blockState.getValue(FACING));
 
                 level.setBlock(blockPos, newState, 10);
@@ -142,7 +142,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     public ItemStack getCloneItemStack(final BlockGetter blockGetter, final BlockPos blockPos,
             final BlockState blockState) {
         // We don't exist as an item so pass it the base version instead
-        return FirmacivBlocks.WATERCRAFT_FRAME_ANGLED.get().getCloneItemStack(blockGetter, blockPos, blockState);
+        return FirmacivBlocks.BOAT_FRAME_ANGLED.get().getCloneItemStack(blockGetter, blockPos, blockState);
     }
 
     public Block getUnderlyingPlank() {
@@ -152,6 +152,6 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     @Nullable
     @Override
     public BlockEntity newBlockEntity(final BlockPos blockPos, final BlockState blockState) {
-        return new WatercraftFrameBlockEntity(blockPos, blockState);
+        return new BoatFrameBlockEntity(blockPos, blockState);
     }
 }

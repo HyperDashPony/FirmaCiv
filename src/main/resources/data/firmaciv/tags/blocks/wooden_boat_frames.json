@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    "firmaciv:wood/acacia/boat_frame_angled",
+    "firmaciv:wood/ash/boat_frame_angled",
+    "firmaciv:wood/aspen/boat_frame_angled",
+    "firmaciv:wood/birch/boat_frame_angled",
+    "firmaciv:wood/blackwood/boat_frame_angled",
+    "firmaciv:wood/chestnut/boat_frame_angled",
+    "firmaciv:wood/douglas_fir/boat_frame_angled",
+    "firmaciv:wood/hickory/boat_frame_angled",
+    "firmaciv:wood/kapok/boat_frame_angled",
+    "firmaciv:wood/maple/boat_frame_angled",
+    "firmaciv:wood/oak/boat_frame_angled",
+    "firmaciv:wood/palm/boat_frame_angled",
+    "firmaciv:wood/pine/boat_frame_angled",
+    "firmaciv:wood/rosewood/boat_frame_angled",
+    "firmaciv:wood/sequoia/boat_frame_angled",
+    "firmaciv:wood/spruce/boat_frame_angled",
+    "firmaciv:wood/sycamore/boat_frame_angled",
+    "firmaciv:wood/white_cedar/boat_frame_angled",
+    "firmaciv:wood/boat_frame_angled"
+  ]
+}
