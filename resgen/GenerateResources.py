@@ -27,6 +27,13 @@ WOODS = {"acacia": "Acacia",
 
 def generateBlockModels(manager: ResourceManager):
     for wood, name in WOODS.items():
+        # Generate models from templates
+        for shape in ["straight", "inner", "outer"]:
+            for progress in ["first", "second", "third", "fourth"]:
+                manager.block_model(f"watercraft_frame_angled/wood/{shape}/{progress}/{wood}",
+                                    {"plank": f"tfc:block/wood/planks/{wood}"},
+                                    f"firmaciv:block/watercraft_frame_angled/template/{shape}/{progress}")
+
         manager.blockstate_multipart(f"wood/{wood}/watercraft_frame_angled",
                                      *BlockStates.getWoodFrameMultipart(wood)).with_lang(f"{name} Boat Frame")
 
