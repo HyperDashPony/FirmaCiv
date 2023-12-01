@@ -40,7 +40,7 @@ val jeiVersion: String = "15.2.0.21"
 val modId: String = "firmaciv"
 */
 version = 'FirmaCivilization-0.0.60-alpha-1.20.1'
-group = 'com.hyperdash.' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'com.alekiponi.' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = ''
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
