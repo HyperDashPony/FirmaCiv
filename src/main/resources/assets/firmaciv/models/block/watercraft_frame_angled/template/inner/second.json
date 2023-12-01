@@ -1,0 +1,71 @@
+{
+	"credit": "Made with Blockbench",
+	"elements": [
+		{
+			"from": [15, 4, 4],
+			"to": [16, 6, 6],
+			"faces": {
+				"north": {"uv": [0, 10, 1, 12], "texture": "#plank"},
+				"east": {"uv": [10, 10, 12, 12], "texture": "#plank"},
+				"south": {"uv": [15, 10, 16, 12], "texture": "#plank"},
+				"up": {"uv": [15, 4, 16, 6], "texture": "#plank"},
+				"down": {"uv": [15, 10, 16, 12], "texture": "#plank"}
+			}
+		},
+		{
+			"from": [10, 4, 0],
+			"to": [12, 6, 1],
+			"faces": {
+				"north": {"uv": [4, 10, 6, 12], "texture": "#plank"},
+				"east": {"uv": [15, 10, 16, 12], "texture": "#plank"},
+				"west": {"uv": [0, 10, 1, 12], "texture": "#plank"},
+				"up": {"uv": [10, 0, 12, 1], "texture": "#plank"},
+				"down": {"uv": [10, 15, 12, 16], "texture": "#plank"}
+			}
+		},
+		{
+			"from": [8, 4, 1],
+			"to": [12, 7, 4],
+			"faces": {
+				"north": {"uv": [4, 9, 8, 12], "texture": "#plank"},
+				"east": {"uv": [12, 9, 15, 12], "texture": "#plank"},
+				"west": {"uv": [1, 9, 4, 12], "texture": "#plank"},
+				"up": {"uv": [8, 1, 12, 4], "texture": "#plank"},
+				"down": {"uv": [8, 12, 12, 15], "texture": "#plank"}
+			}
+		},
+		{
+			"from": [8, 4, 4],
+			"to": [15, 7, 8],
+			"faces": {
+				"north": {"uv": [1, 9, 8, 12], "texture": "#plank"},
+				"east": {"uv": [8, 9, 12, 12], "texture": "#plank"},
+				"south": {"uv": [8, 9, 15, 12], "texture": "#plank"},
+				"west": {"uv": [4, 9, 8, 12], "texture": "#plank"},
+				"up": {"uv": [8, 4, 15, 8], "texture": "#plank"},
+				"down": {"uv": [8, 8, 15, 12], "texture": "#plank"}
+			}
+		},
+		{
+			"from": [9, 7, 4],
+			"to": [15, 8, 8],
+			"faces": {
+				"north": {"uv": [1, 8, 7, 9], "texture": "#plank"},
+				"east": {"uv": [8, 8, 12, 9], "texture": "#plank"},
+				"south": {"uv": [9, 8, 15, 9], "texture": "#plank"},
+				"west": {"uv": [4, 8, 8, 9], "texture": "#plank"},
+				"up": {"uv": [9, 4, 15, 8], "texture": "#plank"}
+			}
+		},
+		{
+			"from": [9, 7, 1],
+			"to": [12, 8, 4],
+			"faces": {
+				"north": {"uv": [4, 8, 7, 9], "texture": "#plank"},
+				"east": {"uv": [12, 8, 15, 9], "texture": "#plank"},
+				"west": {"uv": [1, 8, 4, 9], "texture": "#plank"},
+				"up": {"uv": [9, 1, 12, 4], "rotation": 90, "texture": "#plank"}
+			}
+		}
+	]
+}
