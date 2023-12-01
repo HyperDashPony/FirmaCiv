@@ -1,6 +1,6 @@
 from mcresources import ResourceManager
 
-import BlockStates
+import blockStates
 import constants
 
 
@@ -14,9 +14,9 @@ def generate(manager: ResourceManager):
                                     f"firmaciv:block/watercraft_frame_angled/template/{shape}/{progress}")
 
         manager.blockstate_multipart(f"wood/{wood}/watercraft_frame_angled",
-                                     *BlockStates.getWoodFrameMultipart(wood)).with_lang(f"{name} Boat Frame")
+                                     *blockStates.getWoodFrameMultipart(wood)).with_lang(f"{name} Boat Frame")
 
-        manager.blockstate("watercraft_frame_angled", variants=BlockStates.angledWaterCraftFrame).with_lang(
+        manager.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
             "Angled Watercraft Frame")
         manager.item_model("watercraft_frame_angled", parent="firmaciv:block/watercraft_frame_angled/straight",
                            no_textures=True)
