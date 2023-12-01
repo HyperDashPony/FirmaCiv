@@ -37,7 +37,8 @@ def generateBlockModels(manager: ResourceManager):
 
 
 def main():
-    resourceManager = mcresources.ResourceManager("firmaciv", "../src/main/resources")
+    resourceManager = mcresources.ResourceManager("firmaciv", "../src/main/resources",
+                                                  on_error=lambda file, e: print(f"Error writing {file}\n{e}"))
     generateBlockModels(resourceManager)
     resourceManager.flush()
     print("Generated stuff!")
