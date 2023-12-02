@@ -3,7 +3,6 @@ from mcresources import ResourceManager
 import blockStates
 import constants
 
-
 def generate(manager: ResourceManager):
     for wood, name in constants.TFC_WOODS.items():
         # Generate models from templates
