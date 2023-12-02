@@ -8,6 +8,9 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Boat.class)
 public class BoatMixin extends Entity implements net.minecraftforge.common.extensions.IForgeBoat {
@@ -16,12 +19,11 @@ public class BoatMixin extends Entity implements net.minecraftforge.common.exten
         super(pEntityType, pLevel);
     }
 
-    @Override
-    protected boolean canAddPassenger(Entity pPassenger) {
+
+    @Inject(method = "canAddPassenger", at = @At("HEAD"))
+    public void injectStopAddingPassengers(Entity pPassenger, CallbackInfoReturnable<Boolean> cir){
         if (FirmacivConfig.SERVER.disableVanillaBoatFunctionality.get()) {
-            return false;
-        } else {
-            return this.getPassengers().size() < this.getMaxPassengers() && !this.canBoatInFluid(this.getEyeInFluidType());
+            cir.setReturnValue(false);
         }
     }
 

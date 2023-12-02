@@ -15,6 +15,7 @@
     "minecraft.MobMixin",
     "minecraft.BoatMixin",
     "minecraft.ClientPacketListenerMixin",
+    "minecraft.BoatItemMixin",
     "tfc.TFCBoatMixin",
     "tfc.TFCChestedHorseMixin",
     "tfc.TFCHorseMixin"
