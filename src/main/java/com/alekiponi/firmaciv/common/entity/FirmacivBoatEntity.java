@@ -74,7 +74,7 @@ public class FirmacivBoatEntity extends Entity {
 
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
-    protected final float DAMAGE_RECOVERY = 0.5f;
+    protected final float DAMAGE_RECOVERY = 2.0f;
     protected final float[] paddlePositions = new float[2];
     private final int spawnTicks = 0;
     protected List<VehiclePartEntity> vehicleParts = new ArrayList<>();

@@ -22,8 +22,8 @@ public class CanoeEntity extends FirmacivBoatEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
             EntityDataSerializers.INT);
     public final int PASSENGER_NUMBER = 3;
-    protected final float DAMAGE_THRESHOLD = 10.0f;
-    protected final float DAMAGE_RECOVERY = 1.0f;
+    protected final float DAMAGE_THRESHOLD = 80.0f;
+    protected final float DAMAGE_RECOVERY = 2.0f;
 
     public final int[] CLEATS = {2};
 
