@@ -51,7 +51,7 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<VehiclePartEntity>> VEHICLE_PART_ENTITY = ENTITY_TYPES.register(
             "vehicle_part",
-            () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.1F, 0.1F)
+            () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.025F, 0.025F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_part").toString()));
 
     public static final RegistryObject<EntityType<VehicleCleatEntity>> VEHICLE_CLEAT_ENTITY = ENTITY_TYPES.register(

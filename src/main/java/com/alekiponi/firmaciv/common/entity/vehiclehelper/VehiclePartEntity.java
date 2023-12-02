@@ -6,6 +6,7 @@ import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -124,7 +125,8 @@ public class VehiclePartEntity extends Entity {
             } else {
                 passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
                 if (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 1) {
-                    if (tickCount < 10 || thisVehicle.getControllingPassenger() == null) {
+                    if (tickCount < 10 || thisVehicle.getControllingPassenger() == null
+                            || (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 5) && this.getFirstPassenger().isVehicle() && this.getFirstPassenger().getFirstPassenger() instanceof Player) {
                         this.setYRot(thisVehicle.getYRot());
                         passenger.setYRot(thisVehicle.getYRot() + compartmentRotation);
                     }

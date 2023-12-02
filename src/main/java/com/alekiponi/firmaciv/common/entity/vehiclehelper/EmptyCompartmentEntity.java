@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.alekiponi.firmaciv.common.entity.*;
 import com.alekiponi.firmaciv.util.FirmacivTags;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,6 +72,16 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
 
     public boolean canAddOnlyBLocks() {
         return canAddOnlyBlocks;
+    }
+
+
+    protected void addPassenger(Entity pPassenger) {
+        super.addPassenger(pPassenger);
+        if(this.isPassenger()){
+            this.setYRot(this.getVehicle().getYRot());
+        }
+
+        //passenger.setYRot(thisVehicle.getYRot() + compartmentRotation);
     }
 
     @Override
