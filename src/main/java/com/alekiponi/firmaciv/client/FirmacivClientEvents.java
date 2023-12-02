@@ -96,7 +96,7 @@ public class FirmacivClientEvents {
                                 double direction;
                                 if (pLevel.dimensionType().natural()) {
                                     assert livingEntity != null;
-                                    direction = ((((entity.getYRot() + 180)%360))/360);
+                                    direction = ((Mth.wrapDegrees(entity.getYRot()) + 180)%360)/360;
                                 } else {
                                     direction = Math.random();
                                 }
