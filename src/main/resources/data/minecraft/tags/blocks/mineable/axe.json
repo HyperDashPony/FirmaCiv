@@ -20,6 +20,26 @@
     "firmaciv:canoe_component_block/spruce",
     "firmaciv:canoe_component_block/sycamore",
     "firmaciv:canoe_component_block/white_cedar",
-    "firmaciv:canoe_component_block/willow"
+    "firmaciv:canoe_component_block/willow",
+
+    "firmaciv:wood/acacia/watercraft_frame_angled",
+    "firmaciv:wood/ash/watercraft_frame_angled",
+    "firmaciv:wood/aspen/watercraft_frame_angled",
+    "firmaciv:wood/birch/watercraft_frame_angled",
+    "firmaciv:wood/blackwood/watercraft_frame_angled",
+    "firmaciv:wood/chestnut/watercraft_frame_angled",
+    "firmaciv:wood/douglas_fir/watercraft_frame_angled",
+    "firmaciv:wood/hickory/watercraft_frame_angled",
+    "firmaciv:wood/kapok/watercraft_frame_angled",
+    "firmaciv:wood/maple/watercraft_frame_angled",
+    "firmaciv:wood/oak/watercraft_frame_angled",
+    "firmaciv:wood/palm/watercraft_frame_angled",
+    "firmaciv:wood/pine/watercraft_frame_angled",
+    "firmaciv:wood/rosewood/watercraft_frame_angled",
+    "firmaciv:wood/sequoia/watercraft_frame_angled",
+    "firmaciv:wood/spruce/watercraft_frame_angled",
+    "firmaciv:wood/sycamore/watercraft_frame_angled",
+    "firmaciv:wood/white_cedar/watercraft_frame_angled",
+    "firmaciv:wood/willow/watercraft_frame_angled"
   ]
 }
