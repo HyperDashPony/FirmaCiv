@@ -39,7 +39,7 @@ val jeiVersion: String = "15.2.0.21"
 
 val modId: String = "firmaciv"
 */
-version = 'FirmaCivilization-0.1.0-alpha-1.20.1'
+version = 'FirmaCivilization-0.1.1-alpha-1.20.1'
 group = 'com.alekiponi.' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = ''
 
@@ -201,6 +201,9 @@ dependencies {
     // patchouli
     fg.deobf("curse.maven:patchouli-306770:4636277")
     implementation fg.deobf("curse.maven:patchouli-306770:4636277")
+
+    fg.deobf("curse.maven:better-third-person-435044:4596768")
+    runtimeOnly fg.deobf("curse.maven:better-third-person-435044:4596768")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
