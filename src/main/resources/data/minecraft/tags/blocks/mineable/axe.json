@@ -1,5 +1,4 @@
 {
-  "__comment__": "This file was automatically created by mcresources",
   "replace": false,
   "values": [
     "firmaciv:canoe_component_block/acacia",
@@ -21,6 +20,8 @@
     "firmaciv:canoe_component_block/sycamore",
     "firmaciv:canoe_component_block/white_cedar",
     "firmaciv:canoe_component_block/willow",
+
+    "firmaciv:wood/watercraft_frame_angled",
 
     "firmaciv:wood/acacia/watercraft_frame_angled",
     "firmaciv:wood/ash/watercraft_frame_angled",
