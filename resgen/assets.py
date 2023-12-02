@@ -14,7 +14,7 @@ def generate(manager: ResourceManager):
                                     f"firmaciv:block/watercraft_frame_angled/template/{shape}/{progress}")
 
         manager.blockstate_multipart(f"wood/{wood}/watercraft_frame_angled",
-                                     *blockStates.getWoodFrameMultipart(wood)).with_lang(f"{name} Shipright's Scaffolding")
+                                     *blockStates.getWoodFrameMultipart(wood)).with_lang(f"{name} Shipwright's Scaffolding")
 
         manager.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
             "Shipwright's Scaffolding")
