@@ -144,8 +144,12 @@ public enum IngameOverlays {
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
-                stack.translate((float)width / 2.0F - 5f - 12f, (float)height / 2.0F - 4.5F, 0.0F);
                 stack.scale(1.0F, 1.0F, 1.0F);
+                stack.translate((float)width / 2.0F - 5f - 12f, (float)height / 2.0F - 5F, 0.0F);
+                if((float)height % 2.0 != 0){
+                    stack.translate(0f, 0.5f, 0.0f);
+                }
+
 
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
 
@@ -153,7 +157,7 @@ public enum IngameOverlays {
                         if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger().is(emptyCompartmentEntity)) {
                             graphics.blit(TEXTURE, 0, 0, 0, 0, 9, 9);
                             if(emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity && player.getItemInHand(player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)){
-                                graphics.blit(TEXTURE, -24, 0, 9, 0, 9, 9);
+                                graphics.blit(TEXTURE, -12, 0, 9, 0, 9, 9);
                             }
 
                         } else if (player.getItemInHand(player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)){
