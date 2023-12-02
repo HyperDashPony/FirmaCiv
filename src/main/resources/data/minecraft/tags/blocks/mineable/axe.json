@@ -1,0 +1,25 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "firmaciv:canoe_component_block/acacia",
+    "firmaciv:canoe_component_block/ash",
+    "firmaciv:canoe_component_block/aspen",
+    "firmaciv:canoe_component_block/birch",
+    "firmaciv:canoe_component_block/blackwood",
+    "firmaciv:canoe_component_block/chestnut",
+    "firmaciv:canoe_component_block/douglas_fir",
+    "firmaciv:canoe_component_block/hickory",
+    "firmaciv:canoe_component_block/kapok",
+    "firmaciv:canoe_component_block/maple",
+    "firmaciv:canoe_component_block/oak",
+    "firmaciv:canoe_component_block/palm",
+    "firmaciv:canoe_component_block/pine",
+    "firmaciv:canoe_component_block/rosewood",
+    "firmaciv:canoe_component_block/sequoia",
+    "firmaciv:canoe_component_block/spruce",
+    "firmaciv:canoe_component_block/sycamore",
+    "firmaciv:canoe_component_block/white_cedar",
+    "firmaciv:canoe_component_block/willow"
+  ]
+}
