@@ -17,6 +17,6 @@ def generate(manager: ResourceManager):
                                      *blockStates.getWoodFrameMultipart(wood)).with_lang(f"{name} Shipright's Scaffolding")
 
         manager.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
-            "Angled Watercraft Frame")
+            "Shipwright's Scaffolding")
         manager.item_model("watercraft_frame_angled", parent="firmaciv:block/watercraft_frame_angled/straight",
                            no_textures=True)
