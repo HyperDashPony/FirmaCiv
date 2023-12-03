@@ -1,277 +1,275 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "variants": {
-    "canoe_carved=1,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_1"
+    "facing=north,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/0"
     },
-    "canoe_carved=2,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_2"
+    "facing=north,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/1"
     },
-    "canoe_carved=3,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_3"
+    "facing=north,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/2"
     },
-    "canoe_carved=4,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_4"
+    "facing=north,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/3"
     },
-    "canoe_carved=5,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_5"
+    "facing=north,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/4"
     },
-    "canoe_carved=6,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_6"
+    "facing=north,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/5"
     },
-    "canoe_carved=7,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_7"
+    "facing=north,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/6"
     },
-    "canoe_carved=8,facing=north": {
-      "model": "firmaciv:block/canoe_component_block/kapok_8"
+    "facing=north,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/7"
     },
-    "canoe_carved=9,facing=north,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_9"
+    "facing=north,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/8"
     },
-    "canoe_carved=10,facing=north,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_10"
+    "facing=north,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/8"
     },
-    "canoe_carved=11,facing=north,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_11"
+    "facing=north,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/9"
     },
-    "canoe_carved=12,facing=north,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_12"
+    "facing=north,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/9"
     },
-    "canoe_carved=13,facing=north,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_13"
+    "facing=north,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/10"
     },
-
-
-    "canoe_carved=1,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_1"
+    "facing=north,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/10"
     },
-    "canoe_carved=2,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_2"
+    "facing=north,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/11"
     },
-    "canoe_carved=3,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_3"
+    "facing=north,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/11"
     },
-    "canoe_carved=4,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_4"
+    "facing=north,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/12"
     },
-    "canoe_carved=5,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_5"
+    "facing=north,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/12"
     },
-    "canoe_carved=6,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_6"
-    },
-    "canoe_carved=7,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_7"
-    },
-    "canoe_carved=8,facing=south": {
-      "model": "firmaciv:block/canoe_component_block/kapok_8"
-    },
-    "canoe_carved=9,facing=south,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_9"
-    },
-    "canoe_carved=10,facing=south,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_10"
-    },
-    "canoe_carved=11,facing=south,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_11"
-    },
-    "canoe_carved=12,facing=south,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_12"
-    },
-    "canoe_carved=13,facing=south,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_13"
-    },
-
-
-    "canoe_carved=1,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_1",
+    "facing=east,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/0",
       "y": 90
     },
-    "canoe_carved=2,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_2",
+    "facing=east,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/1",
       "y": 90
     },
-    "canoe_carved=3,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_3",
+    "facing=east,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/2",
       "y": 90
     },
-    "canoe_carved=4,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_4",
+    "facing=east,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/3",
       "y": 90
     },
-    "canoe_carved=5,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_5",
+    "facing=east,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/4",
       "y": 90
     },
-    "canoe_carved=6,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_6",
+    "facing=east,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/5",
       "y": 90
     },
-    "canoe_carved=7,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_7",
+    "facing=east,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/6",
       "y": 90
     },
-    "canoe_carved=8,facing=east": {
-      "model": "firmaciv:block/canoe_component_block/kapok_8",
+    "facing=east,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/7",
       "y": 90
     },
-    "canoe_carved=9,facing=east,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_9",
+    "facing=east,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/8",
       "y": 90
     },
-    "canoe_carved=10,facing=east,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_10",
+    "facing=east,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/8",
       "y": 90
     },
-    "canoe_carved=11,facing=east,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_11",
+    "facing=east,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/9",
       "y": 90
     },
-    "canoe_carved=12,facing=east,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_12",
+    "facing=east,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/9",
       "y": 90
     },
-    "canoe_carved=13,facing=east,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_13",
+    "facing=east,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/10",
       "y": 90
     },
-
-
-
-    "canoe_carved=1,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_1",
+    "facing=east,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/10",
       "y": 90
     },
-    "canoe_carved=2,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_2",
+    "facing=east,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/11",
       "y": 90
     },
-    "canoe_carved=3,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_3",
+    "facing=east,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/11",
       "y": 90
     },
-    "canoe_carved=4,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_4",
+    "facing=east,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/12",
       "y": 90
     },
-    "canoe_carved=5,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_5",
+    "facing=east,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/12",
       "y": 90
     },
-    "canoe_carved=6,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_6",
-      "y": 90
-    },
-    "canoe_carved=7,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_7",
-      "y": 90
-    },
-    "canoe_carved=8,facing=west": {
-      "model": "firmaciv:block/canoe_component_block/kapok_8",
-      "y": 90
-    },
-    "canoe_carved=9,facing=west,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_9",
-      "y": 90
-    },
-    "canoe_carved=10,facing=west,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_10",
-      "y": 90
-    },
-    "canoe_carved=11,facing=west,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_11",
-      "y": 90
-    },
-    "canoe_carved=12,facing=west,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_12",
-      "y": 90
-    },
-    "canoe_carved=13,facing=west,end=false": {
-      "model": "firmaciv:block/canoe_component_block/kapok_13",
-      "y": 90
-    },
-
-
-
-    "canoe_carved=9,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_9",
-      "y": 270
-    },
-    "canoe_carved=10,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_10",
-      "y": 270
-    },
-    "canoe_carved=11,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_11",
-      "y": 270
-    },
-    "canoe_carved=12,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_12",
-      "y": 270
-    },
-    "canoe_carved=13,facing=west,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_13",
-      "y": 270
-    },
-
-    "canoe_carved=9,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_9",
-      "y": 90
-    },
-    "canoe_carved=10,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_10",
-      "y": 90
-    },
-    "canoe_carved=11,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_11",
-      "y": 90
-    },
-    "canoe_carved=12,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_12",
-      "y": 90
-    },
-    "canoe_carved=13,facing=east,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_13",
-      "y": 90
-    },
-
-
-    "canoe_carved=9,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_9"
-    },
-    "canoe_carved=10,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_10"
-    },
-    "canoe_carved=11,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_11"
-    },
-    "canoe_carved=12,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_12"
-    },
-    "canoe_carved=13,facing=north,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_13"
-    },
-
-
-
-    "canoe_carved=9,facing=south,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_9",
+    "facing=south,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/0",
       "y": 180
     },
-    "canoe_carved=10,facing=south,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_10",
+    "facing=south,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/1",
       "y": 180
     },
-    "canoe_carved=11,facing=south,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_11",
+    "facing=south,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/2",
       "y": 180
     },
-    "canoe_carved=12,facing=south,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_12",
+    "facing=south,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/3",
       "y": 180
     },
-    "canoe_carved=13,facing=south,end=true": {
-      "model": "firmaciv:block/canoe_component_block/end_kapok_13",
+    "facing=south,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/4",
       "y": 180
+    },
+    "facing=south,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/5",
+      "y": 180
+    },
+    "facing=south,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/6",
+      "y": 180
+    },
+    "facing=south,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/7",
+      "y": 180
+    },
+    "facing=south,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/8",
+      "y": 180
+    },
+    "facing=south,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/8",
+      "y": 180
+    },
+    "facing=south,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/9",
+      "y": 180
+    },
+    "facing=south,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/9",
+      "y": 180
+    },
+    "facing=south,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/10",
+      "y": 180
+    },
+    "facing=south,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/10",
+      "y": 180
+    },
+    "facing=south,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/11",
+      "y": 180
+    },
+    "facing=south,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/11",
+      "y": 180
+    },
+    "facing=south,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/12",
+      "y": 180
+    },
+    "facing=south,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/12",
+      "y": 180
+    },
+    "facing=west,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/0",
+      "y": 270
+    },
+    "facing=west,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/1",
+      "y": 270
+    },
+    "facing=west,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/2",
+      "y": 270
+    },
+    "facing=west,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/3",
+      "y": 270
+    },
+    "facing=west,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/4",
+      "y": 270
+    },
+    "facing=west,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/5",
+      "y": 270
+    },
+    "facing=west,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/6",
+      "y": 270
+    },
+    "facing=west,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/all/7",
+      "y": 270
+    },
+    "facing=west,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/8",
+      "y": 270
+    },
+    "facing=west,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/8",
+      "y": 270
+    },
+    "facing=west,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/9",
+      "y": 270
+    },
+    "facing=west,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/9",
+      "y": 270
+    },
+    "facing=west,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/10",
+      "y": 270
+    },
+    "facing=west,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/10",
+      "y": 270
+    },
+    "facing=west,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/11",
+      "y": 270
+    },
+    "facing=west,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/11",
+      "y": 270
+    },
+    "facing=west,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/middle/12",
+      "y": 270
+    },
+    "facing=west,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/kapok/end/12",
+      "y": 270
     }
   }
 }
