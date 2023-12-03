@@ -78,6 +78,29 @@ angledWaterCraftFrame = {
     }}
 
 
+def canoe_component(wood: str) -> Json:
+    var: Json = {}
+
+    for direction, rotation in {"north": None, "east": 90, "south": 180, "west": 270}.items():
+        for n in range(8):
+            var[f"facing={direction},canoe_carved={n + 1}"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/all/{n}",
+                "y": rotation
+            }
+
+        for n in range(8, 13):
+            var[f"facing={direction},canoe_carved={n + 1},end=false"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/middle/{n}",
+                "y": rotation
+            }
+            var[f"facing={direction},canoe_carved={n + 1},end=true"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/end/{n}",
+                "y": rotation
+            }
+
+    return var
+
+
 def getWoodFrameMultipart(wood: str) -> list[Json]:
     # Only the frames
     json = [

@@ -31,7 +31,7 @@ def generate(manager: ResourceManager):
                                 f"firmaciv:block/canoe_component_block/template/end/{n}")
             manager.block_model(f"wood/canoe_component_block/{wood}/middle/{n}", canoe_component_textures,
                                 f"firmaciv:block/canoe_component_block/template/middle/{n}")
-            # manager.blockstate(f"canoe_component_block/{wood}", )
+            manager.blockstate(f"canoe_component_block/{wood}", variants=blockStates.canoe_component(wood))
 
         # Basic frame
         manager.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
