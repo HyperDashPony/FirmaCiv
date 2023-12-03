@@ -8,7 +8,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfc:wood/lumber/sycamore"
+          "name": "tfc:wood/lumber/mangrove"
         }
       ],
       "conditions": [

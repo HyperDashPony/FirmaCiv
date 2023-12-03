@@ -1,9 +1,10 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "name": "loot_pool",
+      "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
@@ -15,9 +16,6 @@
           "condition": "minecraft:survives_explosion"
         }
       ]
-
     }
   ]
-
-
 }
