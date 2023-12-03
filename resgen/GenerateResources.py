@@ -2,6 +2,7 @@ import mcresources
 
 import assets
 import constants
+import data
 
 
 def main():
@@ -10,6 +11,7 @@ def main():
     print("Starting resource generation.")
     resourceManager.lang(constants.DEFAULT_LANG)
     assets.generate(resourceManager)
+    data.generate(resourceManager)
     resourceManager.flush()
 
     print(f"Finished generating files!")
