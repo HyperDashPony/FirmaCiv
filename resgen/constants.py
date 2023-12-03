@@ -117,7 +117,6 @@ DEFAULT_LANG = {
     "block.firmaciv.boat_frame": "Shipwright's Scaffolding",
 
     "block.firmaciv.thatch_roofing": "Thatch Roofing",
-    "block.firmaciv.oarlock": "Oarlock",
 
     "item.firmaciv.barometer": "Barometer",
     "item.firmaciv.nav_clock": "Navigator's Timepiece",
