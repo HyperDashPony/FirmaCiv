@@ -58,7 +58,7 @@ def generate(manager: ResourceManager):
             "model": "firmaciv:block/oarlock",
             "y": 270
         }
-    }).with_lang("Oarlock").with_block_loot("oarlock")
+    }).with_lang("Oarlock").with_block_loot("firmaciv:oarlock")
     manager.item_model("oarlock")
 
     # Items with generated models
