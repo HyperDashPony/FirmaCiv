@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.mixins.minecraft;
+package com.alekiponi.firmaciv.mixins.client;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.mojang.authlib.GameProfile;
@@ -20,10 +20,10 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     private boolean handsBusy;
 
     @Shadow
-    private Input input;
+    public Input input;
 
-    public LocalPlayerMixin(ClientLevel pClientLevel, GameProfile pGameProfile) {
-        super(pClientLevel, pGameProfile);
+    public LocalPlayerMixin(ClientLevel level, GameProfile profile) {
+        super(level, profile);
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))

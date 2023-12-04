@@ -4,22 +4,12 @@
   "package": "com.alekiponi.firmaciv.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "minecraft.PlayerModelMixin",
+    "minecraft.MobMixin"
   ],
   "client": [
-    "minecraft.LocalPlayerMixin",
-    "minecraft.PlayerModelMixin",
-    "minecraft.LivingEntityMixin",
-    "minecraft.AbstractChestedHorseMixin",
-    "minecraft.HorseMixin",
-    "minecraft.CamelMixin",
-    "minecraft.MobMixin",
-    "minecraft.BoatMixin",
-    "minecraft.ClientPacketListenerMixin",
-    "minecraft.BoatItemMixin",
-    "tfc.TFCBoatMixin",
-    "tfc.TFCChestedHorseMixin",
-    "tfc.TFCHorseMixin",
-    "tfc.TFCBoatItemMixin"
+    "client.ClientPacketListenerMixin",
+    "client.LocalPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
