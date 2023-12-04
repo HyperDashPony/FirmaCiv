@@ -2,7 +2,7 @@ import mcresources
 
 import assets
 import constants
-import data
+import tags
 import recipes
 
 
@@ -12,7 +12,7 @@ def main():
     print("Starting resource generation.")
     resourceManager.lang(constants.DEFAULT_LANG)
     assets.generate(resourceManager)
-    data.generate(resourceManager)
+    tags.generate(resourceManager)
     recipes.generate(resourceManager)
     resourceManager.flush()
 
