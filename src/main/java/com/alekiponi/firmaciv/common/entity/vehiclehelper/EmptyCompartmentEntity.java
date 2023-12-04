@@ -80,8 +80,6 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         if(this.isPassenger()){
             this.setYRot(this.getVehicle().getYRot());
         }
-
-        //passenger.setYRot(thisVehicle.getYRot() + compartmentRotation);
     }
 
     @Override
@@ -162,6 +160,12 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             }
         }
 
+        if(this.isVehicle()){
+            if(this.getFirstPassenger().getBbWidth() > this.getTrueVehicle().getPassengerSizeLimit()){
+                this.ejectPassengers();
+            }
+        }
+
         this.checkInsideBlocks();
         final List<Entity> list = this.level()
                 .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
@@ -170,7 +174,9 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level().isClientSide() && this.getTrueVehicle() != null) {
             for (final Entity entity : list) {
                 if (!entity.hasPassenger(this)) {
-                    float maxSize = this.getTrueVehicle().getPassengerSizeLimit();
+                    float maxSize = 0.6f;
+                    maxSize = this.getTrueVehicle().getPassengerSizeLimit();
+                    boolean thingy = entity.getBbWidth() <= maxSize;
                     if (this.getPassengers()
                             .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         if(!(entity instanceof Predator)){
@@ -190,18 +196,6 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                 this.ejectPassengers();
             }
         }
-
-        /*
-        if(!this.level().isClientSide()){
-            if(this.isVehicle() && this.getDeltaMovement().length() == 0f && this.getPassengerRideTick() > Calendars.SERVER.getTicks()){
-                this.setPassengerRideTick(Calendars.SERVER.getTicks());
-            } else {
-                this.setPassengerRideTick(Long.MAX_VALUE);
-            }
-
-
-        }*/
-
 
         super.tick();
     }

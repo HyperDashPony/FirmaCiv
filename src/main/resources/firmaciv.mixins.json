@@ -18,7 +18,8 @@
     "minecraft.BoatItemMixin",
     "tfc.TFCBoatMixin",
     "tfc.TFCChestedHorseMixin",
-    "tfc.TFCHorseMixin"
+    "tfc.TFCHorseMixin",
+    "tfc.TFCBoatItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
