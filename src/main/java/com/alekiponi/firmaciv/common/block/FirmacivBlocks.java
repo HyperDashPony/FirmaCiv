@@ -29,7 +29,7 @@ public final class FirmacivBlocks {
 
     public static final Map<BoatVariant, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = Helpers.mapOfKeys(
             BoatVariant.class, boatVariant -> registerBlockWithoutItem(
-                    "canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
+                    "wood/canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
                             boatVariant)));
 
