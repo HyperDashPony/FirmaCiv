@@ -34,28 +34,28 @@ def generate(manager: ResourceManager):
             manager.blockstate(f"canoe_component_block/{wood}", variants=blockStates.canoe_component(wood)).with_lang(
                 f"{name} Canoe Component").with_block_loot(f"tfc:wood/lumber/{wood}")
 
-        # Basic frame
-        manager.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
-            "Shipwright's Scaffolding").with_block_loot("firmaciv:watercraft_frame_angled")
-        # Need to manually make the model
-        manager.item_model("watercraft_frame_angled", parent="firmaciv:block/watercraft_frame_angled/straight",
-                           no_textures=True)
+    # Basic frame
+    manager.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
+        "Shipwright's Scaffolding").with_block_loot("firmaciv:watercraft_frame_angled")
+    # Need to manually make the model
+    manager.item_model("watercraft_frame_angled", parent="firmaciv:block/watercraft_frame_angled/straight",
+                       no_textures=True)
 
-        manager.blockstate("oarlock", variants={
-            "facing=east": {
-                "model": "firmaciv:block/oarlock",
-                "y": 90
-            },
-            "facing=north": {
-                "model": "firmaciv:block/oarlock"
-            },
-            "facing=south": {
-                "model": "firmaciv:block/oarlock",
-                "y": 180
-            },
-            "facing=west": {
-                "model": "firmaciv:block/oarlock",
-                "y": 270
-            }
-        }).with_lang("Oarlock").with_block_loot("oarlock")
-        manager.item_model("oarlock")
+    manager.blockstate("oarlock", variants={
+        "facing=east": {
+            "model": "firmaciv:block/oarlock",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "firmaciv:block/oarlock"
+        },
+        "facing=south": {
+            "model": "firmaciv:block/oarlock",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "firmaciv:block/oarlock",
+            "y": 270
+        }
+    }).with_lang("Oarlock").with_block_loot("oarlock")
+    manager.item_model("oarlock")
