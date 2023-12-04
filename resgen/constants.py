@@ -98,21 +98,6 @@ DEFAULT_LANG = {
 
     "block.firmaciv.thatch_roofing": "Thatch Roofing",
 
-    "item.firmaciv.barometer": "Barometer",
-    "item.firmaciv.nav_clock": "Navigator's Timepiece",
-    "item.firmaciv.sextant": "Sextant",
-    "item.firmaciv.unfinished_barometer": "Unfinished Barometer",
-    "item.firmaciv.unfinished_nav_clock": "Unfinished Navigator's Timepiece",
-    "item.firmaciv.unfinished_sextant": "Unfinished Sextant",
-    "item.firmaciv.nav_toolkit": "Navigator's Toolkit",
-    "item.firmaciv.large_waterproof_hide": "Large Waterproof Hide",
-    "item.firmaciv.copper_bolt": "Copper Bolt",
-    "item.firmaciv.kayak": "Kayak",
-    "item.firmaciv.kayak_paddle": "Kayak Paddle",
-    "item.firmaciv.canoe_paddle": "Canoe Paddle",
-    "item.firmaciv.oar": "Oar",
-    "item.firmaciv.firmaciv_compass": "Compass (Declination: True North)",
-
     "item.firmaciv.canoe_icon_only": "ICON ONLY",
     "item.firmaciv.canoe_with_paddle_icon_only": "ICON ONLY",
     "item.firmaciv.kayak_with_paddle_icon_only": "ICON ONLY",

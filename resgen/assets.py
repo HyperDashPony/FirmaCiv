@@ -59,3 +59,22 @@ def generate(manager: ResourceManager):
         }
     }).with_lang("Oarlock").with_block_loot("oarlock")
     manager.item_model("oarlock")
+
+    # Items with generated models
+    manager.item("unfinished_barometer").with_item_model().with_lang("Unfinished Barometer")
+    manager.item("unfinished_nav_clock").with_item_model().with_lang("Unfinished Navigator's Timepiece")
+    manager.item("unfinished_sextant").with_item_model().with_lang("Unfinished Sextant")
+    manager.item("sextant").with_item_model().with_lang("Sextant")
+    manager.item("copper_bolt").with_item_model().with_lang("Copper Bolt")
+    manager.item("kayak").with_item_model().with_lang("Kayak")
+    manager.item("large_waterproof_hide").with_item_model().with_lang("Large Waterproof Hide")
+    manager.item("nav_toolkit").with_item_model().with_lang("Navigator's Toolkit")
+
+    # Items with custom models
+    manager.item("barometer").with_lang("Barometer")
+    manager.item("nav_clock").with_lang("Navigator's Timepiece")
+    manager.item("firmaciv_compass").with_lang("Compass (Declination: True North)")
+
+    manager.item("kayak_paddle").with_lang("Kayak Paddle")
+    manager.item("canoe_paddle").with_lang("Canoe Paddle")
+    manager.item("oar").with_lang("Oar")
