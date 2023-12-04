@@ -1,10 +1,16 @@
 package com.alekiponi.firmaciv.events;
 
 import com.alekiponi.firmaciv.Firmaciv;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.events.config.FirmacivConfig;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.GameRules;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,9 +20,7 @@ public class ForgeEventHandler {
     @SubscribeEvent
     public static void onWorldLoad(LevelEvent.Load event) {
         if (event.getLevel() instanceof final ServerLevel level) {
-
             final MinecraftServer server = level.getServer();
-
             final GameRules rules = level.getGameRules();
 
             if (FirmacivConfig.SERVER.forceReducedDebugInfo.get()) {
@@ -25,5 +29,24 @@ public class ForgeEventHandler {
 
         }
     }
+
+    @SubscribeEvent
+    public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        final Entity entity = event.getTarget();
+        if (entity instanceof LivingEntity living) {
+            if (living.isPassenger() && living.getVehicle() instanceof EmptyCompartmentEntity && event.getEntity().isSecondaryUseActive()) {
+                living.stopRiding();
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.SUCCESS);
+            }
+        }
+        if (entity instanceof Boat) {
+            if (FirmacivConfig.SERVER.disableVanillaBoatFunctionality.get()) {
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.FAIL);
+            }
+        }
+    }
+
 
 }

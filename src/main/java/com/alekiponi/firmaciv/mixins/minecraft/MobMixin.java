@@ -1,7 +1,6 @@
 package com.alekiponi.firmaciv.mixins.minecraft;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -12,26 +11,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
-
 @Mixin(Mob.class)
-public class MobMixin extends Entity {
+public abstract class MobMixin extends Entity {
 
     @Shadow
     private Entity leashHolder;
 
-    @Shadow
-    private int delayedLeashHolderId;
-    @Nullable
-    @Shadow
-    private CompoundTag leashInfoTag;
-
     public MobMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-    }
-
-    @Shadow
-    private void restoreLeashFromSave() {
     }
 
     @Shadow
@@ -47,18 +34,4 @@ public class MobMixin extends Entity {
         }
     }
 
-    @Shadow
-    protected void defineSynchedData() {
-
-    }
-
-    @Shadow
-    public void readAdditionalSaveData(CompoundTag pCompound) {
-
-    }
-
-    @Shadow
-    public void addAdditionalSaveData(CompoundTag pCompound) {
-
-    }
 }

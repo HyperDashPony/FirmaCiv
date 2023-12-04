@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.mixins.minecraft;
+package com.alekiponi.firmaciv.mixins.client;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
-public class ClientPacketListenerMixin{
+public abstract class ClientPacketListenerMixin {
 
     @Shadow
     private ClientLevel level;
@@ -20,8 +20,8 @@ public class ClientPacketListenerMixin{
     @Inject(method = "handleEntityLinkPacket", at = @At("TAIL"))
     private void injectCleatPacket(ClientboundSetEntityLinkPacket pPacket, CallbackInfo ci){
         Entity entity = this.level.getEntity(pPacket.getSourceId());
-        if (entity instanceof VehicleCleatEntity) {
-            ((VehicleCleatEntity)entity).setDelayedLeashHolderId(pPacket.getDestId());
+        if (entity instanceof VehicleCleatEntity cleat) {
+            cleat.setDelayedLeashHolderId(pPacket.getDestId());
         }
     }
 
