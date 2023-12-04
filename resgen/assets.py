@@ -9,11 +9,11 @@ def generate(manager: ResourceManager):
         # Generate models from templates
         for shape in ["straight", "inner", "outer"]:
             for progress in ["first", "second", "third", "fourth"]:
-                manager.block_model(f"watercraft_frame_angled/wood/{shape}/{progress}/{wood}",
+                manager.block_model(f"wood/watercraft_frame_angled/{wood}/{shape}/{progress}",
                                     {"plank": f"tfc:block/wood/planks/{wood}"},
                                     f"firmaciv:block/watercraft_frame_angled/template/{shape}/{progress}")
 
-        manager.blockstate_multipart(f"wood/{wood}/watercraft_frame_angled",
+        manager.blockstate_multipart(f"wood/watercraft_frame_angled/{wood}",
                                      *blockStates.getWoodFrameMultipart(wood)).with_lang(
             f"{name} Shipwright's Scaffolding").with_block_loot("firmaciv:watercraft_frame_angled")
 

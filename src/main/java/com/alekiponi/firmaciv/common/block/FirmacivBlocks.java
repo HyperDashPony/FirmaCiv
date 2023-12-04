@@ -3,7 +3,6 @@ package com.alekiponi.firmaciv.common.block;
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
-import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.Helpers;
@@ -13,8 +12,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -30,8 +27,8 @@ public final class FirmacivBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
             Firmaciv.MOD_ID);
 
-    public static final Map<BoatVariant, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS =
-            Helpers.mapOfKeys(BoatVariant.class, boatVariant -> registerBlockWithoutItem(
+    public static final Map<BoatVariant, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = Helpers.mapOfKeys(
+            BoatVariant.class, boatVariant -> registerBlockWithoutItem(
                     "canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
                             boatVariant)));
@@ -57,25 +54,20 @@ public final class FirmacivBlocks {
             () -> new AngledBoatFrameBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final Map<RegistryWood, RegistryObject<Block>> WOODEN_BOAT_FRAME_ANGLED = registerWoodenBoatFrames();
+    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
+            () -> new OarlockBlock(BlockBehaviour.Properties.copy(
+                    TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
 
     public static Map<RegistryWood, RegistryObject<Block>> registerWoodenBoatFrames() {
         final Map<RegistryWood, RegistryObject<Block>> map = new HashMap<>();
 
         for (final Wood tfcWood : Wood.values()) {
-            map.put(tfcWood,
-                    registerBlockWithoutItem("wood/" + tfcWood.getSerializedName() + "/watercraft_frame_angled",
-                            () -> new WoodenBoatFrameBlock(tfcWood,
-                                    BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get()))));
+            map.put(tfcWood, registerBlockWithoutItem("wood/watercraft_frame_angled/" + tfcWood.getSerializedName(),
+                    () -> new WoodenBoatFrameBlock(tfcWood, BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get()))));
         }
 
         return map;
     }
-
-    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
-            () -> new OarlockBlock(BlockBehaviour.Properties.copy(
-                    TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
-
-
 
     private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);
@@ -88,8 +80,7 @@ public final class FirmacivBlocks {
     }
 
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
-        FirmacivItems.ITEMS.register(name, () -> new BlockItem(block.get(),
-                new Item.Properties()));
+        FirmacivItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
     public static void register(IEventBus eventBus) {
