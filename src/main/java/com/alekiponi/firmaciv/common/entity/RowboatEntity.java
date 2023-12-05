@@ -36,9 +36,11 @@ public class RowboatEntity extends FirmacivBoatEntity {
 
     public final int[] CLEATS = {5};
 
-    public final int[][] COMPARTMENT_ROTATIONS = {{0,180}};
+    public final int[][] COMPARTMENT_ROTATIONS = {{0, 180}};
 
-    public final int[] CAN_ADD_ONLY_BLOCKS = {2,1};
+    public final int[] CAN_ADD_ONLY_BLOCKS = {2, 1};
+    protected final float PASSENGER_SIZE_LIMIT = 1.4F;
+
 
     public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -48,10 +50,8 @@ public class RowboatEntity extends FirmacivBoatEntity {
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
     }
 
-
-    protected final float PASSENGER_SIZE_LIMIT = 1.4F;
     @Override
-    public float getPassengerSizeLimit(){
+    public float getPassengerSizeLimit() {
         return PASSENGER_SIZE_LIMIT;
     }
 
@@ -61,10 +61,14 @@ public class RowboatEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int[] getCleats(){return this.CLEATS;}
+    public int[] getCleats() {
+        return this.CLEATS;
+    }
 
     @Override
-    public int[] getCanAddOnlyBlocks(){return CAN_ADD_ONLY_BLOCKS;}
+    public int[] getCanAddOnlyBlocks() {
+        return CAN_ADD_ONLY_BLOCKS;
+    }
 
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
@@ -99,7 +103,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
                         localX = -0.1f;
                         localZ = -0.4f;
                     }
-                    case 5 ->{
+                    case 5 -> {
                         // cleat
                         localX = 1.7f;
                         localZ = 0f;
@@ -189,10 +193,14 @@ public class RowboatEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getCompartmentRotation(int i){return COMPARTMENT_ROTATIONS[i][0];}
+    public int getCompartmentRotation(int i) {
+        return COMPARTMENT_ROTATIONS[i][0];
+    }
 
     @Override
-    public int[][] getCompartmentRotationsArray(){return COMPARTMENT_ROTATIONS;}
+    public int[][] getCompartmentRotationsArray() {
+        return COMPARTMENT_ROTATIONS;
+    }
 
     @Override
     public Item getDropItem() {

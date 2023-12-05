@@ -34,7 +34,7 @@ public class KayakRenderer extends EntityRenderer<KayakEntity> {
 
     @Override
     public void render(KayakEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
+            MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.5D, 0.0D);
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));

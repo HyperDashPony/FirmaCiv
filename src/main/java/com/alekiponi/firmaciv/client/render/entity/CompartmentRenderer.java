@@ -27,7 +27,7 @@ public class CompartmentRenderer extends EntityRenderer<CompartmentEntity> {
     }
 
     public void render(CompartmentEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
+            MultiBufferSource pBuffer, int pPackedLight) {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
         if (!(pEntity instanceof EmptyCompartmentEntity)) {
@@ -58,7 +58,7 @@ public class CompartmentRenderer extends EntityRenderer<CompartmentEntity> {
     }
 
     protected void renderCompartmentContents(CompartmentEntity pEntity, float pPartialTicks, BlockState pState,
-                                             PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
+            PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         this.blockRenderer.renderSingleBlock(pState, pPoseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
     }
 }

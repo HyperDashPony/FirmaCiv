@@ -30,9 +30,9 @@ import java.util.UUID;
 
 public class VehicleCleatEntity extends Entity {
 
-    private static final EntityDataAccessor<Byte> DATA_MOB_FLAGS_ID = SynchedEntityData.defineId(VehicleCleatEntity.class, EntityDataSerializers.BYTE);
-
     public static final String LEASH_TAG = "Leash";
+    private static final EntityDataAccessor<Byte> DATA_MOB_FLAGS_ID = SynchedEntityData.defineId(
+            VehicleCleatEntity.class, EntityDataSerializers.BYTE);
     @Nullable
     private Entity leashHolder;
     private int delayedLeashHolderId;
@@ -80,12 +80,14 @@ public class VehicleCleatEntity extends Entity {
             if (!this.isAlive() || !this.leashHolder.isAlive()) {
                 this.dropLeash(true, true);
             }
-            if (this.getVehicle().isPassenger() && this.getVehicle().getVehicle() instanceof FirmacivBoatEntity && this.leashHolder instanceof Player player) {
+            if (this.getVehicle().isPassenger() && this.getVehicle()
+                    .getVehicle() instanceof FirmacivBoatEntity && this.leashHolder instanceof Player player) {
                 if (this.distanceTo(this.leashHolder) > 4f) {
 
                     FirmacivBoatEntity thisVehicle = (FirmacivBoatEntity) this.getVehicle().getVehicle();
                     Vec3 vectorToVehicle = player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
-                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y, vectorToVehicle.z * -0.1f);
+                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y,
+                            vectorToVehicle.z * -0.1f);
 
 
                     //float rotationTowardsPlayer = (float) Math.atan(player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).z / player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).x);
@@ -95,12 +97,15 @@ public class VehicleCleatEntity extends Entity {
                     double d2 = player.getPosition(0).z - thisVehicle.getZ();
                     double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 
-                    float finalRotation = Mth.wrapDegrees((float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
-                    float intermediateRotation = thisVehicle.getYRot() + (Mth.wrapDegrees((finalRotation - thisVehicle.getYRot())) / 45);
+                    float finalRotation = Mth.wrapDegrees(
+                            (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
+                    float intermediateRotation = thisVehicle.getYRot() + (Mth.wrapDegrees(
+                            (finalRotation - thisVehicle.getYRot())) / 45);
 
 
                     double difference = (player.getY()) - thisVehicle.getY();
-                    if (player.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement().length() < 0.02f) {
+                    if (player.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement()
+                            .length() < 0.02f) {
                         thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY() + 0.55f, thisVehicle.getZ());
                     }
 
@@ -149,7 +154,8 @@ public class VehicleCleatEntity extends Entity {
 
 
             if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-                ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, (Entity) null));
+                ((ServerLevel) this.level()).getChunkSource()
+                        .broadcast(this, new ClientboundSetEntityLinkPacket(this, null));
             }
         }
 
@@ -184,7 +190,8 @@ public class VehicleCleatEntity extends Entity {
         this.leashHolder = pLeashHolder;
         this.leashInfoTag = null;
         if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
-            ((ServerLevel) this.level()).getChunkSource().broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
+            ((ServerLevel) this.level()).getChunkSource()
+                    .broadcast(this, new ClientboundSetEntityLinkPacket(this, this.leashHolder));
         }
 
     }
@@ -203,7 +210,8 @@ public class VehicleCleatEntity extends Entity {
                     this.setLeashedTo(entity, true);
                     return;
                 }
-            } else if (this.leashInfoTag.contains("X", 99) && this.leashInfoTag.contains("Y", 99) && this.leashInfoTag.contains("Z", 99)) {
+            } else if (this.leashInfoTag.contains("X", 99) && this.leashInfoTag.contains("Y",
+                    99) && this.leashInfoTag.contains("Z", 99)) {
                 BlockPos blockpos = NbtUtils.readBlockPos(this.leashInfoTag);
                 this.setLeashedTo(LeashFenceKnotEntity.getOrCreateKnot(this.level(), blockpos), true);
                 return;
@@ -236,7 +244,7 @@ public class VehicleCleatEntity extends Entity {
 
     @Override
     public Vec3 getLeashOffset(float pPartialTick) {
-        return new Vec3(0.0D, (double) this.getEyeHeight(), 0f);
+        return new Vec3(0.0D, this.getEyeHeight(), 0f);
     }
 
     @Override

@@ -177,7 +177,7 @@ public abstract class CompartmentEntity extends Entity {
 
     @Override
     public void lerpTo(final double posX, final double posY, final double posZ, final float yaw, final float pitch,
-                       final int pPosRotationIncrements, final boolean teleport) {
+            final int pPosRotationIncrements, final boolean teleport) {
         this.lerpX = posX;
         this.lerpY = posY;
         this.lerpZ = posZ;

@@ -25,14 +25,16 @@ public class SloopEntity extends FirmacivBoatEntity {
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
 
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
+    protected float sailRotation;
+    protected int sailState;
+
+    public SloopEntity(EntityType<? extends FirmacivBoatEntity> entityType, Level level) {
+        super(entityType, level);
+    }
 
     @Override
     public float getPassengerSizeLimit() {
         return PASSENGER_SIZE_LIMIT;
-    }
-
-    public SloopEntity(EntityType<? extends FirmacivBoatEntity> entityType, Level level) {
-        super(entityType, level);
     }
 
     @Override
@@ -67,6 +69,7 @@ public class SloopEntity extends FirmacivBoatEntity {
         return new AABB(startingPoint, endingPoint);
     }
 
+    // sailing stuff
 
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
@@ -174,19 +177,11 @@ public class SloopEntity extends FirmacivBoatEntity {
         }
     }
 
-
-
     @Override
     public void tick() {
         super.tick();
         this.sailBoat();
     }
-
-    // sailing stuff
-
-    protected float sailRotation;
-
-    protected int sailState;
 
     // method to get sailing controls
 
@@ -194,27 +189,27 @@ public class SloopEntity extends FirmacivBoatEntity {
 
     // method for getting wind stuff?
 
-    public float getSailRotation(){
+    public float getSailRotation() {
         return sailRotation;
     }
 
-    public float getSailWorldRotation(){
+    public float getSailWorldRotation() {
         return sailRotation + this.getYRot();
     }
 
-    public float[] getWindAngleAndSpeed(){
-        Vec2 windVector = Climate.getWindVector(this.level(),this.blockPosition());
-        double direction = Math.round(Math.toDegrees(Math.atan(windVector.x/windVector.y)));
-        double speed = Math.round(windVector.length()*320);
+    public float[] getWindAngleAndSpeed() {
+        Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
+        double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
+        double speed = Math.round(windVector.length() * 320);
         return new float[]{(float) direction, (float) speed};
     }
 
 
-    public int getSailState(){
+    public int getSailState() {
         return sailState;
     }
 
-    public void setSailState(int state){
+    public void setSailState(int state) {
         sailState = state;
     }
 
@@ -249,25 +244,25 @@ public class SloopEntity extends FirmacivBoatEntity {
                 boolean inputLeft = this.getSailingCompartment().getInputLeft();
                 boolean inputRight = this.getSailingCompartment().getInputRight();
                 if (inputLeft) {
-                    if(sailRotation > -21){
+                    if (sailRotation > -21) {
                         --this.sailRotation;
                     }
                 }
 
                 if (inputRight) {
-                    if(sailRotation < 21){
+                    if (sailRotation < 21) {
                         ++this.sailRotation;
                     }
                 }
 
                 if (inputUp) {
-                    if(sailState < 3){
+                    if (sailState < 3) {
                         sailState++;
                     }
                 }
 
                 if (inputDown) {
-                    if(sailState > 0){
+                    if (sailState > 0) {
                         sailState--;
                     }
                 }

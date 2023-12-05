@@ -1,6 +1,5 @@
 package com.alekiponi.firmaciv.common.block;
 
-import com.alekiponi.firmaciv.common.blockentity.BoatFrameBlockEntity;
 import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.RowboatEntity;
@@ -58,7 +57,9 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     }
 
     public static boolean isSupportedByWatercraftFrame(LevelReader pLevel, BlockPos thispos) {
-        return pLevel.getBlockState(thispos.below()).getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock && pLevel.getBlockState(thispos.below()).getValue(FRAME_PROCESSED_7) == 7;
+        return pLevel.getBlockState(thispos.below())
+                .getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock && pLevel.getBlockState(
+                thispos.below()).getValue(FRAME_PROCESSED_7) == 7;
     }
 
     private static Vec3 getSpawnPosition(Level pLevel, BlockPos thispos, BlockState blockState) {
@@ -68,6 +69,17 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         Vec3 origin = new Vec3(((thispos.getX() + otherpos.getX()) / 2.0f) + 0.5f, thispos.getY() + 0.5f,
                 ((thispos.getZ() + otherpos.getZ()) / 2.0f) + 0.5f);
         return origin;
+    }
+
+    private static boolean validateFrameState(BlockState framestate, ItemStack plankitem) {
+        // check if the plank item matches
+        if (framestate.getBlock() instanceof WoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack()
+                .is(plankitem.getItem())) {
+            // check if the state matches
+            return framestate.getValue(FRAME_PROCESSED_7) == 7;
+        }
+        return false;
+
     }
 
     @Override
@@ -121,7 +133,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     private void spawnRowboat(Level pLevel, BlockPos thispos, BlockState blockState) {
         Direction direction = blockState.getValue(FACING);
         Direction.Axis axis = direction.getClockWise().getAxis();
-        WoodenBoatFrameBlock boatFrameBlock = (WoodenBoatFrameBlock)pLevel.getBlockState(thispos.below()).getBlock();
+        WoodenBoatFrameBlock boatFrameBlock = (WoodenBoatFrameBlock) pLevel.getBlockState(thispos.below()).getBlock();
         String woodName = boatFrameBlock.getPlankAsItemStack().getItem().toString().split("planks/")[1];
         BoatVariant variant = BoatVariant.byName(woodName);
         RowboatEntity rowboat = FirmacivEntities.ROWBOATS.get(variant).get().create(pLevel);
@@ -153,7 +165,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         ItemStack plankItem = ItemStack.EMPTY;
         if (frameState.getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock) {
             plankItem = woodenBoatFrameBlock.getPlankAsItemStack();
-            if(FirmacivConfig.SERVER.shipWoodRestriction.get()){
+            if (FirmacivConfig.SERVER.shipWoodRestriction.get()) {
                 if (!plankItem.is(FirmacivTags.Items.PLANKS_THAT_MAKE_SHIPS)) {
                     return false;
                 }
@@ -167,7 +179,8 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
             if (frameState.getValue(FACING) == direction) {
                 // the lower middle watercraft block is validated
                 frameState = level.getBlockState(thispos.relative(direction.getOpposite()));
-                if (frameState.getValue(FACING) == direction.getOpposite() && validateFrameState(frameState, plankItem)) {
+                if (frameState.getValue(FACING) == direction.getOpposite() && validateFrameState(frameState,
+                        plankItem)) {
                     //the middle of the boat has been fully validated
                     //proceed left and right
                     BlockState frameState1 = level.getBlockState(thispos.relative(structureAxis, 1));
@@ -202,13 +215,11 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
                                             if (validateFrameState(frameState2, plankItem)) {
                                                 //the top of the boat has been fully validated
                                                 //the WHOLE BOAT has been validated
-                                                if(frameState2.getValue(FACING) == negativeDirection2
+                                                return frameState2.getValue(FACING) == negativeDirection2
                                                         || (frameState2.getValue(FACING)
                                                         .getAxis() != structureAxis && (frameState2.getValue(
                                                         SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState2.getValue(
-                                                        SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))){
-                                                    return true;
-                                                }
+                                                        SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT));
                                             }
                                         }
                                     }
@@ -221,18 +232,6 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
             }
         }
         return false;
-    }
-
-    private static boolean validateFrameState(BlockState framestate, ItemStack plankitem){
-        // check if the plank item matches
-        if(framestate.getBlock() instanceof WoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack().is(plankitem.getItem())){
-            // check if the state matches
-            if(framestate.getValue(FRAME_PROCESSED_7) == 7){
-                return true;
-            }
-        }
-        return false;
-
     }
 
     @Override

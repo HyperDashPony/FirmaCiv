@@ -307,7 +307,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
-                                                                  BlockEntityType<T> pBlockEntityType) {
+            BlockEntityType<T> pBlockEntityType) {
         return createTickerHelper(pBlockEntityType, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(),
                 CanoeComponentBlockEntity::serverTick);
     }

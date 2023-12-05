@@ -25,12 +25,14 @@ public class KayakEntity extends FirmacivBoatEntity {
     protected final float DAMAGE_RECOVERY = 1.0f;
 
     protected final float PASSENGER_SIZE_LIMIT = 0.6F;
-    @Override
-    public float getPassengerSizeLimit(){
-        return PASSENGER_SIZE_LIMIT;
-    }
+
     public KayakEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    public float getPassengerSizeLimit() {
+        return PASSENGER_SIZE_LIMIT;
     }
 
     @Nullable

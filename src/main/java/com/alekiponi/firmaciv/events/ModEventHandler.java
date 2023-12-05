@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ModEventHandler {
 
     @SubscribeEvent
-    public static void registerAttributes(EntityAttributeCreationEvent event){
+    public static void registerAttributes(EntityAttributeCreationEvent event) {
 
     }
 }

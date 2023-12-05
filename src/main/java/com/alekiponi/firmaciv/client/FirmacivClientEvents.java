@@ -45,7 +45,7 @@ public class FirmacivClientEvents {
                     private long lastUpdateTick;
 
                     public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel,
-                                               @Nullable LivingEntity livingEntity, int p_174668_) {
+                            @Nullable LivingEntity livingEntity, int p_174668_) {
 
                         Entity entity = livingEntity != null ? livingEntity : pStack.getEntityRepresentation();
                         if (entity == null) {
@@ -73,14 +73,15 @@ public class FirmacivClientEvents {
                 });
 
 
-        ItemProperties.register(FirmacivItems.FIRMACIV_COMPASS.get(), new ResourceLocation(Firmaciv.MOD_ID, "firmaciv_compass_direction"),
+        ItemProperties.register(FirmacivItems.FIRMACIV_COMPASS.get(),
+                new ResourceLocation(Firmaciv.MOD_ID, "firmaciv_compass_direction"),
                 new ClampedItemPropertyFunction() {
                     private double rotation;
                     private double rota;
                     private long lastUpdateTick;
 
                     public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel,
-                                               @Nullable LivingEntity livingEntity, int p_174668_) {
+                            @Nullable LivingEntity livingEntity, int p_174668_) {
 
                         Entity entity = livingEntity != null ? livingEntity : pStack.getEntityRepresentation();
                         if (entity == null) {
@@ -96,7 +97,7 @@ public class FirmacivClientEvents {
                                 double direction;
                                 if (pLevel.dimensionType().natural()) {
                                     assert livingEntity != null;
-                                    direction = ((Mth.wrapDegrees(entity.getYRot()) + 180)%360)/360;
+                                    direction = ((Mth.wrapDegrees(entity.getYRot()) + 180) % 360) / 360;
                                 } else {
                                     direction = Math.random();
                                 }
@@ -115,7 +116,7 @@ public class FirmacivClientEvents {
                     private long lastUpdateTick;
 
                     public float unclampedCall(ItemStack p_174665_, @Nullable ClientLevel p_174666_,
-                                               @Nullable LivingEntity livingEntity, int p_174668_) {
+                            @Nullable LivingEntity livingEntity, int p_174668_) {
                         net.minecraft.world.entity.Entity entity = livingEntity != null ? livingEntity : p_174665_.getEntityRepresentation();
                         if (entity == null) {
                             return 0.0F;

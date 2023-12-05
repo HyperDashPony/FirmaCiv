@@ -38,9 +38,12 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition cleat = partdefinition.addOrReplaceChild("cleat", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition cleat = partdefinition.addOrReplaceChild("cleat", CubeListBuilder.create(),
+                PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition cube_r1 = cleat.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(33, 95).addBox(-17.0F, -9.0F, -5.0F, 2.0F, 1.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition cube_r1 = cleat.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(33, 95)
+                        .addBox(-17.0F, -9.0F, -5.0F, 2.0F, 1.0F, 10.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         PartDefinition middle = partdefinition.addOrReplaceChild("middle", CubeListBuilder.create(),
                 PartPose.offset(0.0F, 24.0F, 0.0F));
@@ -138,7 +141,7 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-                          float headPitch) {
+            float headPitch) {
 
     }
 
@@ -148,7 +151,7 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
-                               float red, float green, float blue, float alpha) {
+            float red, float green, float blue, float alpha) {
         cleat.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         middle.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         end.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

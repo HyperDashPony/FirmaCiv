@@ -22,16 +22,10 @@ public class CanoeEntity extends FirmacivBoatEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
             EntityDataSerializers.INT);
     public final int PASSENGER_NUMBER = 3;
+    public final int[] CLEATS = {2};
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float DAMAGE_RECOVERY = 2.0f;
-
-    public final int[] CLEATS = {2};
-
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
-    @Override
-    public float getPassengerSizeLimit(){
-        return PASSENGER_SIZE_LIMIT;
-    }
 
     public CanoeEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -39,6 +33,11 @@ public class CanoeEntity extends FirmacivBoatEntity {
         final String name = entityType.toString().split("canoe.")[1];
 
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
+    }
+
+    @Override
+    public float getPassengerSizeLimit() {
+        return PASSENGER_SIZE_LIMIT;
     }
 
     @Override
@@ -178,7 +177,6 @@ public class CanoeEntity extends FirmacivBoatEntity {
     public ItemStack getPickResult() {
         return new ItemStack(this.getDropItem());
     }
-
 
 
     public ResourceLocation getTextureLocation() {

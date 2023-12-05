@@ -14,8 +14,8 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.BOAT_FRAME_ANGLED;
+import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 
 public class FirmacivBlockEntities {
 
@@ -39,14 +39,14 @@ public class FirmacivBlockEntities {
     }
 
     private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name,
-                                                                                       BlockEntityType.BlockEntitySupplier<T> factory,
-                                                                                       Supplier<? extends Block> block) {
+            BlockEntityType.BlockEntitySupplier<T> factory,
+            Supplier<? extends Block> block) {
         return RegistrationHelpers.register(BLOCK_ENTITIES, name, factory, block);
     }
 
     private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name,
-                                                                                       BlockEntityType.BlockEntitySupplier<T> factory,
-                                                                                       Stream<? extends Supplier<? extends Block>> blocks) {
+            BlockEntityType.BlockEntitySupplier<T> factory,
+            Stream<? extends Supplier<? extends Block>> blocks) {
         return RegistrationHelpers.register(BLOCK_ENTITIES, name, factory, blocks);
     }
 

@@ -33,10 +33,10 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
     }
 
     private static void addVertexPair(VertexConsumer pConsumer, Matrix4f pMatrix, float p_174310_, float p_174311_,
-                                      float p_174312_, int pEntityBlockLightLevel, int pLeashHolderBlockLightLevel,
-                                      int pEntitySkyLightLevel, int pLeashHolderSkyLightLevel, float p_174317_,
-                                      float p_174318_, float p_174319_, float p_174320_, int pIndex,
-                                      boolean p_174322_) {
+            float p_174312_, int pEntityBlockLightLevel, int pLeashHolderBlockLightLevel,
+            int pEntitySkyLightLevel, int pLeashHolderSkyLightLevel, float p_174317_,
+            float p_174318_, float p_174319_, float p_174320_, int pIndex,
+            boolean p_174322_) {
         float f = (float) pIndex / 24.0F;
         int i = (int) Mth.lerp(f, (float) pEntityBlockLightLevel, (float) pLeashHolderBlockLightLevel);
         int j = (int) Mth.lerp(f, (float) pEntitySkyLightLevel, (float) pLeashHolderSkyLightLevel);
@@ -60,28 +60,29 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
     }
 
     public void render(VehicleCleatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
+            MultiBufferSource pBuffer, int pPackedLight) {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
         Entity entity = pEntity.getLeashHolder();
         if (entity != null) {
             pPoseStack.pushPose();
             pPoseStack.scale(-0.8F, -0.8F, 0.8F);
             pPoseStack.mulPose(Axis.YP.rotationDegrees(pEntityYaw));
-            if(pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity){
+            if (pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity) {
                 pPoseStack.scale(0.8F, 0.8F, 0.8F);
                 pPoseStack.translate(-0.25f, -0.35f, 0.f);
                 pPoseStack.mulPose(Axis.ZP.rotationDegrees(90));
             }
             this.model.setupAnim(pEntity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(KNOT_LOCATION));
-            this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
+                    1.0F, 1.0F);
             pPoseStack.popPose();
             this.renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, entity);
         }
     }
 
     private <E extends Entity> void renderLeash(VehicleCleatEntity pEntity, float pPartialTicks, PoseStack pPoseStack,
-                                                MultiBufferSource pBuffer, E pLeashHolder) {
+            MultiBufferSource pBuffer, E pLeashHolder) {
         pPoseStack.pushPose();
         Vec3 vec3 = pLeashHolder.getRopeHoldPosition(pPartialTicks);
         double d0 = (double) (Mth.lerp(pPartialTicks, pEntity.getYRot(),
