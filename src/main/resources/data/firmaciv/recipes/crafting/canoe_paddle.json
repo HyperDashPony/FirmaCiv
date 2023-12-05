@@ -1,13 +1,13 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "   ",
     " S ",
     "L  "
   ],
   "key": {
     "S": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "L": {
       "tag": "tfc:lumber"

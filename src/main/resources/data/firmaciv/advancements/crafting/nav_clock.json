@@ -1,4 +1,5 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_item": {
@@ -6,16 +7,18 @@
       "conditions": {
         "items": [
           {
-            "item": "firmaciv:large_waterproof_hide"
+            "items": [
+              "firmaciv:nav_clock"
+            ]
           }
         ]
       }
-    }
-  },
-  "has_the_recipe": {
-    "trigger": "minecraft:recipe_unlocked",
-    "conditions": {
-      "recipe": "firmaciv:kayak"
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "firmaciv:crafting/nav_clock"
+      }
     }
   },
   "requirements": [
@@ -26,7 +29,7 @@
   ],
   "rewards": {
     "recipes": [
-      "firmaciv:kayak"
+      "firmaciv:crafting/nav_clock"
     ]
   }
 }

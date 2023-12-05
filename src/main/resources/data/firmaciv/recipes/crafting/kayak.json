@@ -1,19 +1,20 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "@@@",
-    "L@L",
-    "###"
+    "SSS",
+    "HSH",
+    "LLL"
   ],
   "key": {
-    "#": {
-      "tag": "tfc:lumber"
-    },
-    "@": {
+    "S": {
       "tag": "forge:string"
     },
-    "L": {
+    "H": {
       "item": "firmaciv:large_waterproof_hide"
+    },
+    "L": {
+      "tag": "tfc:lumber"
     }
   },
   "result": {

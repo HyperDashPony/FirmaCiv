@@ -1,4 +1,5 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_item": {
@@ -6,14 +7,17 @@
       "conditions": {
         "items": [
           {
-            "item": "tfc:metal/ingot/brass"
+            "items": [
+              "firmaciv:sextant"
+            ]
           }
         ]
       }
-    },"has_the_recipe": {
+    },
+    "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "firmaciv:nav_clock"
+        "recipe": "firmaciv:crafting/sextant"
       }
     }
   },
@@ -25,7 +29,7 @@
   ],
   "rewards": {
     "recipes": [
-      "firmaciv:nav_clock"
+      "firmaciv:crafting/sextant"
     ]
   }
 }

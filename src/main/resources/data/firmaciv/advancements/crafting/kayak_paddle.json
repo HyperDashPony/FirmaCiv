@@ -1,4 +1,5 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_item": {
@@ -6,14 +7,17 @@
       "conditions": {
         "items": [
           {
-            "item": "tfc:metal/ingot/brass"
+            "items": [
+              "firmaciv:kayak_paddle"
+            ]
           }
         ]
       }
-    },"has_the_recipe": {
+    },
+    "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "firmaciv:sextant"
+        "recipe": "firmaciv:crafting/kayak_paddle"
       }
     }
   },
@@ -25,7 +29,7 @@
   ],
   "rewards": {
     "recipes": [
-      "firmaciv:sextant"
+      "firmaciv:crafting/kayak_paddle"
     ]
   }
 }

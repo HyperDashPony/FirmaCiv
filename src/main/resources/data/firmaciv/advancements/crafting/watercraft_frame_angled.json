@@ -1,4 +1,5 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_item": {
@@ -6,7 +7,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "tfc:lumber"
+            "items": [
+              "firmaciv:watercraft_frame_angled"
+            ]
           }
         ]
       }
@@ -14,7 +17,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "firmaciv:kayak_paddle"
+        "recipe": "firmaciv:crafting/watercraft_frame_angled"
       }
     }
   },
@@ -26,7 +29,7 @@
   ],
   "rewards": {
     "recipes": [
-      "firmaciv:kayak_paddle"
+      "firmaciv:crafting/watercraft_frame_angled"
     ]
   }
 }
