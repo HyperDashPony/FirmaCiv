@@ -29,3 +29,15 @@ def generate(rm: ResourceManager):
         "Z": {
             "item": "minecraft:bowl"
         }}, "firmaciv:firmaciv_compass")
+
+    rm.crafting_shaped("crafting/watercraft_frame_angled", [" LL", "LLL", "LL "], {"L": "#tfc:lumber"},
+                       "firmaciv:watercraft_frame_angled").with_advancement("firmaciv:watercraft_frame_angled")
+
+    rm.crafting_shapeless("crafting/barometer",
+                          ["firmaciv:unfinished_barometer", "tfc:brass_mechanisms", "#tfc:glass_bottles",
+                           {"type": "tfc:fluid_item",
+                            "fluid_ingredient": {
+                                "ingredient": "minecraft:water",
+                                "amount": 100
+                            }}],
+                          "firmaciv:barometer").with_advancement("firmaciv:barometer")
