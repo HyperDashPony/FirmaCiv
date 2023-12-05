@@ -3,7 +3,7 @@
   "parent": "firmaciv:block/canoe_component_block/template/all/2",
   "textures": {
     "0": "tfc:block/wood/stripped_log/hickory",
-    "1": "tfc:block/wood/stripped_log_top/acacia",
-    "particle": "tfc:block/wood/stripped_log/acacia"
+    "1": "tfc:block/wood/stripped_log_top/hickory",
+    "particle": "tfc:block/wood/stripped_log/hickory"
   }
 }
