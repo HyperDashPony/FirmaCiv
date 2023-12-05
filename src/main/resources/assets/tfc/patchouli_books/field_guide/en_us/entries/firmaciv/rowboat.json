@@ -13,7 +13,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "firmaciv:watercraft_frame_angled",
+      "recipe": "firmaciv:crafting/watercraft_frame_angled",
       "text": "To build a rowboat, you'll need to start with Shipwright's Scaffolding. These allow you to keep the boat materials in place while you build. $(br2)Then, you'll place them facing inward in a 2 by 3 area."
     },
     {
@@ -137,7 +137,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe2": "firmaciv:oar",
+      "recipe2": "firmaciv:crafting/oar",
       "text": "Now, add oars with $(item)$(k:key.use)$() and you'll be on your way!"
     },
     {

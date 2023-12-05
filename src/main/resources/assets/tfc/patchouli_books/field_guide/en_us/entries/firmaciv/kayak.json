@@ -18,8 +18,8 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "firmaciv:kayak",
-      "recipe2": "firmaciv:kayak_paddle"
+      "recipe": "firmaciv:crafting/kayak",
+      "recipe2": "firmaciv:crafting/kayak_paddle"
     },
     {
       "type": "tfc:sealed_barrel_recipe",

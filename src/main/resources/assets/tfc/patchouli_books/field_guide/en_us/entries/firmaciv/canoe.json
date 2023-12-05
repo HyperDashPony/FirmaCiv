@@ -90,7 +90,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "firmaciv:canoe_paddle",
+      "recipe": "firmaciv:crafting/canoe_paddle",
       "text": "Don't forget to craft a paddle or two!"
     }
   ],

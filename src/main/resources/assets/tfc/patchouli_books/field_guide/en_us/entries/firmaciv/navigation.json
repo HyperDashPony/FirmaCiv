@@ -18,7 +18,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "firmaciv:nav_clock",
+      "recipe": "firmaciv:crafting/nav_clock",
       "text": "Once you craft your Navigator's Timepiece, you can hold it and press $(item)$(k:key.use)$() to determine your Longitude. Remember that your Longitude is measured in Degrees East or West, meaning 0 Degrees at the Prime Meridian, and 360 Degrees for an identical climate."
     },
     {
@@ -28,7 +28,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "firmaciv:sextant",
+      "recipe": "firmaciv:crafting/sextant",
       "text": "Once you craft your Sextant, you can hold it and press $(item)$(k:key.use)$() to determine your Latitude. Remember that your Latitude is measured in Degrees North or South, meaning 0 Degrees at the Equator, and 90 Degrees North or South for a polar region."
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "firmaciv:barometer",
+      "recipe": "firmaciv:crafting/barometer",
       "text": "Once you craft your Barometer, you can hold it and press $(item)$(k:key.use)$() to determine your Altitude. Remember that your Altitude is measured in distance from the Sea Level datum."
     },
     {
