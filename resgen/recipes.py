@@ -30,9 +30,7 @@ def generate(rm: ResourceManager):
             "item": "minecraft:bowl"
         }}, "firmaciv:firmaciv_compass")
 
-    rm.crafting_shaped("crafting/watercraft_frame_angled", [" LL", "LLL", "LL "], {"L": "#tfc:lumber"},
-                       "firmaciv:watercraft_frame_angled").with_advancement("firmaciv:watercraft_frame_angled")
-
+    # Boating items
     rm.crafting_shapeless("crafting/barometer",
                           ["firmaciv:unfinished_barometer", "tfc:brass_mechanisms", "#tfc:glass_bottles",
                            {"type": "tfc:fluid_item",
@@ -42,6 +40,16 @@ def generate(rm: ResourceManager):
                             }}],
                           "firmaciv:barometer").with_advancement("firmaciv:barometer")
 
+    rm.crafting_shapeless("crafting/nav_clock",
+                          ["firmaciv:unfinished_nav_clock", *["tfc:lens" for _ in range(2)],
+                           *["tfc:brass_mechanisms" for _ in range(3)]],
+                          "firmaciv:nav_clock").with_advancement("firmaciv:nav_clock")
+
+    rm.crafting_shapeless("crafting/sextant", ["firmaciv:unfinished_sextant", "tfc:lens", "tfc:brass_mechanisms"],
+                          "firmaciv:sextant").with_advancement("firmaciv:sextant")
+
+    rm.crafting_shaped("crafting/watercraft_frame_angled", [" LL", "LLL", "LL "], {"L": "#tfc:lumber"},
+                       "firmaciv:watercraft_frame_angled").with_advancement("firmaciv:watercraft_frame_angled")
     # Oar/paddles
     rm.crafting_shaped("crafting/oar", ["  S", " S ", "L  "], {"S": "#forge:rods/wooden", "L": "#tfc:lumber"},
                        "firmaciv:oar").with_advancement("firmaciv:oar")
