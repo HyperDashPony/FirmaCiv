@@ -1,6 +1,5 @@
 package com.alekiponi.firmaciv.common.block;
 
-import com.alekiponi.firmaciv.common.blockentity.BoatFrameBlockEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -16,8 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -25,9 +22,7 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-
-public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlock {
+public class WoodenBoatFrameBlock extends SquaredAngleBlock {
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
     public final RegistryWood wood;
@@ -41,21 +36,6 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
-            final BlockState newState, final boolean isMoving) {
-        if (level.getBlockEntity(blockPos) instanceof BoatFrameBlockEntity frameBlockEntity) {
-            if (!blockState.is(newState.getBlock())) {
-                frameBlockEntity.ejectContents();
-            }
-        }
-
-        if (blockState.hasBlockEntity() && (!blockState.is(newState.getBlock()) || !newState.hasBlockEntity())) {
-            level.removeBlockEntity(blockPos);
-        }
-    }
-
-    @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
     }
@@ -65,29 +45,19 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
 
-
-
-        if (hand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
-        }
-
-        // Quit early if we don't have the right BlockEntity
-        if (!(level.getBlockEntity(blockPos) instanceof BoatFrameBlockEntity frameBlockEntity)) {
-            return InteractionResult.PASS;
-        }
+        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         final ItemStack heldStack = player.getItemInHand(hand);
 
         final int processState = blockState.getValue(FRAME_PROCESSED);
 
-
         // Try extract
         if (heldStack.isEmpty() && !level.isClientSide) {
             // Extract an item
             if (processState <= 3) {
-                ItemHandlerHelper.giveItemToPlayer(player, frameBlockEntity.extractPlanks(1));
+                ItemHandlerHelper.giveItemToPlayer(player, this.getPlankAsItemStack());
             } else {
-                ItemHandlerHelper.giveItemToPlayer(player, frameBlockEntity.extractBolts(1));
+                ItemHandlerHelper.giveItemToPlayer(player, FirmacivItems.COPPER_BOLT.get().getDefaultInstance());
             }
 
             // Set ourselves back to our base
@@ -108,14 +78,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
         if (heldStack.is(this.getPlankAsItemStack().getItem())) {
             // Must be [0,3)
             if (processState < 3) {
-                final ItemStack remainder = frameBlockEntity.insertPlanks(heldStack.split(1));
-
-                // Couldn't put the item in
-                if (!remainder.isEmpty()) {
-                    heldStack.grow(1);
-                    return InteractionResult.FAIL;
-                }
-
+                heldStack.shrink(1);
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -128,7 +91,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
         if (heldStack.is(FirmacivItems.COPPER_BOLT.get()) && player.getOffhandItem().is(TFCTags.Items.HAMMERS)) {
             // Must be [3,7)
             if (3 <= processState && processState < 7) {
-                frameBlockEntity.insertBolts(heldStack.split(1));
+                heldStack.shrink(1);
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.METAL_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -154,11 +117,5 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock implements EntityBlo
 
     public ItemStack getPlankAsItemStack() {
         return wood.getBlock(Wood.BlockType.PLANKS).get().asItem().getDefaultInstance();
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(final BlockPos blockPos, final BlockState blockState) {
-        return new BoatFrameBlockEntity(blockPos, blockState);
     }
 }
