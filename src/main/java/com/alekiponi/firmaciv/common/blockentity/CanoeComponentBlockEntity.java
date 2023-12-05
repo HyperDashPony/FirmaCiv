@@ -7,7 +7,9 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -51,7 +53,7 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         return this.litTick;
     }
 
-    @VisibleForTesting
+
     public void light() {
 
         if (this.isLit) {
@@ -82,6 +84,18 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
                 ((CanoeComponentBlockEntity) pLevel.getBlockEntity(blockPos2)).light();
             }
         }
+    }
+
+    public void loadAdditional(CompoundTag nbt) {
+        this.isLit = nbt.getBoolean("isLit");
+        this.litTick = nbt.getLong("litTick");
+        super.loadAdditional(nbt);
+    }
+
+    public void saveAdditional(CompoundTag nbt) {
+        nbt.putBoolean("isLit", this.isLit);
+        nbt.putLong("litTick", this.litTick);
+        super.saveAdditional(nbt);
     }
 
     public long getTicksLeft() {
