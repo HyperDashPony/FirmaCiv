@@ -160,8 +160,8 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             }
         }
 
-        if(this.isVehicle()){
-            if(this.getFirstPassenger().getBbWidth() > this.getTrueVehicle().getPassengerSizeLimit()){
+        if(this.isVehicle() && !this.level().isClientSide()){
+            if(this.getFirstPassenger() != null && this.getTrueVehicle() != null && this.getFirstPassenger().getBbWidth() > this.getTrueVehicle().getPassengerSizeLimit()){
                 this.ejectPassengers();
             }
         }
