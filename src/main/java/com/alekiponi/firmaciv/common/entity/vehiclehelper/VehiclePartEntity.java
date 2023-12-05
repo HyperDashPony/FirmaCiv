@@ -14,7 +14,7 @@ public class VehiclePartEntity extends Entity {
     protected float compartmentRotation = 0;
     private int selfDestructTicks = 0;
 
-    private int noPassengerTicks = 0;
+    private final int noPassengerTicks = 0;
 
     public VehiclePartEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
@@ -32,11 +32,9 @@ public class VehiclePartEntity extends Entity {
             }
         }
 
-        if(!(this.getVehicle() instanceof FirmacivBoatEntity))
-        {
+        if (!(this.getVehicle() instanceof final FirmacivBoatEntity vehicle)) {
             return;
         }
-        FirmacivBoatEntity vehicle = (FirmacivBoatEntity)this.getVehicle();
 
 
         /*
@@ -51,9 +49,9 @@ public class VehiclePartEntity extends Entity {
          */
 
         if (tickCount < 30) {
-            if(vehicle.getPassengers().size() == vehicle.getPassengerNumber()){
-                for(int[] i : vehicle.getCompartmentRotationsArray()){
-                    if(vehicle.getPassengers().get(i[0]) == this){
+            if (vehicle.getPassengers().size() == vehicle.getPassengerNumber()) {
+                for (int[] i : vehicle.getCompartmentRotationsArray()) {
+                    if (vehicle.getPassengers().get(i[0]) == this) {
                         this.compartmentRotation = i[1];
                     }
                 }
@@ -65,9 +63,9 @@ public class VehiclePartEntity extends Entity {
         if (this.getPassengers().isEmpty()) {
             boolean shouldAddCleatInstead = false;
 
-            if(vehicle.getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()){
-                for(int i : vehicle.getCleats()){
-                    if(vehicle.getPassengers().get(i).is(this)){
+            if (vehicle.getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()) {
+                for (int i : vehicle.getCleats()) {
+                    if (vehicle.getPassengers().get(i).is(this)) {
 
                         shouldAddCleatInstead = true;
 
@@ -86,7 +84,7 @@ public class VehiclePartEntity extends Entity {
             }
 
 
-            if(!shouldAddCleatInstead){
+            if (!shouldAddCleatInstead) {
                 final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
                         .create(this.level());
 
@@ -95,7 +93,8 @@ public class VehiclePartEntity extends Entity {
                     newCompartment.setYRot(this.getYRot() + compartmentRotation);
                     newCompartment.setPos(this.getX(), this.getY(), this.getZ());
                     if (!newCompartment.startRiding(this)) {
-                        Firmaciv.LOGGER.error("New Compartment: {} unable to ride Vehicle Part: {}", newCompartment, this);
+                        Firmaciv.LOGGER.error("New Compartment: {} unable to ride Vehicle Part: {}", newCompartment,
+                                this);
                     }
                     this.level().addFreshEntity(newCompartment);
                 }
@@ -113,22 +112,22 @@ public class VehiclePartEntity extends Entity {
 
         if (!(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity)) return;
 
-        FirmacivBoatEntity thisVehicle = (FirmacivBoatEntity) this.getVehicle();
-
         final double riderOffset = ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
         final Vec3 vec3 = (new Vec3(0, 0, 0)).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
         moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
         passenger.setPos(this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
 
         if ((passenger instanceof CompartmentEntity || passenger instanceof VehicleCleatEntity)) {
-            if(thisVehicle.isBeingTowed()){
+            if (firmacivBoatEntity.isBeingTowed()) {
             } else {
                 passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());
                 if (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 1) {
-                    if (tickCount < 10 || thisVehicle.getControllingPassenger() == null
-                            || (Math.abs(passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 5) && this.getFirstPassenger().isVehicle() && this.getFirstPassenger().getFirstPassenger() instanceof Player) {
-                        this.setYRot(thisVehicle.getYRot());
-                        passenger.setYRot(thisVehicle.getYRot() + compartmentRotation);
+                    if (tickCount < 10 || firmacivBoatEntity.getControllingPassenger() == null
+                            || (Math.abs(
+                            passenger.getYRot() - firmacivBoatEntity.getYRot() + compartmentRotation) > 5) && this.getFirstPassenger()
+                            .isVehicle() && this.getFirstPassenger().getFirstPassenger() instanceof Player) {
+                        this.setYRot(firmacivBoatEntity.getYRot());
+                        passenger.setYRot(firmacivBoatEntity.getYRot() + compartmentRotation);
                     }
                 }
             }

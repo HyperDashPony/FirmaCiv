@@ -61,12 +61,16 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         PartDefinition waterocclusion = partdefinition.addOrReplaceChild("waterocclusion", CubeListBuilder.create(),
                 PartPose.offset(0.0123F, 13.0F, -8.7623F));
 
-        PartDefinition cleat = partdefinition.addOrReplaceChild("cleat", CubeListBuilder.create().texOffs(115, 171).addBox(13.25F, 12.75F, -11.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(118, 178).addBox(13.25F, 12.75F, -9.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(118, 178).addBox(13.25F, 12.75F, -13.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(10.25F, -5.75F, -13.25F, 0.0F, 1.5708F, 0.0F));
+        PartDefinition cleat = partdefinition.addOrReplaceChild("cleat", CubeListBuilder.create().texOffs(115, 171)
+                        .addBox(13.25F, 12.75F, -11.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                        .texOffs(118, 178).addBox(13.25F, 12.75F, -9.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                        .texOffs(118, 178).addBox(13.25F, 12.75F, -13.25F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(10.25F, -5.75F, -13.25F, 0.0F, 1.5708F, 0.0F));
 
-        PartDefinition cleat2 = cleat.addOrReplaceChild("cleat2", CubeListBuilder.create().texOffs(119, 179).addBox(13.25F, 12.75F, -9.25F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(119, 179).addBox(13.25F, 12.75F, -12.25F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 1.0F, 0.0F));
+        PartDefinition cleat2 = cleat.addOrReplaceChild("cleat2", CubeListBuilder.create().texOffs(119, 179)
+                        .addBox(13.25F, 12.75F, -9.25F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                        .texOffs(119, 179).addBox(13.25F, 12.75F, -12.25F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 1.0F, 0.0F));
 
         PartDefinition cube_r1 = waterocclusion.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(192, 50)
                         .addBox(-15.513F, -1.0F, -15.539F, 16.0F, 2.0F, 16.0F, new CubeDeformation(0.0F)),
@@ -276,7 +280,7 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw,
-                          float pHeadPitch) {
+            float pHeadPitch) {
     }
 
     public ModelPart getWaterocclusion() {
@@ -292,14 +296,14 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
     }
 
     public void setupAnim(RowboatEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
-                          float pNetHeadYaw, float pHeadPitch) {
+            float pNetHeadYaw, float pHeadPitch) {
         animatePaddle(pEntity, 0, this.getOarPort(), pLimbSwing);
         animatePaddle(pEntity, 1, this.getOarStarboard(), pLimbSwing);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
-                               float red, float green, float blue, float alpha) {
+            float red, float green, float blue, float alpha) {
         hull.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         bow_floor.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         seats.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

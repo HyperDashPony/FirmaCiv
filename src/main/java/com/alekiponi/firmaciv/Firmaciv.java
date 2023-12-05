@@ -1,8 +1,8 @@
 package com.alekiponi.firmaciv;
 
 import com.alekiponi.firmaciv.client.FirmacivClientEvents;
-import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.alekiponi.firmaciv.common.block.FirmacivBlocks;
+import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.common.item.FirmacivTabs;

@@ -18,9 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerModel.class)
 public abstract class PlayerModelMixin<T extends LivingEntity> extends HumanoidModel<T> {
 
-    @Shadow @Final public ModelPart rightPants;
+    @Shadow
+    @Final
+    public ModelPart rightPants;
 
-    @Shadow @Final public ModelPart leftPants;
+    @Shadow
+    @Final
+    public ModelPart leftPants;
 
     public PlayerModelMixin(ModelPart pRoot) {
         super(pRoot);
@@ -28,7 +32,7 @@ public abstract class PlayerModelMixin<T extends LivingEntity> extends HumanoidM
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
     void injectRidingPoseChange(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
-                                float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
+            float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
         if (pEntity.isPassenger() && pEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
             if ((emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity)
                     || (emptyCompartmentEntity.getTrueVehicle() instanceof RowboatEntity && emptyCompartmentEntity.canAddNonPlayers())) {

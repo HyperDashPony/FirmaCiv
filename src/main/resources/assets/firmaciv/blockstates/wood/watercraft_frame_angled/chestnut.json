@@ -1,0 +1,2072 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/straight",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer"
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/inner",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/outer",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/first"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/second"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/third"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/fourth"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/straight/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/inner/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "0|1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "1|2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "2|3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "3|4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/wood/watercraft_frame_angled/chestnut/outer/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/first"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/second"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/third"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "straight",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "straight",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "straight",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/fourth"
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "straight",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/straight/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "inner_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "inner_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "inner_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "inner_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/inner/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_left",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "4|5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/first",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "5|6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/second",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "6|7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/third",
+        "uvlock": true,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "shape": "outer_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "shape": "outer_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "shape": "outer_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "shape": "outer_right",
+        "frame_processed": "7"
+      },
+      "apply": {
+        "model": "firmaciv:block/watercraft_frame_angled/bolt/outer/fourth",
+        "uvlock": true,
+        "y": 270
+      }
+    }
+  ]
+}

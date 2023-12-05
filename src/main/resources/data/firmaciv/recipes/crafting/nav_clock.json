@@ -1,0 +1,27 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "firmaciv:unfinished_nav_clock"
+    },
+    {
+      "item": "tfc:lens"
+    },
+    {
+      "item": "tfc:lens"
+    },
+    {
+      "item": "tfc:brass_mechanisms"
+    },
+    {
+      "item": "tfc:brass_mechanisms"
+    },
+    {
+      "item": "tfc:brass_mechanisms"
+    }
+  ],
+  "result": {
+    "item": "firmaciv:nav_clock"
+  }
+}

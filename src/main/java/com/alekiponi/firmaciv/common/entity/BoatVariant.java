@@ -55,7 +55,7 @@ public enum BoatVariant {
     private final Supplier<? extends Block> stripped;
 
     BoatVariant(final int id, final Wood wood, final Supplier<? extends Block> stripped,
-                final Supplier<? extends Item> lumber) {
+            final Supplier<? extends Item> lumber) {
         this.id = id;
         this.lumber = lumber;
         this.stripped = stripped;

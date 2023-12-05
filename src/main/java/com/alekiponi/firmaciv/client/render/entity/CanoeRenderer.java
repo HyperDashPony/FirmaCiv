@@ -1,10 +1,10 @@
 package com.alekiponi.firmaciv.client.render.entity;
 
-import com.google.common.collect.ImmutableMap;
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
 import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -46,7 +46,7 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     @Override
     public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
+            MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));

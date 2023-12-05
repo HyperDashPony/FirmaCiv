@@ -1,4 +1,5 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "replace": false,
   "values": [
     "tfc:wood/stripped_log/acacia",
@@ -10,6 +11,7 @@
     "tfc:wood/stripped_log/douglas_fir",
     "tfc:wood/stripped_log/hickory",
     "tfc:wood/stripped_log/kapok",
+    "tfc:wood/stripped_log/mangrove",
     "tfc:wood/stripped_log/maple",
     "tfc:wood/stripped_log/oak",
     "tfc:wood/stripped_log/palm",

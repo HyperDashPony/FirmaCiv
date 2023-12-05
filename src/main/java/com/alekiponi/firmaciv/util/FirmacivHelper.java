@@ -15,7 +15,8 @@ public class FirmacivHelper {
         Vec3 view = entity.getViewVector(1);
         Vec3 to = from.add(view.x * range, view.y * range, view.z * range);
         AABB aabb = entity.getBoundingBox().expandTowards(view.scale(range)).inflate(1, 1, 1);
-        EntityHitResult hit = ProjectileUtil.getEntityHitResult(entity, from, to, aabb, e -> !e.isSpectator() && e.isPickable(), range * range);
+        EntityHitResult hit = ProjectileUtil.getEntityHitResult(entity, from, to, aabb,
+                e -> !e.isSpectator() && e.isPickable(), range * range);
         return hit != null && from.distanceTo(hit.getLocation()) < range ? hit.getEntity() : null;
     }
 }

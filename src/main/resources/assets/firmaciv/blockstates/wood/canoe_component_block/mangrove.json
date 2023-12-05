@@ -1,0 +1,275 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "facing=north,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/0"
+    },
+    "facing=north,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/1"
+    },
+    "facing=north,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/2"
+    },
+    "facing=north,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/3"
+    },
+    "facing=north,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/4"
+    },
+    "facing=north,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/5"
+    },
+    "facing=north,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/6"
+    },
+    "facing=north,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/7"
+    },
+    "facing=north,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/8"
+    },
+    "facing=north,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/8"
+    },
+    "facing=north,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/9"
+    },
+    "facing=north,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/9"
+    },
+    "facing=north,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/10"
+    },
+    "facing=north,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/10"
+    },
+    "facing=north,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/11"
+    },
+    "facing=north,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/11"
+    },
+    "facing=north,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/12"
+    },
+    "facing=north,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/12"
+    },
+    "facing=east,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/0",
+      "y": 90
+    },
+    "facing=east,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/1",
+      "y": 90
+    },
+    "facing=east,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/2",
+      "y": 90
+    },
+    "facing=east,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/3",
+      "y": 90
+    },
+    "facing=east,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/4",
+      "y": 90
+    },
+    "facing=east,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/5",
+      "y": 90
+    },
+    "facing=east,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/6",
+      "y": 90
+    },
+    "facing=east,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/7",
+      "y": 90
+    },
+    "facing=east,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/8",
+      "y": 90
+    },
+    "facing=east,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/8",
+      "y": 90
+    },
+    "facing=east,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/9",
+      "y": 90
+    },
+    "facing=east,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/9",
+      "y": 90
+    },
+    "facing=east,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/10",
+      "y": 90
+    },
+    "facing=east,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/10",
+      "y": 90
+    },
+    "facing=east,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/11",
+      "y": 90
+    },
+    "facing=east,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/11",
+      "y": 90
+    },
+    "facing=east,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/12",
+      "y": 90
+    },
+    "facing=east,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/12",
+      "y": 90
+    },
+    "facing=south,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/0",
+      "y": 180
+    },
+    "facing=south,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/1",
+      "y": 180
+    },
+    "facing=south,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/2",
+      "y": 180
+    },
+    "facing=south,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/3",
+      "y": 180
+    },
+    "facing=south,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/4",
+      "y": 180
+    },
+    "facing=south,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/5",
+      "y": 180
+    },
+    "facing=south,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/6",
+      "y": 180
+    },
+    "facing=south,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/7",
+      "y": 180
+    },
+    "facing=south,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/8",
+      "y": 180
+    },
+    "facing=south,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/8",
+      "y": 180
+    },
+    "facing=south,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/9",
+      "y": 180
+    },
+    "facing=south,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/9",
+      "y": 180
+    },
+    "facing=south,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/10",
+      "y": 180
+    },
+    "facing=south,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/10",
+      "y": 180
+    },
+    "facing=south,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/11",
+      "y": 180
+    },
+    "facing=south,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/11",
+      "y": 180
+    },
+    "facing=south,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/12",
+      "y": 180
+    },
+    "facing=south,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/12",
+      "y": 180
+    },
+    "facing=west,canoe_carved=1": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/0",
+      "y": 270
+    },
+    "facing=west,canoe_carved=2": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/1",
+      "y": 270
+    },
+    "facing=west,canoe_carved=3": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/2",
+      "y": 270
+    },
+    "facing=west,canoe_carved=4": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/3",
+      "y": 270
+    },
+    "facing=west,canoe_carved=5": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/4",
+      "y": 270
+    },
+    "facing=west,canoe_carved=6": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/5",
+      "y": 270
+    },
+    "facing=west,canoe_carved=7": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/6",
+      "y": 270
+    },
+    "facing=west,canoe_carved=8": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/all/7",
+      "y": 270
+    },
+    "facing=west,canoe_carved=9,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/8",
+      "y": 270
+    },
+    "facing=west,canoe_carved=9,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/8",
+      "y": 270
+    },
+    "facing=west,canoe_carved=10,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/9",
+      "y": 270
+    },
+    "facing=west,canoe_carved=10,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/9",
+      "y": 270
+    },
+    "facing=west,canoe_carved=11,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/10",
+      "y": 270
+    },
+    "facing=west,canoe_carved=11,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/10",
+      "y": 270
+    },
+    "facing=west,canoe_carved=12,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/11",
+      "y": 270
+    },
+    "facing=west,canoe_carved=12,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/11",
+      "y": 270
+    },
+    "facing=west,canoe_carved=13,end=false": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/middle/12",
+      "y": 270
+    },
+    "facing=west,canoe_carved=13,end=true": {
+      "model": "firmaciv:block/wood/canoe_component_block/mangrove/end/12",
+      "y": 270
+    }
+  }
+}

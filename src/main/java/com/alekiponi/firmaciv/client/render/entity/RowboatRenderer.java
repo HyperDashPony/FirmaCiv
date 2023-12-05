@@ -1,10 +1,10 @@
 package com.alekiponi.firmaciv.client.render.entity;
 
-import com.google.common.collect.ImmutableMap;
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.RowboatEntityModel;
 import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.RowboatEntity;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -46,7 +46,7 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
 
     @Override
     public void render(RowboatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack poseStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
+            MultiBufferSource pBuffer, int pPackedLight) {
         poseStack.pushPose();
         poseStack.translate(0.0D, 0.4375D, 0.0D);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));

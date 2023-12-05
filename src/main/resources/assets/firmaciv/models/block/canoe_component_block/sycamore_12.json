@@ -1,8 +1,0 @@
-{
-	"parent": "firmaciv:block/canoe_component_block/template/middle_end_12",
-	"textures": {
-		"0": "tfc:block/wood/stripped_log/sycamore",
-		"1": "tfc:block/wood/stripped_log_top/sycamore",
-		"particle": "tfc:block/wood/stripped_log/sycamore"
-	}
-}

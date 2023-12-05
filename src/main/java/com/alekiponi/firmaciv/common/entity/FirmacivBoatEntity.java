@@ -1,10 +1,10 @@
 package com.alekiponi.firmaciv.common.entity;
 
-import com.google.common.collect.Lists;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.google.common.collect.Lists;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -113,18 +113,26 @@ public class FirmacivBoatEntity extends Entity {
     public int getPassengerNumber() {
         return PASSENGER_NUMBER;
     }
-    
-    public int[] getCleats(){return CLEATS;}
 
-    public int getCompartmentRotation(int i){return COMPARTMENT_ROTATIONS[i][0];}
+    public int[] getCleats() {
+        return CLEATS;
+    }
 
-    public float getPassengerSizeLimit(){
+    public int getCompartmentRotation(int i) {
+        return COMPARTMENT_ROTATIONS[i][0];
+    }
+
+    public float getPassengerSizeLimit() {
         return PASSENGER_SIZE_LIMIT;
     }
 
-    public int[][] getCompartmentRotationsArray(){return COMPARTMENT_ROTATIONS;}
+    public int[][] getCompartmentRotationsArray() {
+        return COMPARTMENT_ROTATIONS;
+    }
 
-    public int[] getCanAddOnlyBlocks(){return CAN_ADD_ONLY_BLOCKS;}
+    public int[] getCanAddOnlyBlocks() {
+        return CAN_ADD_ONLY_BLOCKS;
+    }
 
     protected int getMaxPassengers() {
         return this.getPassengerNumber();
@@ -133,10 +141,6 @@ public class FirmacivBoatEntity extends Entity {
     @Override
     protected float getEyeHeight(final Pose pose, final EntityDimensions entityDimensions) {
         return entityDimensions.height;
-    }
-
-    public void setDeltaRotation(float deltaRotation){
-        this.deltaRotation = deltaRotation;
     }
 
     protected float getDamageThreshold() {
@@ -149,6 +153,10 @@ public class FirmacivBoatEntity extends Entity {
 
     public float getDeltaRotation() {
         return deltaRotation;
+    }
+
+    public void setDeltaRotation(float deltaRotation) {
+        this.deltaRotation = deltaRotation;
     }
 
     @Override
@@ -197,18 +205,18 @@ public class FirmacivBoatEntity extends Entity {
                 super.getRelativePortalPosition(axis, portal));
     }
 
-    public boolean canIAcceptLargePassengers(EmptyCompartmentEntity compartmentEntity){
+    public boolean canIAcceptLargePassengers(EmptyCompartmentEntity compartmentEntity) {
         return true;
     }
 
-    public boolean canIAcceptPassengersOrBlocks(EmptyCompartmentEntity compartmentEntity){
+    public boolean canIAcceptPassengersOrBlocks(EmptyCompartmentEntity compartmentEntity) {
         return true;
     }
 
     @Nullable
-    public Entity getCompAsEntityFromIndex(int index){
-        if(this.getPassengers().size() == this.getPassengerNumber()){
-            if(this.getPassengers().get(index).isVehicle()){
+    public Entity getCompAsEntityFromIndex(int index) {
+        if (this.getPassengers().size() == this.getPassengerNumber()) {
+            if (this.getPassengers().get(index).isVehicle()) {
                 return this.getPassengers().get(index).getFirstPassenger();
             }
         }
@@ -300,7 +308,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     public void lerpTo(final double posX, final double posY, final double posZ, final float yaw, final float pitch,
-                       final int pPosRotationIncrements, final boolean teleport) {
+            final int pPosRotationIncrements, final boolean teleport) {
         this.lerpX = posX;
         this.lerpY = posY;
         this.lerpZ = posZ;
@@ -353,7 +361,6 @@ public class FirmacivBoatEntity extends Entity {
         }
 
 
-
         super.tick();
 
         // play effects based on movement
@@ -404,8 +411,6 @@ public class FirmacivBoatEntity extends Entity {
         }
 
 
-
-
         this.tickLerp();
         if (this.isControlledByLocalInstance()) {
             if (!(this.getFirstPassenger() instanceof Player)) {
@@ -424,9 +429,6 @@ public class FirmacivBoatEntity extends Entity {
             this.setDeltaMovement(Vec3.ZERO);
             this.deltaRotation = 0f;
         }
-
-
-
 
 
         this.tickBubbleColumn();
@@ -817,10 +819,10 @@ public class FirmacivBoatEntity extends Entity {
         return compartments;
     }
 
-    public boolean isBeingTowed(){
-        if(this.getPassengers().size() == this.getPassengerNumber()){
-            for(int i : this.getCleats()){
-                if(this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat){
+    public boolean isBeingTowed() {
+        if (this.getPassengers().size() == this.getPassengerNumber()) {
+            for (int i : this.getCleats()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat) {
                     return vehicleCleat.isLeashed() && this.getDeltaMovement().length() != 0;
                 }
             }
@@ -948,7 +950,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     protected void checkFallDamage(final double fallDistance, final boolean onGround, final BlockState blockState,
-                                   final BlockPos blockPos) {
+            final BlockPos blockPos) {
         this.lastYd = this.getDeltaMovement().y;
         if (this.isPassenger()) return;
 
@@ -968,10 +970,10 @@ public class FirmacivBoatEntity extends Entity {
 
             this.causeFallDamage(this.fallDistance, 1, this.damageSources().fall());
             if (!this.level().isClientSide && !this.isRemoved()) {
-                for(Entity passenger : this.getTruePassengers()){
+                for (Entity passenger : this.getTruePassengers()) {
                     passenger.causeFallDamage(this.fallDistance, 1, this.damageSources().fall());
                 }
-                for(Entity passenger : this.getPassengers()) {
+                for (Entity passenger : this.getPassengers()) {
                     if (passenger.isVehicle()) {
                         passenger.getFirstPassenger().kill();
                     }

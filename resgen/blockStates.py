@@ -78,6 +78,29 @@ angledWaterCraftFrame = {
     }}
 
 
+def canoe_component(wood: str) -> Json:
+    var: Json = {}
+
+    for direction, rotation in {"north": None, "east": 90, "south": 180, "west": 270}.items():
+        for n in range(8):
+            var[f"facing={direction},canoe_carved={n + 1}"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/all/{n}",
+                "y": rotation
+            }
+
+        for n in range(8, 13):
+            var[f"facing={direction},canoe_carved={n + 1},end=false"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/middle/{n}",
+                "y": rotation
+            }
+            var[f"facing={direction},canoe_carved={n + 1},end=true"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/end/{n}",
+                "y": rotation
+            }
+
+    return var
+
+
 def getWoodFrameMultipart(wood: str) -> list[Json]:
     # Only the frames
     json = [
@@ -131,17 +154,17 @@ def getWoodFrameMultipart(wood: str) -> list[Json]:
         # Wood progress states
         json += [
             ({"facing": "north", "shape": "straight", "frame_processed": processedStates},
-             {"model": f"firmaciv:block/watercraft_frame_angled/wood/straight/{template}/{wood}",
+             {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/straight/{template}",
               "uvlock": True,
               "y": 180}),
             ({"facing": "east", "shape": "straight", "frame_processed": processedStates},
-             {"model": f"firmaciv:block/watercraft_frame_angled/wood/straight/{template}/{wood}",
+             {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/straight/{template}",
               "uvlock": True,
               "y": 270}),
             ({"facing": "south", "shape": "straight", "frame_processed": processedStates},
-             {"model": f"firmaciv:block/watercraft_frame_angled/wood/straight/{template}/{wood}"}),
+             {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/straight/{template}"}),
             ({"facing": "west", "shape": "straight", "frame_processed": processedStates},
-             {"model": f"firmaciv:block/watercraft_frame_angled/wood/straight/{template}/{wood}",
+             {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/straight/{template}",
               "uvlock": True,
               "y": 90})
         ]
@@ -155,19 +178,19 @@ def getWoodFrameMultipart(wood: str) -> list[Json]:
             for template, processedStates in plankTemplateStates.items():
                 json += [
                     ({"facing": "north", "shape": f"{shape}_{side}", "frame_processed": processedStates},
-                     {"model": f"firmaciv:block/watercraft_frame_angled/wood/{shape}/{template}/{wood}",
+                     {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/{shape}/{template}",
                       "uvlock": True,
                       "y": rotation[0]}),
                     ({"facing": "east", "shape": f"{shape}_{side}", "frame_processed": processedStates},
-                     {"model": f"firmaciv:block/watercraft_frame_angled/wood/{shape}/{template}/{wood}",
+                     {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/{shape}/{template}",
                       "uvlock": True,
                       "y": rotation[1]}),
                     ({"facing": "south", "shape": f"{shape}_{side}", "frame_processed": processedStates},
-                     {"model": f"firmaciv:block/watercraft_frame_angled/wood/{shape}/{template}/{wood}",
+                     {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/{shape}/{template}",
                       "uvlock": True,
                       "y": rotation[2]}),
                     ({"facing": "west", "shape": f"{shape}_{side}", "frame_processed": processedStates},
-                     {"model": f"firmaciv:block/watercraft_frame_angled/wood/{shape}/{template}/{wood}",
+                     {"model": f"firmaciv:block/wood/watercraft_frame_angled/{wood}/{shape}/{template}",
                       "uvlock": True,
                       "y": rotation[3]})
                 ]

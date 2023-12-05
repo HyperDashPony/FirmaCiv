@@ -35,10 +35,10 @@ public enum IngameOverlays {
 
     SAILING_ELEMENT(IngameOverlays::renderSailingElement);
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation("firmaciv", "textures/gui/icons/compartment_icons.png");;
+    public static final ResourceLocation TEXTURE = new ResourceLocation("firmaciv",
+            "textures/gui/icons/compartment_icons.png");
     final IGuiOverlay overlay;
     private final String id;
-
 
 
     IngameOverlays(IGuiOverlay overlay) {
@@ -57,7 +57,8 @@ public enum IngameOverlays {
         event.registerAbove(vanilla.id(), overlay.id, overlay.overlay);
     }
 
-    private static void renderPassengerStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
+    private static void renderPassengerStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width,
+            int height) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player player = mc.player;
@@ -68,38 +69,42 @@ public enum IngameOverlays {
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
-                stack.translate((float)width / 2.0F, (float)height / 2.0F - 15.0F, 0.0F);
+                stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
                 stack.scale(1.0F, 1.0F, 1.0F);
 
                 String string = "";
 
-                if(entity == null){
+                if (entity == null) {
                     entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 5f);
                 }
 
-                if(entity instanceof LivingEntity livingEntity){
-                    if(livingEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity){
-                        long remainingTicks = (long) (ICalendar.TICKS_IN_DAY*3) - (Calendars.SERVER.getTicks() - emptyCompartmentEntity.getPassengerRideTick());
+                if (entity instanceof LivingEntity livingEntity) {
+                    if (livingEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
+                        long remainingTicks = (long) (ICalendar.TICKS_IN_DAY * 3) - (Calendars.SERVER.getTicks() - emptyCompartmentEntity.getPassengerRideTick());
 
                         if (remainingTicks <= ICalendar.TICKS_IN_DAY) {
                             string = "This rider is restless. ";
                         }
-                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject";
+                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage()
+                                .getString() + " + " + mc.options.keyUse.getTranslatedKeyMessage()
+                                .getString() + " to eject";
                     }
                 }
 
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
-                    if(emptyCompartmentEntity.getFirstPassenger() instanceof LivingEntity livingEntity){
-                        long remainingTicks = (long) (ICalendar.TICKS_IN_DAY*3) - (Calendars.SERVER.getTicks() - emptyCompartmentEntity.getPassengerRideTick());
+                    if (emptyCompartmentEntity.getFirstPassenger() instanceof LivingEntity livingEntity) {
+                        long remainingTicks = (long) (ICalendar.TICKS_IN_DAY * 3) - (Calendars.SERVER.getTicks() - emptyCompartmentEntity.getPassengerRideTick());
 
                         if (remainingTicks <= ICalendar.TICKS_IN_DAY) {
                             string = "This rider is restless. ";
                         }
-                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage().getString() +  " + " + mc.options.keyUse.getTranslatedKeyMessage().getString()  + " to eject";
+                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage()
+                                .getString() + " + " + mc.options.keyUse.getTranslatedKeyMessage()
+                                .getString() + " to eject";
                     }
                 }
 
-                if(!string.equals("")){
+                if (!string.equals("")) {
                     graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), false);
                 }
 
@@ -109,19 +114,20 @@ public enum IngameOverlays {
     }
 
 
-    private static void renderSailingElement(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
+    private static void renderSailingElement(ForgeGui gui, GuiGraphics graphics, float partialTick, int width,
+            int height) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player player = mc.player;
-            Vec2 windVector = Climate.getWindVector(player.level(),player.blockPosition());
-            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x/windVector.y)));
-            double speed = Math.round(windVector.length()*320*0.5399568);
+            Vec2 windVector = Climate.getWindVector(player.level(), player.blockPosition());
+            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
+            double speed = Math.round(windVector.length() * 320 * 0.5399568);
 
             if (setup(gui, mc)) {
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
-                stack.translate((float)width / 2.0F, (float)height / 2.0F - 15.0F, 0.0F);
+                stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
                 stack.scale(1.0F, 1.0F, 1.0F);
 
                 String string = "speed: " + speed + " knots, direction: " + direction;
@@ -134,8 +140,8 @@ public enum IngameOverlays {
     }
 
 
-
-    private static void renderCompartmentStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
+    private static void renderCompartmentStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width,
+            int height) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player player = mc.player;
@@ -145,8 +151,8 @@ public enum IngameOverlays {
 
                 stack.pushPose();
                 stack.scale(1.0F, 1.0F, 1.0F);
-                stack.translate((float)width / 2.0F - 5f - 12f, (float)height / 2.0F - 5F, 0.0F);
-                if((float)height % 2.0 != 0){
+                stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
+                if ((float) height % 2.0 != 0) {
                     stack.translate(0f, 0.5f, 0.0f);
                 }
 
@@ -154,17 +160,20 @@ public enum IngameOverlays {
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
 
                     if (emptyCompartmentEntity.getTrueVehicle() != null) {
-                        if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger().is(emptyCompartmentEntity)) {
+                        if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger()
+                                .is(emptyCompartmentEntity)) {
                             graphics.blit(TEXTURE, 0, 0, 0, 0, 9, 9);
-                            if(emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity && player.getItemInHand(player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)){
+                            if (emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity && player.getItemInHand(
+                                    player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)) {
                                 graphics.blit(TEXTURE, -12, 0, 9, 0, 9, 9);
                             }
 
-                        } else if (player.getItemInHand(player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)){
+                        } else if (player.getItemInHand(player.getUsedItemHand())
+                                .is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)) {
                             graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
-                        } else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()){
+                        } else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()) {
                             graphics.blit(TEXTURE, 0, 0, 36, 0, 9, 9);
-                        } else if (!emptyCompartmentEntity.isVehicle() && emptyCompartmentEntity.canAddOnlyBLocks()){
+                        } else if (!emptyCompartmentEntity.isVehicle() && emptyCompartmentEntity.canAddOnlyBLocks()) {
                             graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
                         }
                     }

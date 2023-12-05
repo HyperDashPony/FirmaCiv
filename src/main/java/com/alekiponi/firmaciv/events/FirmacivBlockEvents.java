@@ -1,8 +1,8 @@
 package com.alekiponi.firmaciv.events;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.common.block.CanoeComponentBlock;
+import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.events.config.FirmacivConfig;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.events.StartFireEvent;

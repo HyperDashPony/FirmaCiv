@@ -1,0 +1,17 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " LL",
+    "LLL",
+    "LL "
+  ],
+  "key": {
+    "L": {
+      "tag": "tfc:lumber"
+    }
+  },
+  "result": {
+    "item": "firmaciv:watercraft_frame_angled"
+  }
+}

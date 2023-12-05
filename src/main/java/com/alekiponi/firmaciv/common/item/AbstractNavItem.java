@@ -55,7 +55,7 @@ public class AbstractNavItem extends Item {
     }
 
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand,
-                                                  NavType navType) {
+            NavType navType) {
 
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
 

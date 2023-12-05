@@ -1,9 +1,11 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.alekiponi.firmaciv.common.entity.*;
+import com.alekiponi.firmaciv.common.entity.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.entity.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.SloopEntity;
 import com.alekiponi.firmaciv.util.FirmacivTags;
+import com.google.common.collect.Lists;
 import net.dries007.tfc.common.entities.predator.Predator;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
@@ -23,26 +25,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class EmptyCompartmentEntity extends CompartmentEntity {
+    protected static final EntityDataAccessor<Long> DATA_ID_PASSENGER_RIDE_TICK = SynchedEntityData.defineId(
+            EmptyCompartmentEntity.class, EntityDataSerializers.LONG);
+    protected final long stillTick = 8000;
     protected boolean inputLeft;
     protected boolean inputRight;
     protected boolean inputUp;
     protected boolean inputDown;
-
     protected boolean canAddNonPlayers;
-
     protected boolean canAddOnlyBlocks;
-
-    protected final long stillTick = 8000;
-
-    protected static final EntityDataAccessor<Long> DATA_ID_PASSENGER_RIDE_TICK = SynchedEntityData.defineId(
-            EmptyCompartmentEntity.class, EntityDataSerializers.LONG);
 
 
     public EmptyCompartmentEntity(final EntityType<?> entityType, final Level level) {
@@ -77,7 +74,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
 
     protected void addPassenger(Entity pPassenger) {
         super.addPassenger(pPassenger);
-        if(this.isPassenger()){
+        if (this.isPassenger()) {
             this.setYRot(this.getVehicle().getYRot());
         }
     }
@@ -110,7 +107,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         }
         if (passenger.getBbWidth() > 0.9f) {
             localX += 0.2f;
-            if(this.getTrueVehicle() instanceof RowboatEntity){
+            if (this.getTrueVehicle() instanceof RowboatEntity) {
                 localX -= 0.6f;
             }
         }
@@ -150,9 +147,9 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                 canAddNonPlayers = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
             }
             if (tickCount < 100 && this.isPassenger()) {
-                for(int i : this.getTrueVehicle().getCanAddOnlyBlocks()){
-                    if(this.getTrueVehicle().getPassengers().size() == this.getTrueVehicle().getPassengerNumber()){
-                        if(this.getTrueVehicle().getPassengers().get(i) == this.getVehicle()){
+                for (int i : this.getTrueVehicle().getCanAddOnlyBlocks()) {
+                    if (this.getTrueVehicle().getPassengers().size() == this.getTrueVehicle().getPassengerNumber()) {
+                        if (this.getTrueVehicle().getPassengers().get(i) == this.getVehicle()) {
                             canAddOnlyBlocks = true;
                         }
                     }
@@ -171,7 +168,8 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                 .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
 
 
-        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level().isClientSide() && this.getTrueVehicle() != null) {
+        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level()
+                .isClientSide() && this.getTrueVehicle() != null) {
             for (final Entity entity : list) {
                 if (!entity.hasPassenger(this)) {
                     float maxSize = 0.6f;
@@ -179,7 +177,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                     boolean thingy = entity.getBbWidth() <= maxSize;
                     if (this.getPassengers()
                             .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
-                        if(!(entity instanceof Predator)){
+                        if (!(entity instanceof Predator)) {
                             entity.startRiding(this);
                             this.setPassengerRideTick(Calendars.SERVER.getTicks());
                         }
@@ -189,8 +187,8 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             }
         }
 
-        if(this.isVehicle() && !(this.getFirstPassenger() instanceof Player)){
-            long remainingTicks = (long) (ICalendar.TICKS_IN_DAY*3) - (Calendars.SERVER.getTicks() - this.getPassengerRideTick());
+        if (this.isVehicle() && !(this.getFirstPassenger() instanceof Player)) {
+            long remainingTicks = (long) (ICalendar.TICKS_IN_DAY * 3) - (Calendars.SERVER.getTicks() - this.getPassengerRideTick());
 
             if (remainingTicks <= 0L) {
                 this.ejectPassengers();
@@ -223,7 +221,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
 
 
     public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
-                         final boolean inputDown) {
+            final boolean inputDown) {
         this.inputLeft = inputLeft;
         this.inputRight = inputRight;
         this.inputUp = inputUp;

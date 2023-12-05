@@ -1,4 +1,5 @@
 {
+  "__comment__": "This file was automatically created by mcresources",
   "type": "tfc:heating",
   "ingredient": {
     "item": "firmaciv:oarlock"
@@ -7,5 +8,5 @@
     "fluid": "tfc:metal/cast_iron",
     "amount": 200
   },
-  "temperature": 930
+  "temperature": 1535
 }
