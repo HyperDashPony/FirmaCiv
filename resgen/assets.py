@@ -2,6 +2,7 @@ from mcresources import ResourceManager
 
 import blockStates
 import constants
+import lootTables
 
 
 def generate(manager: ResourceManager):
@@ -15,7 +16,7 @@ def generate(manager: ResourceManager):
 
         manager.blockstate_multipart(f"wood/watercraft_frame_angled/{wood}",
                                      *blockStates.getWoodFrameMultipart(wood)).with_lang(
-            f"{name} Shipwright's Scaffolding").with_block_loot("firmaciv:watercraft_frame_angled")
+            f"{name} Shipwright's Scaffolding").with_block_loot(*lootTables.boat_frame(wood))
 
         # Canoe components now
         canoe_component_textures = {"0": f"tfc:block/wood/stripped_log/{wood}",
