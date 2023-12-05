@@ -55,6 +55,12 @@ def generate(rm: ResourceManager):
                        {"S": "#forge:string", "H": "firmaciv:large_waterproof_hide", "L": "#tfc:lumber"},
                        "firmaciv:kayak").with_advancement("firmaciv:kayak")
 
+    rm.crafting_shapeless("crafting/large_waterproof_hide",
+                          ["tfc:large_prepared_hide", *["firmalife:beeswax" for _ in range(4)]],
+                          "firmaciv:large_waterproof_hide",
+                          conditions={"type": "forge:mod_loaded", "modid": "firmalife"}).with_advancement(
+        "firmaciv:large_waterproof_hide")
+
     # Oar/paddles
     rm.crafting_shaped("crafting/oar", ["  S", " S ", "L  "], {"S": "#forge:rods/wooden", "L": "#tfc:lumber"},
                        "firmaciv:oar").with_advancement("firmaciv:oar")
