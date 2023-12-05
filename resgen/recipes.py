@@ -41,3 +41,11 @@ def generate(rm: ResourceManager):
                                 "amount": 100
                             }}],
                           "firmaciv:barometer").with_advancement("firmaciv:barometer")
+
+    # Oar/paddles
+    rm.crafting_shaped("crafting/oar", ["  S", " S ", "L  "], {"S": "#forge:rods/wooden", "L": "#tfc:lumber"},
+                       "firmaciv:oar").with_advancement("firmaciv:oar")
+    rm.crafting_shaped("crafting/kayak_paddle", ["  L", " S ", "L  "], {"S": "#forge:rods/wooden", "L": "#tfc:lumber"},
+                       "firmaciv:kayak_paddle").with_advancement("firmaciv:kayak_paddle")
+    rm.crafting_shaped("crafting/canoe_paddle", [" S ", "L  "], {"S": "#forge:rods/wooden", "L": "#tfc:lumber"},
+                       "firmaciv:canoe_paddle").with_advancement("firmaciv:canoe_paddle")
