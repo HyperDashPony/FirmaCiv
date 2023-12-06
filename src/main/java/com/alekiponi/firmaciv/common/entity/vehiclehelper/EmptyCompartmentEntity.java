@@ -174,7 +174,6 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                 if (!entity.hasPassenger(this)) {
                     float maxSize = 0.6f;
                     maxSize = this.getTrueVehicle().getPassengerSizeLimit();
-                    boolean thingy = entity.getBbWidth() <= maxSize;
                     if (this.getPassengers()
                             .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                         if (!(entity instanceof Predator)) {
