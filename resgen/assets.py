@@ -22,10 +22,12 @@ def generate(rm: ResourceManager):
         canoe_component_textures = {"0": f"tfc:block/wood/stripped_log/{woodType}",
                                     "1": f"tfc:block/wood/stripped_log_top/{woodType}",
                                     "particle": f"tfc:block/wood/stripped_log/{woodType}"}
+
         # Models that are shared by the end and middle states
         for n in range(8):
             rm.block_model(f"wood/canoe_component_block/{woodType}/all/{n}", canoe_component_textures,
                            f"firmaciv:block/canoe_component_block/template/all/{n}")
+
         # End and Middle only models
         for n in range(8, 13):
             rm.block_model(f"wood/canoe_component_block/{woodType}/end/{n}", canoe_component_textures,
@@ -39,6 +41,7 @@ def generate(rm: ResourceManager):
     # Basic frame
     rm.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
         "Shipwright's Scaffolding").with_block_loot("firmaciv:watercraft_frame_angled")
+
     # Need to manually make the model
     rm.item_model("watercraft_frame_angled", parent="firmaciv:block/watercraft_frame_angled/straight",
                   no_textures=True)
