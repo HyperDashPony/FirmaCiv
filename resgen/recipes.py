@@ -80,6 +80,16 @@ def generate(rm: ResourceManager):
     heat_recipe(rm, "unfinished_nav_clock", "firmaciv:unfinished_nav_clock", 930, None, "400 tfc:metal/brass")
     heat_recipe(rm, "unfinished_sextant", "firmaciv:unfinished_sextant", 930, None, "200 tfc:metal/brass")
 
+    quern_recipe(rm, "amethyst", "tfc:gem/amethyst", "tfc:powder/amethyst", count=4)
+    quern_recipe(rm, "diamond", "tfc:gem/diamond", "tfc:powder/diamond", count=4)
+    quern_recipe(rm, "emerald", "tfc:gem/emerald", "tfc:powder/emerald", count=4)
+    quern_recipe(rm, "lapis_lazuli", "tfc:gem/lapis_lazuli", "tfc:powder/lapis_lazuli", count=4)
+    quern_recipe(rm, "opal", "tfc:gem/opal", "tfc:powder/opal", count=4)
+    quern_recipe(rm, "pyrite", "tfc:gem/pyrite", "tfc:powder/pyrite", count=4)
+    quern_recipe(rm, "ruby", "tfc:gem/ruby", "tfc:powder/ruby", count=4)
+    quern_recipe(rm, "sapphire", "tfc:gem/sapphire", "tfc:powder/sapphire", count=4)
+    quern_recipe(rm, "topaz", "tfc:gem/topaz", "tfc:powder/topaz", count=4)
+
 
 def heat_recipe(rm: ResourceManager, name_parts: ResourceIdentifier, ingredient: Json, temperature: float,
                 result_item: Optional[Union[str, Json]] = None, result_fluid: Optional[str] = None,
@@ -96,6 +106,19 @@ def heat_recipe(rm: ResourceManager, name_parts: ResourceIdentifier, ingredient:
         'temperature': temperature,
         'use_durability': use_durability if use_durability else None,
         'chance': chance,
+    })
+
+
+def quern_recipe(rm: ResourceManager, name: ResourceIdentifier, item: str, result: str,
+                 count: int = 1) -> RecipeContext:
+    """
+    Copied from tfc data gen
+    """
+    result = result if not isinstance(result, str) else utils.item_stack((count, result))
+
+    return rm.recipe(('quern', name), 'tfc:quern', {
+        'ingredient': utils.ingredient(item),
+        'result': result
     })
 
 
