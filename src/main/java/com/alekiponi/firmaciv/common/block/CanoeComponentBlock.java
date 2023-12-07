@@ -5,6 +5,8 @@ import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,7 +50,9 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
     public final BoatVariant variant;
+    private RegistryWood wood;
 
+    @Deprecated
     public CanoeComponentBlock(final Properties properties, final BoatVariant variant) {
         super(properties);
         this.registerDefaultState(
@@ -57,6 +61,18 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         this.variant = variant;
         this.strippedBlock = variant.getStripped();
         this.lumberItem = variant.getLumber();
+    }
+
+    public CanoeComponentBlock(final Properties properties, final Supplier<? extends Item> lumberItem,
+            final RegistryWood wood) {
+        super(properties);
+        this.registerDefaultState(
+                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(AXIS, Direction.Axis.Z)
+                        .setValue(CANOE_CARVED, 1).setValue(END, false));
+        this.strippedBlock = wood.getBlock(Wood.BlockType.STRIPPED_LOG);
+        this.lumberItem = lumberItem;
+        this.wood = wood;
+        this.variant = BoatVariant.ACACIA;
     }
 
     public static Block getByStripped(final Block strippedLogBlock) {
