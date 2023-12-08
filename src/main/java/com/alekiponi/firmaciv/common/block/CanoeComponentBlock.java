@@ -48,7 +48,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
-    private RegistryWood wood;
+    public final RegistryWood wood;
 
     public CanoeComponentBlock(final Properties properties, final Supplier<? extends Item> lumberItem,
             final RegistryWood wood) {
