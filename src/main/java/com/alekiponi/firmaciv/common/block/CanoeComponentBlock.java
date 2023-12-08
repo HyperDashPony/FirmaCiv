@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -44,8 +45,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
     public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED_13;
     public static final BooleanProperty END = FirmacivBlockStateProperties.END;
-    private static final VoxelShape SHAPE_FINAL = Block.box(0, 0, 0, 16, 9, 16);
-    private static final VoxelShape SHAPE_1 = Block.box(0, 0, 0, 16, 16, 16);
+    private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
     private RegistryWood wood;
@@ -327,8 +327,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public VoxelShape getShape(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
             final CollisionContext collisionContext) {
         return switch (blockState.getValue(CANOE_CARVED)) {
-            case 1, 2, 3, 4 -> SHAPE_1;
-            default -> SHAPE_FINAL;
+            case 1, 2, 3, 4 -> Shapes.block();
+            default -> HALF_SHAPE;
         };
     }
 
