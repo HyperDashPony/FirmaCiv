@@ -62,6 +62,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     }
 
     public static Block getByStripped(final Block strippedLogBlock) {
+        // TODO make a map of stripped logs -> canoe components?
+        //noinspection OptionalGetWithoutIsPresent
         return CANOE_COMPONENT_BLOCKS.values().stream()
                 .filter(registryObject -> registryObject.get().strippedBlock.get() == strippedLogBlock)
                 .map(RegistryObject::get).findFirst().get();
@@ -74,17 +76,15 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         final Block canoeComponentBlock = getByStripped(strippedLogBlock);
 
-        BlockPos blockPos0 = blockPos;
-
         int row = 0;
         for (int i = -2; i <= 2; ++i) {
             // check two blocks in each direction and look for a row of 3 blocks
 
-            blockPos0 = blockPos.relative(axis, i);
-            if (levelAccessor.getBlockState(blockPos0).is(strippedLogBlock) || levelAccessor.getBlockState(blockPos0)
-                    .is(canoeComponentBlock)) {
+            final BlockPos relativePos = blockPos.relative(axis, i);
+            if (levelAccessor.getBlockState(relativePos).is(strippedLogBlock) || levelAccessor.getBlockState(
+                    relativePos).is(canoeComponentBlock)) {
 
-                if (levelAccessor.getBlockState(blockPos0).getValue(AXIS) == axis) {
+                if (levelAccessor.getBlockState(relativePos).getValue(AXIS) == axis) {
                     row++;
                     if (row == 3) {
                         return true;
@@ -243,6 +243,9 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         final CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.wood).get().create(level);
 
+        // Failed to create a canoe will crash with NPE
+        if (canoe == null) return;
+
         {
             // TODO this seems weird, why are we using the axis to figure out if the entity should be rotated?
             final float rotation = axis == Direction.Axis.X ? 90 : 0;
@@ -341,14 +344,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> stateBuilder) {
         super.createBlockStateDefinition(stateBuilder.add(FACING).add(AXIS).add(CANOE_CARVED).add(END));
-    }
-
-    public Item getLumber() {
-        return lumberItem.get();
-    }
-
-    public Block getStrippedLog() {
-        return strippedBlock.get();
     }
 
     @Override
