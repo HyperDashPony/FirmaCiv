@@ -2,7 +2,6 @@ package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -49,19 +48,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE_1 = Block.box(0, 0, 0, 16, 16, 16);
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
-    public final BoatVariant variant;
     private RegistryWood wood;
-
-    @Deprecated
-    public CanoeComponentBlock(final Properties properties, final BoatVariant variant) {
-        super(properties);
-        this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(AXIS, Direction.Axis.Z)
-                        .setValue(CANOE_CARVED, 1).setValue(END, false));
-        this.variant = variant;
-        this.strippedBlock = variant.getStripped();
-        this.lumberItem = variant.getLumber();
-    }
 
     public CanoeComponentBlock(final Properties properties, final Supplier<? extends Item> lumberItem,
             final RegistryWood wood) {
@@ -72,7 +59,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         this.strippedBlock = wood.getBlock(Wood.BlockType.STRIPPED_LOG);
         this.lumberItem = lumberItem;
         this.wood = wood;
-        this.variant = BoatVariant.ACACIA;
     }
 
     public static Block getByStripped(final Block strippedLogBlock) {
