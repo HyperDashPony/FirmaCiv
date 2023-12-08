@@ -226,44 +226,41 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             return;
         }
 
-        BlockPattern.BlockPatternMatch blockpattern$blockpatternmatch = createCanoeFull(canoeComponentBlock).find(level,
-                blockPos);
-        if (blockpattern$blockpatternmatch != null) {
+        final BlockPattern.BlockPatternMatch canoePattern = createCanoeFull(canoeComponentBlock).find(level, blockPos);
 
-            Direction.Axis axis = level.getBlockState(blockPos).getValue(AXIS);
-            BlockPos middleblockpos = getMiddleBlockPos(level, blockPos, canoeComponentBlock);
+        if (canoePattern == null) return;
 
-            for (int i = 0; i < createCanoeFull(canoeComponentBlock).getHeight(); ++i) {
-                BlockInWorld blockinworld = blockpattern$blockpatternmatch.getBlock(0, i, 0);
-                level.setBlock(blockinworld.getPos(), Blocks.AIR.defaultBlockState(), 2);
-                level.levelEvent(2001, blockinworld.getPos(), Block.getId(blockinworld.getState()));
-            }
+        final Direction.Axis axis = level.getBlockState(blockPos).getValue(AXIS);
+        final BlockPos middleBlockPos = getMiddleBlockPos(level, blockPos, canoeComponentBlock);
 
-            CanoeComponentBlock ccb = (CanoeComponentBlock) canoeComponentBlock;
-
-            CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.wood).get().create(level);
-
-            if (axis == Direction.Axis.X) {
-                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
-                        (double) middleblockpos.getZ() + 0.5D, 90.0F, 0.0F);
-            } else {
-                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
-                        (double) middleblockpos.getZ() + 0.5D, 0.0F, 0.0F);
-            }
-
-            level.addFreshEntity(canoe);
-
-            for (ServerPlayer serverplayer : level.getEntitiesOfClass(ServerPlayer.class,
-                    canoe.getBoundingBox().inflate(5.0D))) {
-                CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, canoe);
-            }
-
-            for (int l = 0; l < createCanoeFull(canoeComponentBlock).getHeight(); ++l) {
-                BlockInWorld blockinworld3 = blockpattern$blockpatternmatch.getBlock(0, l, 0);
-                level.blockUpdated(blockinworld3.getPos(), Blocks.AIR);
-            }
+        for (int i = 0; i < createCanoeFull(canoeComponentBlock).getHeight(); ++i) {
+            final BlockInWorld patternBlock = canoePattern.getBlock(0, i, 0);
+            level.setBlock(patternBlock.getPos(), Blocks.AIR.defaultBlockState(), 2);
+            level.levelEvent(2001, patternBlock.getPos(), Block.getId(patternBlock.getState()));
         }
 
+        final CanoeComponentBlock ccb = (CanoeComponentBlock) canoeComponentBlock;
+
+        final CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.wood).get().create(level);
+
+        {
+            // TODO this seems weird, why are we using the axis to figure out if the entity should be rotated?
+            final float rotation = axis == Direction.Axis.X ? 90 : 0;
+            canoe.moveTo(middleBlockPos.getX() + 0.5, middleBlockPos.getY() + 0.05, middleBlockPos.getZ() + 0.5,
+                    rotation, 0);
+        }
+
+        level.addFreshEntity(canoe);
+
+        for (final ServerPlayer serverplayer : level.getEntitiesOfClass(ServerPlayer.class,
+                canoe.getBoundingBox().inflate(5))) {
+            CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, canoe);
+        }
+
+        for (int l = 0; l < createCanoeFull(canoeComponentBlock).getHeight(); ++l) {
+            final BlockInWorld patternBlock = canoePattern.getBlock(0, l, 0);
+            level.blockUpdated(patternBlock.getPos(), Blocks.AIR);
+        }
     }
 
     private static BlockPattern createCanoeFull(final Block canoeComponentBlock) {
