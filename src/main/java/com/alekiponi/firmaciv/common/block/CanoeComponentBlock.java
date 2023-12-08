@@ -255,7 +255,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
             CanoeComponentBlock ccb = (CanoeComponentBlock) canoeComponentBlock;
 
-            CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.variant).get().create(level);
+            CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.wood).get().create(level);
 
             if (axis == Direction.Axis.X) {
                 canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
