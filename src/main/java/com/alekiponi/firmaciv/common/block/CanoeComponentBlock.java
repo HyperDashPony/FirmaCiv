@@ -352,17 +352,17 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             final BlockState newState, final boolean movedByPiston) {
         super.onRemove(blockState, level, blockPos, newState, movedByPiston);
 
-        if (newState.is(blockState.getBlock()) || blockState.getValue(CANOE_CARVED) >= 13) return;
+        if (newState.is(this) || blockState.getValue(CANOE_CARVED) >= 13) return;
 
-        final Block ccb = blockState.getBlock();
         final Direction.Axis axis = blockState.getValue(AXIS);
 
-        if (level.getBlockState(blockPos.relative(axis, 1)).is(ccb) && level.getBlockState(blockPos.relative(axis, 1))
-                .getValue(AXIS) == axis) {
+        if (level.getBlockState(blockPos.relative(axis, 1)).is(this) && level.getBlockState(
+                blockPos.relative(axis, 1)).getValue(AXIS) == axis) {
             level.destroyBlock(blockPos.relative(axis, 1), true);
         }
-        if (level.getBlockState(blockPos.relative(axis, -1)).is(ccb) && level.getBlockState(blockPos.relative(axis, -1))
-                .getValue(AXIS) == axis) {
+
+        if (level.getBlockState(blockPos.relative(axis, -1)).is(this) && level.getBlockState(
+                blockPos.relative(axis, -1)).getValue(AXIS) == axis) {
             level.destroyBlock(blockPos.relative(axis, -1), true);
         }
     }
