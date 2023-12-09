@@ -48,6 +48,9 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
 
         if (this.isLit) return;
 
+        // Not at the point where it can be lit on fire
+        if (this.getBlockState().getValue(CANOE_CARVED) != 11) return;
+
         this.isLit = true;
         this.litTick = Calendars.SERVER.getTicks();
         this.markForBlockUpdate();

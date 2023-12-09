@@ -2,7 +2,7 @@ package com.alekiponi.firmaciv.events;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.block.CanoeComponentBlock;
-import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
+import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.alekiponi.firmaciv.events.config.FirmacivConfig;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.events.StartFireEvent;
@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ToolActions;
@@ -26,16 +25,15 @@ public final class FirmacivBlockEvents {
 
     @SubscribeEvent
     public static void onStartFire(final StartFireEvent event) {
-        if (event.getState().is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)) {
+        final BlockState blockState = event.getState();
+        final BlockPos blockPos = event.getPos();
 
-            if (event.getState().getValue(CanoeComponentBlock.CANOE_CARVED) == 11) {
-
-                final BlockEntity blockEntity = event.getPlayer().level().getBlockEntity(event.getPos());
-
-                if (blockEntity instanceof CanoeComponentBlockEntity ccBlockEntity) {
-                    ccBlockEntity.light();
-                }
-            }
+        if (blockState.getBlock() instanceof CanoeComponentBlock) {
+            event.getLevel().getBlockEntity(blockPos, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get())
+                    .ifPresent(canoe -> {
+                        canoe.light();
+                        event.setCanceled(true);
+                    });
         }
     }
 
