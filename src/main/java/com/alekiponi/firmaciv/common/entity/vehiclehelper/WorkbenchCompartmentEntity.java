@@ -35,7 +35,12 @@ public class WorkbenchCompartmentEntity extends CompartmentEntity implements Has
 
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
+        this.openCustomInventoryScreen(player);
+        return InteractionResult.SUCCESS;
+    }
 
+    @Override
+    public void openCustomInventoryScreen(final Player player) {
         // Stupid, gross, dirty way of letting vanilla do most of the container work
         class WorkbenchLevelAccess implements ContainerLevelAccess {
             private final WorkbenchCompartmentEntity compartment;
@@ -54,11 +59,5 @@ public class WorkbenchCompartmentEntity extends CompartmentEntity implements Has
                 (containerID, playerInventory, unused) -> new CompartmentCraftingMenu(containerID, playerInventory,
                         new WorkbenchLevelAccess(this)), CONTAINER_TITLE));
         player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
-        return InteractionResult.CONSUME;
-    }
-
-    @Override
-    public void openCustomInventoryScreen(final Player player) {
-        // TODO move the menu opening from interact to here
     }
 }
