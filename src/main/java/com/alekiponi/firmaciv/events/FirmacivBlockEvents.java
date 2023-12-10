@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -39,18 +40,26 @@ public final class FirmacivBlockEvents {
 
     @SubscribeEvent
     public static void onBlockToolModification(final BlockToolModificationEvent event) {
-        if (event.getToolAction() == ToolActions.AXE_STRIP && (event.getState()
-                .is(FirmacivTags.Blocks.CAN_MAKE_CANOE) || (!FirmacivConfig.SERVER.canoeWoodRestriction.get() && event.getState()
-                .is(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED))) && event.getPlayer()
-                .getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS)) {
-            if (event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()) {
+        // We only care about strip events
+        if (event.getToolAction() != ToolActions.AXE_STRIP) return;
+
+        final BlockState blockState = event.getState();
+        final ItemStack heldStack = event.getHeldItemStack();
+
+        // Item is a saw so we should attempt a conversion
+        if (heldStack.is(FirmacivTags.Items.SAWS)) {
+            final boolean isConvertibleBlock = blockState.is(
+                    FirmacivConfig.SERVER.canoeWoodRestriction.get() ? FirmacivTags.Blocks.CAN_MAKE_CANOE : FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
+
+            if (isConvertibleBlock && blockState.getValue(BlockStateProperties.AXIS).isHorizontal()) {
                 convertLogToCanoeComponent(event);
+                return;
             }
         }
 
-        if (event.getToolAction() == ToolActions.AXE_STRIP && (event.getState()
-                .is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))) {
-            if (event.getState().getValue(BlockStateProperties.AXIS).isHorizontal()) {
+        // All other axe strip events try to process the canoe component
+        if (blockState.is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)) {
+            if (blockState.getValue(BlockStateProperties.AXIS).isHorizontal()) {
                 processCanoeComponent(event);
             }
         }
