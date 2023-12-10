@@ -20,6 +20,18 @@
     "tfc:wood/chest/spruce",
     "tfc:wood/chest/sycamore",
     "tfc:wood/chest/white_cedar",
-    "tfc:wood/chest/willow"
+    "tfc:wood/chest/willow",
+
+
+
+    "tfc:metal/anvil/bismuth_bronze",
+    "tfc:metal/anvil/black_bronze",
+    "tfc:metal/anvil/bronze",
+    "tfc:metal/anvil/copper",
+    "tfc:metal/anvil/wrought_iron",
+    "tfc:metal/anvil/steel",
+    "tfc:metal/anvil/black_steel",
+    "tfc:metal/anvil/blue_steel",
+    "tfc:metal/anvil/red_steel"
   ]
 }

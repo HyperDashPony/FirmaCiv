@@ -49,6 +49,11 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(WorkbenchCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "compartment_workbench").toString()));
 
+    public static final RegistryObject<EntityType<AnvilCompartmentEntity>> ANVIL_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
+            "compartment_anvil",
+            () -> EntityType.Builder.of(AnvilCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "compartment_anvil").toString()));
+
     public static final RegistryObject<EntityType<VehiclePartEntity>> VEHICLE_PART_ENTITY = ENTITY_TYPES.register(
             "vehicle_part",
             () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.025F, 0.025F)
@@ -64,13 +69,15 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "outrigger").toString()));
 
+     */
+
 
     public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
             () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(4F, 0.75F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
 
 
-     */
+
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

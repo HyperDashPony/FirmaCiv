@@ -32,6 +32,9 @@ public class FirmacivTags {
         public static final TagKey<Item> SAWS = getFromTFC("saws");
         public static final TagKey<Item> AXES = getFromTFC("axes");
         public static final TagKey<Item> LUMBER = getFromTFC("lumber");
+
+        public static final TagKey<Item> ANVILS = getFromTFC("anvils");
+
         public static final TagKey<Item> PLANKS = create("planks");
         public static final TagKey<Item> CHESTS = create("chests");
         public static final TagKey<Item> WORKBENCHES = create("workbenches");

@@ -28,6 +28,8 @@ public class FirmacivTabs {
                         pOutput.accept(FirmacivItems.BAROMETER.get());
                         pOutput.accept(FirmacivItems.UNFINISHED_BAROMETER.get());
 
+                        pOutput.accept(FirmacivItems.FIRMACIV_COMPASS.get());
+
                         pOutput.accept(FirmacivItems.LARGE_WATERPROOF_HIDE.get());
                         pOutput.accept(FirmacivItems.KAYAK.get());
                         pOutput.accept(FirmacivItems.KAYAK_PADDLE.get());

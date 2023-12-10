@@ -82,26 +82,27 @@ public class RowboatEntity extends FirmacivBoatEntity {
                         // front / pilot seat
                         localX = 1.1f;
                         localZ = 0.0f;
+                        localY += 0.15f;
                     }
                     case 1 -> {
                         // back right seat
                         localX = -0.95f;
-                        localZ = 0.4f;
+                        localZ = 0.375f;
                     }
                     case 2 -> {
                         // back left seat
                         localX = -0.95f;
-                        localZ = -0.4f;
+                        localZ = -0.375f;
                     }
                     case 3 -> {
                         // middle right seat
                         localX = -0.1f;
-                        localZ = 0.4f;
+                        localZ = 0.375f;
                     }
                     case 4 -> {
                         // middle left seat
                         localX = -0.1f;
-                        localZ = -0.4f;
+                        localZ = -0.375f;
                     }
                     case 5 -> {
                         // cleat

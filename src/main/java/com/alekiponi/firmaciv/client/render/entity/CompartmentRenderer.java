@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.client.render.entity;
 
+import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.ChestCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
@@ -34,15 +35,17 @@ public class CompartmentRenderer extends EntityRenderer<CompartmentEntity> {
             BlockState blockstate = null;
             if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
                 blockstate = bi.getBlock().defaultBlockState();
-                if (pEntity instanceof ChestCompartmentEntity) {
-                    //blockstate = blockstate.setValue(ChestBlock.FACING, Direction.NORTH);
-                }
             }
             if (blockstate != null) {
                 pPoseStack.pushPose();
                 pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - pEntityYaw));
                 pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
-                pPoseStack.scale(0.6F, 0.6F, 0.6F);
+                if(pEntity.getTrueVehicle() instanceof CanoeEntity){
+                    pPoseStack.scale(0.6F, 0.6F, 0.6F);
+                } else {
+                    pPoseStack.scale(0.6875F, 0.6875F, 0.6875F);
+                }
+
                 pPoseStack.translate(-0.5F, 00F, -0.5F);
 
                 this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);

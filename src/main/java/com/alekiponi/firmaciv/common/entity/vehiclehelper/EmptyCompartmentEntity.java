@@ -264,9 +264,12 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
         if (this.canAddNonPlayers() && !item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
-            } /*else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
+            } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
                 newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
-            }*/
+            }
+            else if (item.is(FirmacivTags.Items.ANVILS)){
+                newCompartment = FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get().create(player.level());
+            }
         }
 
         if (ridingThisPart == null) return InteractionResult.PASS;
@@ -275,7 +278,12 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             swapCompartments(newCompartment);
             newCompartment.setYRot(newCompartment.ridingThisPart.getYRot() + ridingThisPart.compartmentRotation);
             newCompartment.setBlockTypeItem(item.split(1));
-            this.playSound(SoundEvents.WOOD_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            if(newCompartment.getBlockTypeItem().is(FirmacivTags.Items.ANVILS)){
+                this.playSound(SoundEvents.METAL_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            } else {
+                this.playSound(SoundEvents.WOOD_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            }
+
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
