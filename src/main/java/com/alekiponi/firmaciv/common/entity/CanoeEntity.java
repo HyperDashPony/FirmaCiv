@@ -119,12 +119,16 @@ public class CanoeEntity extends FirmacivBoatEntity {
             if (this.getPassengers().size() > 1) {
                 switch (this.getPassengers().indexOf(passenger)) {
                     case 0 -> {
+                        //forward seat
                         localX = 0.3f;
                         localZ = 0.0f;
+                        localY += 0.0625f;
                     }
                     case 1 -> {
+                        //rear seat
                         localX = -0.7f;
                         localZ = 0.0f;
+                        localY += 0.0625f;
                     }
                     //cleat
                     case 2 -> {

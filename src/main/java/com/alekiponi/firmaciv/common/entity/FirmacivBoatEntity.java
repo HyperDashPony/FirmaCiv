@@ -1071,15 +1071,25 @@ public class FirmacivBoatEntity extends Entity {
 
     @Nullable
     public EmptyCompartmentEntity getControllingCompartment() {
+        if(!this.level().isClientSide()){
+            return null;
+        }
         final Entity vehiclePart = this.getPilotVehiclePartAsEntity();
 
-        if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) return null;
+        if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle())
+        {
+            return null;
+        }
 
         if (!(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity))
+        {
             return null;
+        }
 
         if (!emptyCompartmentEntity.isVehicle() || !(emptyCompartmentEntity.getFirstPassenger() instanceof LocalPlayer))
+        {
             return null;
+        }
 
         return emptyCompartmentEntity;
     }
