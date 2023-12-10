@@ -17,7 +17,10 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -38,10 +41,9 @@ import java.util.function.Supplier;
 
 import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 
-
 public class CanoeComponentBlock extends BaseEntityBlock {
 
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
     public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED;
     public static final BooleanProperty END = FirmacivBlockStateProperties.END;
@@ -356,8 +358,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         final Direction.Axis axis = blockState.getValue(AXIS);
 
-        if (level.getBlockState(blockPos.relative(axis, 1)).is(this) && level.getBlockState(
-                blockPos.relative(axis, 1)).getValue(AXIS) == axis) {
+        if (level.getBlockState(blockPos.relative(axis, 1)).is(this) && level.getBlockState(blockPos.relative(axis, 1))
+                .getValue(AXIS) == axis) {
             level.destroyBlock(blockPos.relative(axis, 1), true);
         }
 
