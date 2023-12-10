@@ -1,13 +1,18 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
+import com.alekiponi.firmaciv.common.menu.CompartmentCraftingMenu;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.SlotAccess;
@@ -15,6 +20,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.ContainerEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,8 +31,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class WorkbenchCompartmentEntity extends CompartmentEntity implements HasCustomInventoryScreen, ContainerEntity {
+    private static final Component CONTAINER_TITLE = Component.translatable("container.crafting");
     private static final int CONTAINER_SIZE = 18;
     private NonNullList<ItemStack> itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
     @Nullable
@@ -62,13 +71,26 @@ public class WorkbenchCompartmentEntity extends CompartmentEntity implements Has
 
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
-        final InteractionResult interactionResult = this.interactWithContainerVehicle(player);
 
-        if (interactionResult.consumesAction()) {
-            this.gameEvent(GameEvent.CONTAINER_OPEN, player);
+        // Stupid, gross, dirty way of letting vanilla do most of the container work
+        class WorkbenchLevelAccess implements ContainerLevelAccess {
+            private final WorkbenchCompartmentEntity compartment;
+
+            public WorkbenchLevelAccess(final WorkbenchCompartmentEntity compartment) {
+                this.compartment = compartment;
+            }
+
+            @Override
+            public <T> Optional<T> evaluate(final BiFunction<Level, BlockPos, T> function) {
+                return Optional.of(function.apply(compartment.level(), compartment.blockPosition()));
+            }
         }
 
-        return interactionResult;
+        player.openMenu(new SimpleMenuProvider(
+                (containerID, playerInventory, unused) -> new CompartmentCraftingMenu(containerID, playerInventory,
+                        new WorkbenchLevelAccess(this)), CONTAINER_TITLE));
+        player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
+        return InteractionResult.CONSUME;
     }
 
     @Override
@@ -170,8 +192,7 @@ public class WorkbenchCompartmentEntity extends CompartmentEntity implements Has
 
     @Override
     public <T> LazyOptional<T> getCapability(final Capability<T> capability, final @Nullable Direction facing) {
-        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER)
-            return itemHandler.cast();
+        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER) return itemHandler.cast();
         return super.getCapability(capability, facing);
     }
 
