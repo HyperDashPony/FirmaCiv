@@ -1,6 +1,6 @@
 {
   "ingredient": {
-    "utem": "firmaciv:nav_clock"
+    "item": "firmaciv:nav_clock"
   },
   "heat_capacity": 11.429,
   "forging_temperature": 558,
