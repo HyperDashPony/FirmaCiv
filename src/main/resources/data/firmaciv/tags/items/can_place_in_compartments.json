@@ -23,6 +23,27 @@
     "tfc:wood/chest/willow",
 
 
+    "tfc:wood/trapped_chest/acacia",
+    "tfc:wood/trapped_chest/ash",
+    "tfc:wood/trapped_chest/aspen",
+    "tfc:wood/trapped_chest/birch",
+    "tfc:wood/trapped_chest/blackwood",
+    "tfc:wood/trapped_chest/chestnut",
+    "tfc:wood/trapped_chest/douglas_fir",
+    "tfc:wood/trapped_chest/hickory",
+    "tfc:wood/trapped_chest/kapok",
+    "tfc:wood/trapped_chest/mangrove",
+    "tfc:wood/trapped_chest/maple",
+    "tfc:wood/trapped_chest/oak",
+    "tfc:wood/trapped_chest/palm",
+    "tfc:wood/trapped_chest/pine",
+    "tfc:wood/trapped_chest/rosewood",
+    "tfc:wood/trapped_chest/sequoia",
+    "tfc:wood/trapped_chest/spruce",
+    "tfc:wood/trapped_chest/sycamore",
+    "tfc:wood/trapped_chest/white_cedar",
+    "tfc:wood/trapped_chest/willow",
+
 
     "tfc:metal/anvil/bismuth_bronze",
     "tfc:metal/anvil/black_bronze",
@@ -32,6 +53,28 @@
     "tfc:metal/anvil/steel",
     "tfc:metal/anvil/black_steel",
     "tfc:metal/anvil/blue_steel",
-    "tfc:metal/anvil/red_steel"
+    "tfc:metal/anvil/red_steel",
+
+
+    "tfc:wood/planks/acacia_workbench",
+    "tfc:wood/planks/ash_workbench",
+    "tfc:wood/planks/aspen_workbench",
+    "tfc:wood/planks/birch_workbench",
+    "tfc:wood/planks/blackwood_workbench",
+    "tfc:wood/planks/chestnut_workbench",
+    "tfc:wood/planks/douglas_fir_workbench",
+    "tfc:wood/planks/hickory_workbench",
+    "tfc:wood/planks/kapok_workbench",
+    "tfc:wood/planks/mangrove_workbench",
+    "tfc:wood/planks/maple_workbench",
+    "tfc:wood/planks/oak_workbench",
+    "tfc:wood/planks/palm_workbench",
+    "tfc:wood/planks/pine_workbench",
+    "tfc:wood/planks/rosewood_workbench",
+    "tfc:wood/planks/sequoia_workbench",
+    "tfc:wood/planks/spruce_workbench",
+    "tfc:wood/planks/sycamore_workbench",
+    "tfc:wood/planks/white_cedar_workbench",
+    "tfc:wood/planks/willow_workbench"
   ]
 }
