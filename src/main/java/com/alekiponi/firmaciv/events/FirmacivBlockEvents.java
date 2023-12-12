@@ -21,6 +21,8 @@ import net.minecraftforge.event.level.BlockEvent.BlockToolModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Optional;
+
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class FirmacivBlockEvents {
 
@@ -52,7 +54,7 @@ public final class FirmacivBlockEvents {
                     FirmacivConfig.SERVER.canoeWoodRestriction.get() ? FirmacivTags.Blocks.CAN_MAKE_CANOE : FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
 
             if (isConvertibleBlock && blockState.getValue(BlockStateProperties.AXIS).isHorizontal()) {
-                convertLogToCanoeComponent(event);
+                convertLogToCanoeComponent(event).ifPresent(event::setFinalState);
                 return;
             }
         }
@@ -120,37 +122,13 @@ public final class FirmacivBlockEvents {
         }
     }
 
-    private static void convertLogToCanoeComponent(final BlockToolModificationEvent event) {
+    private static Optional<BlockState> convertLogToCanoeComponent(final BlockToolModificationEvent event) {
         final Block strippedLogBlock = event.getState().getBlock();
         final BlockPos blockPos = event.getPos();
         final LevelAccessor levelAccessor = event.getLevel();
         final Level level = event.getPlayer().level();
 
-        if (CanoeComponentBlock.isValidShape(levelAccessor, blockPos)) {
-            levelAccessor.playSound(event.getPlayer(), blockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
-            event.getPlayer().swing(event.getPlayer().getUsedItemHand());
-            event.getPlayer().level().addDestroyBlockEffect(blockPos, event.getState());
-
-            final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(strippedLogBlock);
-            canoeComponentBlock.defaultBlockState().setValue(CanoeComponentBlock.AXIS, Direction.Axis.Z);
-            final Direction.Axis axis = event.getState().getValue(CanoeComponentBlock.AXIS);
-
-            levelAccessor.setBlock(blockPos,
-                    CanoeComponentBlock.getStateForPlacement(level, strippedLogBlock, blockPos), 2);
-
-            final BlockPos blockPosAhead = blockPos.relative(axis, 1);
-            final BlockPos blockPosBehind = blockPos.relative(axis, -1);
-
-            if (levelAccessor.getBlockState(blockPosAhead).is(canoeComponentBlock) && levelAccessor.getBlockState(
-                    blockPosBehind).is(canoeComponentBlock)) {
-                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), blockPos, canoeComponentBlock, true);
-                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), blockPos.relative(axis, -1),
-                        canoeComponentBlock, false);
-            } else if (level.getBlockState(blockPosAhead).is(canoeComponentBlock)) {
-                CanoeComponentBlock.setEndPieces(level, blockPosAhead, canoeComponentBlock, true);
-            } else {
-                CanoeComponentBlock.setEndPieces(level, blockPosBehind, canoeComponentBlock, false);
-            }
-        }
+        if (!CanoeComponentBlock.isValidShape(levelAccessor, blockPos)) return Optional.empty();
+        return Optional.of(CanoeComponentBlock.getStateForPlacement(level, strippedLogBlock, blockPos));
     }
 }
