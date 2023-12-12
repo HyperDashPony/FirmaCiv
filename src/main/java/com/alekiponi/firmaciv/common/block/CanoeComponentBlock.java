@@ -4,6 +4,7 @@ import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -16,7 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -71,36 +72,18 @@ public class CanoeComponentBlock extends BaseEntityBlock {
                 .map(RegistryObject::get).findFirst().get();
     }
 
-    public static boolean isValidCanoeShape(final LevelAccessor levelAccessor, final Block strippedLogBlock,
-            final BlockPos blockPos) {
-
-        final Direction.Axis axis = levelAccessor.getBlockState(blockPos).getValue(AXIS);
-
-        final Block canoeComponentBlock = getByStripped(strippedLogBlock);
-
-        int row = 0;
-        for (int i = -2; i <= 2; ++i) {
-            // check two blocks in each direction and look for a row of 3 blocks
-
-            final BlockPos relativePos = blockPos.relative(axis, i);
-            if (levelAccessor.getBlockState(relativePos).is(strippedLogBlock) || levelAccessor.getBlockState(
-                    relativePos).is(canoeComponentBlock)) {
-
-                if (levelAccessor.getBlockState(relativePos).getValue(AXIS) == axis) {
-                    row++;
-                    if (row == 3) {
-                        return true;
-                    }
-                } else {
-                    row = 0;
-                }
-
-            } else {
-                row = 0;
-            }
-        }
-
-        return false;
+    /**
+     * Checks if there is a valid canoe shape
+     *
+     * @param levelAccessor The level accessor
+     * @param startBlockPos The starting block position
+     * @return If there is a valid canoe shape
+     */
+    public static boolean isValidShape(final LevelReader levelAccessor, final BlockPos startBlockPos) {
+        final BlockPattern canoePattern = BlockPatternBuilder.start().aisle("#", "#", "#").where('#',
+                BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE) || blockState.is(
+                        FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))).build();
+        return canoePattern.find(levelAccessor, startBlockPos) != null;
     }
 
     private static BlockPos getMiddleBlockPos(final Level pLevel, final BlockPos pPos,

@@ -122,29 +122,29 @@ public final class FirmacivBlockEvents {
 
     private static void convertLogToCanoeComponent(final BlockToolModificationEvent event) {
         final Block strippedLogBlock = event.getState().getBlock();
-        final BlockPos thisBlockPos = event.getPos();
-        final LevelAccessor world = event.getLevel();
+        final BlockPos blockPos = event.getPos();
+        final LevelAccessor levelAccessor = event.getLevel();
         final Level level = event.getPlayer().level();
 
-        if (CanoeComponentBlock.isValidCanoeShape(world, strippedLogBlock, thisBlockPos)) {
-            world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+        if (CanoeComponentBlock.isValidShape(levelAccessor, blockPos)) {
+            levelAccessor.playSound(event.getPlayer(), blockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
             event.getPlayer().swing(event.getPlayer().getUsedItemHand());
-            event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, event.getState());
+            event.getPlayer().level().addDestroyBlockEffect(blockPos, event.getState());
 
             final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(strippedLogBlock);
             canoeComponentBlock.defaultBlockState().setValue(CanoeComponentBlock.AXIS, Direction.Axis.Z);
             final Direction.Axis axis = event.getState().getValue(CanoeComponentBlock.AXIS);
 
-            world.setBlock(thisBlockPos,
-                    CanoeComponentBlock.getStateForPlacement(level, strippedLogBlock, thisBlockPos), 2);
+            levelAccessor.setBlock(blockPos,
+                    CanoeComponentBlock.getStateForPlacement(level, strippedLogBlock, blockPos), 2);
 
-            final BlockPos blockPosAhead = thisBlockPos.relative(axis, 1);
-            final BlockPos blockPosBehind = thisBlockPos.relative(axis, -1);
+            final BlockPos blockPosAhead = blockPos.relative(axis, 1);
+            final BlockPos blockPosBehind = blockPos.relative(axis, -1);
 
-            if (world.getBlockState(blockPosAhead).is(canoeComponentBlock) && world.getBlockState(blockPosBehind)
-                    .is(canoeComponentBlock)) {
-                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), thisBlockPos, canoeComponentBlock, true);
-                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), thisBlockPos.relative(axis, -1),
+            if (levelAccessor.getBlockState(blockPosAhead).is(canoeComponentBlock) && levelAccessor.getBlockState(
+                    blockPosBehind).is(canoeComponentBlock)) {
+                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), blockPos, canoeComponentBlock, true);
+                CanoeComponentBlock.setEndPieces(event.getPlayer().level(), blockPos.relative(axis, -1),
                         canoeComponentBlock, false);
             } else if (level.getBlockState(blockPosAhead).is(canoeComponentBlock)) {
                 CanoeComponentBlock.setEndPieces(level, blockPosAhead, canoeComponentBlock, true);
