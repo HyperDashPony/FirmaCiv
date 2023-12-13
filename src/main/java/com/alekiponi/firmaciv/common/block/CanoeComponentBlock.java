@@ -112,64 +112,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         return pPos;
     }
 
-    public static BlockState getStateForPlacement(final Level level, final Block strippedLogBlock,
-            final BlockPos blockPos) {
-
-        final Direction.Axis axis = level.getBlockState(blockPos).getValue(AXIS);
-
-        final Block canoeComponentBlock = getByStripped(strippedLogBlock);
-
-        final BlockState finalBlockState = canoeComponentBlock.defaultBlockState().setValue(CANOE_CARVED, 1)
-                .setValue(END, true).setValue(AXIS, axis)
-                .setValue(FACING, ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
-
-        final BlockPos blockPos1 = blockPos.relative(axis, 1);
-
-        if ((level.getBlockState(blockPos1).is(canoeComponentBlock) || level.getBlockState(blockPos1)
-                .is(strippedLogBlock) && level.getBlockState(blockPos1).getValue(AXIS) == axis)) {
-            // if it's a valid block and rotation positive, then flip it
-            return finalBlockState.setValue(FACING, ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
-        }
-
-        return finalBlockState;
-    }
-
-    public static void setEndPieces(final Level level, final BlockPos blockPos, final Block canoeComponentBlock,
-            final boolean positiveDir) {
-
-        if (!level.getBlockState(blockPos).is(canoeComponentBlock)) {
-            return;
-        }
-
-        BlockState thisBlockState = level.getBlockState(blockPos);
-
-        final Direction.Axis axis = level.getBlockState(blockPos).getValue(AXIS);
-
-        final BlockPos blockPos1 = blockPos.relative(axis, (positiveDir ? 1 : -1));
-
-        if (level.getBlockState(blockPos1).is(canoeComponentBlock) && level.getBlockState(blockPos1)
-                .getValue(AXIS) == axis) {
-
-            thisBlockState = thisBlockState.setValue(END, false);
-            level.setBlock(blockPos, thisBlockState, 4);
-
-            setEndPieces(level, blockPos1, canoeComponentBlock, positiveDir);
-        } else {
-            thisBlockState = thisBlockState.setValue(END, true);
-
-            if (positiveDir) {
-                thisBlockState = thisBlockState.setValue(FACING,
-                        ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
-            } else {
-                thisBlockState = thisBlockState.setValue(FACING,
-                        ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
-            }
-
-            level.setBlock(blockPos, thisBlockState, 4);
-        }
-
-    }
-
     private static boolean areValidBlockStates(final Level level, final BlockPos blockPos,
             final Block canoeComponentBlock) {
 
@@ -290,24 +232,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             final BlockEntityType<T> blockEntityType) {
         return createTickerHelper(blockEntityType, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(),
                 CanoeComponentBlockEntity::serverTick);
-    }
-
-    @Override
-    public boolean isFlammable(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
-            final Direction blockFace) {
-        return false;
-    }
-
-    @Override
-    public int getFlammability(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
-            final Direction blockFace) {
-        return 5;
-    }
-
-    @Override
-    public int getFireSpreadSpeed(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
-            final Direction blockFace) {
-        return 5;
     }
 
     @Override
