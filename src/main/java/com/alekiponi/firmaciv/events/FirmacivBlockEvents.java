@@ -11,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -123,12 +122,15 @@ public final class FirmacivBlockEvents {
     }
 
     private static Optional<BlockState> convertLogToCanoeComponent(final BlockToolModificationEvent event) {
+        // TODO pass in the needed variables instead of grabbing them from the passed in event
         final Block strippedLogBlock = event.getState().getBlock();
         final BlockPos blockPos = event.getPos();
         final LevelAccessor levelAccessor = event.getLevel();
-        final Level level = event.getPlayer().level();
 
         if (!CanoeComponentBlock.isValidShape(levelAccessor, blockPos)) return Optional.empty();
-        return Optional.of(CanoeComponentBlock.getStateForPlacement(level, strippedLogBlock, blockPos));
+
+        final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(strippedLogBlock);
+
+        return Optional.of(canoeComponentBlock.defaultBlockState());
     }
 }
