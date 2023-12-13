@@ -32,7 +32,9 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -44,9 +46,7 @@ import java.util.function.Supplier;
 import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 
 public class CanoeComponentBlock extends BaseEntityBlock {
-
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED;
     public static final EnumProperty<Shape> SHAPE = FirmacivBlockStateProperties.CANOE_SHAPE;
     private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
@@ -57,9 +57,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public CanoeComponentBlock(final Properties properties, final Supplier<? extends Item> lumberItem,
             final RegistryWood wood) {
         super(properties);
-        this.registerDefaultState(
-                this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(AXIS, Direction.Axis.Z)
-                        .setValue(CANOE_CARVED, 1).setValue(SHAPE, Shape.STRAIGHT));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED, 1)
+                .setValue(SHAPE, Shape.STRAIGHT));
         this.strippedBlock = wood.getBlock(Wood.BlockType.STRIPPED_LOG);
         this.lumberItem = lumberItem;
         this.wood = wood;
@@ -247,13 +246,12 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(final BlockPlaceContext placeContext) {
-        return this.defaultBlockState().setValue(FACING, placeContext.getHorizontalDirection().getOpposite())
-                .setValue(AXIS, placeContext.getHorizontalDirection().getAxis());
+        return this.defaultBlockState().setValue(AXIS, placeContext.getHorizontalDirection().getAxis());
     }
 
     @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> stateBuilder) {
-        super.createBlockStateDefinition(stateBuilder.add(FACING).add(AXIS).add(CANOE_CARVED).add(SHAPE));
+        super.createBlockStateDefinition(stateBuilder.add(AXIS).add(CANOE_CARVED).add(SHAPE));
     }
 
     @Override

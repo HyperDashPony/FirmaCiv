@@ -10,8 +10,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static com.alekiponi.firmaciv.common.block.CanoeComponentBlock.AXIS;
 import static com.alekiponi.firmaciv.common.block.CanoeComponentBlock.CANOE_CARVED;
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
 
 public class CanoeComponentBlockEntity extends TFCBlockEntity {
     private long litTick;

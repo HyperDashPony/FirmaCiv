@@ -56,8 +56,9 @@ public final class FirmacivBlocks {
 
         for (final Wood tfcWood : Wood.values()) {
             map.put(tfcWood, registerBlockWithoutItem("wood/canoe_component_block/" + tfcWood.getSerializedName(),
-                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
-                            () -> TFCItems.LUMBER.get(tfcWood).get(), tfcWood)));
+                    () -> new CanoeComponentBlock(
+                            BlockBehaviour.Properties.copy(Blocks.OAK_LOG).mapColor(blockState -> tfcWood.woodColor())
+                                    .noOcclusion(), () -> TFCItems.LUMBER.get(tfcWood).get(), tfcWood)));
         }
 
         return map;
