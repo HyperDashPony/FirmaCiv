@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -47,7 +48,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
     public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED;
-    public static final BooleanProperty END = FirmacivBlockStateProperties.END;
+    public static final EnumProperty<Shape> SHAPE = FirmacivBlockStateProperties.CANOE_SHAPE;
     private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
@@ -58,7 +59,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         super(properties);
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(AXIS, Direction.Axis.Z)
-                        .setValue(CANOE_CARVED, 1).setValue(END, false));
+                        .setValue(CANOE_CARVED, 1).setValue(SHAPE, Shape.STRAIGHT));
         this.strippedBlock = wood.getBlock(Wood.BlockType.STRIPPED_LOG);
         this.lumberItem = lumberItem;
         this.wood = wood;
@@ -252,7 +253,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> stateBuilder) {
-        super.createBlockStateDefinition(stateBuilder.add(FACING).add(AXIS).add(CANOE_CARVED).add(END));
+        super.createBlockStateDefinition(stateBuilder.add(FACING).add(AXIS).add(CANOE_CARVED).add(SHAPE));
     }
 
     @Override
@@ -273,6 +274,21 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         if (level.getBlockState(blockPos.relative(axis, -1)).is(this) && level.getBlockState(
                 blockPos.relative(axis, -1)).getValue(AXIS) == axis) {
             level.destroyBlock(blockPos.relative(axis, -1), true);
+        }
+    }
+
+    public enum Shape implements StringRepresentable {
+        STRAIGHT,
+        END_LEFT,
+        END_RIGHT;
+
+        @Override
+        public String getSerializedName() {
+            return switch (this) {
+                case STRAIGHT -> "straight";
+                case END_LEFT -> "end_left";
+                case END_RIGHT -> "end_right";
+            };
         }
     }
 }
