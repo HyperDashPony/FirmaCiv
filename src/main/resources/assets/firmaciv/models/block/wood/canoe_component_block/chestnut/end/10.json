@@ -1,9 +1,0 @@
-{
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "firmaciv:block/canoe_component_block/template/end/10",
-  "textures": {
-    "0": "tfc:block/wood/stripped_log/chestnut",
-    "1": "tfc:block/wood/stripped_log_top/chestnut",
-    "particle": "tfc:block/wood/stripped_log/chestnut"
-  }
-}
