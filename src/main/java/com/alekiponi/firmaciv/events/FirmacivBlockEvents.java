@@ -20,8 +20,6 @@ import net.minecraftforge.event.level.BlockEvent.BlockToolModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Optional;
-
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class FirmacivBlockEvents {
 
@@ -53,7 +51,12 @@ public final class FirmacivBlockEvents {
                     FirmacivConfig.SERVER.canoeWoodRestriction.get() ? FirmacivTags.Blocks.CAN_MAKE_CANOE : FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
 
             if (isConvertibleBlock && blockState.getValue(BlockStateProperties.AXIS).isHorizontal()) {
-                convertLogToCanoeComponent(event).ifPresent(event::setFinalState);
+
+                if (CanoeComponentBlock.isValidShape(event.getLevel(), event.getPos())) {
+                    final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(blockState.getBlock());
+
+                    event.setFinalState(canoeComponentBlock.defaultBlockState());
+                }
                 return;
             }
         }
@@ -121,16 +124,4 @@ public final class FirmacivBlockEvents {
         }
     }
 
-    private static Optional<BlockState> convertLogToCanoeComponent(final BlockToolModificationEvent event) {
-        // TODO pass in the needed variables instead of grabbing them from the passed in event
-        final Block strippedLogBlock = event.getState().getBlock();
-        final BlockPos blockPos = event.getPos();
-        final LevelAccessor levelAccessor = event.getLevel();
-
-        if (!CanoeComponentBlock.isValidShape(levelAccessor, blockPos)) return Optional.empty();
-
-        final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(strippedLogBlock);
-
-        return Optional.of(canoeComponentBlock.defaultBlockState());
-    }
 }
