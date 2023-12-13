@@ -7,11 +7,7 @@ import com.alekiponi.firmaciv.events.config.FirmacivConfig;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -19,6 +15,8 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.level.BlockEvent.BlockToolModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class FirmacivBlockEvents {
@@ -63,65 +61,33 @@ public final class FirmacivBlockEvents {
 
         // All other axe strip events try to process the canoe component
         if (blockState.is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)) {
-            if (blockState.getValue(BlockStateProperties.AXIS).isHorizontal()) {
-                processCanoeComponent(event);
-            }
+            processCanoeComponent(event.getState(), heldStack).ifPresent(event::setFinalState);
         }
     }
 
-    private static void processCanoeComponent(final BlockToolModificationEvent event) {
-        final Block canoeComponentBlock = event.getState().getBlock();
-        final BlockState canoeComponentBlockState = event.getState();
-        final BlockPos thisBlockPos = event.getPos();
-        final LevelAccessor world = event.getLevel();
-        final Direction.Axis axis = event.getState().getValue(CanoeComponentBlock.AXIS);
+    /**
+     * Attempts to process a canoe component
+     *
+     * @param blockState The canoe component state to process
+     * @param heldStack  The held stack that's being used to process the component
+     * @return A blockstate if it could be processed
+     */
+    private static Optional<BlockState> processCanoeComponent(final BlockState blockState, final ItemStack heldStack) {
+        if (heldStack.is(FirmacivTags.Items.SAWS)) {
+            if (5 < blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
 
-        final int nextCanoeCarvedState = event.getState().getValue(CanoeComponentBlock.CANOE_CARVED) + 1;
-
-        if (canoeComponentBlockState.getValue(CanoeComponentBlock.CANOE_CARVED) < 5 && event.getPlayer()
-                .getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.SAWS)) {
-            event.getPlayer().swing(event.getPlayer().getUsedItemHand());
-            world.setBlock(thisBlockPos,
-                    event.getState().setValue(CanoeComponentBlock.CANOE_CARVED, nextCanoeCarvedState), 2);
-            event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
-            event.getPlayer().getItemInHand(event.getContext().getHand()).getUseAnimation();
-            world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
-
-            if (nextCanoeCarvedState == 5) {
-                Block.dropResources(canoeComponentBlockState, world, thisBlockPos.above(), null);
-                //Block.dropResources(canoeComponentBlockState, event.getPlayer().getLevel(), thisBlockPos, null, event.getPlayer(), Item);
-
-            }
-
-        } else if (canoeComponentBlockState.getValue(
-                CanoeComponentBlock.CANOE_CARVED) >= 5 && canoeComponentBlockState.getValue(
-                CanoeComponentBlock.CANOE_CARVED) < 11 && event.getPlayer()
-                .getItemInHand(event.getPlayer().getUsedItemHand()).is(FirmacivTags.Items.AXES)) {
-            event.getPlayer().swing(event.getPlayer().getUsedItemHand());
-
-            BlockPos blockPos1;
-            // if there are three in a row then it's valid
-            boolean flag = false;
-            int row = 0;
-            for (int i = -2; i <= 2; ++i) {
-                blockPos1 = thisBlockPos.relative(axis, i);
-                if ((world.getBlockState(blockPos1).is(canoeComponentBlock) && world.getBlockState(blockPos1)
-                        .getValue(CanoeComponentBlock.CANOE_CARVED) >= 5)) {
-                    row++;
-                    flag = row >= 3;
-                } else {
-                    row = 0;
-                }
-            }
-
-            if (flag) {
-                world.setBlock(thisBlockPos,
-                        event.getState().setValue(CanoeComponentBlock.CANOE_CARVED, nextCanoeCarvedState), 2);
-                event.getPlayer().level().addDestroyBlockEffect(thisBlockPos, canoeComponentBlockState);
-                event.getPlayer().getItemInHand(event.getContext().getHand()).getUseAnimation();
-                world.playSound(event.getPlayer(), thisBlockPos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
-            }
+            return Optional.of(blockState.cycle(CanoeComponentBlock.CANOE_CARVED));
         }
-    }
 
+        if (heldStack.is(FirmacivTags.Items.AXES)) {
+
+            if (6 > blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
+
+            if (10 < blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
+
+            return Optional.of(blockState.cycle(CanoeComponentBlock.CANOE_CARVED));
+        }
+
+        return Optional.empty();
+    }
 }
