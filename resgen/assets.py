@@ -30,10 +30,15 @@ def generate(rm: ResourceManager):
 
         # End and Middle only models
         for n in range(8, 13):
-            rm.block_model(f"wood/canoe_component_block/{woodType}/end/{n}", canoe_component_textures,
-                           f"firmaciv:block/canoe_component_block/template/end/{n}")
-            rm.block_model(f"wood/canoe_component_block/{woodType}/middle/{n}", canoe_component_textures,
-                           f"firmaciv:block/canoe_component_block/template/middle/{n}")
+            rm.block_model(f"wood/canoe_component_block/{woodType}/straight/{n}", canoe_component_textures,
+                           f"firmaciv:block/canoe_component_block/template/straight/{n}")
+
+            rm.block_model(f"wood/canoe_component_block/{woodType}/end_left/{n}", canoe_component_textures,
+                           f"firmaciv:block/canoe_component_block/template/end_left/{n}")
+
+            rm.block_model(f"wood/canoe_component_block/{woodType}/end_right/{n}", canoe_component_textures,
+                           f"firmaciv:block/canoe_component_block/template/end_right/{n}")
+
             rm.blockstate(f"wood/canoe_component_block/{woodType}",
                           variants=blockStates.canoe_component(woodType)).with_lang(
                 f"{name} Canoe Component").with_block_loot(f"tfc:wood/lumber/{woodType}")

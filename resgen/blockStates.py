@@ -81,20 +81,24 @@ angledWaterCraftFrame = {
 def canoe_component(wood: str) -> Json:
     var: Json = {}
 
-    for direction, rotation in {"north": None, "east": 90, "south": 180, "west": 270}.items():
+    for axis, rotation in {"z": None, "x": 90}.items():
         for n in range(8):
-            var[f"facing={direction},canoe_carved={n + 1}"] = {
+            var[f"axis={axis},canoe_carved={n + 1}"] = {
                 "model": f"firmaciv:block/wood/canoe_component_block/{wood}/all/{n}",
                 "y": rotation
             }
 
         for n in range(8, 13):
-            var[f"facing={direction},canoe_carved={n + 1},end=false"] = {
-                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/middle/{n}",
+            var[f"axis={axis},canoe_carved={n + 1},shape=straight"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/straight/{n}",
                 "y": rotation
             }
-            var[f"facing={direction},canoe_carved={n + 1},end=true"] = {
-                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/end/{n}",
+            var[f"axis={axis},canoe_carved={n + 1},shape=end_left"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/end_left/{n}",
+                "y": rotation
+            }
+            var[f"axis={axis},canoe_carved={n + 1},shape=end_right"] = {
+                "model": f"firmaciv:block/wood/canoe_component_block/{wood}/end_right/{n}",
                 "y": rotation
             }
 
