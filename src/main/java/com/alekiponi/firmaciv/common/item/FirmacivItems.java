@@ -16,7 +16,7 @@ public class FirmacivItems {
             () -> new SextantItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> UNFINISHED_SEXTANT = ITEMS.register("unfinished_sextant",
-            () -> new SextantItem(new Item.Properties().stacksTo(1)));
+            () -> new Item(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> NAV_CLOCK = ITEMS.register("nav_clock",
             () -> new NavClockItem(new Item.Properties().stacksTo(1)));
@@ -27,7 +27,7 @@ public class FirmacivItems {
             () -> new BarometerItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> UNFINISHED_BAROMETER = ITEMS.register("unfinished_barometer",
-            () -> new BarometerItem(new Item.Properties().stacksTo(1)));
+            () -> new Item(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> FIRMACIV_COMPASS = ITEMS.register("firmaciv_compass",
             () -> new Item(new Item.Properties().stacksTo(1)));
