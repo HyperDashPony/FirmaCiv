@@ -75,8 +75,6 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(4F, 0.75F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
 
-
-<<<<<<< Updated upstream
      */
 
 
