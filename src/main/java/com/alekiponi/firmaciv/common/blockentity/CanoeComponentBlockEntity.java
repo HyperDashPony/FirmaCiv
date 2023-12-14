@@ -28,7 +28,7 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         final long remainingTicks = TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlockEntity.litTick);
 
         if (remainingTicks <= 0) {
-            final BlockState newState = blockState.setValue(CANOE_CARVED, 13);
+            final BlockState newState = blockState.setValue(CANOE_CARVED, 12);
             level.setBlock(blockPos, newState, 4);
             CanoeComponentBlock.trySpawnCanoe(level, blockPos, blockState.getBlock());
             canoeBlockEntity.isLit = false;
@@ -49,12 +49,12 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         if (this.isLit) return;
 
         // Not at the point where it can be lit on fire
-        if (this.getBlockState().getValue(CANOE_CARVED) != 11) return;
+        if (this.getBlockState().getValue(CANOE_CARVED) != 10) return;
 
         this.isLit = true;
         this.litTick = Calendars.SERVER.getTicks();
         this.markForBlockUpdate();
-        final BlockState newState = this.getBlockState().setValue(CANOE_CARVED, 12);
+        final BlockState newState = this.getBlockState().setValue(CANOE_CARVED, 11);
         this.level.setBlock(this.getBlockPos(), newState, 4);
 
         final BlockPos pPos = this.getBlockPos();
@@ -65,13 +65,13 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         final BlockPos blockPosBehind = pPos.relative(axis, -1);
 
         if (this.level.getBlockEntity(blockPosAhead) instanceof CanoeComponentBlockEntity canoeBlockEntity) {
-            if (this.level.getBlockState(blockPosAhead).getValue(CANOE_CARVED) == 11) {
+            if (this.level.getBlockState(blockPosAhead).getValue(CANOE_CARVED) == 10) {
                 canoeBlockEntity.light();
             }
         }
 
         if (this.level.getBlockEntity(blockPosBehind) instanceof CanoeComponentBlockEntity canoeBlockEntity) {
-            if (this.level.getBlockState(blockPosBehind).getValue(CANOE_CARVED) == 11) {
+            if (this.level.getBlockState(blockPosBehind).getValue(CANOE_CARVED) == 10) {
                 canoeBlockEntity.light();
             }
         }

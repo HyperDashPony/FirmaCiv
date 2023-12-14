@@ -58,7 +58,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public CanoeComponentBlock(final Properties properties, final Supplier<? extends Item> lumberItem,
             final RegistryWood wood) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED, 1)
+        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED, 0)
                 .setValue(SHAPE, Shape.STRAIGHT));
         this.strippedBlock = wood.getBlock(Wood.BlockType.STRIPPED_LOG);
         this.lumberItem = lumberItem;
@@ -125,24 +125,24 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         if (level.getBlockState(blockPos0).is(canoeComponentBlock) && level.getBlockState(blockPos1)
                 .is(canoeComponentBlock)) {
 
-            if (level.getBlockState(blockPos0).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos1)
-                    .getValue(CANOE_CARVED) == 13) {
+            if (level.getBlockState(blockPos0).getValue(CANOE_CARVED) == 12 && level.getBlockState(blockPos1)
+                    .getValue(CANOE_CARVED) == 12) {
                 return true;
             }
         }
         if (level.getBlockState(blockPos1).is(canoeComponentBlock) && level.getBlockState(blockPos2)
                 .is(canoeComponentBlock)) {
 
-            if (level.getBlockState(blockPos1).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos2)
-                    .getValue(CANOE_CARVED) == 13) {
+            if (level.getBlockState(blockPos1).getValue(CANOE_CARVED) == 12 && level.getBlockState(blockPos2)
+                    .getValue(CANOE_CARVED) == 12) {
                 return true;
             }
         }
         if (level.getBlockState(blockPos2).is(canoeComponentBlock) && level.getBlockState(blockPos3)
                 .is(canoeComponentBlock)) {
 
-            return level.getBlockState(blockPos2).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos3)
-                    .getValue(CANOE_CARVED) == 13;
+            return level.getBlockState(blockPos2).getValue(CANOE_CARVED) == 12 && level.getBlockState(blockPos3)
+                    .getValue(CANOE_CARVED) == 12;
         }
 
         return false;
@@ -203,7 +203,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public void animateTick(final BlockState blockState, final Level level, final BlockPos blockPos,
             final RandomSource randomSource) {
 
-        if (blockState.getValue(CANOE_CARVED) == 12) {
+        if (blockState.getValue(CANOE_CARVED) == 11) {
             final double x = blockPos.getX() + randomSource.nextDouble();
             final double y = blockPos.getY() + randomSource.nextDouble();
             final double z = blockPos.getZ() + randomSource.nextDouble();
@@ -240,7 +240,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public VoxelShape getShape(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
             final CollisionContext collisionContext) {
         return switch (blockState.getValue(CANOE_CARVED)) {
-            case 1, 2, 3, 4 -> Shapes.block();
+            case 0, 1, 2, 3 -> Shapes.block();
             default -> HALF_SHAPE;
         };
     }
@@ -297,7 +297,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             final BlockState newState, final boolean movedByPiston) {
         super.onRemove(blockState, level, blockPos, newState, movedByPiston);
 
-        if (newState.is(this) || blockState.getValue(CANOE_CARVED) >= 13) return;
+        if (newState.is(this)) return;
 
         final Direction.Axis axis = blockState.getValue(AXIS);
 

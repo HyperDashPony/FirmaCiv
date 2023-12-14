@@ -1,164 +1,164 @@
 {
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
-    "axis=z,canoe_carved=1": {
+    "axis=z,canoe_carved=0": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/0"
     },
-    "axis=z,canoe_carved=2": {
+    "axis=z,canoe_carved=1": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/1"
     },
-    "axis=z,canoe_carved=3": {
+    "axis=z,canoe_carved=2": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/2"
     },
-    "axis=z,canoe_carved=4": {
+    "axis=z,canoe_carved=3": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/3"
     },
-    "axis=z,canoe_carved=5": {
+    "axis=z,canoe_carved=4": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/4"
     },
-    "axis=z,canoe_carved=6": {
+    "axis=z,canoe_carved=5": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/5"
     },
-    "axis=z,canoe_carved=7": {
+    "axis=z,canoe_carved=6": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/6"
     },
-    "axis=z,canoe_carved=8": {
+    "axis=z,canoe_carved=7": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/7"
     },
-    "axis=z,canoe_carved=9,shape=straight": {
+    "axis=z,canoe_carved=8,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/8"
     },
-    "axis=z,canoe_carved=9,shape=end_left": {
+    "axis=z,canoe_carved=8,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/8"
     },
-    "axis=z,canoe_carved=9,shape=end_right": {
+    "axis=z,canoe_carved=8,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/8"
     },
-    "axis=z,canoe_carved=10,shape=straight": {
+    "axis=z,canoe_carved=9,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/9"
     },
-    "axis=z,canoe_carved=10,shape=end_left": {
+    "axis=z,canoe_carved=9,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/9"
     },
-    "axis=z,canoe_carved=10,shape=end_right": {
+    "axis=z,canoe_carved=9,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/9"
     },
-    "axis=z,canoe_carved=11,shape=straight": {
+    "axis=z,canoe_carved=10,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/10"
     },
-    "axis=z,canoe_carved=11,shape=end_left": {
+    "axis=z,canoe_carved=10,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/10"
     },
-    "axis=z,canoe_carved=11,shape=end_right": {
+    "axis=z,canoe_carved=10,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/10"
     },
-    "axis=z,canoe_carved=12,shape=straight": {
+    "axis=z,canoe_carved=11,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/11"
     },
-    "axis=z,canoe_carved=12,shape=end_left": {
+    "axis=z,canoe_carved=11,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/11"
     },
-    "axis=z,canoe_carved=12,shape=end_right": {
+    "axis=z,canoe_carved=11,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/11"
     },
-    "axis=z,canoe_carved=13,shape=straight": {
+    "axis=z,canoe_carved=12,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/12"
     },
-    "axis=z,canoe_carved=13,shape=end_left": {
+    "axis=z,canoe_carved=12,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/12"
     },
-    "axis=z,canoe_carved=13,shape=end_right": {
+    "axis=z,canoe_carved=12,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/12"
     },
-    "axis=x,canoe_carved=1": {
+    "axis=x,canoe_carved=0": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/0",
       "y": 90
     },
-    "axis=x,canoe_carved=2": {
+    "axis=x,canoe_carved=1": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/1",
       "y": 90
     },
-    "axis=x,canoe_carved=3": {
+    "axis=x,canoe_carved=2": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/2",
       "y": 90
     },
-    "axis=x,canoe_carved=4": {
+    "axis=x,canoe_carved=3": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/3",
       "y": 90
     },
-    "axis=x,canoe_carved=5": {
+    "axis=x,canoe_carved=4": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/4",
       "y": 90
     },
-    "axis=x,canoe_carved=6": {
+    "axis=x,canoe_carved=5": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/5",
       "y": 90
     },
-    "axis=x,canoe_carved=7": {
+    "axis=x,canoe_carved=6": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/6",
       "y": 90
     },
-    "axis=x,canoe_carved=8": {
+    "axis=x,canoe_carved=7": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/all/7",
       "y": 90
     },
-    "axis=x,canoe_carved=9,shape=straight": {
+    "axis=x,canoe_carved=8,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/8",
       "y": 90
     },
-    "axis=x,canoe_carved=9,shape=end_left": {
+    "axis=x,canoe_carved=8,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/8",
       "y": 90
     },
-    "axis=x,canoe_carved=9,shape=end_right": {
+    "axis=x,canoe_carved=8,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/8",
       "y": 90
     },
-    "axis=x,canoe_carved=10,shape=straight": {
+    "axis=x,canoe_carved=9,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/9",
       "y": 90
     },
-    "axis=x,canoe_carved=10,shape=end_left": {
+    "axis=x,canoe_carved=9,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/9",
       "y": 90
     },
-    "axis=x,canoe_carved=10,shape=end_right": {
+    "axis=x,canoe_carved=9,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/9",
       "y": 90
     },
-    "axis=x,canoe_carved=11,shape=straight": {
+    "axis=x,canoe_carved=10,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/10",
       "y": 90
     },
-    "axis=x,canoe_carved=11,shape=end_left": {
+    "axis=x,canoe_carved=10,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/10",
       "y": 90
     },
-    "axis=x,canoe_carved=11,shape=end_right": {
+    "axis=x,canoe_carved=10,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/10",
       "y": 90
     },
-    "axis=x,canoe_carved=12,shape=straight": {
+    "axis=x,canoe_carved=11,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/11",
       "y": 90
     },
-    "axis=x,canoe_carved=12,shape=end_left": {
+    "axis=x,canoe_carved=11,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/11",
       "y": 90
     },
-    "axis=x,canoe_carved=12,shape=end_right": {
+    "axis=x,canoe_carved=11,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/11",
       "y": 90
     },
-    "axis=x,canoe_carved=13,shape=straight": {
+    "axis=x,canoe_carved=12,shape=straight": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/straight/12",
       "y": 90
     },
-    "axis=x,canoe_carved=13,shape=end_left": {
+    "axis=x,canoe_carved=12,shape=end_left": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_left/12",
       "y": 90
     },
-    "axis=x,canoe_carved=13,shape=end_right": {
+    "axis=x,canoe_carved=12,shape=end_right": {
       "model": "firmaciv:block/wood/canoe_component_block/sycamore/end_right/12",
       "y": 90
     }
