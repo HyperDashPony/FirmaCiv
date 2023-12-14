@@ -44,7 +44,7 @@
     {
       "type": "patchouli:text",
       "title": "Footnotes",
-      "text": "Because you will be measuring distance in Degrees, it might be helpful to know the block conversions. Every 90 Degrees is 10,000 blocks, and every single degree is about 111 blocks.$(br2)In Firma: Civilization, Compasses will always point North, but are crafted with the original TerraFirmaCraft recipe."
+      "text": "Because you will be measuring distance in Degrees, it might be helpful to know the block conversions. Every 90 Degrees is 20,000 blocks, and every single degree is about 222 blocks.$(br2)In Firma: Civilization, Compasses will always point North, but are crafted with the original TerraFirmaCraft recipe."
     }
   ],
   "read_by_default": true,

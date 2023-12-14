@@ -76,6 +76,7 @@ public final class FirmacivEntities {
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
 
 
+<<<<<<< Updated upstream
      */
 
 
@@ -88,4 +89,6 @@ public final class FirmacivEntities {
     }
 
 
+=======
+>>>>>>> Stashed changes
 }
