@@ -18,7 +18,7 @@
     {
       "type": "patchouli:text",
       "title": "Customization",
-      "text": "You can add blocks to boats! As if you're placing a block on land, press $(item)$(k:key.use)$() while holding a chest to add it to the boat. Press $(item)$(k:key.use)$() to access them. If you can't place a block in a particular place, that's probably because it's the pilot seat! You can't pilot the boat if there's a block in the way! You can remove the blocks by breaking them, like normal."
+      "text": "You can add blocks to boats! As if you're placing a block on land, press $(item)$(k:key.use)$() while holding a chest, an anvil, or a workbench, to add it to the boat. Press $(item)$(k:key.use)$() to access them. If you can't place a block in a particular place, that's probably because it's the pilot seat! You can't pilot the boat if there's a block in the way! You can remove the blocks by breaking them, like normal."
     },
     {
       "type": "patchouli:image",
