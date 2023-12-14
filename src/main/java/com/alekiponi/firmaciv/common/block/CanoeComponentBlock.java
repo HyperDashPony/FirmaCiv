@@ -264,14 +264,24 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
         final Direction.Axis axis = blockState.getValue(AXIS);
 
-        if (level.getBlockState(blockPos.relative(axis, 1)).is(this) && level.getBlockState(blockPos.relative(axis, 1))
-                .getValue(AXIS) == axis) {
-            level.destroyBlock(blockPos.relative(axis, 1), true);
+        final Shape shape = blockState.getValue(SHAPE);
+
+        // Prevent break propagation to the left if it's an end
+        if (shape != Shape.END_LEFT) {
+            final BlockPos leftBlockPos = blockPos.relative(axis, axis == Direction.Axis.X ? -1 : 1);
+            final BlockState leftBlockState = level.getBlockState(leftBlockPos);
+            if (leftBlockState.is(this) && leftBlockState.getValue(AXIS) == axis) {
+                level.destroyBlock(leftBlockPos, true);
+            }
         }
 
-        if (level.getBlockState(blockPos.relative(axis, -1)).is(this) && level.getBlockState(
-                blockPos.relative(axis, -1)).getValue(AXIS) == axis) {
-            level.destroyBlock(blockPos.relative(axis, -1), true);
+        // Prevent break propagation to the right if it's an end
+        if (shape != Shape.END_RIGHT) {
+            final BlockPos rightBlockPos = blockPos.relative(axis, axis == Direction.Axis.X ? 1 : -1);
+            final BlockState rightBlockState = level.getBlockState(rightBlockPos);
+            if (rightBlockState.is(this) && rightBlockState.getValue(AXIS) == axis) {
+                level.destroyBlock(rightBlockPos, true);
+            }
         }
     }
 
