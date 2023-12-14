@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -252,6 +253,42 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> stateBuilder) {
         super.createBlockStateDefinition(stateBuilder.add(AXIS).add(CANOE_CARVED).add(SHAPE));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState updateShape(final BlockState blockState, final Direction direction,
+            final BlockState neighborState, final LevelAccessor levelAccessor, final BlockPos blockPos,
+            final BlockPos neighborPos) {
+
+        // Not the same component block so ignore
+        if (!neighborState.is(this)) return blockState;
+
+        final Direction.Axis axis = blockState.getValue(AXIS);
+
+        // Update didn't come from a direction we care about
+        if (axis != direction.getAxis()) return blockState;
+
+        // Neighbor isn't on our axis
+        if (axis != neighborState.getValue(AXIS)) return blockState;
+
+        final BlockState otherNeighbor = levelAccessor.getBlockState(blockPos.relative(direction.getOpposite()));
+
+        // Only need to handle the neighbor
+        if (!otherNeighbor.is(this)) {
+
+            final Shape shape;
+            if (axis == Direction.Axis.X) {
+                shape = direction.getStepX() > 0 ? Shape.END_LEFT : Shape.END_RIGHT;
+            } else {
+                assert axis == Direction.Axis.Z : "Axis must be Z";
+                shape = direction.getStepZ() > 0 ? Shape.END_RIGHT : Shape.END_LEFT;
+            }
+
+            return blockState.setValue(SHAPE, shape);
+        }
+
+        return super.updateShape(blockState, direction, neighborState, levelAccessor, blockPos, neighborPos);
     }
 
     @Override
