@@ -79,14 +79,8 @@ public final class FirmacivEntities {
 
 
 
-
-
-
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
 
-
-=======
->>>>>>> Stashed changes
 }
