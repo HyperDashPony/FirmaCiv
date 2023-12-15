@@ -7,6 +7,7 @@ import com.alekiponi.firmaciv.events.config.FirmacivConfig;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,15 +49,16 @@ public final class FirmacivBlockEvents {
             final boolean isConvertibleBlock = blockState.is(
                     FirmacivConfig.SERVER.canoeWoodRestriction.get() ? FirmacivTags.Blocks.CAN_MAKE_CANOE : FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
 
-            if (isConvertibleBlock && blockState.getValue(BlockStateProperties.AXIS).isHorizontal()) {
+            final Direction.Axis axis = blockState.getValue(BlockStateProperties.AXIS);
 
-                if (CanoeComponentBlock.isValidShape(event.getLevel(), event.getPos())) {
-                    final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(blockState.getBlock());
+            if (!isConvertibleBlock || !axis.isHorizontal()) return;
 
-                    event.setFinalState(canoeComponentBlock.defaultBlockState());
-                }
-                return;
-            }
+            if (!CanoeComponentBlock.isValidShape(event.getLevel(), event.getPos())) return;
+
+            final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(blockState.getBlock());
+            event.setFinalState(canoeComponentBlock.defaultBlockState().setValue(CanoeComponentBlock.AXIS, axis));
+
+            return;
         }
 
         // All other axe strip events try to process the canoe component
