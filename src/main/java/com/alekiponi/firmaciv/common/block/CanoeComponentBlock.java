@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -243,11 +242,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
             case 0, 1, 2, 3 -> Shapes.block();
             default -> HALF_SHAPE;
         };
-    }
-
-    @Override
-    public BlockState getStateForPlacement(final BlockPlaceContext placeContext) {
-        return this.defaultBlockState().setValue(AXIS, placeContext.getHorizontalDirection().getAxis());
     }
 
     @Override
