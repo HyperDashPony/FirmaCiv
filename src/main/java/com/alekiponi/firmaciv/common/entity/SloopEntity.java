@@ -4,6 +4,7 @@ import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -27,6 +28,11 @@ public class SloopEntity extends FirmacivBoatEntity {
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
     protected float sailRotation;
     protected int sailState;
+    protected int sailAnimationTicks;
+
+    protected double windAngle;
+
+    protected double windSpeed;
 
     public SloopEntity(EntityType<? extends FirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
@@ -64,13 +70,13 @@ public class SloopEntity extends FirmacivBoatEntity {
 
     @Override
     public AABB getBoundingBoxForCulling() {
-        Vec3 startingPoint = new Vec3(this.getX() - 7, this.getY() - 7, this.getZ() - 7);
-        Vec3 endingPoint = new Vec3(this.getX() + 7, this.getY() + 7, this.getZ() + 7);
+        float bbRadius = 10f;
+        Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
+        Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
         return new AABB(startingPoint, endingPoint);
     }
 
     // sailing stuff
-
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
         if (this.hasPassenger(passenger)) {
@@ -181,6 +187,14 @@ public class SloopEntity extends FirmacivBoatEntity {
     public void tick() {
         super.tick();
         this.sailBoat();
+        sailAnimationTicks = this.tickCount;
+        if(tickCount % 40 == 0){
+            Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
+            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
+            double speed = Math.abs(Math.round(windVector.length() * 320));
+            this.windSpeed = speed;
+            this.windAngle = Mth.wrapDegrees(direction);
+        }
     }
 
     // method to get sailing controls
@@ -190,18 +204,17 @@ public class SloopEntity extends FirmacivBoatEntity {
     // method for getting wind stuff?
 
     public float getSailRotation() {
-        return sailRotation;
+        return Mth.wrapDegrees(sailRotation);
     }
 
     public float getSailWorldRotation() {
-        return sailRotation + this.getYRot();
+        return Mth.wrapDegrees(sailRotation + Mth.wrapDegrees(this.getYRot()));
     }
 
+    public int getSailAnimationTicks(){ return sailAnimationTicks;};
+
     public float[] getWindAngleAndSpeed() {
-        Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
-        double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
-        double speed = Math.round(windVector.length() * 320);
-        return new float[]{(float) direction, (float) speed};
+        return new float[]{(float) windAngle, (float) windSpeed};
     }
 
 

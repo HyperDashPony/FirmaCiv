@@ -11,6 +11,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 
 public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -33,9 +34,7 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     private final ModelPart hold_netting;
     private final ModelPart waterocclusion;
     private final ModelPart mainsail_main;
-    private final ModelPart shrouds;
     private final ModelPart jibsail_1;
-
 
 
     public SloopEntityModel() {
@@ -59,7 +58,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         this.sidewall_port = root.getChild("sidewall_port");
         this.hold_netting = root.getChild("hold_netting");
         this.waterocclusion = root.getChild("waterocclusion");
-        this.shrouds = root.getChild("shrouds");
         this.jibsail_1 = root.getChild("jibsail_1");
     }
 
@@ -138,28 +136,9 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         PartDefinition gaff = mainsail_main.addOrReplaceChild("gaff", CubeListBuilder.create(), PartPose.offset(0.0F, -116.4182F, 0.9159F));
 
-        PartDefinition peak_halliard_r1 = gaff.addOrReplaceChild("peak_halliard_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -34.0F, -0.5F, 1.0F, 64.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -7.6163F, 27.7348F, -1.5184F, 0.0F, 0.0F));
-
         PartDefinition gaff_r1 = gaff.addOrReplaceChild("gaff_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-33.0233F, -4.8366F, -1.0F, 70.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 2.0299F, 29.3169F, 1.5708F, -1.2392F, -1.5708F));
 
         generateMainsail(mainsail_main);
-
-        /*
-        for(int i = 0; i < horizontal_sail_sections; i++){
-            String name = "mainsail_part_" + i;
-            float zposition = 0.5f + (i*sail_section_widths);
-            float height = 102;
-            if(i < horizontal_sail_sections/2){
-                height += ((i*sail_section_widths)/3.0f);
-            } else {
-                height = mainsail_length;
-                height -= ((i*sail_section_widths)-60)*2;
-            }
-            float yorigin = -4 - height;
-            mainsail_main.addOrReplaceChild(name, CubeListBuilder.create().texOffs(144, 895).addBox(-0.5F, yorigin, zposition, 2, height, sail_section_widths, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-        }
-
-         */
 
         PartDefinition mast = partdefinition.addOrReplaceChild("mast", CubeListBuilder.create(), PartPose.offset(-2.0F, -55.0F, 41.0F));
 
@@ -394,12 +373,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         PartDefinition waterocclusion_r1 = waterocclusion.addOrReplaceChild("waterocclusion_r1", CubeListBuilder.create().texOffs(0, 1000).addBox(-3.7926F, 42.5F, -11.0F, 38.0F, 2.0F, 22.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -55.0F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition shrouds = partdefinition.addOrReplaceChild("shrouds", CubeListBuilder.create(), PartPose.offset(-17.741F, -143.0F, -33.75F));
-
-        PartDefinition shroud_starboard_r1 = shrouds.addOrReplaceChild("shroud_starboard_r1", CubeListBuilder.create().texOffs(136, 862).mirror().addBox(15.75F, -2.0583F, -0.5F, 1.0F, 161.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.1308F, 0.0057F, 0.1749F));
-
-        PartDefinition shroud_port_r1 = shrouds.addOrReplaceChild("shroud_port_r1", CubeListBuilder.create().texOffs(136, 862).addBox(-16.75F, -2.0583F, -0.5F, 1.0F, 161.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(35.482F, 0.0F, 0.0F, 0.1308F, -0.0057F, -0.1749F));
-
         PartDefinition jibsail_1 = partdefinition.addOrReplaceChild("jibsail_1", CubeListBuilder.create().texOffs(173, 912).addBox(-0.5F, -89.0F, -71.0F, 1.0F, 96.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -22.0F, 8.75F));
 
         PartDefinition jibsail_luff_1_r1 = jibsail_1.addOrReplaceChild("jibsail_luff_1_r1", CubeListBuilder.create().texOffs(144, 872).addBox(-0.125F, -44.0F, 3.25F, 0.25F, 29.0F, 1.75F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -54.9951F, -83.1351F, -0.588F, 0.0F, 0.0F));
@@ -429,96 +402,118 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
     private static final int vertical_sail_sections = 5;
 
-    private static final int sail_section_widths = mainsail_length/horizontal_sail_sections;
+    private static final int sail_section_widths = mainsail_length / horizontal_sail_sections;
 
-    private static final int sail_section_heights = mainsail_height/vertical_sail_sections;
+    private static final int sail_section_heights = mainsail_height / vertical_sail_sections;
 
-    private static void generateMainsail(PartDefinition mainsail_main){
+    private static void generateMainsail(PartDefinition mainsail_main) {
 
-        for(int zindex = 0; zindex < horizontal_sail_sections; zindex++)
-        {
-            float zposition = 0.5f + (zindex*sail_section_widths);
+        for (int zindex = 0; zindex < horizontal_sail_sections; zindex++) {
+            float zposition = 0.5f + (zindex * sail_section_widths);
             float height = 102;
-            if(zindex < horizontal_sail_sections/2){
-                height += ((zindex*sail_section_widths)/3.0f);
+            if (zindex < horizontal_sail_sections / 2) {
+                height += ((zindex * sail_section_widths) / 3.0f);
             } else {
                 height = mainsail_length;
-                height -= ((zindex*sail_section_widths)-60)*2;
+                height -= ((zindex * sail_section_widths) - 60) * 2;
             }
             float yorigin = -4;
-            for(int yindex = 0; yindex < vertical_sail_sections; yindex ++)
-            {
+            for (int yindex = 0; yindex < vertical_sail_sections; yindex++) {
                 yorigin = (yindex * sail_section_heights);
                 float section_height = sail_section_heights;
-                if(height - (yorigin) <= sail_section_heights && height - (yorigin) > 0){
+                if (height - (yorigin) <= sail_section_heights && height - (yorigin) > 0) {
                     section_height = Math.round(height - yorigin);
                     yorigin += section_height - sail_section_heights;
-                    while(section_height % 4 != 0){
-                        section_height--;
-                        yorigin--;
-                    }
-                } else if(height - (yorigin) <= 0){
+                } else if (height - (yorigin) <= 0) {
                     break;
                 }
+
+                //.texOffs(673, 996)
+
+                int textureOffsetx = 673+zindex*sail_section_widths;
+                int textureOffsetY = (996-(int)yorigin);
 
                 String name = "mainsail_part_" + zindex + "_" + yindex;
-                mainsail_main.addOrReplaceChild(name, CubeListBuilder.create().texOffs(144, 895).addBox(-0.5F, -yorigin-sail_section_heights-4, zposition, 2, section_height, sail_section_widths, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                mainsail_main.addOrReplaceChild(name, CubeListBuilder.create().texOffs(textureOffsetx, textureOffsetY).addBox(-1F, -yorigin - sail_section_heights - 4, zposition, 2, section_height, sail_section_widths, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
             }
         }
-
-        /*
-        for(int i = 0; i < horizontal_sail_sections; i++){
-            String name = "mainsail_part_" + i;
-            float zposition = 0.5f + (i*sail_section_widths);
-            float height = 102;
-            if(i < horizontal_sail_sections/2){
-                height += ((i*sail_section_widths)/3.0f);
-            } else {
-                height = mainsail_length;
-                height -= ((i*sail_section_widths)-60)*2;
-            }
-            float yorigin = -4 - height;
-            mainsail_main.addOrReplaceChild(name, CubeListBuilder.create().texOffs(144, 895).addBox(-0.5F, yorigin, zposition, 2, height, sail_section_widths, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-        }*/
     }
 
-    private static void animateSail(SloopEntity pBoat, ModelPart[][] sails, float mastRotation, float pPartialTicks) {
-        //float ticks = pPartialTicks % horizontal_sail_sections;
-        //boom.yRot = mastRotation
+    private static void animateSail(SloopEntity pBoat, float pPartialTicks, ModelPart mainsail_main, ModelPart[][] sails, float mastRotation, int animationTick, float[] windAngleAndSpeed) {
+        mainsail_main.yRot = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
+        float windWorldAngle = pBoat.getWindAngleAndSpeed()[0];
+        float windSpeed = pBoat.getWindAngleAndSpeed()[1] / 16f;
+        float sailWorldAngle = pBoat.getSailWorldRotation();
+        int airFoilDirection = 1;
+        ModelPart gaff = mainsail_main.getChild("gaff");
+        float windDifference = Mth.degreesDifference(windWorldAngle, sailWorldAngle);
+        if (windDifference < 0) {
+            airFoilDirection = -1;
+        }
+        windDifference = Math.abs(windDifference);
 
-        for(int zindex = 0; zindex < horizontal_sail_sections; zindex++)
-        {
-            float zfunction = Math.round((float) ((5 * Math.sin(0.1*(zindex*sail_section_widths)))));
+        if (windSpeed < 0.1) {
+            windSpeed = 0.1f;
+        }
+        float animationTickFloat = -windSpeed * animationTick;
 
-            for(int yindex = 0; yindex < vertical_sail_sections; yindex ++)
-            {
-                float yfunction = zfunction * (-0.1f*(((float)(yindex)-2.0f)*((float)(yindex)-2.0f))+1.0f);
-                if(sails[zindex][yindex] == null){
+
+        for (int zindex = 0; zindex < horizontal_sail_sections; zindex++) {
+
+            for (int yindex = 0; yindex < vertical_sail_sections; yindex++) {
+                if (sails[zindex][yindex] == null) {
                     break;
                 }
-                sails[zindex][yindex].x=yfunction+0.5f;
-                sails[zindex][yindex].z = (-1f*(((float)(yindex)-2.0f)*((float)(yindex)-2.0f))+1.0f);
-                sails[zindex][yindex].y = 0;
+                float luffFunction = (float) (5 * Math.sin(0.1 * ((zindex * sail_section_widths) + animationTickFloat + yindex * sail_section_widths)));
+                float squaredFunctionComponent = (zindex - 7) * (zindex - 7);
+                float airfoilFunction = (-0.20f * squaredFunctionComponent + 11) * airFoilDirection;
+                if (zindex > 7) {
+                    airfoilFunction = (-0.018f * squaredFunctionComponent + 11) * airFoilDirection;
+                }
+
+                float ycurve = yindex * airFoilDirection;
+                if (yindex > 2) {
+                    ycurve = -(yindex - 3) * airFoilDirection;
+                }
+                float falloff = 0.4f * (float) Math.log((zindex + 1.00f)) + 0.1f;
+                if (zindex > 15f) {
+                    falloff = 0.4f * (float) Math.log((-zindex + 1.00f + 29f)) + 0.1f;
+                }
+                if (falloff > 1.0f) {
+                    falloff = 1.0f;
+                }
+
+                luffFunction = luffFunction * falloff;
+                airfoilFunction = airfoilFunction * falloff;
+                ycurve = ycurve * falloff;
+
+                float mixFunction = 0;
+                if (windDifference > 30 && windDifference < 150) {
+                    mixFunction = 0.92f;
+                } else if (windDifference > 150) {
+                    windDifference = Math.abs(windDifference - 180);
+                    mixFunction = windDifference / 30f;
+                } else {
+                    mixFunction = windDifference / 30f;
+                }
+
+                if (mixFunction >= 0.9f) {
+                    luffFunction = (float) (5 * Math.sin(0.1 * ((zindex * sail_section_widths) + animationTickFloat))) * falloff;
+                }
+
+                float finalfunction = ((airfoilFunction) * mixFunction + (luffFunction * (1.0f - mixFunction))) + ycurve * mixFunction;
+
+                sails[zindex][yindex].x = (finalfunction);
             }
         }
 
-        /*
-        for(int i = 0; i < horizontal_sail_sections; i++){
-            float function = Math.round((float) ((5 * Math.sin(0.1*(i*sail_section_widths)))));
-
-            if(i < horizontal_sail_sections/2){
-                function = Math.round(((((i*sail_section_widths)-30.0f)/12f)*(((i*sail_section_widths)-30f)/12.0f) + 1f) - 15f);
-            } else {
-                function = Math.round((0.01f*(i*3)*(i*3))/12f - 15f);
-            }
-            sails[i].x=function+0.5f;
-        }*/
+        double gaffRotation = (Math.tan(sails[14][4].x / (15 * sail_section_widths)));
+        gaff.yRot = (float) gaffRotation;//Mth.rotLerp(pPartialTicks, gaff.yRot, (float) gaffRotation);
 
     }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-            float headPitch) {
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
     }
 
@@ -526,25 +521,30 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         return this.waterocclusion;
     }
 
+    public ModelPart getMainsail() {
+        return this.mainsail_main;
+    }
+
 
     public void setupAnim(SloopEntity pEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
                           float headPitch) {
-        animateSail(pEntity, this.getSails(), (float) Math.toRadians(pEntity.getSailRotation()), limbSwingAmount);
+        if (mainSailParts[0][0] == null) {
+            mainSailParts = getSails(this);
+        }
+        animateSail(pEntity, limbSwing, mainsail_main, mainSailParts, (float) Math.toRadians(pEntity.getSailRotation()), pEntity.getSailAnimationTicks(), pEntity.getWindAngleAndSpeed());
     }
 
-    private static ModelPart[][] mainSailParts;
+    private ModelPart[][] mainSailParts = new ModelPart[horizontal_sail_sections][vertical_sail_sections];
 
-    public ModelPart[][] getSails() {
+    public static ModelPart[][] getSails(SloopEntityModel sloopEntityModel) {
 
         ModelPart[][] sails = new ModelPart[horizontal_sail_sections][vertical_sail_sections];
 
-        for(int zindex = 0; zindex < horizontal_sail_sections; zindex++)
-        {
+        for (int zindex = 0; zindex < horizontal_sail_sections; zindex++) {
             String name = "mainsail_part_" + zindex + "_";
-            for(int yindex = 0; yindex < vertical_sail_sections; yindex ++)
-            {
-                if(mainsail_main.hasChild(name + yindex)){
-                    sails[zindex][yindex] = mainsail_main.getChild(name + yindex);
+            for (int yindex = 0; yindex < vertical_sail_sections; yindex++) {
+                if (sloopEntityModel.mainsail_main.hasChild(name + yindex)) {
+                    sails[zindex][yindex] = sloopEntityModel.mainsail_main.getChild(name + yindex);
                 } else {
                     sails[zindex][yindex] = null;
                 }
@@ -561,12 +561,12 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
-            float red, float green, float blue, float alpha) {
+                               float red, float green, float blue, float alpha) {
         transom_port.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         transom_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         bowsprit.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hull_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        mainsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        //mainsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         mast.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         keel.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         sidewall_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
@@ -581,7 +581,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         sidewall_port.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hold_netting.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         //waterocclusion.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        shrouds.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         jibsail_1.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }
