@@ -337,6 +337,23 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         END_LEFT,
         END_RIGHT;
 
+        /**
+         * Helper to get the correct end Shape from an axis and an axis direction.
+         *
+         * @param axis          The axis of the canoe component. Must be a horizontal axis
+         * @param axisDirection The axis direction in reference to the connecting canoe component
+         * @return An end shape for the given axis and axis direction
+         */
+        public static Shape endFromAxisAndAxisDirection(final Direction.Axis axis,
+                final Direction.AxisDirection axisDirection) {
+            assert axis.isHorizontal() : "Axis must be horizontal";
+            if (axis == Direction.Axis.X) {
+                return axisDirection == Direction.AxisDirection.POSITIVE ? Shape.END_RIGHT : Shape.END_LEFT;
+            } else {
+                return axisDirection == Direction.AxisDirection.POSITIVE ? Shape.END_LEFT : Shape.END_RIGHT;
+            }
+        }
+
         @Override
         public String getSerializedName() {
             return switch (this) {

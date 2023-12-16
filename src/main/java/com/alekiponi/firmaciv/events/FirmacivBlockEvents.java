@@ -9,6 +9,7 @@ import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -41,29 +42,76 @@ public final class FirmacivBlockEvents {
         // We only care about strip events
         if (event.getToolAction() != ToolActions.AXE_STRIP) return;
 
+        final Level level = event.getContext().getLevel();
         final BlockState blockState = event.getState();
         final ItemStack heldStack = event.getHeldItemStack();
+
+        final BlockPos blockPos = event.getPos();
 
         // Item is a saw so we should attempt a conversion
         if (heldStack.is(FirmacivTags.Items.SAWS)) {
             final boolean isConvertibleBlock = blockState.is(
                     FirmacivConfig.SERVER.canoeWoodRestriction.get() ? FirmacivTags.Blocks.CAN_MAKE_CANOE : FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
 
-            final Direction.Axis axis = blockState.getValue(BlockStateProperties.AXIS);
+            if (isConvertibleBlock) {
+                final Direction.Axis axis = blockState.getValue(BlockStateProperties.AXIS);
 
-            if (!isConvertibleBlock || !axis.isHorizontal()) return;
+                if (!axis.isHorizontal()) return;
 
-            if (!CanoeComponentBlock.isValidShape(event.getLevel(), event.getPos())) return;
+                if (!CanoeComponentBlock.isValidShape(level, blockPos)) return;
 
-            final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(blockState.getBlock());
-            event.setFinalState(canoeComponentBlock.defaultBlockState().setValue(CanoeComponentBlock.AXIS, axis));
+                final Block canoeComponentBlock = CanoeComponentBlock.getByStripped(blockState.getBlock());
+                final BlockState canoeComponentState = canoeComponentBlock.defaultBlockState()
+                        .setValue(CanoeComponentBlock.AXIS, axis);
 
-            return;
+                event.setFinalState(canoeComponentState);
+
+                // Cannot modify level
+                if (event.isSimulated()) return;
+
+                level.setBlock(blockPos.relative(axis, 1), canoeComponentState.setValue(CanoeComponentBlock.SHAPE,
+                                CanoeComponentBlock.Shape.endFromAxisAndAxisDirection(axis, Direction.AxisDirection.POSITIVE)),
+                        Block.UPDATE_ALL_IMMEDIATE);
+
+                level.setBlock(blockPos.relative(axis, -1), canoeComponentState.setValue(CanoeComponentBlock.SHAPE,
+                                CanoeComponentBlock.Shape.endFromAxisAndAxisDirection(axis, Direction.AxisDirection.NEGATIVE)),
+                        Block.UPDATE_ALL_IMMEDIATE);
+                return;
+            }
         }
 
         // All other axe strip events try to process the canoe component
         if (blockState.is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)) {
-            processCanoeComponent(event.getState(), heldStack).ifPresent(event::setFinalState);
+            processCanoeComponent(blockState, heldStack).ifPresent(finalState -> {
+                event.setFinalState(finalState);
+
+                // Cannot modify level
+                if (event.isSimulated()) return;
+
+                level.addDestroyBlockEffect(blockPos, finalState);
+
+                if (!heldStack.is(FirmacivTags.Items.AXES)) return;
+
+                final Direction.Axis axis = finalState.getValue(CanoeComponentBlock.AXIS);
+
+                final BlockPos leftPos = blockPos.relative(axis, 1);
+                final BlockState leftBlockState = level.getBlockState(leftPos);
+
+                if (leftBlockState.is(finalState.getBlock())) {
+                    final BlockState state = leftBlockState.cycle(CanoeComponentBlock.CANOE_CARVED);
+                    level.setBlock(leftPos, state, Block.UPDATE_ALL_IMMEDIATE);
+                    level.addDestroyBlockEffect(leftPos, state);
+                }
+
+                final BlockPos rightPos = blockPos.relative(axis, -1);
+                final BlockState rightBlockState = level.getBlockState(rightPos);
+
+                if (rightBlockState.is(finalState.getBlock())) {
+                    final BlockState state = rightBlockState.cycle(CanoeComponentBlock.CANOE_CARVED);
+                    level.setBlock(rightPos, state, Block.UPDATE_ALL_IMMEDIATE);
+                    level.addDestroyBlockEffect(rightPos, state);
+                }
+            });
         }
     }
 
