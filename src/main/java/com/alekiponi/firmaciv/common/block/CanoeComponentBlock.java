@@ -49,6 +49,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED;
     public static final EnumProperty<Shape> SHAPE = FirmacivBlockStateProperties.CANOE_SHAPE;
+    public static final BlockPattern VALID_CANOE_PATTERN = BlockPatternBuilder.start().aisle("#", "#", "#")
+            .where('#', BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE))).build();
     private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
@@ -80,10 +82,24 @@ public class CanoeComponentBlock extends BaseEntityBlock {
      * @return If there is a valid canoe shape
      */
     public static boolean isValidShape(final LevelReader levelAccessor, final BlockPos startBlockPos) {
-        final BlockPattern canoePattern = BlockPatternBuilder.start().aisle("#", "#", "#").where('#',
-                BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE) || blockState.is(
-                        FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))).build();
-        return canoePattern.find(levelAccessor, startBlockPos) != null;
+        final BlockPattern.BlockPatternMatch patternMatch = VALID_CANOE_PATTERN.find(levelAccessor, startBlockPos);
+
+        if (patternMatch == null) return false;
+
+        @Nullable Direction.Axis firstAxis = null;
+        for (int i = 0; i < patternMatch.getHeight(); i++) {
+            final BlockInWorld patternBlock = patternMatch.getBlock(0, i, 0);
+
+            final Direction.Axis axis = patternBlock.getState().getValue(RotatedPillarBlock.AXIS);
+
+            if (firstAxis == null) firstAxis = axis;
+
+            if (firstAxis != axis) return false;
+
+            if (!axis.isHorizontal()) return false;
+        }
+
+        return true;
     }
 
     private static BlockPos getMiddleBlockPos(final Level pLevel, final BlockPos pPos,
