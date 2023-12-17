@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID)
 public final class FirmacivBlockEvents {
 
     @SubscribeEvent
