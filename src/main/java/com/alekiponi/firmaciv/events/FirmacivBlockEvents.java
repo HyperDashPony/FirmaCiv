@@ -13,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.pattern.BlockInWorld;
+import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.level.BlockEvent.BlockToolModificationEvent;
@@ -73,16 +75,65 @@ public final class FirmacivBlockEvents {
 
                 event.setFinalState(canoeComponentState);
 
-                // Cannot modify level
-                if (event.isSimulated()) return;
+                final BlockPattern.BlockPatternMatch patternMatch = CanoeComponentBlock.VALID_CANOE_PATTERN.find(level,
+                        blockPos);
 
-                level.setBlock(blockPos.relative(axis, 1), canoeComponentState.setValue(CanoeComponentBlock.SHAPE,
-                                CanoeComponentBlock.Shape.endFromAxisAndAxisDirection(axis, Direction.AxisDirection.POSITIVE)),
-                        Block.UPDATE_ALL_IMMEDIATE);
+                if (patternMatch == null) return;
 
-                level.setBlock(blockPos.relative(axis, -1), canoeComponentState.setValue(CanoeComponentBlock.SHAPE,
-                                CanoeComponentBlock.Shape.endFromAxisAndAxisDirection(axis, Direction.AxisDirection.NEGATIVE)),
-                        Block.UPDATE_ALL_IMMEDIATE);
+                final Direction.AxisDirection axisDirection = patternMatch.getUp().getAxisDirection();
+
+                for (int i = 0; i < patternMatch.getHeight(); i++) {
+                    final BlockInWorld patternBlock = patternMatch.getBlock(0, i, 0);
+                    final BlockPos patternBlockPos = patternBlock.getPos();
+
+                    // Should override the state instead of setting the block as the event callie does that
+                    if (patternBlockPos.equals(blockPos)) {
+                        // Front end
+                        if (0 == i) {
+                            final CanoeComponentBlock.Shape shape = CanoeComponentBlock.Shape.getEndShape(axis,
+                                    axisDirection);
+                            event.setFinalState(canoeComponentState.setValue(CanoeComponentBlock.SHAPE, shape));
+                        }
+
+                        // Back end
+                        if (patternMatch.getHeight() - 1 == i) {
+                            final CanoeComponentBlock.Shape shape = CanoeComponentBlock.Shape.getEndShape(axis,
+                                    axisDirection.opposite());
+                            event.setFinalState(canoeComponentState.setValue(CanoeComponentBlock.SHAPE, shape));
+                        }
+
+                        if (!event.isSimulated()) level.addDestroyBlockEffect(patternBlockPos, event.getFinalState());
+                        continue;
+                    }
+
+                    // Cannot modify level
+                    if (event.isSimulated()) continue;
+
+                    // Front end
+                    if (0 == i) {
+                        final CanoeComponentBlock.Shape shape = CanoeComponentBlock.Shape.getEndShape(axis,
+                                axisDirection);
+                        final BlockState state = canoeComponentState.setValue(CanoeComponentBlock.SHAPE, shape);
+
+                        level.setBlock(patternBlockPos, state, Block.UPDATE_ALL_IMMEDIATE);
+                        level.addDestroyBlockEffect(patternBlockPos, state);
+                        continue;
+                    }
+
+                    // Back end
+                    if (patternMatch.getHeight() - 1 == i) {
+                        final CanoeComponentBlock.Shape shape = CanoeComponentBlock.Shape.getEndShape(axis,
+                                axisDirection.opposite());
+                        final BlockState state = canoeComponentState.setValue(CanoeComponentBlock.SHAPE, shape);
+
+                        level.setBlock(patternBlockPos, state, Block.UPDATE_ALL_IMMEDIATE);
+                        level.addDestroyBlockEffect(patternBlockPos, state);
+                        continue;
+                    }
+
+                    level.setBlock(patternBlockPos, canoeComponentState, Block.UPDATE_ALL_IMMEDIATE);
+                    level.addDestroyBlockEffect(patternBlockPos, canoeComponentState);
+                }
                 return;
             }
         }
