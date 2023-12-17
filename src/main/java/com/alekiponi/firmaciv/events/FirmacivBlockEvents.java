@@ -84,33 +84,10 @@ public final class FirmacivBlockEvents {
         if (blockState.is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS)) {
             processCanoeComponent(blockState, heldStack).ifPresent(finalState -> {
                 event.setFinalState(finalState);
-
-                // Cannot modify level
+                // Cannot modify level so we shouldn't add particles
                 if (event.isSimulated()) return;
 
-                level.addDestroyBlockEffect(blockPos, finalState);
-
-                if (!heldStack.is(FirmacivTags.Items.AXES)) return;
-
-                final Direction.Axis axis = finalState.getValue(CanoeComponentBlock.AXIS);
-
-                final BlockPos leftPos = blockPos.relative(axis, 1);
-                final BlockState leftBlockState = level.getBlockState(leftPos);
-
-                if (leftBlockState.is(finalState.getBlock())) {
-                    final BlockState state = leftBlockState.cycle(CanoeComponentBlock.CANOE_CARVED);
-                    level.setBlock(leftPos, state, Block.UPDATE_ALL_IMMEDIATE);
-                    level.addDestroyBlockEffect(leftPos, state);
-                }
-
-                final BlockPos rightPos = blockPos.relative(axis, -1);
-                final BlockState rightBlockState = level.getBlockState(rightPos);
-
-                if (rightBlockState.is(finalState.getBlock())) {
-                    final BlockState state = rightBlockState.cycle(CanoeComponentBlock.CANOE_CARVED);
-                    level.setBlock(rightPos, state, Block.UPDATE_ALL_IMMEDIATE);
-                    level.addDestroyBlockEffect(rightPos, state);
-                }
+                level.addDestroyBlockEffect(event.getPos(), finalState);
             });
         }
     }
