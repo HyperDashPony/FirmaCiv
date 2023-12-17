@@ -179,16 +179,16 @@ public final class FirmacivBlockEvents {
      */
     private static Optional<BlockState> processCanoeComponent(final BlockState blockState, final ItemStack heldStack) {
         if (heldStack.is(FirmacivTags.Items.SAWS)) {
-            if (3 < blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
+            if (4 < blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
 
             return Optional.of(blockState.cycle(CanoeComponentBlock.CANOE_CARVED));
         }
 
         if (heldStack.is(FirmacivTags.Items.AXES)) {
 
-            if (4 > blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
+            if (5 > blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
 
-            if (9 < blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
+            if (10 < blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
 
             return Optional.of(blockState.cycle(CanoeComponentBlock.CANOE_CARVED));
         }

@@ -136,24 +136,24 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         if (level.getBlockState(blockPos0).is(canoeComponentBlock) && level.getBlockState(blockPos1)
                 .is(canoeComponentBlock)) {
 
-            if (level.getBlockState(blockPos0).getValue(CANOE_CARVED) == 12 && level.getBlockState(blockPos1)
-                    .getValue(CANOE_CARVED) == 12) {
+            if (level.getBlockState(blockPos0).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos1)
+                    .getValue(CANOE_CARVED) == 13) {
                 return true;
             }
         }
         if (level.getBlockState(blockPos1).is(canoeComponentBlock) && level.getBlockState(blockPos2)
                 .is(canoeComponentBlock)) {
 
-            if (level.getBlockState(blockPos1).getValue(CANOE_CARVED) == 12 && level.getBlockState(blockPos2)
-                    .getValue(CANOE_CARVED) == 12) {
+            if (level.getBlockState(blockPos1).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos2)
+                    .getValue(CANOE_CARVED) == 13) {
                 return true;
             }
         }
         if (level.getBlockState(blockPos2).is(canoeComponentBlock) && level.getBlockState(blockPos3)
                 .is(canoeComponentBlock)) {
 
-            return level.getBlockState(blockPos2).getValue(CANOE_CARVED) == 12 && level.getBlockState(blockPos3)
-                    .getValue(CANOE_CARVED) == 12;
+            return level.getBlockState(blockPos2).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos3)
+                    .getValue(CANOE_CARVED) == 13;
         }
 
         return false;
@@ -214,7 +214,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public void animateTick(final BlockState blockState, final Level level, final BlockPos blockPos,
             final RandomSource randomSource) {
 
-        if (blockState.getValue(CANOE_CARVED) == 11) {
+        if (blockState.getValue(CANOE_CARVED) == 12) {
             final double x = blockPos.getX() + randomSource.nextDouble();
             final double y = blockPos.getY() + randomSource.nextDouble();
             final double z = blockPos.getZ() + randomSource.nextDouble();
@@ -251,7 +251,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public VoxelShape getShape(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
             final CollisionContext collisionContext) {
         return switch (blockState.getValue(CANOE_CARVED)) {
-            case 0, 1, 2, 3 -> Shapes.block();
+            case 0, 1, 2, 3, 4 -> Shapes.block();
             default -> HALF_SHAPE;
         };
     }
