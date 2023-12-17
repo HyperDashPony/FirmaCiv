@@ -8,6 +8,7 @@ import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -45,11 +46,17 @@ public final class FirmacivBlockEvents {
         final Level level = event.getContext().getLevel();
         final BlockState blockState = event.getState();
         final ItemStack heldStack = event.getHeldItemStack();
-
         final BlockPos blockPos = event.getPos();
 
         // Item is a saw so we should attempt a conversion
         if (heldStack.is(FirmacivTags.Items.SAWS)) {
+
+            {
+                final Player player = event.getPlayer();
+                // Only do the early return if not crouching when we have a player
+                if (player != null && !player.isCrouching()) return;
+            }
+
             final boolean isConvertibleBlock = blockState.is(
                     FirmacivConfig.SERVER.canoeWoodRestriction.get() ? FirmacivTags.Blocks.CAN_MAKE_CANOE : FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
 
