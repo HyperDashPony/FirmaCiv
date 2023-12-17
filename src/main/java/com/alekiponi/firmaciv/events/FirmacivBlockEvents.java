@@ -124,6 +124,7 @@ public final class FirmacivBlockEvents {
                 if (0 == i) {
                     final CanoeComponentBlock.Shape shape = CanoeComponentBlock.Shape.getEndShape(axis, axisDirection);
                     finalState = canoeComponentState.setValue(CanoeComponentBlock.SHAPE, shape);
+                    continue;
                 }
 
                 // Back end
@@ -131,8 +132,10 @@ public final class FirmacivBlockEvents {
                     final CanoeComponentBlock.Shape shape = CanoeComponentBlock.Shape.getEndShape(axis,
                             axisDirection.opposite());
                     finalState = canoeComponentState.setValue(CanoeComponentBlock.SHAPE, shape);
+                    continue;
                 }
 
+                finalState = canoeComponentState;
                 continue;
             }
 
