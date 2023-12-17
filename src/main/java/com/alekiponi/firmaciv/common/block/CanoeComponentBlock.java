@@ -304,13 +304,12 @@ public class CanoeComponentBlock extends BaseEntityBlock {
          * @param axisDirection The axis direction in reference to the connecting canoe component
          * @return An end shape for the given axis and axis direction
          */
-        public static Shape endFromAxisAndAxisDirection(final Direction.Axis axis,
-                final Direction.AxisDirection axisDirection) {
+        public static Shape getEndShape(final Direction.Axis axis, final Direction.AxisDirection axisDirection) {
             assert axis.isHorizontal() : "Axis must be horizontal";
-            if (axis == Direction.Axis.X) {
-                return axisDirection == Direction.AxisDirection.POSITIVE ? Shape.END_RIGHT : Shape.END_LEFT;
-            } else {
-                return axisDirection == Direction.AxisDirection.POSITIVE ? Shape.END_LEFT : Shape.END_RIGHT;
+            if (Direction.Axis.X == axis) {
+                return axisDirection == Direction.AxisDirection.POSITIVE ? END_RIGHT : END_LEFT;
+            } else { // Z
+                return axisDirection == Direction.AxisDirection.NEGATIVE ? END_RIGHT : END_LEFT;
             }
         }
 
