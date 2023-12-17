@@ -52,17 +52,16 @@ public final class FirmacivBlockEvents {
 
         // Item is a saw so we should attempt a conversion
         if (heldStack.is(FirmacivTags.Items.SAWS)) {
-
-            {
-                final Player player = event.getPlayer();
-                // Only do the early return if not crouching when we have a player
-                if (player != null && !player.isCrouching()) return;
-            }
-
             final boolean isConvertibleBlock = blockState.is(
                     FirmacivConfig.SERVER.canoeWoodRestriction.get() ? FirmacivTags.Blocks.CAN_MAKE_CANOE : FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED);
 
             if (isConvertibleBlock) {
+                {
+                    final Player player = event.getPlayer();
+                    // Only do the early return if not crouching when we have a player
+                    if (player != null && !player.isCrouching()) return;
+                }
+
                 final BlockState finalState = convertToCanoeComponent(blockState, blockPos, level, event.isSimulated());
                 event.setFinalState(finalState);
 
