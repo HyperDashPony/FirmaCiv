@@ -1,14 +1,14 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import com.alekiponi.firmaciv.common.entity.CannonEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.network.PacketHandler;
 import com.alekiponi.firmaciv.network.ServerboundCompartmentInputPacket;
-import com.alekiponi.firmaciv.util.FirmacivTags;
 import com.google.common.collect.Lists;
 import net.dries007.tfc.common.entities.predator.Predator;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -24,17 +24,18 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected static final EntityDataAccessor<Long> DATA_ID_PASSENGER_RIDE_TICK = SynchedEntityData.defineId(
@@ -147,9 +148,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             livingEntity.setYBodyRot(this.getYRot());
             livingEntity.setYHeadRot(livingEntity.getYHeadRot() + this.getYRot());
             this.clampRotation(livingEntity);
-        } else if(passenger instanceof CannonEntity cannon){
-            cannon.setYRot(-this.getYRot()-180);
-            if(cannon.getXRot() > 5){
+        } else if (passenger instanceof CannonEntity cannon) {
+            cannon.setYRot(-this.getYRot() - 180);
+            if (cannon.getXRot() > 5) {
                 cannon.setXRot(5);
             }
         }
@@ -174,16 +175,17 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                 canAddNonPlayers = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
             }
             if (tickCount < 10 && this.isPassenger()) {
-                for(AbstractCompartmentEntity compartment : this.getTrueVehicle().getCanAddOnlyBlocks()){
-                    if(compartment.getVehicle() == this.getVehicle()){
+                for (AbstractCompartmentEntity compartment : this.getTrueVehicle().getCanAddOnlyBlocks()) {
+                    if (compartment.getVehicle() == this.getVehicle()) {
                         canAddOnlyBlocks = true;
                     }
                 }
             }
         }
 
-        if(this.isVehicle() && !this.level().isClientSide()){
-            if(this.getFirstPassenger() != null && this.getTrueVehicle() != null && this.getFirstPassenger().getBbWidth() > this.getTrueVehicle().getPassengerSizeLimit()){
+        if (this.isVehicle() && !this.level().isClientSide()) {
+            if (this.getFirstPassenger() != null && this.getTrueVehicle() != null && this.getFirstPassenger()
+                    .getBbWidth() > this.getTrueVehicle().getPassengerSizeLimit()) {
                 this.ejectPassengers();
             }
         }
@@ -199,9 +201,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                 if (!entity.hasPassenger(this)) {
                     float maxSize = 0.6f;
                     maxSize = this.getTrueVehicle().getPassengerSizeLimit();
-                    if (this.getPassengers()
-                            .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize) {
-                        if(entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)){
+                    if (this.getPassengers().size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize) {
+                        if (entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                             if (!(entity instanceof Predator)) {
                                 entity.startRiding(this);
                                 this.setPassengerRideTick(Calendars.SERVER.getTicks());
@@ -222,7 +223,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             }
         }
 
-        if(!(this.getFirstPassenger() instanceof Player)){
+        if (!(this.getFirstPassenger() instanceof Player)) {
             this.setInputLeft(false);
             this.setInputRight(false);
             this.setInputUp(false);
@@ -230,7 +231,6 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         }
 
         super.tick();
-
     }
 
     @Override
@@ -269,33 +269,35 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
             final boolean inputDown) {
-        if(this.getFirstPassenger() instanceof Player){
+        if (this.getFirstPassenger() instanceof Player) {
             boolean shouldUpdateServer = false;
-            if(this.getInputLeft() != inputLeft){
+            if (this.getInputLeft() != inputLeft) {
                 this.setInputLeft(inputLeft);
                 shouldUpdateServer = true;
             }
-            if(this.getInputRight() != inputRight){
+            if (this.getInputRight() != inputRight) {
                 this.setInputRight(inputRight);
                 shouldUpdateServer = true;
             }
-            if(this.getInputUp() != inputUp){
+            if (this.getInputUp() != inputUp) {
                 this.setInputUp(inputUp);
                 shouldUpdateServer = true;
             }
-            if(this.getInputDown() != inputDown){
+            if (this.getInputDown() != inputDown) {
                 this.setInputDown(inputDown);
                 shouldUpdateServer = true;
             }
-            if(this.level().isClientSide() && shouldUpdateServer){
-                PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(inputLeft, inputRight, inputUp, inputDown, this.getId()));
+            if (this.level().isClientSide() && shouldUpdateServer) {
+                PacketHandler.clientSendPacket(
+                        new ServerboundCompartmentInputPacket(inputLeft, inputRight, inputUp, inputDown, this.getId()));
             }
         } else {
             this.setInputLeft(false);
             this.setInputRight(false);
             this.setInputUp(false);
             this.setInputDown(false);
-            PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(false, false, false, false, this.getId()));
+            PacketHandler.clientSendPacket(
+                    new ServerboundCompartmentInputPacket(false, false, false, false, this.getId()));
         }
 
     }
@@ -304,36 +306,31 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         return this.entityData.get(DATA_ID_INPUT_LEFT);
     }
 
-    public boolean getInputRight() {
-
-        return this.entityData.get(DATA_ID_INPUT_RIGHT);
-    }
-
-    public boolean getInputUp(){
-        return this.entityData.get(DATA_ID_INPUT_UP);
-    }
-
-    public boolean getInputDown() {
-
-        return this.entityData.get(DATA_ID_INPUT_DOWN);
-    }
-
     public void setInputLeft(boolean input) {
-
         this.entityData.set(DATA_ID_INPUT_LEFT, input);
     }
 
-    public void setInputRight(boolean input) {
+    public boolean getInputRight() {
+        return this.entityData.get(DATA_ID_INPUT_RIGHT);
+    }
 
+    public void setInputRight(boolean input) {
         this.entityData.set(DATA_ID_INPUT_RIGHT, input);
+    }
+
+    public boolean getInputUp() {
+        return this.entityData.get(DATA_ID_INPUT_UP);
     }
 
     public void setInputUp(boolean input) {
         this.entityData.set(DATA_ID_INPUT_UP, input);
     }
 
-    public void setInputDown(boolean input) {
+    public boolean getInputDown() {
+        return this.entityData.get(DATA_ID_INPUT_DOWN);
+    }
 
+    public void setInputDown(boolean input) {
         this.entityData.set(DATA_ID_INPUT_DOWN, input);
     }
 
@@ -344,19 +341,20 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
-        final ItemStack item = player.getItemInHand(hand);
+        final ItemStack heldStack = player.getItemInHand(hand);
 
-        if(this.canAddNonPlayers() && !this.canAddOnlyBLocks() && item.is(FirmacivItems.CANNON.get()) && this.getRootVehicle() instanceof SloopEntity){
+        if (this.canAddNonPlayers() && !this.canAddOnlyBLocks() && heldStack.is(
+                FirmacivItems.CANNON.get()) && this.getRootVehicle() instanceof SloopEntity) {
             CannonEntity cannon = FirmacivEntities.CANNON_ENTITY.get().create(this.level());
             cannon.moveTo(this.getPosition(0));
-            cannon.setYRot(-this.getYRot()-180);
+            cannon.setYRot(-this.getYRot() - 180);
             cannon.startRiding(this);
             if (!this.level().isClientSide()) {
                 this.level().addFreshEntity(cannon);
             }
             player.awardStat(Stats.ITEM_USED.get(FirmacivItems.CANNON.get()));
             if (!player.getAbilities().instabuild) {
-                item.shrink(1);
+                heldStack.shrink(1);
             }
             return InteractionResult.SUCCESS;
         }
@@ -369,30 +367,17 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             return InteractionResult.PASS;
         }
 
-        AbstractCompartmentEntity newCompartment = null;
-        if (this.canAddNonPlayers() && !item.isEmpty() && this.getPassengers().isEmpty()) {
-            if (item.is(FirmacivTags.Items.CHESTS)) {
-                newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
-            } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
-                newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
-            }
-            else if (item.is(FirmacivTags.Items.ANVILS)){
-                newCompartment = FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get().create(player.level());
-            }
-        }
-
         if (ridingThisPart == null) return InteractionResult.PASS;
 
-        if (newCompartment != null) {
-            swapCompartments(newCompartment);
-            newCompartment.setYRot(newCompartment.ridingThisPart.getYRot() + ridingThisPart.getCompartmentRotation());
-            newCompartment.setBlockTypeItem(item.split(1));
-            if(newCompartment.getBlockTypeItem().is(FirmacivTags.Items.ANVILS)){
-                this.playSound(SoundEvents.METAL_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            } else {
-                this.playSound(SoundEvents.WOOD_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            }
+        final Optional<CompartmentType<?>> compartmentType = CompartmentType.fromStack(heldStack);
 
+        if (compartmentType.isPresent()) {
+            final AbstractCompartmentEntity compartmentEntity = compartmentType.get()
+                    .create(this.level(), heldStack.split(1));
+            this.swapCompartments(compartmentEntity);
+            // TODO per type placement sounds
+            this.playSound(SoundEvents.WOOD_PLACE, 1, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            this.gameEvent(GameEvent.EQUIP);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
@@ -405,7 +390,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     @Override
     public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
-        if(this.getTrueVehicle().getDeltaMovement().length() > 0.01){
+        if (this.getTrueVehicle().getDeltaMovement().length() > 0.01) {
             return this.getTrueVehicle().getDismountLocationForPassenger(passenger);
         }
         double y = this.getTrueVehicle().getDismountLocationForPassenger(passenger).y();
