@@ -1,14 +1,14 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import com.alekiponi.firmaciv.common.entity.CannonEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.network.PacketHandler;
 import com.alekiponi.firmaciv.network.ServerboundCompartmentInputPacket;
-import com.alekiponi.firmaciv.util.FirmacivTags;
 import com.google.common.collect.Lists;
 import net.dries007.tfc.common.entities.predator.Predator;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -24,17 +24,18 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected static final EntityDataAccessor<Long> DATA_ID_PASSENGER_RIDE_TICK = SynchedEntityData.defineId(
@@ -344,19 +345,20 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
-        final ItemStack item = player.getItemInHand(hand);
+        final ItemStack heldStack = player.getItemInHand(hand);
 
-        if(this.canAddNonPlayers() && !this.canAddOnlyBLocks() && item.is(FirmacivItems.CANNON.get()) && this.getRootVehicle() instanceof SloopEntity){
+        if (this.canAddNonPlayers() && !this.canAddOnlyBLocks() && heldStack.is(
+                FirmacivItems.CANNON.get()) && this.getRootVehicle() instanceof SloopEntity) {
             CannonEntity cannon = FirmacivEntities.CANNON_ENTITY.get().create(this.level());
             cannon.moveTo(this.getPosition(0));
-            cannon.setYRot(-this.getYRot()-180);
+            cannon.setYRot(-this.getYRot() - 180);
             cannon.startRiding(this);
             if (!this.level().isClientSide()) {
                 this.level().addFreshEntity(cannon);
             }
             player.awardStat(Stats.ITEM_USED.get(FirmacivItems.CANNON.get()));
             if (!player.getAbilities().instabuild) {
-                item.shrink(1);
+                heldStack.shrink(1);
             }
             return InteractionResult.SUCCESS;
         }
@@ -369,30 +371,17 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             return InteractionResult.PASS;
         }
 
-        AbstractCompartmentEntity newCompartment = null;
-        if (this.canAddNonPlayers() && !item.isEmpty() && this.getPassengers().isEmpty()) {
-            if (item.is(FirmacivTags.Items.CHESTS)) {
-                newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());
-            } else if (item.is(FirmacivTags.Items.WORKBENCHES)) {
-                newCompartment = FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get().create(player.level());
-            }
-            else if (item.is(FirmacivTags.Items.ANVILS)){
-                newCompartment = FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get().create(player.level());
-            }
-        }
-
         if (ridingThisPart == null) return InteractionResult.PASS;
 
-        if (newCompartment != null) {
-            swapCompartments(newCompartment);
-            newCompartment.setYRot(newCompartment.ridingThisPart.getYRot() + ridingThisPart.getCompartmentRotation());
-            newCompartment.setBlockTypeItem(item.split(1));
-            if(newCompartment.getBlockTypeItem().is(FirmacivTags.Items.ANVILS)){
-                this.playSound(SoundEvents.METAL_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            } else {
-                this.playSound(SoundEvents.WOOD_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
-            }
+        final Optional<CompartmentType<?>> compartmentType = CompartmentType.fromStack(heldStack);
 
+        if (compartmentType.isPresent()) {
+            final AbstractCompartmentEntity compartmentEntity = compartmentType.get()
+                    .create(this.level(), heldStack.split(1));
+            this.swapCompartments(compartmentEntity);
+            // TODO per type placement sounds
+            this.playSound(SoundEvents.WOOD_PLACE, 1, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+            this.gameEvent(GameEvent.EQUIP);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
