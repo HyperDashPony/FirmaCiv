@@ -8,6 +8,7 @@ import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.events.StartFireEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -81,6 +82,15 @@ public final class FirmacivBlockEvents {
                 if (event.isSimulated()) return;
 
                 level.addDestroyBlockEffect(blockPos, finalState);
+
+                if (CanoeComponentBlock.HALF_CARVED != finalState.getValue(CanoeComponentBlock.CANOE_CARVED)) return;
+
+                final ItemStack itemStack = ((CanoeComponentBlock) finalState.getBlock()).lumberItem.get()
+                        .getDefaultInstance();
+                itemStack.setCount(1);
+                final ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                        itemStack);
+                level.addFreshEntity(itemEntity);
             });
         }
     }
@@ -186,7 +196,8 @@ public final class FirmacivBlockEvents {
 
         if (heldStack.is(FirmacivTags.Items.AXES)) {
 
-            if (5 > blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
+            if (CanoeComponentBlock.HALF_CARVED > blockState.getValue(CanoeComponentBlock.CANOE_CARVED))
+                return Optional.empty();
 
             if (10 < blockState.getValue(CanoeComponentBlock.CANOE_CARVED)) return Optional.empty();
 
