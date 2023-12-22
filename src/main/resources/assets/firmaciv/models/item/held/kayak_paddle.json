@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "tfc:block/wood/planks/maple"
+		"1": "tfc:block/wood/stripped_log/maple"
 	},
 	"elements": [
 		{
@@ -56,23 +56,18 @@
 	"gui_light": "front",
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, -2, 0]
+			"translation": [-6, 5.5, 1]
 		},
-		"ground": {
-			"rotation": [90, 0, 0]
+		"thirdperson_lefthand": {
+			"translation": [-6, 5.5, 1]
 		},
-		"gui": {
-			"rotation": [-67.5, 0, 45],
-			"scale": [1.5, 1.5, 1.5]
-		},
-		"head": {
+		"firstperson_righthand": {
 			"rotation": [90, 0, 0],
-			"translation": [0, 0, -16],
-			"scale": [1.6, 1.6, 1.6]
+			"translation": [-9, -0.75, 6]
 		},
-		"fixed": {
-			"translation": [0, 0, -1.5],
-			"scale": [1.5, 1.5, 1.5]
+		"firstperson_lefthand": {
+			"rotation": [90, 0, 0],
+			"translation": [-9, -0.75, 6]
 		}
 	}
 }

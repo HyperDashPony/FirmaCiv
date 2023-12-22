@@ -80,9 +80,6 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
             sloopModel.getWaterocclusion().render(poseStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
 
-        VertexConsumer vertexConsumer2 = pBuffer.getBuffer(RenderType.entitySmoothCutout(sloopResources.getFirst()));
-        sloopModel.getMainsail().render(poseStack, vertexConsumer2, pPackedLight, OverlayTexture.NO_OVERLAY);
-
         poseStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
     }
