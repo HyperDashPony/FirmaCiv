@@ -1,48 +1,38 @@
 package com.alekiponi.firmaciv.common.blockentity;
 
 import com.alekiponi.firmaciv.common.block.CanoeComponentBlock;
-import com.mojang.logging.LogUtils;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.VisibleForTesting;
-import org.slf4j.Logger;
 
+import static com.alekiponi.firmaciv.common.block.CanoeComponentBlock.AXIS;
 import static com.alekiponi.firmaciv.common.block.CanoeComponentBlock.CANOE_CARVED;
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
 
 public class CanoeComponentBlockEntity extends TFCBlockEntity {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
-    private ServerPlayer lighter;
     private long litTick;
     private boolean isLit;
 
-    public CanoeComponentBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(), pPos, pBlockState);
+    public CanoeComponentBlockEntity(final BlockPos blockPos, final BlockState blockState) {
+        super(FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(), blockPos, blockState);
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, CanoeComponentBlockEntity canoeBlock) {
+    public static void serverTick(final Level level, final BlockPos blockPos, final BlockState blockState,
+            final CanoeComponentBlockEntity canoeBlockEntity) {
+        if (!canoeBlockEntity.isLit) return;
 
-        if (canoeBlock.isLit) {
-            long remainingTicks = (long) TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlock.litTick);
+        final long remainingTicks = TFCConfig.SERVER.pitKilnTicks.get() - (Calendars.SERVER.getTicks() - canoeBlockEntity.litTick);
 
-            if (remainingTicks <= 0L) {
-
-                BlockState newState = state.setValue(CANOE_CARVED, 13);
-                level.setBlock(pos, newState, 4);
-                CanoeComponentBlock.trySpawnCanoe(level, pos, state.getBlock());
-                canoeBlock.isLit = false;
-            }
+        if (remainingTicks <= 0) {
+            final BlockState newState = blockState.setValue(CANOE_CARVED, 13);
+            level.setBlock(blockPos, newState, 4);
+            CanoeComponentBlock.trySpawnCanoe(level, blockPos, blockState.getBlock());
+            canoeBlockEntity.isLit = false;
         }
-
     }
 
     public boolean isLit() {
@@ -53,54 +43,55 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         return this.litTick;
     }
 
-
     public void light() {
+        assert this.level != null : "Level should not be null";
 
-        if (this.isLit) {
-            return;
-        }
+        if (this.isLit) return;
+
+        // Not at the point where it can be lit on fire
+        if (this.getBlockState().getValue(CANOE_CARVED) != 11) return;
 
         this.isLit = true;
         this.litTick = Calendars.SERVER.getTicks();
         this.markForBlockUpdate();
-        BlockState newState = this.getBlockState().setValue(CANOE_CARVED, 12);
-        level.setBlock(this.getBlockPos(), newState, 4);
+        final BlockState newState = this.getBlockState().setValue(CANOE_CARVED, 12);
+        this.level.setBlock(this.getBlockPos(), newState, 4);
 
-        BlockPos pPos = this.getBlockPos();
-        Level pLevel = this.getLevel();
+        final BlockPos pPos = this.getBlockPos();
 
-        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
+        final Direction.Axis axis = this.level.getBlockState(pPos).getValue(AXIS);
 
-        BlockPos blockPos1 = pPos.relative(axis, 1);
-        BlockPos blockPos2 = pPos.relative(axis, -1);
+        final BlockPos blockPosAhead = pPos.relative(axis, 1);
+        final BlockPos blockPosBehind = pPos.relative(axis, -1);
 
-        if (pLevel.getBlockEntity(blockPos1) instanceof CanoeComponentBlockEntity) {
-            if (pLevel.getBlockState(blockPos1).getValue(CANOE_CARVED) == 11) {
-                ((CanoeComponentBlockEntity) pLevel.getBlockEntity(blockPos1)).light();
+        if (this.level.getBlockEntity(blockPosAhead) instanceof CanoeComponentBlockEntity canoeBlockEntity) {
+            if (this.level.getBlockState(blockPosAhead).getValue(CANOE_CARVED) == 11) {
+                canoeBlockEntity.light();
             }
         }
-        if (pLevel.getBlockEntity(blockPos2) instanceof CanoeComponentBlockEntity) {
-            if (pLevel.getBlockState(blockPos2).getValue(CANOE_CARVED) == 11) {
-                ((CanoeComponentBlockEntity) pLevel.getBlockEntity(blockPos2)).light();
+
+        if (this.level.getBlockEntity(blockPosBehind) instanceof CanoeComponentBlockEntity canoeBlockEntity) {
+            if (this.level.getBlockState(blockPosBehind).getValue(CANOE_CARVED) == 11) {
+                canoeBlockEntity.light();
             }
         }
     }
 
-    public void loadAdditional(CompoundTag nbt) {
-        this.isLit = nbt.getBoolean("isLit");
-        this.litTick = nbt.getLong("litTick");
-        super.loadAdditional(nbt);
+    public void loadAdditional(final CompoundTag compoundTag) {
+        this.isLit = compoundTag.getBoolean("isLit");
+        this.litTick = compoundTag.getLong("litTick");
+        super.loadAdditional(compoundTag);
     }
 
-    public void saveAdditional(CompoundTag nbt) {
-        nbt.putBoolean("isLit", this.isLit);
-        nbt.putLong("litTick", this.litTick);
-        super.saveAdditional(nbt);
+    public void saveAdditional(final CompoundTag compoundTag) {
+        compoundTag.putBoolean("isLit", this.isLit);
+        compoundTag.putLong("litTick", this.litTick);
+        super.saveAdditional(compoundTag);
     }
 
     public long getTicksLeft() {
         assert this.level != null;
 
-        return this.litTick + (long) TFCConfig.SERVER.pitKilnTicks.get() - Calendars.get(this.level).getTicks();
+        return this.litTick + TFCConfig.SERVER.pitKilnTicks.get() - Calendars.get(this.level).getTicks();
     }
 }

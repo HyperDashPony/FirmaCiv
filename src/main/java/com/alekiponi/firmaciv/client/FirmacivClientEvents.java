@@ -2,7 +2,6 @@ package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.render.entity.CanoeRenderer;
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.item.AbstractNavItem;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
@@ -33,10 +32,7 @@ public class FirmacivClientEvents {
 
     private static void clientSetup(final FMLClientSetupEvent event) {
 
-        for (BoatVariant variant : BoatVariant.values()) {
-            EntityRenderers.register(FirmacivEntities.CANOES.get(variant).get(), CanoeRenderer::new);
-        }
-
+        FirmacivEntities.CANOES.forEach(((wood, canoe) -> EntityRenderers.register(canoe.get(), CanoeRenderer::new)));
 
         ItemProperties.register(FirmacivItems.BAROMETER.get(), new ResourceLocation(Firmaciv.MOD_ID, "altitude"),
                 new ClampedItemPropertyFunction() {

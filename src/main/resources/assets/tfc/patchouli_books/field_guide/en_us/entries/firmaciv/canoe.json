@@ -51,9 +51,9 @@
           ]
         ],
         "mapping": {
-          "F": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=true]",
-          "0": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=false]",
-          "B": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=true]"
+          "F": "firmaciv:wood/canoe_component_block/douglas_fir[axis=x,canoe_carved=5,shape=end_right]",
+          "0": "firmaciv:wood/canoe_component_block/douglas_fir[axis=x,canoe_carved=5,shape=straight]",
+          "B": "firmaciv:wood/canoe_component_block/douglas_fir[axis=x,canoe_carved=5,shape=end_left]"
         }
       },
       "name": "Weird Slabs",
@@ -71,9 +71,9 @@
           ]
         ],
         "mapping": {
-          "F": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=11,facing=west,end=true]",
-          "0": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=11,facing=east,end=false]",
-          "B": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=11,facing=east,end=true]"
+          "F": "firmaciv:wood/canoe_component_block/douglas_fir[axis=x,canoe_carved=11,shape=end_right]",
+          "0": "firmaciv:wood/canoe_component_block/douglas_fir[axis=x,canoe_carved=11,shape=straight]",
+          "B": "firmaciv:wood/canoe_component_block/douglas_fir[axis=x,canoe_carved=11,shape=end_left]"
         }
       },
       "name": "A Strange Sculpture",
