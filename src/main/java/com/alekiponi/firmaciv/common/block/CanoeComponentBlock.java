@@ -11,6 +11,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
@@ -47,6 +48,11 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     public static final EnumProperty<Shape> SHAPE = FirmacivBlockStateProperties.CANOE_SHAPE;
     public static final BlockPattern VALID_CANOE_PATTERN = BlockPatternBuilder.start().aisle("#", "#", "#")
             .where('#', BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE))).build();
+    public static final BlockPattern CANOE_SHAPE_PATTERN = BlockPatternBuilder.start().aisle("#", "#", "#").where('#',
+                    BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED))
+                            .or(BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))))
+            .build();
+    public static final int STRIPPED_STATE = 0;
     private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
@@ -263,11 +269,52 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
     @Override
     @SuppressWarnings("deprecation")
+    public void tick(final BlockState blockState, final ServerLevel serverLevel, final BlockPos blockPos,
+            final RandomSource random) {
+        final BlockPattern.BlockPatternMatch patternMatch = CANOE_SHAPE_PATTERN.find(serverLevel, blockPos);
+
+        if (patternMatch == null) return;
+
+        for (int i = 0; i < patternMatch.getHeight(); i++) {
+            final BlockInWorld patternBlock = patternMatch.getBlock(0, i, 0);
+
+            final BlockState patternState = patternBlock.getState();
+
+            if (!patternState.is(this)) continue;
+
+            if (STRIPPED_STATE != patternState.getValue(CANOE_CARVED)) return;
+        }
+
+        final BlockState logState = this.strippedBlock.get().defaultBlockState()
+                .setValue(RotatedPillarBlock.AXIS, blockState.getValue(AXIS));
+        serverLevel.setBlock(blockPos, logState, Block.UPDATE_ALL_IMMEDIATE);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onPlace(final BlockState blockState, final Level level, final BlockPos blockPos,
+            final BlockState oldState, final boolean movedByPiston) {
+        if (STRIPPED_STATE != blockState.getValue(CANOE_CARVED)) return;
+
+        if (level.isClientSide) return;
+
+        // The tick method for this block with a delay in game ticks
+        level.scheduleTick(blockPos, this, 5 * 20);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
             final BlockState newState, final boolean movedByPiston) {
         super.onRemove(blockState, level, blockPos, newState, movedByPiston);
 
         if (newState.is(this)) return;
+
+        // Still in the stripped log portion
+        if (STRIPPED_STATE == blockState.getValue(CANOE_CARVED)) {
+            // We are "reverting" back to a stripped log
+            if (newState.is(this.strippedBlock.get())) return;
+        }
 
         final Direction.Axis axis = blockState.getValue(AXIS);
 
