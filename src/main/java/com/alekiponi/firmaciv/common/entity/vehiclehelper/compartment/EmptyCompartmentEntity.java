@@ -56,7 +56,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected boolean canAddOnlyBlocks;
 
 
-    public EmptyCompartmentEntity(final EntityType<?> entityType, final Level level) {
+    public EmptyCompartmentEntity(final EntityType<? extends EmptyCompartmentEntity> entityType, final Level level) {
         super(entityType, level);
         canAddNonPlayers = true;
         canAddOnlyBlocks = false;
