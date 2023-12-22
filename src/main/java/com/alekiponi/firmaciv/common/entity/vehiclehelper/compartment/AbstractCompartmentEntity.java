@@ -49,7 +49,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
     protected AbstractVehiclePart ridingThisPart = null;
     private int notRidingTicks = 0;
 
-    public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
+    public AbstractCompartmentEntity(final EntityType<? extends AbstractCompartmentEntity> entityType, final Level level) {
         super(entityType, level);
     }
 
