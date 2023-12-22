@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level;
 
 public class AnvilCompartmentEntity extends AbstractCompartmentEntity {
 
-    public AnvilCompartmentEntity(EntityType<?> entityType, Level level) {
+    public AnvilCompartmentEntity(EntityType<? extends AnvilCompartmentEntity> entityType, Level level) {
         super(entityType, level);
     }
 

@@ -37,7 +37,7 @@ public class ChestCompartmentEntity extends AbstractCompartmentEntity implements
     private long lootTableSeed;
     private LazyOptional<?> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
-    public ChestCompartmentEntity(final EntityType<?> entityType, final Level level) {
+    public ChestCompartmentEntity(final EntityType<? extends ChestCompartmentEntity> entityType, final Level level) {
         super(entityType, level);
     }
 
