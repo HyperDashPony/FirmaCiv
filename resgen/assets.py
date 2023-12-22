@@ -1,8 +1,8 @@
-from mcresources import ResourceManager
+from mcresources import ResourceManager, loot_tables
 
 import blockStates
 import constants
-import lootTables
+from lootTables import boat_frame
 
 
 def generate(rm: ResourceManager):
@@ -16,7 +16,7 @@ def generate(rm: ResourceManager):
 
         rm.blockstate_multipart(f"wood/watercraft_frame_angled/{woodType}",
                                 *blockStates.getWoodFrameMultipart(woodType)).with_lang(
-            f"{name} Shipwright's Scaffolding").with_block_loot(*lootTables.boat_frame(woodType))
+            f"{name} Shipwright's Scaffolding").with_block_loot(*boat_frame(woodType))
 
         # Canoe components now
         canoe_component_textures = {"0": f"tfc:block/wood/stripped_log/{woodType}",
@@ -41,7 +41,13 @@ def generate(rm: ResourceManager):
 
             rm.blockstate(f"wood/canoe_component_block/{woodType}",
                           variants=blockStates.canoe_component(woodType)).with_lang(
-                f"{name} Canoe Component").with_block_loot(f"tfc:wood/lumber/{woodType}")
+                f"{name} Canoe Component").with_block_loot(
+                {"name": f"tfc:wood/stripped_log/{woodType}",
+                 "conditions": [loot_tables.block_state_property(
+                     f"firmaciv:wood/canoe_component_block/{woodType}[canoe_carved=0]")]},
+                [{"name": f"tfc:wood/lumber/{woodType}",
+                  "conditions": [loot_tables.block_state_property(
+                      f"firmaciv:wood/canoe_component_block/{woodType}[canoe_carved={n}]")]} for n in range(1, 5)])
 
     # Basic frame
     rm.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
