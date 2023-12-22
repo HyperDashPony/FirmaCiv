@@ -52,7 +52,8 @@ public class CanoeComponentBlock extends BaseEntityBlock {
                     BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED))
                             .or(BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))))
             .build();
-    public static final int STRIPPED_STATE = 0;
+    public static final int NOT_CARVED = 0;
+    public static final int HALF_CARVED = 5;
     private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
@@ -282,7 +283,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
             if (!patternState.is(this)) continue;
 
-            if (STRIPPED_STATE != patternState.getValue(CANOE_CARVED)) return;
+            if (NOT_CARVED != patternState.getValue(CANOE_CARVED)) return;
         }
 
         final BlockState logState = this.strippedBlock.get().defaultBlockState()
@@ -294,7 +295,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     @SuppressWarnings("deprecation")
     public void onPlace(final BlockState blockState, final Level level, final BlockPos blockPos,
             final BlockState oldState, final boolean movedByPiston) {
-        if (STRIPPED_STATE != blockState.getValue(CANOE_CARVED)) return;
+        if (NOT_CARVED != blockState.getValue(CANOE_CARVED)) return;
 
         if (level.isClientSide) return;
 
@@ -311,7 +312,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         if (newState.is(this)) return;
 
         // Still in the stripped log portion
-        if (STRIPPED_STATE == blockState.getValue(CANOE_CARVED)) {
+        if (NOT_CARVED == blockState.getValue(CANOE_CARVED)) {
             // We are "reverting" back to a stripped log
             if (newState.is(this.strippedBlock.get())) return;
         }
