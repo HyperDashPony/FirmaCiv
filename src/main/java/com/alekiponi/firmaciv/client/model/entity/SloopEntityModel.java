@@ -5,6 +5,7 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 
 import com.alekiponi.firmaciv.common.entity.FirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.SloopEntity;
+import com.ibm.icu.text.Normalizer2;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -34,8 +35,9 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     private final ModelPart hold_netting;
     private final ModelPart waterocclusion;
     private final ModelPart mainsail_main;
-
     private final ModelPart jibsail_main;
+    private final ModelPart forestay;
+    private final ModelPart shrouds;
 
 
     public SloopEntityModel() {
@@ -60,6 +62,9 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         this.sidewall_port = root.getChild("sidewall_port");
         this.hold_netting = root.getChild("hold_netting");
         this.waterocclusion = root.getChild("waterocclusion");
+        this.forestay = root.getChild("forestay");
+        this.shrouds = root.getChild("shrouds");
+
     }
 
     @Override
@@ -379,39 +384,17 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         PartDefinition shrouds = partdefinition.addOrReplaceChild("shrouds", CubeListBuilder.create(), PartPose.offset(-17.741F, -143.0F, -33.75F));
 
-        PartDefinition shroud_starboard_r1 = shrouds.addOrReplaceChild("shroud_starboard_r1", CubeListBuilder.create().texOffs(136, 862).mirror().addBox(15.75F, -2.0583F, -0.5F, 1.0F, 161.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.1308F, 0.0057F, 0.1749F));
+        PartDefinition shroud_port_r1 = shrouds.addOrReplaceChild("shroud_port_r1", CubeListBuilder.create().texOffs(136, 862).addBox(-16.75F, -1.8083F, -0.5F, 1.0F, 158.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(35.482F, 0.0F, 0.0F, 0.0436F, 0.0F, -0.1309F));
 
-        PartDefinition shroud_port_r1 = shrouds.addOrReplaceChild("shroud_port_r1", CubeListBuilder.create().texOffs(136, 862).addBox(-16.75F, -2.0583F, -0.5F, 1.0F, 161.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(35.482F, 0.0F, 0.0F, 0.1308F, -0.0057F, -0.1749F));
+        PartDefinition shroud_starboard_r1 = shrouds.addOrReplaceChild("shroud_starboard_r1", CubeListBuilder.create().texOffs(136, 862).mirror().addBox(15.75F, -1.8083F, -0.5F, 1.0F, 158.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0436F, 0.0F, 0.1309F));
 
-        PartDefinition jibsail_main = partdefinition.addOrReplaceChild("jibsail_main", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition forestay = partdefinition.addOrReplaceChild("forestay", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition forestay_r1 = jibsail_main.addOrReplaceChild("forestay_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -69.0F, 2.5F, 1.0F, 144.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -100.9951F, -73.6351F, -0.588F, 0.0F, 0.0F));
+        PartDefinition forestay_r1 = forestay.addOrReplaceChild("forestay_r1", CubeListBuilder.create().texOffs(145, 873).addBox(-0.5F, -69.0F, 2.5F, 1.0F, 144.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -100.9951F, -73.6351F, -0.588F, 0.0F, 0.0F));
 
-        /*
+        PartDefinition jibsail_main = partdefinition.addOrReplaceChild("jibsail_main", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -17.0F, -110.0F, -0.588F, 0.0F, 0.0F));
 
-        // TEMPLATES FOR GENERATED PARTS
-
-        PartDefinition poner = partdefinition.addOrReplaceChild("poner", CubeListBuilder.create().texOffs(673, 996).addBox(-1.0F, -70.0F, -32.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
-
-        PartDefinition poner_2 = partdefinition.addOrReplaceChild("poner_2", CubeListBuilder.create().texOffs(673, 996).addBox(-1.0F, -63.0F, -94.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -90.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -57.0F, -102.0F, 2.0F, 18.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -98.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -45.0F, -110.0F, 2.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -51.0F, -106.0F, 2.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -86.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -82.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -78.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -74.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -70.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -66.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -62.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -58.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -54.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(673, 996).addBox(-1.0F, -63.0F, -50.0F, 2.0F, 24.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
-
-         */
-
+        PartDefinition jibsail = jibsail_main.addOrReplaceChild("jibsail", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         // GENERATED MODEL PARTS, DO NOT REPLACE FROM BLOCKBENCH
         {
@@ -454,8 +437,8 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
                     break;
                 }
 
-                int textureOffsetx = 673+zindex* mainsail_section_widths;
-                int textureOffsetY = (996-(int)yorigin);
+                int textureOffsetx = 673 + zindex * mainsail_section_widths;
+                int textureOffsetY = (996 - (int) yorigin);
 
                 String name = "mainsail_part_" + zindex + "_" + yindex;
                 mainsail_main.addOrReplaceChild(name, CubeListBuilder.create().texOffs(textureOffsetx, textureOffsetY).addBox(-1F, -yorigin - mainsail_section_heights - 4f, zposition + 0.5f, 2, section_height, mainsail_section_widths, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
@@ -463,10 +446,10 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         }
     }
 
-    private static final int jibsail_length = 64;
-    private static final int jibsail_height = 96;
-    private static final int jibsail_horizontal_sections = 16;
-    private static final int jibsail_vertical_sections = 4;
+    private static final int jibsail_length = 52;
+    private static final int jibsail_height = 120;
+    private static final int jibsail_horizontal_sections = 13;
+    private static final int jibsail_vertical_sections = 1;
     private static final int jibsail_section_widths = jibsail_length / jibsail_horizontal_sections;
     private static final int jibsail_section_heights = jibsail_height / jibsail_vertical_sections;
 
@@ -474,29 +457,36 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         for (int zindex = 0; zindex < jibsail_horizontal_sections; zindex++) {
             float zposition = (zindex * jibsail_section_widths);
-            float height = jibsail_section_heights/4.0f + jibsail_section_heights;
-            height += zindex*(jibsail_section_heights/4.0f);
+            float height = jibsail_section_heights / 4.0f + jibsail_section_heights;
+            height += zindex * (jibsail_section_heights / 4.0f);
             for (int yindex = 0; yindex < jibsail_vertical_sections; yindex++) {
-                float yorigin = (yindex * jibsail_section_heights) + jibsail_section_heights;
-                float section_height = jibsail_section_heights;
-                if (height - (yorigin) <= jibsail_section_heights && height - (yorigin) > 0) {
+                float section_height = (jibsail_section_heights - (9f * zindex));
+                float yorigin = (yindex * section_height) + section_height + zindex * 3;
+
+                /*if (height - (yorigin) <= jibsail_section_heights && height - (yorigin) > 0) {
                     section_height = Math.round(height - yorigin);
                     yorigin += section_height - jibsail_section_heights;
                 } else if (height - (yorigin) <= 0) {
                     break;
-                }
+                }*/
 
-                int textureOffsetx = 673+zindex* jibsail_section_widths;
-                int textureOffsetY = (996-(int)yorigin);
+                int textureOffsetx = 673 + zindex * jibsail_section_widths;
+                int textureOffsetY = (996 - (int) yorigin);
 
                 String name = "jibsail_part_" + zindex + "_" + yindex;
-                jibsail_main.addOrReplaceChild(name, CubeListBuilder.create().texOffs(textureOffsetx, textureOffsetY).addBox(-1F, -yorigin - 39f, zposition - 110f, 2, section_height, jibsail_section_widths, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                jibsail_main.getChild("jibsail").addOrReplaceChild(name, CubeListBuilder.create()
+                                .texOffs(textureOffsetx, textureOffsetY)
+                                .addBox(-1F, -yorigin, zposition, 2, section_height, jibsail_section_widths, new CubeDeformation(0.0F)),
+                        PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0F, 0.0F, 0.0F));
             }
         }
     }
 
     private static void animateMainsail(SloopEntity pBoat, float pPartialTicks, ModelPart mainsail_main, ModelPart[][] sails, float mastRotation, int animationTick) {
-        mainsail_main.yRot = mastRotation;//Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
+        //mainsail_main.y = 200;
+
+
+        mainsail_main.yRot = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
         float windWorldAngle = pBoat.getWindAngleAndSpeed()[0];
         float windSpeed = pBoat.getWindAngleAndSpeed()[1] / 16f;
         float sailWorldAngle = pBoat.getSailWorldRotation();
@@ -568,16 +558,26 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     }
 
     private static void animateJibsail(SloopEntity pBoat, float pPartialTicks, ModelPart jibsail_main, ModelPart[][] sails, float mastRotation, int animationTick) {
+        ModelPart jibsail = jibsail_main.getChild("jibsail");
+
         float windWorldAngle = pBoat.getWindAngleAndSpeed()[0];
         float windSpeed = pBoat.getWindAngleAndSpeed()[1] / 16f;
-        float sailWorldAngle = pBoat.getYRot();
+        float sailWorldAngle = Mth.wrapDegrees(pBoat.getYRot());
         int airFoilDirection = 1;
 
         float windDifference = Mth.degreesDifference(windWorldAngle, sailWorldAngle);
         if (windDifference < 0) {
             airFoilDirection = -1;
         }
+
+        //jibsail.yRot =0;
         windDifference = Math.abs(windDifference);
+        float windDifferenceForAngle = windDifference;
+        if (windDifferenceForAngle > 90) {
+            windDifferenceForAngle = Math.abs(windDifference - 180);
+        }
+        windDifferenceForAngle = airFoilDirection * (float) Math.toRadians(Mth.clamp(windDifferenceForAngle / 2, 0.0f, 30f));
+        jibsail.yRot = Mth.rotLerp(pPartialTicks, jibsail.yRot, windDifferenceForAngle);
 
         if (windSpeed < 0.1) {
             windSpeed = 0.1f;
@@ -591,18 +591,13 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
                 if (sails[zindex][yindex] == null) {
                     break;
                 }
-                sails[zindex][yindex].zRot = 0;
-                sails[zindex][yindex].xRot = 0;
-                float luffFunction = (float) (3 * Math.sin(0.1 * ((zindex * jibsail_section_widths) + animationTickFloat + yindex * jibsail_section_widths)));
-                float squaredFunctionComponent = (zindex - 16f) * (zindex - 16f);
+                float luffFunction = (float) (5 * Math.sin(0.1 * ((zindex * jibsail_section_widths) + animationTickFloat + yindex * jibsail_section_widths)));
+                float squaredFunctionComponent = (zindex - 22f) * (zindex - 22f);
 
-                float falloff = 0.4f * (float) Math.log((zindex + 1.00f - (yindex*jibsail_section_widths+4))) + 0.1f;
+                float falloff = 0.6f * (float) Math.log((zindex + 1.00f)) + 0.1f;
                 falloff = Mth.clamp(falloff, 0.0f, 1.0f);
 
-                if(yindex*jibsail_section_widths+4 >= zindex){
-                    falloff = 0.1f;
-                }
-                float airfoilFunction = (-0.06f * squaredFunctionComponent + 16) * airFoilDirection;
+                float airfoilFunction = (-0.032f * squaredFunctionComponent + 16) * airFoilDirection;
 
                 luffFunction = luffFunction * falloff;
                 airfoilFunction = airfoilFunction * falloff;
@@ -626,6 +621,7 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
                 sails[zindex][yindex].x = (finalfunction);
             }
         }
+
     }
 
     public ModelPart getWaterocclusion() {
@@ -646,7 +642,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     }
 
     private ModelPart[][] mainSailParts = new ModelPart[mainsail_horizontal_sections][mainsail_vertical_sections];
-
 
 
     public static ModelPart[][] getMainsailParts(SloopEntityModel sloopEntityModel) {
@@ -672,12 +667,12 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     public static ModelPart[][] getJibsailParts(SloopEntityModel sloopEntityModel) {
 
         ModelPart[][] sails = new ModelPart[mainsail_horizontal_sections][mainsail_vertical_sections];
-
+        ModelPart jibsail = sloopEntityModel.jibsail_main.getChild("jibsail");
         for (int zindex = 0; zindex < mainsail_horizontal_sections; zindex++) {
             String name = "jibsail_part_" + zindex + "_";
             for (int yindex = 0; yindex < mainsail_vertical_sections; yindex++) {
-                if (sloopEntityModel.jibsail_main.hasChild(name + yindex)) {
-                    sails[zindex][yindex] = sloopEntityModel.jibsail_main.getChild(name + yindex);
+                if (jibsail.hasChild(name + yindex)) {
+                    sails[zindex][yindex] = jibsail.getChild(name + yindex);
                 } else {
                     sails[zindex][yindex] = null;
                 }
@@ -709,6 +704,8 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         sidewall_port.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hold_netting.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         //waterocclusion.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        forestay.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         jibsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        shrouds.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }

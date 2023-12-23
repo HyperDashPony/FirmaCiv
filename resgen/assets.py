@@ -69,7 +69,7 @@ def generate(rm: ResourceManager):
     rm.item("unfinished_barometer").with_item_model().with_lang("Unfinished Barometer")
     rm.item("unfinished_nav_clock").with_item_model().with_lang("Unfinished Navigator's Timepiece")
     rm.item("unfinished_sextant").with_item_model().with_lang("Unfinished Sextant")
-    rm.item("sextant").with_item_model().with_lang("Sextant")
+    #rm.item("sextant").with_item_model().with_lang("Sextant")
     rm.item("copper_bolt").with_item_model().with_lang("Copper Bolt")
     rm.item("kayak").with_item_model().with_lang("Kayak")
     rm.item("large_waterproof_hide").with_item_model().with_lang("Large Waterproof Hide")

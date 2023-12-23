@@ -257,13 +257,13 @@ public class SloopEntity extends FirmacivBoatEntity {
                 boolean inputLeft = this.getSailingCompartment().getInputLeft();
                 boolean inputRight = this.getSailingCompartment().getInputRight();
                 if (inputLeft) {
-                    if (sailRotation > -21) {
+                    if (sailRotation > -45) {
                         --this.sailRotation;
                     }
                 }
 
                 if (inputRight) {
-                    if (sailRotation < 21) {
+                    if (sailRotation < 45) {
                         ++this.sailRotation;
                     }
                 }
