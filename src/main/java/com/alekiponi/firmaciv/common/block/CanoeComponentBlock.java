@@ -2,23 +2,20 @@ package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
+import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.util.FirmacivTags;
-import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -29,345 +26,357 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
 
+
 public class CanoeComponentBlock extends BaseEntityBlock {
-    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
-    public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED;
-    public static final EnumProperty<Shape> SHAPE = FirmacivBlockStateProperties.CANOE_SHAPE;
-    public static final BlockPattern VALID_CANOE_PATTERN = BlockPatternBuilder.start().aisle("#", "#", "#")
-            .where('#', BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE))).build();
-    public static final BlockPattern CANOE_SHAPE_PATTERN = BlockPatternBuilder.start().aisle("#", "#", "#").where('#',
-                    BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CAN_MAKE_CANOE_UNRESTRICTED))
-                            .or(BlockInWorld.hasState(blockState -> blockState.is(FirmacivTags.Blocks.CANOE_COMPONENT_BLOCKS))))
-            .build();
-    public static final int NOT_CARVED = 0;
-    public static final int HALF_CARVED = 5;
-    private static final VoxelShape HALF_SHAPE = Block.box(0, 0, 0, 16, 9, 16);
+
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
+    public static final IntegerProperty CANOE_CARVED = FirmacivBlockStateProperties.CANOE_CARVED_13;
+    public static final BooleanProperty END = FirmacivBlockStateProperties.END;
+    private static final VoxelShape SHAPE_FINAL = Stream.of(
+                    Block.box(0, 0, 0, 16, 9, 16))
+            .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+    private static final VoxelShape SHAPE_1 = Stream.of(
+                    Block.box(0, 0, 0, 16, 16, 16))
+            .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
     public final Supplier<? extends Block> strippedBlock;
     public final Supplier<? extends Item> lumberItem;
-    public final RegistryWood wood;
+    public final BoatVariant variant;
 
-    public CanoeComponentBlock(final Properties properties, final Supplier<? extends Item> lumberItem,
-            final RegistryWood wood) {
+    public CanoeComponentBlock(Properties properties, BoatVariant variant) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED, 0)
-                .setValue(SHAPE, Shape.STRAIGHT));
-        this.strippedBlock = wood.getBlock(Wood.BlockType.STRIPPED_LOG);
-        this.lumberItem = lumberItem;
-        this.wood = wood;
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
+                .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED, 1).setValue(END, false));
+        this.variant = variant;
+        this.strippedBlock = variant.getStripped();
+        this.lumberItem = variant.getLumber();
     }
 
-    public static Block getByStripped(final Block strippedLogBlock) {
-        // TODO make a map of stripped logs -> canoe components?
-        //noinspection OptionalGetWithoutIsPresent
+    public static Block getByStripped(Block strippedLogBlock) {
         return CANOE_COMPONENT_BLOCKS.values().stream()
                 .filter(registryObject -> registryObject.get().strippedBlock.get() == strippedLogBlock)
-                .map(RegistryObject::get).findFirst().get();
+                .map(registryObject -> registryObject.get()).findFirst().get();
     }
 
-    /**
-     * Checks if there is a valid canoe shape
-     *
-     * @param levelAccessor The level accessor
-     * @param startBlockPos The starting block position
-     * @return If there is a valid canoe shape
-     */
-    public static boolean isValidShape(final LevelReader levelAccessor, final BlockPos startBlockPos) {
-        final BlockPattern.BlockPatternMatch patternMatch = VALID_CANOE_PATTERN.find(levelAccessor, startBlockPos);
+    public static boolean isValidCanoeShape(LevelAccessor world, Block strippedLogBlock, BlockPos pPos) {
 
-        if (patternMatch == null) return false;
+        Direction.Axis axis = world.getBlockState(pPos).getValue(AXIS);
 
-        @Nullable Direction.Axis firstAxis = null;
-        for (int i = 0; i < patternMatch.getHeight(); i++) {
-            final BlockInWorld patternBlock = patternMatch.getBlock(0, i, 0);
+        Block canoeComponentBlock = getByStripped(strippedLogBlock);
 
-            final Direction.Axis axis = patternBlock.getState().getValue(RotatedPillarBlock.AXIS);
+        BlockPos blockPos0 = pPos;
 
-            if (firstAxis == null) firstAxis = axis;
+        int row = 0;
+        for (int i = -2; i <= 2; ++i) {
+            // check two blocks in each direction and look for a row of 3 blocks
 
-            if (firstAxis != axis) return false;
+            blockPos0 = pPos.relative(axis, i);
+            if (world.getBlockState(blockPos0).is(strippedLogBlock) || world.getBlockState(blockPos0)
+                    .is(canoeComponentBlock)) {
 
-            if (!axis.isHorizontal()) return false;
+                if (world.getBlockState(blockPos0).getValue(AXIS) == axis) {
+                    row++;
+                    if (row == 3) {
+                        return true;
+                    }
+                } else {
+                    row = 0;
+                }
+
+            } else {
+                row = 0;
+            }
+
         }
 
-        return true;
+        return false;
     }
 
-    private static BlockPos getMiddleBlockPos(final Level pLevel, final BlockPos pPos,
-            final Block canoeComponentBlock) {
+    private static BlockPos getMiddleBlockPos(Level pLevel, BlockPos pPos, Block canoeComponentBlock) {
 
-        final Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
 
-        final BlockPos blockPos0 = pPos.relative(axis, 2);
-        final BlockPos blockPos1 = pPos.relative(axis, 1);
-        final BlockPos blockPos2 = pPos.relative(axis, -1);
-        final BlockPos blockPos3 = pPos.relative(axis, -2);
+        BlockPos blockPos0 = pPos.relative(axis, 2);
+        BlockPos blockPos1 = pPos.relative(axis, 1);
+        BlockPos blockPos2 = pPos.relative(axis, -1);
+        BlockPos blockPos3 = pPos.relative(axis, -2);
 
-        if (pLevel.getBlockState(blockPos0).is(canoeComponentBlock) && pLevel.getBlockState(blockPos1)
-                .is(canoeComponentBlock)) {
+        if (pLevel.getBlockState(blockPos0).is(canoeComponentBlock) &&
+                pLevel.getBlockState(blockPos1).is(canoeComponentBlock)) {
             return pPos.relative(axis, 1);
         }
-        if (pLevel.getBlockState(blockPos1).is(canoeComponentBlock) && pLevel.getBlockState(blockPos2)
-                .is(canoeComponentBlock)) {
+        if (pLevel.getBlockState(blockPos1).is(canoeComponentBlock) &&
+                pLevel.getBlockState(blockPos2).is(canoeComponentBlock)) {
             return pPos;
         }
-        if (pLevel.getBlockState(blockPos2).is(canoeComponentBlock) && pLevel.getBlockState(blockPos3)
-                .is(canoeComponentBlock)) {
+        if (pLevel.getBlockState(blockPos2).is(canoeComponentBlock) &&
+                pLevel.getBlockState(blockPos3).is(canoeComponentBlock)) {
             return pPos.relative(axis, -1);
         }
 
         return pPos;
     }
 
-    private static boolean areValidBlockStates(final Level level, final BlockPos blockPos,
-            final Block canoeComponentBlock) {
+    public static BlockState getStateForPlacement(Level pLevel, Block strippedLogBlock, BlockPos pPos) {
 
-        final Direction.Axis axis = level.getBlockState(blockPos).getValue(AXIS);
-        final BlockPos blockPos0 = blockPos.relative(axis, 2);
-        final BlockPos blockPos1 = blockPos.relative(axis, 1);
-        final BlockPos blockPos2 = blockPos.relative(axis, -1);
-        final BlockPos blockPos3 = blockPos.relative(axis, -2);
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
 
-        if (level.getBlockState(blockPos0).is(canoeComponentBlock) && level.getBlockState(blockPos1)
-                .is(canoeComponentBlock)) {
+        Block canoeComponentBlock = getByStripped(strippedLogBlock);
 
-            if (level.getBlockState(blockPos0).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos1)
-                    .getValue(CANOE_CARVED) == 13) {
+        BlockState finalBlockState = canoeComponentBlock.defaultBlockState()
+                .setValue(CANOE_CARVED, 1)
+                .setValue(END, true)
+                .setValue(AXIS, axis)
+                .setValue(FACING, ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
+
+        BlockPos blockPos1 = pPos.relative(axis, 1);
+
+        if ((pLevel.getBlockState(blockPos1).is(canoeComponentBlock) || pLevel.getBlockState(blockPos1)
+                .is(strippedLogBlock)
+                && pLevel.getBlockState(blockPos1).getValue(AXIS) == axis)) {
+            // if it's a valid block and rotation positive, then flip it
+            finalBlockState = finalBlockState.setValue(FACING,
+                    ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
+        }
+
+        return finalBlockState;
+    }
+
+    public static void setEndPieces(Level pLevel, BlockPos pPos, Block canoeComponentBlock, boolean positiveDir) {
+
+        if (!pLevel.getBlockState(pPos).is(canoeComponentBlock)) {
+            return;
+        }
+
+        BlockState thisBlockState = pLevel.getBlockState(pPos);
+
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
+
+        BlockPos blockPos1 = pPos.relative(axis, (positiveDir ? 1 : -1));
+
+        if (pLevel.getBlockState(blockPos1).is(canoeComponentBlock) && pLevel.getBlockState(blockPos1)
+                .getValue(AXIS) == axis) {
+
+            thisBlockState = thisBlockState.setValue(END, false);
+            pLevel.setBlock(pPos, thisBlockState, 4);
+
+            setEndPieces(pLevel, blockPos1, canoeComponentBlock, positiveDir);
+        } else {
+            thisBlockState = thisBlockState.setValue(END, true);
+
+            if (positiveDir) {
+                thisBlockState = thisBlockState.setValue(FACING,
+                        ((axis == Direction.Axis.X) ? Direction.EAST : Direction.SOUTH));
+            } else {
+                thisBlockState = thisBlockState.setValue(FACING,
+                        ((axis == Direction.Axis.X) ? Direction.WEST : Direction.NORTH));
+            }
+
+            pLevel.setBlock(pPos, thisBlockState, 4);
+        }
+
+    }
+
+    private static boolean areValidBlockStates(Level pLevel, BlockPos pPos, Block canoeComponentBlock) {
+
+        Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
+
+        BlockPos blockPos0 = pPos.relative(axis, 2);
+        BlockPos blockPos1 = pPos.relative(axis, 1);
+        BlockPos blockPos2 = pPos.relative(axis, -1);
+        BlockPos blockPos3 = pPos.relative(axis, -2);
+
+        if (pLevel.getBlockState(blockPos0).is(canoeComponentBlock) &&
+                pLevel.getBlockState(blockPos1).is(canoeComponentBlock)) {
+
+            if (pLevel.getBlockState(blockPos0).getValue(CANOE_CARVED) == 13 &&
+                    pLevel.getBlockState(blockPos1).getValue(CANOE_CARVED) == 13) {
                 return true;
             }
         }
-        if (level.getBlockState(blockPos1).is(canoeComponentBlock) && level.getBlockState(blockPos2)
-                .is(canoeComponentBlock)) {
+        if (pLevel.getBlockState(blockPos1).is(canoeComponentBlock) &&
+                pLevel.getBlockState(blockPos2).is(canoeComponentBlock)) {
 
-            if (level.getBlockState(blockPos1).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos2)
-                    .getValue(CANOE_CARVED) == 13) {
+            if (pLevel.getBlockState(blockPos1).getValue(CANOE_CARVED) == 13 &&
+                    pLevel.getBlockState(blockPos2).getValue(CANOE_CARVED) == 13) {
                 return true;
             }
         }
-        if (level.getBlockState(blockPos2).is(canoeComponentBlock) && level.getBlockState(blockPos3)
-                .is(canoeComponentBlock)) {
+        if (pLevel.getBlockState(blockPos2).is(canoeComponentBlock) &&
+                pLevel.getBlockState(blockPos3).is(canoeComponentBlock)) {
 
-            return level.getBlockState(blockPos2).getValue(CANOE_CARVED) == 13 && level.getBlockState(blockPos3)
-                    .getValue(CANOE_CARVED) == 13;
+            return pLevel.getBlockState(blockPos2).getValue(CANOE_CARVED) == 13 &&
+                    pLevel.getBlockState(blockPos3).getValue(CANOE_CARVED) == 13;
         }
 
         return false;
     }
 
-    public static void trySpawnCanoe(final Level level, final BlockPos blockPos, final Block canoeComponentBlock) {
+    public static void trySpawnCanoe(Level pLevel, BlockPos pPos, Block canoeComponentBlock) {
 
-        if (!areValidBlockStates(level, blockPos, canoeComponentBlock)) {
+        if (!areValidBlockStates(pLevel, pPos, canoeComponentBlock)) {
             return;
         }
 
-        final BlockPattern.BlockPatternMatch canoePattern = createCanoeFull(canoeComponentBlock).find(level, blockPos);
+        BlockPattern.BlockPatternMatch blockpattern$blockpatternmatch = createCanoeFull(canoeComponentBlock).find(
+                pLevel, pPos);
+        if (blockpattern$blockpatternmatch != null) {
 
-        if (canoePattern == null) return;
+            Direction.Axis axis = pLevel.getBlockState(pPos).getValue(AXIS);
+            BlockPos middleblockpos = getMiddleBlockPos(pLevel, pPos, canoeComponentBlock);
 
-        final Direction.Axis axis = level.getBlockState(blockPos).getValue(AXIS);
-        final BlockPos middleBlockPos = getMiddleBlockPos(level, blockPos, canoeComponentBlock);
+            for (int i = 0; i < createCanoeFull(canoeComponentBlock).getHeight(); ++i) {
+                BlockInWorld blockinworld = blockpattern$blockpatternmatch.getBlock(0, i, 0);
+                pLevel.setBlock(blockinworld.getPos(), Blocks.AIR.defaultBlockState(), 2);
+                pLevel.levelEvent(2001, blockinworld.getPos(), Block.getId(blockinworld.getState()));
+            }
 
-        for (int i = 0; i < createCanoeFull(canoeComponentBlock).getHeight(); ++i) {
-            final BlockInWorld patternBlock = canoePattern.getBlock(0, i, 0);
-            level.setBlock(patternBlock.getPos(), Blocks.AIR.defaultBlockState(), 2);
-            level.levelEvent(2001, patternBlock.getPos(), Block.getId(patternBlock.getState()));
+            CanoeComponentBlock ccb = (CanoeComponentBlock) canoeComponentBlock;
+
+            CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.variant).get().create(pLevel);
+
+            if (axis == Direction.Axis.X) {
+                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
+                        (double) middleblockpos.getZ() + 0.5D, 90.0F, 0.0F);
+            } else {
+                canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
+                        (double) middleblockpos.getZ() + 0.5D, 0.0F, 0.0F);
+            }
+
+            pLevel.addFreshEntity(canoe);
+
+            for (ServerPlayer serverplayer : pLevel.getEntitiesOfClass(ServerPlayer.class,
+                    canoe.getBoundingBox().inflate(5.0D))) {
+                CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, canoe);
+            }
+
+            for (int l = 0; l < createCanoeFull(canoeComponentBlock).getHeight(); ++l) {
+                BlockInWorld blockinworld3 = blockpattern$blockpatternmatch.getBlock(0, l, 0);
+                pLevel.blockUpdated(blockinworld3.getPos(), Blocks.AIR);
+            }
         }
 
-        final CanoeComponentBlock ccb = (CanoeComponentBlock) canoeComponentBlock;
-
-        final CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.wood).get().create(level);
-
-        // Failed to create a canoe will crash with NPE
-        if (canoe == null) return;
-
-        {
-            // TODO this seems weird, why are we using the axis to figure out if the entity should be rotated?
-            final float rotation = axis == Direction.Axis.X ? 90 : 0;
-            canoe.moveTo(middleBlockPos.getX() + 0.5, middleBlockPos.getY() + 0.05, middleBlockPos.getZ() + 0.5,
-                    rotation, 0);
-        }
-
-        level.addFreshEntity(canoe);
-
-        for (final ServerPlayer serverplayer : level.getEntitiesOfClass(ServerPlayer.class,
-                canoe.getBoundingBox().inflate(5))) {
-            CriteriaTriggers.SUMMONED_ENTITY.trigger(serverplayer, canoe);
-        }
-
-        for (int l = 0; l < createCanoeFull(canoeComponentBlock).getHeight(); ++l) {
-            final BlockInWorld patternBlock = canoePattern.getBlock(0, l, 0);
-            level.blockUpdated(patternBlock.getPos(), Blocks.AIR);
-        }
     }
 
-    private static BlockPattern createCanoeFull(final Block canoeComponentBlock) {
-        return BlockPatternBuilder.start().aisle("#", "#", "#")
-                .where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(canoeComponentBlock))).build();
+    // static methods and fields below
+
+    private static BlockPattern createCanoeFull(Block canoeComponentBlock) {
+        BlockPattern canoeFull = BlockPatternBuilder.start().aisle("#", "#", "#").where('#',
+                BlockInWorld.hasState(BlockStatePredicate.forBlock(canoeComponentBlock))).build();
+
+        return canoeFull;
     }
 
     @Override
-    public void animateTick(final BlockState blockState, final Level level, final BlockPos blockPos,
-            final RandomSource randomSource) {
+    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+        if (pState.getValue(CANOE_CARVED) == 12) {
+            double x = (float) pPos.getX() + pRandom.nextFloat();
+            double y = (float) pPos.getY() + pRandom.nextFloat();
+            double z = (float) pPos.getZ() + pRandom.nextFloat();
 
-        if (blockState.getValue(CANOE_CARVED) == 12) {
-            final double x = blockPos.getX() + randomSource.nextDouble();
-            final double y = blockPos.getY() + randomSource.nextDouble();
-            final double z = blockPos.getZ() + randomSource.nextDouble();
-
-            for (int i = 0; i < randomSource.nextInt(3); ++i) {
-                level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0,
-                        0.1 + randomSource.nextDouble() / 8, 0);
+            for (int i = 0; i < pRandom.nextInt(3); ++i) {
+                pLevel.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, x, y, z, 0.0,
+                        0.1F + pRandom.nextFloat() / 8.0F, 0.0);
             }
         }
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(final BlockPos blockPos, final BlockState blockState) {
-        return new CanoeComponentBlockEntity(blockPos, blockState);
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new CanoeComponentBlockEntity(pPos, pState);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public RenderShape getRenderShape(final BlockState blockState) {
+    public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(final Level level, final BlockState blockState,
-            final BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(),
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
+            BlockEntityType<T> pBlockEntityType) {
+        return createTickerHelper(pBlockEntityType, FirmacivBlockEntities.CANOE_COMPONENT_BLOCK_ENTITY.get(),
                 CanoeComponentBlockEntity::serverTick);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public VoxelShape getShape(final BlockState blockState, final BlockGetter blockGetter, final BlockPos blockPos,
-            final CollisionContext collisionContext) {
-        return switch (blockState.getValue(CANOE_CARVED)) {
-            case 0, 1, 2, 3, 4 -> Shapes.block();
-            default -> HALF_SHAPE;
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+        return false;
+    }
+
+    @Override
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+        return 5;
+    }
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+        return 5;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pstate, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+
+        int canoeCarvedState = pstate.getValue(CANOE_CARVED);
+
+        return switch (canoeCarvedState) {
+            case 1, 2, 3, 4 -> SHAPE_1;
+            default -> SHAPE_FINAL;
         };
     }
 
     @Override
-    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> stateBuilder) {
-        super.createBlockStateDefinition(stateBuilder.add(AXIS).add(CANOE_CARVED).add(SHAPE));
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite())
+                .setValue(AXIS, pContext.getHorizontalDirection().getAxis());
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void tick(final BlockState blockState, final ServerLevel serverLevel, final BlockPos blockPos,
-            final RandomSource random) {
-        final BlockPattern.BlockPatternMatch patternMatch = CANOE_SHAPE_PATTERN.find(serverLevel, blockPos);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(FACING);
+        pBuilder.add(AXIS);
+        pBuilder.add(CANOE_CARVED);
+        pBuilder.add(END);
+    }
 
-        if (patternMatch == null) return;
+    public Item getLumber() {
+        return lumberItem.get();
+    }
 
-        for (int i = 0; i < patternMatch.getHeight(); i++) {
-            final BlockInWorld patternBlock = patternMatch.getBlock(0, i, 0);
-
-            final BlockState patternState = patternBlock.getState();
-
-            if (!patternState.is(this)) continue;
-
-            if (NOT_CARVED != patternState.getValue(CANOE_CARVED)) return;
-        }
-
-        final BlockState logState = this.strippedBlock.get().defaultBlockState()
-                .setValue(RotatedPillarBlock.AXIS, blockState.getValue(AXIS));
-        serverLevel.setBlock(blockPos, logState, Block.UPDATE_ALL_IMMEDIATE);
+    public Block getStrippedLog() {
+        return strippedBlock.get();
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void onPlace(final BlockState blockState, final Level level, final BlockPos blockPos,
-            final BlockState oldState, final boolean movedByPiston) {
-        if (NOT_CARVED != blockState.getValue(CANOE_CARVED)) return;
-
-        if (level.isClientSide) return;
-
-        // The tick method for this block with a delay in game ticks
-        level.scheduleTick(blockPos, this, 5 * 20);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(final BlockState blockState, final Level level, final BlockPos blockPos,
-            final BlockState newState, final boolean movedByPiston) {
-        super.onRemove(blockState, level, blockPos, newState, movedByPiston);
-
-        if (newState.is(this)) return;
-
-        // Still in the stripped log portion
-        if (NOT_CARVED == blockState.getValue(CANOE_CARVED)) {
-            // We are "reverting" back to a stripped log
-            if (newState.is(this.strippedBlock.get())) return;
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (pState.hasBlockEntity() && (!pState.is(pNewState.getBlock()) || !pNewState.hasBlockEntity())) {
+            pLevel.removeBlockEntity(pPos);
         }
+        if (!pNewState.is(pState.getBlock()) && pState.getValue(CANOE_CARVED) < 13) {
+            Block ccb = pState.getBlock();
+            Direction.Axis axis = pState.getValue(AXIS);
 
-        final Direction.Axis axis = blockState.getValue(AXIS);
-
-        final Shape shape = blockState.getValue(SHAPE);
-
-        // Prevent break propagation to the left if it's an end
-        if (shape != Shape.END_LEFT) {
-            final BlockPos leftBlockPos = blockPos.relative(axis, axis == Direction.Axis.X ? -1 : 1);
-            final BlockState leftBlockState = level.getBlockState(leftBlockPos);
-            if (leftBlockState.is(this) && leftBlockState.getValue(AXIS) == axis) {
-                level.destroyBlock(leftBlockPos, true);
+            if (pLevel.getBlockState(pPos.relative(axis, 1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, 1))
+                    .getValue(AXIS) == axis) {
+                pLevel.destroyBlock(pPos.relative(axis, 1), true);
             }
-        }
-
-        // Prevent break propagation to the right if it's an end
-        if (shape != Shape.END_RIGHT) {
-            final BlockPos rightBlockPos = blockPos.relative(axis, axis == Direction.Axis.X ? 1 : -1);
-            final BlockState rightBlockState = level.getBlockState(rightBlockPos);
-            if (rightBlockState.is(this) && rightBlockState.getValue(AXIS) == axis) {
-                level.destroyBlock(rightBlockPos, true);
+            if (pLevel.getBlockState(pPos.relative(axis, -1)).is(ccb) && pLevel.getBlockState(pPos.relative(axis, -1))
+                    .getValue(AXIS) == axis) {
+                pLevel.destroyBlock(pPos.relative(axis, -1), true);
             }
-        }
-    }
-
-    public enum Shape implements StringRepresentable {
-        STRAIGHT,
-        END_LEFT,
-        END_RIGHT;
-
-        /**
-         * Helper to get the correct end Shape from an axis and an axis direction.
-         *
-         * @param axis          The axis of the canoe component. Must be a horizontal axis
-         * @param axisDirection The axis direction in reference to the connecting canoe component
-         * @return An end shape for the given axis and axis direction
-         */
-        public static Shape getEndShape(final Direction.Axis axis, final Direction.AxisDirection axisDirection) {
-            assert axis.isHorizontal() : "Axis must be horizontal";
-            if (Direction.Axis.X == axis) {
-                return axisDirection == Direction.AxisDirection.POSITIVE ? END_RIGHT : END_LEFT;
-            } else { // Z
-                return axisDirection == Direction.AxisDirection.NEGATIVE ? END_RIGHT : END_LEFT;
-            }
-        }
-
-        @Override
-        public String getSerializedName() {
-            return switch (this) {
-                case STRAIGHT -> "straight";
-                case END_LEFT -> "end_left";
-                case END_RIGHT -> "end_right";
-            };
         }
     }
 }

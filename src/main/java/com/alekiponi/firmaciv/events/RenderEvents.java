@@ -27,14 +27,11 @@ public final class RenderEvents {
     }
 
     @SubscribeEvent
-    public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-        FirmacivEntities.CANOES.forEach(
-                ((wood, canoe) -> event.registerEntityRenderer(canoe.get(), CanoeRenderer::new)));
-
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         for (final BoatVariant boatVariant : BoatVariant.values()) {
+            event.registerEntityRenderer(FirmacivEntities.CANOES.get(boatVariant).get(), CanoeRenderer::new);
             event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(boatVariant).get(), RowboatRenderer::new);
         }
-
         event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), KayakRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);

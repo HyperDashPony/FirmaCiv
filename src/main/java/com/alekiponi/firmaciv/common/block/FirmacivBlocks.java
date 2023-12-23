@@ -1,10 +1,11 @@
 package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.Firmaciv;
+import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
-import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Metal;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.world.item.BlockItem;
@@ -18,6 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -25,7 +27,16 @@ public final class FirmacivBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
             Firmaciv.MOD_ID);
 
-    public static final Map<RegistryWood, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = registerCanoeComponents();
+    public static final Map<BoatVariant, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = Helpers.mapOfKeys(
+            BoatVariant.class, boatVariant -> registerBlockWithoutItem(
+                    "wood/canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
+                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
+                            boatVariant)));
+
+    // TODO dirty fix remove this when we fix the map above as it's just manually registering a mangrove canoe component
+    public static final RegistryObject<Block> TEMP = registerBlockWithItem("wood/canoe_component_block/mangrove",
+            () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
+                    BoatVariant.ACACIA));
 
     /*
     //TODO: swap between roofing types
@@ -46,23 +57,11 @@ public final class FirmacivBlocks {
      */
     public static final RegistryObject<Block> BOAT_FRAME_ANGLED = registerBlockWithItem("watercraft_frame_angled",
             () -> new AngledBoatFrameBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
+
     public static final Map<RegistryWood, RegistryObject<Block>> WOODEN_BOAT_FRAME_ANGLED = registerWoodenBoatFrames();
-    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock", () -> new OarlockBlock(
-            BlockBehaviour.Properties.copy(
+    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
+            () -> new OarlockBlock(BlockBehaviour.Properties.copy(
                     TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
-
-    public static Map<RegistryWood, RegistryObject<CanoeComponentBlock>> registerCanoeComponents() {
-        final Map<RegistryWood, RegistryObject<CanoeComponentBlock>> map = new HashMap<>();
-
-        for (final Wood tfcWood : Wood.values()) {
-            map.put(tfcWood, registerBlockWithoutItem("wood/canoe_component_block/" + tfcWood.getSerializedName(),
-                    () -> new CanoeComponentBlock(
-                            BlockBehaviour.Properties.copy(Blocks.OAK_LOG).mapColor(blockState -> tfcWood.woodColor())
-                                    .noOcclusion(), () -> TFCItems.LUMBER.get(tfcWood).get(), tfcWood)));
-        }
-
-        return map;
-    }
 
     public static Map<RegistryWood, RegistryObject<Block>> registerWoodenBoatFrames() {
         final Map<RegistryWood, RegistryObject<Block>> map = new HashMap<>();

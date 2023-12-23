@@ -31,7 +31,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-import static com.alekiponi.firmaciv.common.block.FirmacivBlockStateProperties.FRAME_PROCESSED;
+import static com.alekiponi.firmaciv.common.block.FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
 public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
 
@@ -59,7 +59,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     public static boolean isSupportedByWatercraftFrame(LevelReader pLevel, BlockPos thispos) {
         return pLevel.getBlockState(thispos.below())
                 .getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock && pLevel.getBlockState(
-                thispos.below()).getValue(FRAME_PROCESSED) == 7;
+                thispos.below()).getValue(FRAME_PROCESSED_7) == 7;
     }
 
     private static Vec3 getSpawnPosition(Level pLevel, BlockPos thispos, BlockState blockState) {
@@ -76,7 +76,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         if (framestate.getBlock() instanceof WoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack()
                 .is(plankitem.getItem())) {
             // check if the state matches
-            return framestate.getValue(FRAME_PROCESSED) == 7;
+            return framestate.getValue(FRAME_PROCESSED_7) == 7;
         }
         return false;
 
