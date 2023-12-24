@@ -32,7 +32,7 @@ public class KayakEntity extends FirmacivBoatEntity {
 
     @Override
     public float getPassengerSizeLimit() {
-        return PASSENGER_SIZE_LIMIT;
+        return this.PASSENGER_SIZE_LIMIT;
     }
 
     @Nullable
@@ -47,7 +47,7 @@ public class KayakEntity extends FirmacivBoatEntity {
 
     @Override
     public int getPassengerNumber() {
-        return PASSENGER_NUMBER;
+        return this.PASSENGER_NUMBER;
     }
 
     @Override

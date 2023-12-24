@@ -65,10 +65,12 @@ public final class FirmacivEntities {
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_cleat").toString()));
 
 
+    /*
     public static final RegistryObject<EntityType<FirmacivBoatEntity>> OUTRIGGER = ENTITY_TYPES.register("outrigger",
             () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "outrigger").toString()));
 
+     */
 
 
     public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",

@@ -208,6 +208,10 @@ dependencies {
     fg.deobf("curse.maven:jei-238222:4712868")
     runtimeOnly fg.deobf("curse.maven:jei-238222:4712868")
 
+
+    fg.deobf("curse.maven:alekis-easy-held-models-953157:4977248")
+    runtimeOnly fg.deobf("curse.maven:alekis-easy-held-models-953157:4977248")
+
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency

@@ -22,89 +22,81 @@ public class VehiclePartEntity extends Entity {
 
     @Override
     public void tick() {
-        super.tick();
 
-        if (!this.isPassenger()) {
-            selfDestructTicks++;
-            if (selfDestructTicks++ >= 5) {
-                this.ejectPassengers();
-                this.remove(RemovalReason.DISCARDED);
-            }
-        }
-
-        if (!(this.getVehicle() instanceof final FirmacivBoatEntity vehicle)) {
-            return;
-        }
-
-
-        /*
-        if (tickCount < 10) {
-            if (this.getVehicle() instanceof RowboatEntity rowboatEntity) {
-                if (rowboatEntity.getPilotVehiclePartAsEntity() == this) {
-                    compartmentRotation = 180;
-                }
-            }
-        }
-
-         */
-
-        if (tickCount < 30) {
-            if (vehicle.getPassengers().size() == vehicle.getPassengerNumber()) {
-                for (int[] i : vehicle.getCompartmentRotationsArray()) {
-                    if (vehicle.getPassengers().get(i[0]) == this) {
-                        this.compartmentRotation = i[1];
-                    }
+        //serverside stuff
+        if(!this.level().isClientSide()) {
+            if (!this.isPassenger()) {
+                selfDestructTicks++;
+                if (selfDestructTicks++ >= 5) {
+                    this.ejectPassengers();
+                    this.remove(RemovalReason.DISCARDED);
                 }
             }
 
-        }
+            if (!(this.getVehicle() instanceof FirmacivBoatEntity)) {
+                return;
+            }
+            final FirmacivBoatEntity vehicle = (FirmacivBoatEntity) this.getVehicle();
 
-        // Try not to be empty
-        if (this.getPassengers().isEmpty()) {
-            boolean shouldAddCleatInstead = false;
-
-            if (vehicle.getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()) {
-                for (int i : vehicle.getCleats()) {
-                    if (vehicle.getPassengers().get(i).is(this)) {
-
-                        shouldAddCleatInstead = true;
-
-                        final VehicleCleatEntity cleat = FirmacivEntities.VEHICLE_CLEAT_ENTITY.get()
-                                .create(this.level());
-                        cleat.setPos(this.getX(), this.getY(), this.getZ());
-                        if (!cleat.startRiding(this)) {
-                            Firmaciv.LOGGER.error("New Cleat: {} unable to ride Vehicle Part: {}", cleat, this);
+            if (tickCount < 30) {
+                if (vehicle.getPassengers().size() == vehicle.getPassengerNumber()) {
+                    for (int[] i : vehicle.getCompartmentRotationsArray()) {
+                        if (vehicle.getPassengers().get(i[0]) == this) {
+                            this.compartmentRotation = i[1];
                         }
-                        this.level().addFreshEntity(cleat);
-                        break;
-
-
                     }
                 }
+
             }
 
+            // Try not to be empty
+            if (this.getPassengers().isEmpty()) {
+                boolean shouldAddCleatInstead = false;
 
-            if (!shouldAddCleatInstead) {
-                final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
-                        .create(this.level());
+                if (vehicle.getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()) {
+                    for (int i : vehicle.getCleats()) {
+                        if (vehicle.getPassengers().get(i).is(this)) {
 
-                // Can maybe just assert not null? Doesn't really matter I guess
-                if (newCompartment != null) {
-                    newCompartment.setYRot(this.getYRot() + compartmentRotation);
-                    newCompartment.setPos(this.getX(), this.getY(), this.getZ());
-                    if (!newCompartment.startRiding(this)) {
-                        Firmaciv.LOGGER.error("New Compartment: {} unable to ride Vehicle Part: {}", newCompartment,
-                                this);
+                            shouldAddCleatInstead = true;
+
+                            final VehicleCleatEntity cleat = FirmacivEntities.VEHICLE_CLEAT_ENTITY.get()
+                                    .create(this.level());
+                            cleat.setPos(this.getX(), this.getY(), this.getZ());
+                            if (!cleat.startRiding(this)) {
+                                Firmaciv.LOGGER.error("New Cleat: {} unable to ride Vehicle Part: {}", cleat, this);
+                            }
+                            this.level().addFreshEntity(cleat);
+                            break;
+
+
+                        }
                     }
-                    this.level().addFreshEntity(newCompartment);
                 }
-            }
 
+
+                if (!shouldAddCleatInstead) {
+                    final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
+                            .create(this.level());
+
+                    // Can maybe just assert not null? Doesn't really matter I guess
+                    if (newCompartment != null) {
+                        newCompartment.setYRot(this.getYRot() + compartmentRotation);
+                        newCompartment.setPos(this.getX(), this.getY(), this.getZ());
+                        if (!newCompartment.startRiding(this)) {
+                            Firmaciv.LOGGER.error("New Compartment: {} unable to ride Vehicle Part: {}", newCompartment,
+                                    this);
+                        }
+                        this.level().addFreshEntity(newCompartment);
+                    }
+                }
+
+
+            }
 
         }
 
-        // Try remove if I'm not a passenger of something
 
+        super.tick();
     }
 
     @Override

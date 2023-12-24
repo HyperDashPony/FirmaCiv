@@ -1,6 +1,7 @@
 package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.Firmaciv;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import net.minecraft.network.syncher.EntityDataAccessor;

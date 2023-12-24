@@ -99,7 +99,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
                 }
             }
             if (this.getTrueVehicle() instanceof SloopEntity sloopEntity) {
-                localY += -0.1f;
+                localY += 0.0f;
             }
         }
         if (passenger.getBbHeight() <= 0.7) {
