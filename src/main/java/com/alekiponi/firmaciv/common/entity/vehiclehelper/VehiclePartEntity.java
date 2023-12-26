@@ -21,9 +21,6 @@ public class VehiclePartEntity extends Entity {
             VehiclePartEntity.class, EntityDataSerializers.FLOAT);
     private int selfDestructTicks = 0;
 
-    private final int noPassengerTicks = 0;
-
-
     public VehiclePartEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
     }

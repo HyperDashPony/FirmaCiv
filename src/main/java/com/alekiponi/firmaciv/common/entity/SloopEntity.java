@@ -34,14 +34,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public final int[][] COMPARTMENT_ROTATIONS = {{7, 85}, {8, 85}, {9, 85}, {10, -85}, {11, -85}, {12, -85}};
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
-
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
-    protected int sailState;
     protected int sailAnimationTicks;
-
-
-
-
 
     public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
@@ -196,8 +190,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public void tick() {
         super.tick();
         this.sailBoat();
-        sailAnimationTicks = this.tickCount;
-
+        if(this.level().isClientSide()){
+            sailAnimationTicks = this.tickCount;
+        }
     }
 
     @Override
@@ -214,14 +209,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     }
 
     public int getSailAnimationTicks(){ return sailAnimationTicks;};
-
-    public int getSailState() {
-        return sailState;
-    }
-
-    public void setSailState(int state) {
-        sailState = state;
-    }
 
     @Nullable
     public Entity getSailingVehiclePartAsEntity() {

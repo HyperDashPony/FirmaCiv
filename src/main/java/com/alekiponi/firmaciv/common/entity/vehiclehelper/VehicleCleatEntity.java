@@ -115,9 +115,7 @@ public class VehicleCleatEntity extends Entity {
                     thisVehicle.setDeltaMovement(movementVector);
                     thisVehicle.setYRot(finalRotation);
 
-
                 }
-
 
             }
             if (this.distanceTo(this.leashHolder) > 10f && this.leashHolder instanceof Player player) {
@@ -133,12 +131,10 @@ public class VehicleCleatEntity extends Entity {
     }
 
     protected void tickLerp() {
-
-        /*
         if (this.isControlledByLocalInstance()) {
             this.lerpSteps = 0;
             this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
-        }*/
+        }
 
         if (this.lerpSteps > 0) {
             double d0 = this.getX() + (this.lerpX - this.getX()) / (double) this.lerpSteps;

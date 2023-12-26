@@ -144,16 +144,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         return this.DAMAGE_RECOVERY;
     }
 
-    /*
-    public float getDeltaRotation() {
-        return deltaRotation;
-    }
-
-    public void setDeltaRotation(float deltaRotation) {
-        this.deltaRotation = deltaRotation;
-    }
-
-     */
     public void setDeltaRotation(float deltaRotation) {
         this.entityData.set(DATA_ID_DELTA_ROTATION, deltaRotation);
     }
@@ -255,18 +245,10 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         }
     }
 
-    /**
-     * The item that should be dropped when this entity dies
-     *
-     * @return Item Instance
-     */
     public Item getDropItem() {
         return Items.AIR;
     }
 
-    /**
-     * Sets up the entity to do the hurt animation. Only used by packets in multiplayer.
-     */
     @Override
     public void animateHurt(final float pYaw) {
         this.setHurtDir(-this.getHurtDir());
@@ -299,10 +281,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
     @Override
     public void tick() {
 
-        /*
-        if (this.getControllingPassenger() == null) {
-            this.deltaRotation = 0;
-        }*/
         if (!this.level().isClientSide()) {
             if (this.getPassengers().size() < this.getMaxPassengers()) {
                 final VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
@@ -328,10 +306,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
 
         super.tick();
         this.tickLerp();
-        /*
-        if(this.level().isClientSide()){
-            this.tickFloatBoat();
-        }*/
 
         this.tickFloatBoat();
         this.tickControlBoat();
@@ -342,18 +316,8 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
             }
 
             this.move(MoverType.SELF, this.getDeltaMovement());
-        } else {
-            //this.setDeltaMovement(Vec3.ZERO);
         }
 
-
-
-
-
-        /*
-        if(this.level().isClientSide()){
-            this.level().sendPacketToServer();
-        }*/
 
         this.tickPaddlingEffects();
 
@@ -422,9 +386,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
             }
 
             tickWindInput();
-            //tickPaddleInput();
-            //tickControlBoat();
-
 
             Vec3 vec3 = this.getDeltaMovement();
 
@@ -611,7 +572,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
             this.setXRot(this.getXRot() + (float) (this.lerpXRot - (double) this.getXRot()) / (float) this.lerpSteps);
             --this.lerpSteps;
             this.setPos(d0, d1, d2);
-            //this.setRot(this.getYRot(), this.getXRot());
         }
 
 
@@ -988,10 +948,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
 
     @Nullable
     public EmptyCompartmentEntity getControllingCompartment() {
-        /*
-        if(!this.level().isClientSide()){
-            return null;
-        }*/
         final Entity vehiclePart = this.getPilotVehiclePartAsEntity();
 
         if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) {
@@ -1001,12 +957,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         if (!(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity)) {
             return null;
         }
-
-        /*
-        if (!emptyCompartmentEntity.isVehicle() || !(emptyCompartmentEntity.getFirstPassenger() instanceof Player))
-        {
-            return null;
-        }*/
 
         return emptyCompartmentEntity;
     }
