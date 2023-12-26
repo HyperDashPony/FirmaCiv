@@ -47,53 +47,33 @@ public abstract class CameraMixin {
     private float eyeHeightOld;
 
 
-    /*
-    @ModifyConstant(method = "setup", constant = @Constant(doubleValue = 4.0))
-    private double modifyBoatCameraDistance(double constant){
-        if(this.getEntity().getVehicle() instanceof EmptyCompartmentEntity emptyCompartment){
-            if(emptyCompartment.getTrueVehicle() != null){
-                AbstractFirmacivBoatEntity boat = emptyCompartment.getTrueVehicle();
-                double boatSize = boat.getBoundingBox().getXsize();
-                if(boatSize > 1){
-                    return boatSize*constant;
-                }
-            }
-        }
-        return constant;
-    }*/
-
     @Inject(method = "setup", at = @At(value = "TAIL"), cancellable = true)
     public void injectCameraChanges(BlockGetter pLevel, Entity pEntity, boolean pDetached, boolean pThirdPersonReverse, float pPartialTick, CallbackInfo ci){
 
-        if(pEntity.getVehicle() instanceof EmptyCompartmentEntity compartment){
+        if(pEntity.getVehicle() instanceof EmptyCompartmentEntity compartment && pDetached && !pThirdPersonReverse){
             if(compartment.getTrueVehicle() != null){
                 AbstractFirmacivBoatEntity boat = compartment.getTrueVehicle();
 
+                double boatSize = boat.getBoundingBox().getXsize();
+                double cameraDistance = 4.0f;
+                if(boatSize > (1/0.65)){
+                    cameraDistance = cameraDistance * (boatSize * 0.65);
+                }
+                this.setRotation(pEntity.getViewYRot(pPartialTick), pEntity.getViewXRot(pPartialTick));
+                this.setPosition(Mth.lerp((double)pPartialTick, boat.xo, boat.getX()), Mth.lerp((double)pPartialTick, boat.yo, boat.getY()) + (double)Mth.lerp(pPartialTick, this.eyeHeightOld, this.eyeHeight), Mth.lerp((double)pPartialTick, boat.zo, boat.getZ()));
                 if(boat instanceof RowboatEntity rowboatEntity){
                     if(rowboatEntity.getControllingCompartment() != null && rowboatEntity.getControllingCompartment().equals(compartment)){
-                        pDetached = true;
+                        this.setRotation(this.yRot + 180.0F, this.xRot);
+                    }
+                    if (pThirdPersonReverse){
+                        this.setRotation(this.yRot, -this.xRot);
                     }
                 }
-
-                if(pDetached){
-                    double boatSize = boat.getBoundingBox().getXsize();
-                    double cameraDistance = 4.0f;
-                    if(boatSize > 1){
-                        cameraDistance = cameraDistance * (boatSize * 0.65);
-                    }
-                    this.setRotation(pEntity.getViewYRot(pPartialTick), pEntity.getViewXRot(pPartialTick));
-                    this.setPosition(Mth.lerp((double)pPartialTick, boat.xo, boat.getX()), Mth.lerp((double)pPartialTick, boat.yo, boat.getY()) + (double)Mth.lerp(pPartialTick, this.eyeHeightOld, this.eyeHeight), Mth.lerp((double)pPartialTick, boat.zo, boat.getZ()));
-                    if(boat instanceof RowboatEntity rowboatEntity){
-                        if(rowboatEntity.getControllingCompartment() != null && rowboatEntity.getControllingCompartment().equals(compartment)){
-                            this.setRotation(this.yRot + 180.0F, this.xRot);
-                        }
-                    }
-                    else if (pThirdPersonReverse) {
-                        this.setRotation(this.yRot + 180.0F, -this.xRot);
-                    }
-
-                    this.move(-this.getMaxZoom(cameraDistance), 0.0, 0.0);
+                else if (pThirdPersonReverse) {
+                    this.setRotation(this.yRot + 180.0F, -this.xRot);
                 }
+
+                this.move(-this.getMaxZoom(cameraDistance), 0.0, 0.0);
             }
         }
 
