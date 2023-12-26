@@ -1,6 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
-import com.alekiponi.firmaciv.common.entity.FirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -81,10 +81,10 @@ public class VehicleCleatEntity extends Entity {
                 this.dropLeash(true, true);
             }
             if (this.getVehicle().isPassenger() && this.getVehicle()
-                    .getVehicle() instanceof FirmacivBoatEntity && this.leashHolder instanceof Player player) {
+                    .getVehicle() instanceof AbstractFirmacivBoatEntity && this.leashHolder instanceof Player player) {
                 if (this.distanceTo(this.leashHolder) > 4f) {
 
-                    FirmacivBoatEntity thisVehicle = (FirmacivBoatEntity) this.getVehicle().getVehicle();
+                    AbstractFirmacivBoatEntity thisVehicle = (AbstractFirmacivBoatEntity) this.getVehicle().getVehicle();
                     Vec3 vectorToVehicle = player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
                     Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y,
                             vectorToVehicle.z * -0.1f);

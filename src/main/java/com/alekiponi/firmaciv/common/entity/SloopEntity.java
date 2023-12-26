@@ -14,7 +14,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class SloopEntity extends FirmacivBoatEntity {
+public class SloopEntity extends AbstractFirmacivBoatEntity {
 
 
     public final int PASSENGER_NUMBER = 14;
@@ -30,11 +30,9 @@ public class SloopEntity extends FirmacivBoatEntity {
     protected int sailState;
     protected int sailAnimationTicks;
 
-    protected double windAngle;
 
-    protected double windSpeed;
 
-    public SloopEntity(EntityType<? extends FirmacivBoatEntity> entityType, Level level) {
+    public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -44,7 +42,7 @@ public class SloopEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getPassengerNumber() {
+    public int getMaxPassengers() {
         return this.PASSENGER_NUMBER;
     }
 
@@ -188,13 +186,7 @@ public class SloopEntity extends FirmacivBoatEntity {
         super.tick();
         this.sailBoat();
         sailAnimationTicks = this.tickCount;
-        if(tickCount % 40 == 0){
-            Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
-            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
-            double speed = Math.abs(Math.round(windVector.length() * 320));
-            this.windSpeed = speed;
-            this.windAngle = Mth.wrapDegrees(direction);
-        }
+
     }
 
     // method to get sailing controls
@@ -213,10 +205,6 @@ public class SloopEntity extends FirmacivBoatEntity {
 
     public int getSailAnimationTicks(){ return sailAnimationTicks;};
 
-    public float[] getWindAngleAndSpeed() {
-        return new float[]{(float) windAngle, (float) windSpeed};
-    }
-
 
     public int getSailState() {
         return sailState;
@@ -228,7 +216,7 @@ public class SloopEntity extends FirmacivBoatEntity {
 
     @Nullable
     public Entity getSailingVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(13);
         }
         return null;

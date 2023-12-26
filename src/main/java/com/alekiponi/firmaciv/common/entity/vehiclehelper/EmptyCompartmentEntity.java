@@ -30,14 +30,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EmptyCompartmentEntity extends CompartmentEntity {
+public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected static final EntityDataAccessor<Long> DATA_ID_PASSENGER_RIDE_TICK = SynchedEntityData.defineId(
             EmptyCompartmentEntity.class, EntityDataSerializers.LONG);
-    protected final long stillTick = 8000;
-    protected boolean inputLeft;
-    protected boolean inputRight;
-    protected boolean inputUp;
-    protected boolean inputDown;
+
+    protected static final EntityDataAccessor<Boolean> DATA_ID_INPUT_LEFT = SynchedEntityData.defineId(
+            EmptyCompartmentEntity.class, EntityDataSerializers.BOOLEAN);
+
+    protected static final EntityDataAccessor<Boolean> DATA_ID_INPUT_RIGHT = SynchedEntityData.defineId(
+            EmptyCompartmentEntity.class, EntityDataSerializers.BOOLEAN);
+
+    protected static final EntityDataAccessor<Boolean> DATA_ID_INPUT_UP = SynchedEntityData.defineId(
+            EmptyCompartmentEntity.class, EntityDataSerializers.BOOLEAN);
+
+    protected static final EntityDataAccessor<Boolean> DATA_ID_INPUT_DOWN = SynchedEntityData.defineId(
+            EmptyCompartmentEntity.class, EntityDataSerializers.BOOLEAN);
+
     protected boolean canAddNonPlayers;
     protected boolean canAddOnlyBlocks;
 
@@ -51,6 +59,10 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
     @Override
     protected void defineSynchedData() {
         this.entityData.define(DATA_ID_PASSENGER_RIDE_TICK, Long.MAX_VALUE);
+        this.entityData.define(DATA_ID_INPUT_LEFT, false);
+        this.entityData.define(DATA_ID_INPUT_RIGHT, false);
+        this.entityData.define(DATA_ID_INPUT_UP, false);
+        this.entityData.define(DATA_ID_INPUT_DOWN, false);
         super.defineSynchedData();
     }
 
@@ -148,7 +160,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             }
             if (tickCount < 100 && this.isPassenger()) {
                 for (int i : this.getTrueVehicle().getCanAddOnlyBlocks()) {
-                    if (this.getTrueVehicle().getPassengers().size() == this.getTrueVehicle().getPassengerNumber()) {
+                    if (this.getTrueVehicle().getPassengers().size() == this.getTrueVehicle().getMaxPassengers()) {
                         if (this.getTrueVehicle().getPassengers().get(i) == this.getVehicle()) {
                             canAddOnlyBlocks = true;
                         }
@@ -200,12 +212,28 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         this.setPassengerRideTick(pCompound.getLong("passengerRideTick"));
+
+        /*
+        pCompound.getBoolean("inputLeft");
+        pCompound.getBoolean("inputRight");
+        pCompound.getBoolean("inputUp");
+        pCompound.getBoolean("inputDown");
+         */
+
         super.readAdditionalSaveData(pCompound);
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
         pCompound.putLong("passengerRideTick", this.getPassengerRideTick());
+
+        /*
+        pCompound.putBoolean("inputLeft", this.getInputLeft());
+        pCompound.putBoolean("inputRight", this.getInputLeft());
+        pCompound.putBoolean("inputUp", this.getInputLeft());
+        pCompound.putBoolean("inputDown", this.getInputLeft());
+         */
+
         super.readAdditionalSaveData(pCompound);
     }
 
@@ -221,27 +249,49 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
 
     public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
             final boolean inputDown) {
-        this.inputLeft = inputLeft;
-        this.inputRight = inputRight;
-        this.inputUp = inputUp;
-        this.inputDown = inputDown;
+        this.setInputLeft(inputLeft);
+        this.setInputRight(inputRight);
+        this.setInputUp(inputUp);
+        this.setInputDown(inputDown);
     }
 
     public boolean getInputLeft() {
-        return inputLeft;
+        return this.entityData.get(DATA_ID_INPUT_LEFT);
     }
 
     public boolean getInputRight() {
-        return inputRight;
+
+        return this.entityData.get(DATA_ID_INPUT_RIGHT);
     }
 
-    public boolean getInputUp() {
-        return inputUp;
+    public boolean getInputUp(){
+        return this.entityData.get(DATA_ID_INPUT_UP);
     }
 
     public boolean getInputDown() {
-        return inputDown;
+
+        return this.entityData.get(DATA_ID_INPUT_DOWN);
     }
+
+    public void setInputLeft(boolean input) {
+
+        this.entityData.set(DATA_ID_INPUT_LEFT, input);
+    }
+
+    public void setInputRight(boolean input) {
+
+        this.entityData.set(DATA_ID_INPUT_RIGHT, input);
+    }
+
+    public void setInputUp(boolean input) {
+        this.entityData.set(DATA_ID_INPUT_UP, input);
+    }
+
+    public void setInputDown(boolean input) {
+
+        this.entityData.set(DATA_ID_INPUT_DOWN, input);
+    }
+
 
     @Override
     public void onPassengerTurned(final Entity entity) {
@@ -260,7 +310,7 @@ public class EmptyCompartmentEntity extends CompartmentEntity {
             return InteractionResult.PASS;
         }
 
-        CompartmentEntity newCompartment = null;
+        AbstractCompartmentEntity newCompartment = null;
         if (this.canAddNonPlayers() && !item.isEmpty() && this.getPassengers().isEmpty()) {
             if (item.is(FirmacivTags.Items.CHESTS)) {
                 newCompartment = FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get().create(player.level());

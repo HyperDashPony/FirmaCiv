@@ -157,7 +157,7 @@ public enum IngameOverlays {
                 }
 
 
-                if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
+                if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity && emptyCompartmentEntity.isPassenger()) {
 
                     if (emptyCompartmentEntity.getTrueVehicle() != null) {
                         if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger()

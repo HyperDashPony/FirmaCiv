@@ -26,7 +26,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class RowboatEntity extends FirmacivBoatEntity {
+public class RowboatEntity extends AbstractFirmacivBoatEntity {
 
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(RowboatEntity.class,
             EntityDataSerializers.INT);
@@ -42,7 +42,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
 
-    public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+    public RowboatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
 
         final String name = entityType.toString().split("rowboat.")[1];
@@ -56,7 +56,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getPassengerNumber() {
+    public int getMaxPassengers() {
         return this.PASSENGER_NUMBER;
     }
 
@@ -139,7 +139,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    protected void controlBoat() {
+    protected void tickControlBoat() {
         if (this.isVehicle()) {
             if (getControllingCompartment() != null) {
                 boolean inputUp = this.getControllingCompartment().getInputUp();
@@ -215,7 +215,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     @Nullable
     @Override
     public Entity getPilotVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(0);
         }
         return null;

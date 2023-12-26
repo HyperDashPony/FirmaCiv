@@ -6,7 +6,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
-public class AnvilCompartmentEntity extends CompartmentEntity{
+public class AnvilCompartmentEntity extends AbstractCompartmentEntity {
 
     public AnvilCompartmentEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);

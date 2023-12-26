@@ -1,6 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
-import com.alekiponi.firmaciv.common.entity.FirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.KayakEntity;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.nbt.CompoundTag;
@@ -24,16 +24,16 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public abstract class CompartmentEntity extends Entity {
+public abstract class AbstractCompartmentEntity extends Entity {
 
     private static final EntityDataAccessor<ItemStack> DATA_BLOCK_TYPE_ITEM = SynchedEntityData.defineId(
-            CompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
+            AbstractCompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
-            CompartmentEntity.class, EntityDataSerializers.INT);
+            AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT_DIR = SynchedEntityData.defineId(
-            CompartmentEntity.class, EntityDataSerializers.INT);
+            AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(
-            CompartmentEntity.class, EntityDataSerializers.FLOAT);
+            AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
     public int lifespan = 6000;
@@ -48,7 +48,7 @@ public abstract class CompartmentEntity extends Entity {
     protected VehiclePartEntity ridingThisPart = null;
     private int notRidingTicks = 0;
 
-    public CompartmentEntity(final EntityType<?> entityType, final Level level) {
+    public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
     }
 
@@ -89,8 +89,8 @@ public abstract class CompartmentEntity extends Entity {
     }
 
     @Nullable
-    public FirmacivBoatEntity getTrueVehicle() {
-        if (ridingThisPart != null && ridingThisPart.isPassenger() && ridingThisPart.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity) {
+    public AbstractFirmacivBoatEntity getTrueVehicle() {
+        if (ridingThisPart != null && ridingThisPart.isPassenger() && ridingThisPart.getVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity) {
             return firmacivBoatEntity;
         }
         return null;
@@ -103,7 +103,6 @@ public abstract class CompartmentEntity extends Entity {
         }
 
         if (!this.isPassenger()) {
-
             if (!(this instanceof EmptyCompartmentEntity)) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
                 if (this.isInWater() || this.level().getFluidState(this.blockPosition())
@@ -201,7 +200,7 @@ public abstract class CompartmentEntity extends Entity {
      * @param newCompartment The compartment entity which is replacing this object
      * @return The compartment passed in
      */
-    protected CompartmentEntity swapCompartments(final CompartmentEntity newCompartment) {
+    protected AbstractCompartmentEntity swapCompartments(final AbstractCompartmentEntity newCompartment) {
         this.spawnAtLocation(this.getDropItem(), 1);
         this.stopRiding();
         this.discard();

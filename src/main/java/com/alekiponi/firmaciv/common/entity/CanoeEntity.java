@@ -1,7 +1,6 @@
 package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class CanoeEntity extends FirmacivBoatEntity {
+public class CanoeEntity extends AbstractFirmacivBoatEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
             EntityDataSerializers.INT);
     public final int PASSENGER_NUMBER = 3;
@@ -28,7 +27,7 @@ public class CanoeEntity extends FirmacivBoatEntity {
     protected final float DAMAGE_RECOVERY = 2.0f;
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
 
-    public CanoeEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+    public CanoeEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
 
         final String name = entityType.toString().split("canoe.")[1];
@@ -46,9 +45,10 @@ public class CanoeEntity extends FirmacivBoatEntity {
         return CLEATS;
     }
 
+
     @Override
-    protected void controlBoat() {
-        if (this.isVehicle() && this.getControllingPassenger() instanceof Player player) {
+    protected void tickControlBoat() {
+        if (this.isVehicle()) {
             if (getControllingCompartment() != null) {
                 boolean inputUp = this.getControllingCompartment().getInputUp();
                 boolean inputDown = this.getControllingCompartment().getInputDown();
@@ -56,14 +56,19 @@ public class CanoeEntity extends FirmacivBoatEntity {
                 boolean inputRight = this.getControllingCompartment().getInputRight();
                 float f = 0.0f;
                 float paddleMultiplier = 1.0f;
-                if (player.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
-                    paddleMultiplier = 1.6f;
+                if(this.getControllingPassenger() instanceof Player player){
+                    if (player.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
+                        paddleMultiplier = 1.6f;
+                    }
                 }
+
 
                 int i = 0;
                 for (Entity entity : this.getTruePassengers()) {
-                    if (entity instanceof Player) {
-                        i++;
+                    if (entity instanceof Player player2) {
+                        if (player2.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
+                            i++;
+                        }
                     }
                 }
                 if (i == 2) {
@@ -104,7 +109,7 @@ public class CanoeEntity extends FirmacivBoatEntity {
     @Nullable
     @Override
     public Entity getPilotVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(1);
         }
 
@@ -164,7 +169,7 @@ public class CanoeEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getPassengerNumber() {
+    public int getMaxPassengers() {
         return PASSENGER_NUMBER;
     }
 

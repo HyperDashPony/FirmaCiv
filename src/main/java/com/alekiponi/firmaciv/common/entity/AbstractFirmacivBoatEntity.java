@@ -1,18 +1,17 @@
 package com.alekiponi.firmaciv.common.entity;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.google.common.collect.Lists;
+import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ServerboundPaddleBoatPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,9 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Boat.Status;
-import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,10 +31,10 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WaterlilyBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -45,30 +42,28 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class FirmacivBoatEntity extends Entity {
+public abstract class AbstractFirmacivBoatEntity extends Entity {
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
     public static final double PADDLE_SOUND_TIME = Math.PI / 4;
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
-            FirmacivBoatEntity.class, EntityDataSerializers.INT);
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(
-            FirmacivBoatEntity.class, EntityDataSerializers.INT);
-
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(
-            FirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_LEFT = SynchedEntityData.defineId(
-            FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(
-            FirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Vector3f> DATA_ID_DELTA_MOVEMENT = SynchedEntityData.defineId(
-            FirmacivBoatEntity.class, EntityDataSerializers.VECTOR3);
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.VECTOR3);
+
 
     protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
-    public final int PASSENGER_NUMBER = 2;
+    public final int MAX_PASSENGER_NUMBER = 0;
 
     public final int[] CLEATS = {};
     public final int[] CAN_ADD_ONLY_BLOCKS = {};
@@ -80,8 +75,6 @@ public class FirmacivBoatEntity extends Entity {
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
     protected final float DAMAGE_RECOVERY = 2.0f;
     protected final float[] paddlePositions = new float[2];
-    private final int spawnTicks = 0;
-    protected List<VehiclePartEntity> vehicleParts = new ArrayList<>();
     protected float invFriction;
     protected float deltaRotation;
     protected int lerpSteps;
@@ -98,17 +91,26 @@ public class FirmacivBoatEntity extends Entity {
     protected Status oldStatus;
     protected double lastYd;
 
-    public FirmacivBoatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+    protected double windAngle;
+
+    protected double windSpeed;
+    Vec2 windVector;
+
+    public AbstractFirmacivBoatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
+        this.windVector = Climate.getWindVector(this.level(), this.blockPosition());
+        this.updateWind(false);
     }
 
     public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
         return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
     }
 
-    public int getPassengerNumber() {
-        return 0;
+    // consider these reference implementations
+
+    public int getMaxPassengers() {
+        return MAX_PASSENGER_NUMBER;
     }
 
     public int[] getCleats() {
@@ -129,10 +131,6 @@ public class FirmacivBoatEntity extends Entity {
 
     public int[] getCanAddOnlyBlocks() {
         return CAN_ADD_ONLY_BLOCKS;
-    }
-
-    protected int getMaxPassengers() {
-        return this.getPassengerNumber();
     }
 
     @Override
@@ -202,7 +200,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Nullable
     public Entity getCompAsEntityFromIndex(int index) {
-        if (this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.getPassengers().size() == this.getMaxPassengers()) {
             if (this.getPassengers().get(index).isVehicle()) {
                 return this.getPassengers().get(index).getFirstPassenger();
             }
@@ -240,7 +238,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     public void push(final Entity entity) {
-        if (entity instanceof FirmacivBoatEntity) {
+        if (entity instanceof AbstractFirmacivBoatEntity) {
             if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
                 super.push(entity);
             }
@@ -298,7 +296,7 @@ public class FirmacivBoatEntity extends Entity {
             this.deltaRotation = 0;
         }*/
         if (!this.level().isClientSide()) {
-            if (this.getPassengers().size() < this.getPassengerNumber()) {
+            if (this.getPassengers().size() < this.getMaxPassengers()) {
                 final VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
                 newPart.setPos(this.getX(), this.getY(), this.getZ());
                 this.level().addFreshEntity(newPart);
@@ -318,48 +316,89 @@ public class FirmacivBoatEntity extends Entity {
             this.setDamage(this.getDamage() - getDamageRecovery());
         }
 
-        this.tickParticleEffects();
+        this.tickEffects();
 
         super.tick();
         this.tickLerp();
+        /*
         if(this.level().isClientSide()){
-            this.floatBoat();
-        }
-        this.controlBoat();
+            this.tickFloatBoat();
+        }*/
+
         if (this.isControlledByLocalInstance()) {
             if (!(this.getFirstPassenger() instanceof Player)) {
                 this.setPaddleState(false, false);
             }
 
-            if (this.level().isClientSide) {
+            this.tickFloatBoat();
+            if (this.level().isClientSide()) {
+                this.tickControlBoat();
                 this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
 
+            this.move(MoverType.SELF, this.getDeltaMovement());
+        } else {
+            //this.setDeltaMovement(Vec3.ZERO);
         }
 
-        this.move(MoverType.SELF, this.getDeltaMovement());
+
 
         /*
         if(this.level().isClientSide()){
             this.level().sendPacketToServer();
         }*/
 
-
-        /*else {
-            this.setDeltaMovement(Vec3.ZERO);
-            this.deltaRotation = 0f;
-        }*/
-
         this.tickPaddlingEffects();
 
         this.checkInsideBlocks();
 
+        this.updateWind(true);
+
     }
 
-    protected void floatBoat() {
+    protected void tickWindInput(){
+        if(this.status != Status.ON_LAND){
+            Vec3 windMovement = new Vec3(this.getLocalWindVector().x, 0, this.getLocalWindVector().y).normalize();
+            double windFunction = Mth.clamp(this.getLocalWindVector().length(), 0.0001, 0.002);
+            windMovement = windMovement.multiply(windFunction, windFunction, windFunction);
 
-        double d0 = -0.04F;
-        double d1 = this.isNoGravity() ? 0.0D : (double) d0;
+            this.setDeltaMovement(this.getDeltaMovement().add(windMovement));
+        }
+    }
+
+    protected void tickPaddleInput(){
+        if (getControllingCompartment() != null) {
+            boolean inputUp = this.getControllingCompartment().getInputUp();
+            boolean inputDown = this.getControllingCompartment().getInputDown();
+            boolean inputLeft = this.getControllingCompartment().getInputLeft();
+            boolean inputRight = this.getControllingCompartment().getInputRight();
+            float f = 0.0F;
+
+            if (inputRight != inputLeft && !inputUp && !inputDown) {
+                f += 0.005F;
+            }
+
+            if (inputUp) {
+                f += 0.055F;
+            }
+
+            if (inputDown) {
+                f -= 0.025F;
+            }
+
+            this.setDeltaMovement(this.getDeltaMovement()
+                    .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
+                            Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+            this.setPaddleState(
+                    inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+        }
+    }
+
+    protected void tickFloatBoat() {
+
+        double gravAccel = -0.04F;
+        double d1 = this.isNoGravity() ? 0.0D : (double) gravAccel;
+
         double d2 = 0.0D;
         this.invFriction = 0.05F;
         if (this.oldStatus == Status.IN_AIR && this.status != Status.IN_AIR && this.status != Status.ON_LAND) {
@@ -369,6 +408,7 @@ public class FirmacivBoatEntity extends Entity {
             this.lastYd = 0.0D;
             this.status = Status.IN_WATER;
         } else {
+
             if (this.status == Status.IN_WATER) {
                 d2 = ((this.waterLevel - this.getY()) / (double) this.getBbHeight()) + 0.1;
                 this.invFriction = 0.9F;
@@ -402,12 +442,13 @@ public class FirmacivBoatEntity extends Entity {
                 this.invFriction = modifiedFriction;
             }
 
-
+            tickWindInput();
+            //tickPaddleInput();
+            //tickControlBoat();
 
             Vec3 vec3 = this.getDeltaMovement();
 
             this.setDeltaMovement(vec3.x * (double) this.invFriction, vec3.y + d1, vec3.z * (double) this.invFriction);
-
 
             if (this.getControllingCompartment() != null) {
                 double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
@@ -423,6 +464,7 @@ public class FirmacivBoatEntity extends Entity {
                 }
             }
 
+
             if (d2 > 0.0D) {
                 Vec3 vec31 = this.getDeltaMovement();
                 this.setDeltaMovement(vec31.x, (vec31.y + d2 * 0.06153846016296973D) * 0.75D, vec31.z);
@@ -430,45 +472,47 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
-    protected void controlBoat() {
-        if (this.isVehicle()) {
-            if (getControllingCompartment() != null) {
-                boolean inputUp = this.getControllingCompartment().getInputUp();
-                boolean inputDown = this.getControllingCompartment().getInputDown();
-                boolean inputLeft = this.getControllingCompartment().getInputLeft();
-                boolean inputRight = this.getControllingCompartment().getInputRight();
-                float f = 0.0F;
-                if (inputLeft) {
-                    --this.deltaRotation;
-                }
+    protected void tickControlBoat() {
 
-                if (inputRight) {
-                    ++this.deltaRotation;
-                }
-
-                if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    f += 0.005F;
-                }
-
-                this.setYRot(this.getYRot() + this.deltaRotation);
-                if (inputUp) {
-                    f += 0.055F;
-                }
-
-                if (inputDown) {
-                    f -= 0.025F;
-                }
-
-                this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
-                this.setPaddleState(
-                        inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+        if (getControllingCompartment() != null) {
+            boolean inputUp = this.getControllingCompartment().getInputUp();
+            boolean inputDown = this.getControllingCompartment().getInputDown();
+            boolean inputLeft = this.getControllingCompartment().getInputLeft();
+            boolean inputRight = this.getControllingCompartment().getInputRight();
+            float f = 0.0F;
+            if (inputLeft) {
+                --this.deltaRotation;
             }
+
+            if (inputRight) {
+                ++this.deltaRotation;
+            }
+
+            if (inputRight != inputLeft && !inputUp && !inputDown) {
+                f += 0.005F;
+            }
+
+            this.setYRot(this.getYRot() + this.deltaRotation);
+            if (inputUp) {
+                f += 0.055F;
+            }
+
+            if (inputDown) {
+                f -= 0.025F;
+            }
+
+            this.setDeltaMovement(this.getDeltaMovement()
+                    .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
+                            Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+            this.setPaddleState(
+                    inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+        }
+        if (this.isVehicle()) {
+
         }
     }
 
-    protected void tickParticleEffects(){
+    protected void tickEffects(){
         if (this.status == Status.IN_WATER && !this.getPassengers().isEmpty()) {
             if (Math.abs(this.deltaRotation) > 2) {
                 this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(),
@@ -539,6 +583,22 @@ public class FirmacivBoatEntity extends Entity {
         }
     }
 
+    protected void updateWind(boolean waitForWindUpdateTick){
+        if(tickCount % 40 == 0 || !waitForWindUpdateTick){
+            windVector = Climate.getWindVector(this.level(), this.blockPosition());
+            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
+            double speed = Math.abs(Math.round(windVector.length() * 320));
+            this.windSpeed = speed;
+            this.windAngle = Mth.wrapDegrees(direction);
+        }
+    }
+    public float[] getLocalWindAngleAndSpeed() {
+        return new float[]{(float) windAngle, (float) windSpeed};
+    }
+    public Vec2 getLocalWindVector(){
+        return windVector;
+    }
+
     @Nullable
     protected SoundEvent getPaddleSound() {
         switch (this.getStatus()) {
@@ -584,11 +644,6 @@ public class FirmacivBoatEntity extends Entity {
                 this.paddlePositions[pSide], pLimbSwing) : 0.0F;
     }
 
-    /**
-     * Determines the current status of the boat
-     *
-     * @return The current status of the boat
-     */
     protected Status getStatus() {
         final Status underwater = this.isUnderwater();
 
@@ -647,9 +702,6 @@ public class FirmacivBoatEntity extends Entity {
         return l + 1;
     }
 
-    /**
-     * Decides how much the boat should be gliding on the land (based on any slippery blocks)
-     */
     public float getGroundFriction() {
         AABB aabb = this.getBoundingBox();
         AABB aabb1 = new AABB(aabb.minX, aabb.minY - 0.001D, aabb.minZ, aabb.maxX, aabb.minY, aabb.maxZ);
@@ -716,11 +768,6 @@ public class FirmacivBoatEntity extends Entity {
         return flag;
     }
 
-    /**
-     * Determines if the boat is underwater
-     *
-     * @return {@link Status#UNDER_FLOWING_WATER}, {@link Status#UNDER_WATER} or null
-     */
     @Nullable
     protected Status isUnderwater() {
         final AABB aabb = this.getBoundingBox();
@@ -754,15 +801,12 @@ public class FirmacivBoatEntity extends Entity {
         return isUnderwater ? Status.UNDER_WATER : null;
     }
 
-    /**
-     * Update the boat's speed, based on momentum.
-     */
 
     public final List<Entity> getTruePassengers() {
         final List<Entity> truePassengers = Lists.newArrayList();
 
         for (final Entity vehiclePart : this.getPassengers()) {
-            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof CompartmentEntity compartmentEntity) {
+            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity compartmentEntity) {
                 if (compartmentEntity.isVehicle()) {
                     truePassengers.add(compartmentEntity.getFirstPassenger());
                 }
@@ -771,19 +815,28 @@ public class FirmacivBoatEntity extends Entity {
         return truePassengers;
     }
 
-    public final List<Entity> getCompartments() {
-        final List<Entity> compartments = Lists.newArrayList();
+    public final List<AbstractCompartmentEntity> getCompartments() {
+        final List<AbstractCompartmentEntity> compartments = Lists.newArrayList();
 
         for (final Entity vehiclePart : this.getPassengers()) {
-            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof CompartmentEntity compartmentEntity) {
+            if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity compartmentEntity) {
                 compartments.add(compartmentEntity);
             }
         }
         return compartments;
     }
 
+    public final List<VehiclePartEntity> getVehicleParts() {
+        final List<VehiclePartEntity> vehicleParts = Lists.newArrayList();
+
+        for (final Entity vehiclePart : this.getPassengers()) {
+            vehicleParts.add((VehiclePartEntity) vehiclePart);
+        }
+        return vehicleParts;
+    }
+
     public boolean isBeingTowed() {
-        if (this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.getPassengers().size() == this.getMaxPassengers()) {
             for (int i : this.getCleats()) {
                 if (this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat) {
                     return vehicleCleat.isLeashed() && this.getDeltaMovement().length() != 0;
@@ -797,9 +850,14 @@ public class FirmacivBoatEntity extends Entity {
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
         if (this.hasPassenger(passenger)) {
+            if (!(passenger instanceof VehiclePartEntity)) {
+                passenger.stopRiding();
+            }
+
             float localX = 0.0F;
             float localZ = 0.0F;
             float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+
             if (this.getPassengers().size() > 1) {
                 switch (this.getPassengers().indexOf(passenger)) {
                     case 0 -> {
@@ -812,13 +870,13 @@ public class FirmacivBoatEntity extends Entity {
                     }
                 }
             }
+
             final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
+
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
                 passenger.setYRot(this.getYRot());
-            } else if (!(passenger instanceof VehiclePartEntity)) {
-                super.positionRider(passenger, moveFunction);
             }
         }
     }
@@ -828,42 +886,6 @@ public class FirmacivBoatEntity extends Entity {
                 -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
     }
 
-    @Override
-    public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
-        final Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO,
-                passenger.getBbWidth(), passenger.getYRot());
-        final double d0 = this.getX() + vec3.x;
-        final double d1 = this.getZ() + vec3.z;
-        final BlockPos blockpos = BlockPos.containing(d0, this.getBoundingBox().maxY, d1);
-        final BlockPos blockpos1 = blockpos.below();
-        if (!this.level().isWaterAt(blockpos1)) {
-            final List<Vec3> list = Lists.newArrayList();
-            final double d2 = this.level().getBlockFloorHeight(blockpos);
-            if (DismountHelper.isBlockFloorValid(d2)) {
-                list.add(new Vec3(d0, (double) blockpos.getY() + d2, d1));
-            }
-
-            final double d3 = this.level().getBlockFloorHeight(blockpos1);
-            if (DismountHelper.isBlockFloorValid(d3)) {
-                list.add(new Vec3(d0, (double) blockpos1.getY() + d3, d1));
-            }
-
-            for (final Pose pose : passenger.getDismountPoses()) {
-                for (final Vec3 vec31 : list) {
-                    if (DismountHelper.canDismountTo(this.level(), vec31, passenger, pose)) {
-                        passenger.setPose(pose);
-                        return vec31;
-                    }
-                }
-            }
-        }
-
-        return super.getDismountLocationForPassenger(passenger);
-    }
-
-    /**
-     * Applies this boat's yaw to the given entity. Used to update the orientation of its passenger.
-     */
     protected void clampRotation(final Entity entity) {
         entity.setYBodyRot(this.getYRot());
         float f = Mth.wrapDegrees(entity.getYRot() - this.getYRot());
@@ -948,6 +970,7 @@ public class FirmacivBoatEntity extends Entity {
         this.entityData.set(DATA_ID_HURTDIR, hurtDirection);
     }
 
+    /*
     @Override
     public Vec3 getDeltaMovement() {
         return new Vec3(this.entityData.get(DATA_ID_DELTA_MOVEMENT));
@@ -956,6 +979,7 @@ public class FirmacivBoatEntity extends Entity {
     public Vector3f getDeltaMovementFloat() {
         return this.entityData.get(DATA_ID_DELTA_MOVEMENT);
     }
+
 
     @Override
     public void setDeltaMovement(Vec3 pDeltaMovement) {
@@ -973,13 +997,18 @@ public class FirmacivBoatEntity extends Entity {
         this.setDeltaMovement(new Vec3(pX, pY, pZ));
     }
 
+     */
+
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         double x = pCompound.getDouble("dataMovementX");
         double y = pCompound.getDouble("dataMovementY");
         double z = pCompound.getDouble("dataMovementZ");
         this.setDeltaMovement(x,y,z);
+        this.updateWind(false);
     }
+
+
 
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
@@ -990,7 +1019,7 @@ public class FirmacivBoatEntity extends Entity {
 
     @Override
     protected boolean canAddPassenger(final Entity passenger) {
-        return this.getPassengers().size() < this.getPassengerNumber() && !this.isRemoved();
+        return this.getPassengers().size() < this.getMaxPassengers() && !this.isRemoved() && passenger instanceof VehiclePartEntity;
     }
 
     @Nullable
@@ -1032,17 +1061,18 @@ public class FirmacivBoatEntity extends Entity {
             return null;
         }
 
-        if (!emptyCompartmentEntity.isVehicle() || !(emptyCompartmentEntity.getFirstPassenger() instanceof LocalPlayer))
+        /*
+        if (!emptyCompartmentEntity.isVehicle() || !(emptyCompartmentEntity.getFirstPassenger() instanceof Player))
         {
             return null;
-        }
+        }*/
 
         return emptyCompartmentEntity;
     }
 
     @Nullable
     public Entity getPilotVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(0);
         }
         return null;
@@ -1053,7 +1083,8 @@ public class FirmacivBoatEntity extends Entity {
         return this.status == Status.UNDER_WATER || this.status == Status.UNDER_FLOWING_WATER;
     }
 
-    // Forge: Fix MC-119811 by instantly completing lerp on board
+
+    //TODO remove
     @Override
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);

@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.FirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -33,13 +33,13 @@ public class VehiclePartEntity extends Entity {
                 }
             }
 
-            if (!(this.getVehicle() instanceof FirmacivBoatEntity)) {
+            if (!(this.getVehicle() instanceof AbstractFirmacivBoatEntity)) {
                 return;
             }
-            final FirmacivBoatEntity vehicle = (FirmacivBoatEntity) this.getVehicle();
+            final AbstractFirmacivBoatEntity vehicle = (AbstractFirmacivBoatEntity) this.getVehicle();
 
             if (tickCount < 30) {
-                if (vehicle.getPassengers().size() == vehicle.getPassengerNumber()) {
+                if (vehicle.getPassengers().size() == vehicle.getMaxPassengers()) {
                     for (int[] i : vehicle.getCompartmentRotationsArray()) {
                         if (vehicle.getPassengers().get(i[0]) == this) {
                             this.compartmentRotation = i[1];
@@ -53,7 +53,7 @@ public class VehiclePartEntity extends Entity {
             if (this.getPassengers().isEmpty()) {
                 boolean shouldAddCleatInstead = false;
 
-                if (vehicle.getPassengers().size() == ((FirmacivBoatEntity) this.getVehicle()).getPassengerNumber()) {
+                if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
                     for (int i : vehicle.getCleats()) {
                         if (vehicle.getPassengers().get(i).is(this)) {
 
@@ -102,14 +102,14 @@ public class VehiclePartEntity extends Entity {
     @Override
     protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
 
-        if (!(this.getVehicle() instanceof FirmacivBoatEntity firmacivBoatEntity)) return;
+        if (!(this.getVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity)) return;
 
         final double riderOffset = ((this.isRemoved() ? 0.01 : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
         final Vec3 vec3 = (new Vec3(0, 0, 0)).yRot((float) (-this.getYRot() * Math.PI / 180 - Math.PI / 2));
         moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
         passenger.setPos(this.getX() + vec3.x, this.getY() + riderOffset, this.getZ() + vec3.z);
 
-        if ((passenger instanceof CompartmentEntity || passenger instanceof VehicleCleatEntity)) {
+        if ((passenger instanceof AbstractCompartmentEntity || passenger instanceof VehicleCleatEntity)) {
             if (firmacivBoatEntity.isBeingTowed()) {
             } else {
                 passenger.setYRot(passenger.getYRot() + firmacivBoatEntity.getDeltaRotation());

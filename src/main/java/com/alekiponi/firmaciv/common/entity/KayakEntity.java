@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public class KayakEntity extends FirmacivBoatEntity {
+public class KayakEntity extends AbstractFirmacivBoatEntity {
 
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(KayakEntity.class,
             EntityDataSerializers.INT);
@@ -26,7 +26,7 @@ public class KayakEntity extends FirmacivBoatEntity {
 
     protected final float PASSENGER_SIZE_LIMIT = 0.6F;
 
-    public KayakEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+    public KayakEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
     }
 
@@ -38,7 +38,7 @@ public class KayakEntity extends FirmacivBoatEntity {
     @Nullable
     @Override
     public Entity getPilotVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(0);
         }
 
@@ -46,7 +46,7 @@ public class KayakEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getPassengerNumber() {
+    public int getMaxPassengers() {
         return this.PASSENGER_NUMBER;
     }
 
@@ -61,7 +61,7 @@ public class KayakEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    protected void controlBoat() {
+    protected void tickControlBoat() {
         if (this.isVehicle() && this.getControllingPassenger() instanceof Player player) {
             if (getControllingCompartment() != null) {
                 boolean inputUp = this.getControllingCompartment().getInputUp();

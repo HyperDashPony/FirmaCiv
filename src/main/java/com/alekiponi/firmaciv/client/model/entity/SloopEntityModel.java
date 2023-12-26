@@ -3,9 +3,8 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Paste this class into your mod and generate all required imports
 
 
-import com.alekiponi.firmaciv.common.entity.FirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.SloopEntity;
-import com.ibm.icu.text.Normalizer2;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -14,7 +13,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
-public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<T> {
+public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     private final ModelPart transom_port;
     private final ModelPart transom_starboard;
@@ -487,8 +486,8 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
 
         mainsail_main.yRot = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
-        float windWorldAngle = pBoat.getWindAngleAndSpeed()[0];
-        float windSpeed = pBoat.getWindAngleAndSpeed()[1] / 16f;
+        float windWorldAngle = pBoat.getLocalWindAngleAndSpeed()[0];
+        float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] / 16f;
         float sailWorldAngle = pBoat.getSailWorldRotation();
         int airFoilDirection = 1;
 
@@ -560,8 +559,8 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     private static void animateJibsail(SloopEntity pBoat, float pPartialTicks, ModelPart jibsail_main, ModelPart[][] sails, float mastRotation, int animationTick) {
         ModelPart jibsail = jibsail_main.getChild("jibsail");
 
-        float windWorldAngle = pBoat.getWindAngleAndSpeed()[0];
-        float windSpeed = pBoat.getWindAngleAndSpeed()[1] / 16f;
+        float windWorldAngle = pBoat.getLocalWindAngleAndSpeed()[0];
+        float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] / 16f;
         float sailWorldAngle = Mth.wrapDegrees(pBoat.getYRot());
         int airFoilDirection = 1;
 

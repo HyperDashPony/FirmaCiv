@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class WorkbenchCompartmentEntity extends CompartmentEntity implements HasCustomInventoryScreen {
+public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implements HasCustomInventoryScreen {
     private static final Component CONTAINER_TITLE = Component.translatable("container.crafting");
 
     public WorkbenchCompartmentEntity(final EntityType<?> entityType, final Level level) {
