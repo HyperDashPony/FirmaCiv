@@ -4,6 +4,8 @@ import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.SloopEntity;
+import com.alekiponi.firmaciv.network.PacketHandler;
+import com.alekiponi.firmaciv.network.ServerboundCompartmentInputPacket;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import com.google.common.collect.Lists;
 import net.dries007.tfc.common.entities.predator.Predator;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -206,19 +209,25 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             }
         }
 
+        if(!this.level().isClientSide() && !(this.getFirstPassenger() instanceof Player)){
+            this.setInputLeft(false);
+            this.setInputRight(false);
+            this.setInputUp(false);
+            this.setInputDown(false);
+        }
+
         super.tick();
+
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         this.setPassengerRideTick(pCompound.getLong("passengerRideTick"));
 
-        /*
         pCompound.getBoolean("inputLeft");
         pCompound.getBoolean("inputRight");
         pCompound.getBoolean("inputUp");
         pCompound.getBoolean("inputDown");
-         */
 
         super.readAdditionalSaveData(pCompound);
     }
@@ -227,12 +236,11 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected void addAdditionalSaveData(CompoundTag pCompound) {
         pCompound.putLong("passengerRideTick", this.getPassengerRideTick());
 
-        /*
         pCompound.putBoolean("inputLeft", this.getInputLeft());
         pCompound.putBoolean("inputRight", this.getInputLeft());
         pCompound.putBoolean("inputUp", this.getInputLeft());
         pCompound.putBoolean("inputDown", this.getInputLeft());
-         */
+
 
         super.readAdditionalSaveData(pCompound);
     }
@@ -249,10 +257,35 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
             final boolean inputDown) {
-        this.setInputLeft(inputLeft);
-        this.setInputRight(inputRight);
-        this.setInputUp(inputUp);
-        this.setInputDown(inputDown);
+        if(this.getFirstPassenger() instanceof Player player){
+            boolean shouldUpdateServer = false;
+            if(this.getInputLeft() != inputLeft){
+                this.setInputLeft(inputLeft);
+                shouldUpdateServer = true;
+            }
+            if(this.getInputRight() != inputRight){
+                this.setInputRight(inputRight);
+                shouldUpdateServer = true;
+            }
+            if(this.getInputUp() != inputUp){
+                this.setInputUp(inputUp);
+                shouldUpdateServer = true;
+            }
+            if(this.getInputDown() != inputDown){
+                this.setInputDown(inputDown);
+                shouldUpdateServer = true;
+            }
+            if(this.level().isClientSide() && shouldUpdateServer){
+                PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(inputLeft, inputRight, inputUp, inputDown));
+            }
+        } else {
+            this.setInputLeft(false);
+            this.setInputRight(false);
+            this.setInputUp(false);
+            this.setInputDown(false);
+            PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(false, false, false, false));
+        }
+
     }
 
     public boolean getInputLeft() {
@@ -292,7 +325,6 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         this.entityData.set(DATA_ID_INPUT_DOWN, input);
     }
 
-
     @Override
     public void onPassengerTurned(final Entity entity) {
         this.clampRotation(entity);
@@ -326,7 +358,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
         if (newCompartment != null) {
             swapCompartments(newCompartment);
-            newCompartment.setYRot(newCompartment.ridingThisPart.getYRot() + ridingThisPart.compartmentRotation);
+            newCompartment.setYRot(newCompartment.ridingThisPart.getYRot() + ridingThisPart.getCompartmentRotation());
             newCompartment.setBlockTypeItem(item.split(1));
             if(newCompartment.getBlockTypeItem().is(FirmacivTags.Items.ANVILS)){
                 this.playSound(SoundEvents.METAL_PLACE, 1.0F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
@@ -346,6 +378,8 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     @Override
     public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
+        double y = this.getTrueVehicle().getDismountLocationForPassenger(passenger).y();
+
         final Vec3 escapeVector = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO,
                 passenger.getBbWidth(), passenger.getYRot());
 
@@ -376,7 +410,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                 if (!DismountHelper.canDismountTo(this.level(), output, passenger, dismountPose)) continue;
 
                 passenger.setPose(dismountPose);
-                return output;
+                return new Vec3(output.x, y, output.z);
             }
         }
 

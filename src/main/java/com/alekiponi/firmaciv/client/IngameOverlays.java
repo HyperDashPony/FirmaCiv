@@ -150,15 +150,15 @@ public enum IngameOverlays {
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
-                stack.scale(1.0F, 1.0F, 1.0F);
-                stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
-                if ((float) height % 2.0 != 0) {
-                    stack.translate(0f, 0.5f, 0.0f);
-                }
+
 
 
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity && emptyCompartmentEntity.isPassenger()) {
-
+                    stack.scale(1.0F, 1.0F, 1.0F);
+                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
+                    if ((float) height % 2.0 != 0) {
+                        stack.translate(0f, 0.5f, 0.0f);
+                    }
                     if (emptyCompartmentEntity.getTrueVehicle() != null) {
                         if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger()
                                 .is(emptyCompartmentEntity)) {

@@ -1,8 +1,10 @@
 package com.alekiponi.firmaciv.client.render.entity;
 
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -11,6 +13,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,6 +33,13 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
                        MultiBufferSource pBuffer, int pPackedLight) {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
+        float rotation = 0f;
+        if(pEntity.getTrueVehicle() != null && pEntity.getVehicle() instanceof VehiclePartEntity vehiclePart && pEntity.tickCount < 2){
+            rotation = pEntity.getTrueVehicle().getYRot() + vehiclePart.getCompartmentRotation();
+        } else {
+            rotation = pEntityYaw;
+        }
+
         if (!(pEntity instanceof EmptyCompartmentEntity)) {
             BlockState blockstate = null;
             if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
@@ -37,7 +47,7 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
             }
             if (blockstate != null) {
                 pPoseStack.pushPose();
-                pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - pEntityYaw));
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - rotation));
                 pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
                 if(pEntity.getTrueVehicle() instanceof CanoeEntity){
                     pPoseStack.scale(0.6F, 0.6F, 0.6F);

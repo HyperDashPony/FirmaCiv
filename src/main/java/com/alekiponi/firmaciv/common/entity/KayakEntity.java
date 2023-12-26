@@ -75,18 +75,18 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
                 }
 
                 if (inputLeft) {
-                    --this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()-1);
                 }
 
                 if (inputRight) {
-                    ++this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()+1);
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
                     f += 0.0025F * paddleMultiplier;
                 }
 
-                this.setYRot(this.getYRot() + this.deltaRotation);
+                this.setYRot(this.getYRot() + this.getDeltaRotation());
 
                 if (inputUp) {
                     f += 0.0275F * paddleMultiplier;

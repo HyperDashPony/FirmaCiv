@@ -76,18 +76,18 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
                 }
 
                 if (inputLeft) {
-                    --this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()-1);
                 }
 
                 if (inputRight) {
-                    ++this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()+1);
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
                     f += 0.0025F * paddleMultiplier;
                 }
 
-                this.setYRot(this.getYRot() + this.deltaRotation);
+                this.setYRot(this.getYRot() + this.getDeltaRotation());
 
                 if (inputUp) {
                     f += 0.0275F * paddleMultiplier;
@@ -104,6 +104,8 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
             }
 
         }
+
+
     }
 
     @Nullable
@@ -140,11 +142,11 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
                     case 2 -> {
                         localX = 1.0f;
                         localZ = 0.0f;
-                        localY += 0.2f;
+                        localY += 0.28f;
                     }
                 }
             }
-            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
+            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {

@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.GameRules;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,6 +28,13 @@ public class ForgeEventHandler {
                 rules.getRule(GameRules.RULE_REDUCEDDEBUGINFO).set(true, server);
             }
 
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
+        if(event.getEntity().getVehicle() instanceof EmptyCompartmentEntity){
+            event.getEntity().stopRiding();
         }
     }
 

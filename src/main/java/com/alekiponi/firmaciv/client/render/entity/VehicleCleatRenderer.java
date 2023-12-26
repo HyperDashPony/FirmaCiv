@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.client.render.entity;
 
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -64,9 +65,15 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
         Entity entity = pEntity.getLeashHolder();
         if (entity != null) {
+            float rotation = 0f;
+            if(pEntity.getVehicle().getVehicle() instanceof AbstractFirmacivBoatEntity trueVehicle){
+                rotation = trueVehicle.getYRot();
+            } else {
+                rotation = pEntityYaw;
+            }
             pPoseStack.pushPose();
             pPoseStack.scale(-0.8F, -0.8F, 0.8F);
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(pEntityYaw));
+            pPoseStack.mulPose(Axis.YP.rotationDegrees(rotation));
             if (pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity) {
                 pPoseStack.scale(0.8F, 0.8F, 0.8F);
                 pPoseStack.translate(-0.25f, -0.35f, 0.f);

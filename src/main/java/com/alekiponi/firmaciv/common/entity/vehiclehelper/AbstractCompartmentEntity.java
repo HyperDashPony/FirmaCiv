@@ -90,7 +90,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
     @Nullable
     public AbstractFirmacivBoatEntity getTrueVehicle() {
-        if (ridingThisPart != null && ridingThisPart.isPassenger() && ridingThisPart.getVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity) {
+        if(this.getRootVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity){
             return firmacivBoatEntity;
         }
         return null;
@@ -170,7 +170,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
             this.setXRot(this.getXRot() + (float) (this.lerpXRot - (double) this.getXRot()) / (float) this.lerpSteps);
             --this.lerpSteps;
             this.setPos(d0, d1, d2);
-            this.setRot(this.getYRot(), this.getXRot());
+            //this.setRot(this.getYRot(), this.getXRot());
         }
     }
 

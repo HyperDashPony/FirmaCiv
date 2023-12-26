@@ -116,7 +116,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
                     }
                 }
             }
-            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
+            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
@@ -160,7 +160,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
                     paddleMultiplier = 1.6f;
                     if (this.getOars().getCount() == 1) {
                         if (this.getDeltaMovement().length() > 0.1f) {
-                            ++this.deltaRotation;
+                            this.setDeltaRotation(this.getDeltaRotation()+1);
                         }
 
                     }
@@ -168,18 +168,18 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
 
                 float f = 0.0F;
                 if (inputLeft) {
-                    --this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()-1);
                 }
 
                 if (inputRight) {
-                    ++this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()+1);
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
                     f += 0.0025F * paddleMultiplier;
                 }
 
-                this.setYRot(this.getYRot() + this.deltaRotation);
+                this.setYRot(this.getYRot() + this.getDeltaRotation());
 
                 if (inputUp) {
                     f += 0.0275F * paddleMultiplier;
