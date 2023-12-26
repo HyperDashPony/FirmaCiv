@@ -9,7 +9,8 @@
   ],
   "client": [
     "client.ClientPacketListenerMixin",
-    "client.LocalPlayerMixin"
+    "client.LocalPlayerMixin",
+    "client.CameraMixin"
   ],
   "injectors": {
     "defaultRequire": 1

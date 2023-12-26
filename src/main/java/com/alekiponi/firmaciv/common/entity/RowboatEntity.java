@@ -146,15 +146,6 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
                 boolean inputDown = this.getControllingCompartment().getInputDown();
                 boolean inputLeft = this.getControllingCompartment().getInputLeft();
                 boolean inputRight = this.getControllingCompartment().getInputRight();
-                if (getControllingPassenger() instanceof LocalPlayer) {
-                    Minecraft mc = Minecraft.getInstance();
-                    if (mc.options.getCameraType() != CameraType.THIRD_PERSON_FRONT) {
-                        inputDown = this.getControllingCompartment().getInputUp();
-                        inputUp = this.getControllingCompartment().getInputDown();
-                        inputLeft = this.getControllingCompartment().getInputRight();
-                        inputRight = this.getControllingCompartment().getInputLeft();
-                    }
-                }
                 float paddleMultiplier = 1.0f;
                 if (this.getOars().getCount() > 0) {
                     paddleMultiplier = 1.6f;
@@ -162,11 +153,10 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
                         if (this.getDeltaMovement().length() > 0.1f) {
                             this.setDeltaRotation(this.getDeltaRotation()+1);
                         }
-
                     }
                 }
 
-                float f = 0.0F;
+                float acceleration = 0.0F;
                 if (inputLeft) {
                     this.setDeltaRotation(this.getDeltaRotation()-1);
                 }
@@ -176,22 +166,22 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    f += 0.0025F * paddleMultiplier;
+                    acceleration += 0.0025F * paddleMultiplier;
                 }
 
                 this.setYRot(this.getYRot() + this.getDeltaRotation());
 
                 if (inputUp) {
-                    f += 0.0275F * paddleMultiplier;
+                    acceleration += 0.0275F * paddleMultiplier;
                 }
 
                 if (inputDown) {
-                    f -= 0.0125F * paddleMultiplier;
+                    acceleration -= 0.0125F * paddleMultiplier;
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
                 this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
         }

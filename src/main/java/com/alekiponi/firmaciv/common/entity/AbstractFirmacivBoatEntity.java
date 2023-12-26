@@ -336,11 +336,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         this.tickFloatBoat();
         this.tickControlBoat();
         if (this.isControlledByLocalInstance()) {
-            if (!(this.getFirstPassenger() instanceof Player)) {
-                this.setPaddleState(false, false);
-            }
-
-
             if (this.level().isClientSide()) {
 
                 this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
