@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -51,6 +52,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         return this.PASSENGER_NUMBER;
     }
 
+
     @Override
     public int[] getCleats() {
         return this.CLEATS;
@@ -69,14 +71,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public int[][] getCompartmentRotationsArray() {
         return COMPARTMENT_ROTATIONS;
-    }
-
-    @Override
-    public AABB getBoundingBoxForCulling() {
-        float bbRadius = 10f;
-        Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
-        Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
-        return new AABB(startingPoint, endingPoint);
     }
 
     // sailing stuff
@@ -193,6 +187,21 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         if(this.level().isClientSide()){
             sailAnimationTicks = this.tickCount;
         }
+
+        //TODO this is setup code for distance sail LODs
+
+        //TODO get the player from the minecraft instance instead
+        /*
+        if(this.level().isClientSide()){
+            Player nearestPlayer = this.level().getNearestPlayer(this, 32*16);
+            if(nearestPlayer != null){
+                float distance = this.distanceTo(nearestPlayer);
+                if(distance > 4*16){
+                    //render the simple sail instead
+                }
+            }
+        }*/
+
     }
 
     @Override

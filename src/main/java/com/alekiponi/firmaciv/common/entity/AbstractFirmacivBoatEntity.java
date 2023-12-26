@@ -987,4 +987,12 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
     public ItemStack getPickResult() {
         return new ItemStack(this.getDropItem());
     }
+
+    @Override
+    public AABB getBoundingBoxForCulling() {
+        float bbRadius = this.getBbWidth()*2+1;
+        Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
+        Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
+        return new AABB(startingPoint, endingPoint);
+    }
 }
