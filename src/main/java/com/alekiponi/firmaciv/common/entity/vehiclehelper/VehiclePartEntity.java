@@ -28,7 +28,7 @@ public class VehiclePartEntity extends Entity {
     @Override
     public void tick() {
 
-        //serverside stuff
+        // Most of vehiclepart's ticking actions should only be on the server
         if(!this.level().isClientSide()) {
             if (!this.isPassenger()) {
                 selfDestructTicks++;

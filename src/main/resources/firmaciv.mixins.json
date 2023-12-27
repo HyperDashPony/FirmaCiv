@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "minecraft.PlayerModelMixin",
-    "minecraft.MobMixin"
+    "minecraft.MobMixin",
+    "minecraft.PlayerMixin"
   ],
   "client": [
     "client.ClientPacketListenerMixin",

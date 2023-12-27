@@ -186,12 +186,13 @@ public abstract class AbstractCompartmentEntity extends Entity {
     }
 
     protected SoundEvent getHurtSound(final DamageSource damageSource) {
+        damageSource.getEntity();
         return SoundEvents.WOOD_HIT;
     }
 
     protected void playHurtSound(final DamageSource pSource) {
         SoundEvent soundevent = this.getHurtSound(pSource);
-        this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
+        this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.05F + 0.35F);
     }
 
     /**
@@ -223,12 +224,16 @@ public abstract class AbstractCompartmentEntity extends Entity {
         this.setHurtDir(-this.getHurtDir());
         this.setHurtTime(10);
         this.setDamage(this.getDamage() + amount * 8);
+
         this.markHurt();
         this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
         final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
 
         // Don't kill
-        if (!instantKill && !(this.getDamage() > 10)) return true;
+        if (!instantKill && !(this.getDamage() > 10)) {
+            this.playHurtSound(damageSource);
+            return true;
+        }
 
         if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             this.destroy(damageSource);

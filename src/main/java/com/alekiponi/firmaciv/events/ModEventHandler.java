@@ -18,7 +18,6 @@ public class ModEventHandler {
 
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event) {
-        //event.enqueueWork(PacketHandler::init);
         PacketHandler.init();
     }
 }

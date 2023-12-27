@@ -55,7 +55,7 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<VehiclePartEntity>> VEHICLE_PART_ENTITY = ENTITY_TYPES.register(
             "vehicle_part",
-            () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.025F, 0.025F)
+            () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.00F, 0.00F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_part").toString()));
 
     public static final RegistryObject<EntityType<VehicleCleatEntity>> VEHICLE_CLEAT_ENTITY = ENTITY_TYPES.register(
@@ -72,9 +72,12 @@ public final class FirmacivEntities {
      */
 
 
+    /*
     public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
             () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(4F, 0.75F).clientTrackingRange(32)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
+
+     */
 
 
 

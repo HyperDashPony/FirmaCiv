@@ -146,12 +146,10 @@ public enum IngameOverlays {
         if (mc.player != null) {
             Player player = mc.player;
             if (setup(gui, mc)) {
-                Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 5f);
+                Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 3f);
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
-
-
 
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity && emptyCompartmentEntity.isPassenger()) {
                     stack.scale(1.0F, 1.0F, 1.0F);

@@ -41,6 +41,7 @@ public class Firmaciv {
         MinecraftForge.EVENT_BUS.register(this);
         eventBus.addListener(this::addCreative);
         FirmacivConfig.init();
+
         if (FMLEnvironment.dist == Dist.CLIENT) {
             FirmacivClientEvents.init();
         }
