@@ -47,6 +47,7 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
     @Override
     public void render(RowboatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack poseStack,
             MultiBufferSource pBuffer, int pPackedLight) {
+
         poseStack.pushPose();
         poseStack.translate(0.0D, 0.4375D, 0.0D);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
@@ -68,6 +69,11 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         rowboatEntityModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
+        if(pEntity.tickCount < 1){
+            poseStack.popPose();
+            super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
+            return;
+        }
         rowboatEntityModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F,
                 1.0F, 1.0F, 1.0F);
         if (pEntity.getOars().getCount() >= 1) {

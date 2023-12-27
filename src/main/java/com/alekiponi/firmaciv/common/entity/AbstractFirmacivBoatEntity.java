@@ -323,7 +323,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
 
         this.checkInsideBlocks();
 
-        this.updateWind(true);
+        //this.updateWind(true);
 
     }
 
@@ -385,7 +385,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
                 this.invFriction = modifiedFriction;
             }
 
-            tickWindInput();
+            //tickWindInput();
 
             Vec3 vec3 = this.getDeltaMovement();
 

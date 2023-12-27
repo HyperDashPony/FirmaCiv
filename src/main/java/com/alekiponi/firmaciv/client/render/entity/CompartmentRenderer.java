@@ -40,6 +40,10 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
             rotation = pEntityYaw;
         }
 
+        if(pEntity.tickCount < 2){
+            return;
+        }
+
         if (!(pEntity instanceof EmptyCompartmentEntity)) {
             BlockState blockstate = null;
             if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {

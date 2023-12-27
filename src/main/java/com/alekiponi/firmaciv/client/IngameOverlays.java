@@ -175,8 +175,9 @@ public enum IngameOverlays {
                             graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
                         }
                     }
-                } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity) {
-
+                } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity  && vehicleCleatEntity.isPassenger()) {
+                    stack.scale(1.0F, 1.0F, 1.0F);
+                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
                     if (vehicleCleatEntity.getVehicle().getVehicle() != null) {
                         graphics.blit(TEXTURE, 0, 0, 54, 0, 9, 9);
                     }

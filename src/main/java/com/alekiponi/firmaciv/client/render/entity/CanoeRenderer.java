@@ -70,6 +70,11 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         canoeModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(canoeModel.renderType(getTextureLocation(pEntity)));
+        if(pEntity.tickCount < 1){
+            pMatrixStack.popPose();
+            super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+            return;
+        }
         canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 

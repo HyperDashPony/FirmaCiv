@@ -55,7 +55,6 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
             poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
-
         Pair<ResourceLocation, SloopEntityModel> pair = sloopResources;
         ResourceLocation resourcelocation = pair.getFirst();
         SloopEntityModel sloopModel = pair.getSecond();
@@ -65,6 +64,11 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         sloopModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(sloopModel.renderType(resourcelocation));
+        if(pEntity.tickCount < 1){
+            poseStack.popPose();
+            super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
+            return;
+        }
         sloopModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 
