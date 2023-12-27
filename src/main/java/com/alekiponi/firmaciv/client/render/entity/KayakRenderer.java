@@ -45,14 +45,7 @@ public class KayakRenderer extends EntityRenderer<KayakEntity> {
         }
 
         if (f > 0.0F) {
-            pMatrixStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
-        }
-
-        float f2 = pEntity.getBubbleAngle(pPartialTicks);
-        if (!Mth.equal(f2, 0.0F)) {
-            pMatrixStack.mulPose(
-                    (new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F),
-                            1.0F, 0.0F, 1.0F));
+            pMatrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
         Pair<ResourceLocation, KayakEntityModel> pair = kayakResources;

@@ -3,7 +3,7 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Paste this class into your mod and generate all required imports
 
 
-import com.alekiponi.firmaciv.common.entity.FirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -13,7 +13,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class OutriggerEntityModel<T extends FirmacivBoatEntity> extends EntityModel<T> {
+public class OutriggerEntityModel<T extends AbstractFirmacivBoatEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             new ResourceLocation("modid", "outrigger_canoe_v2"), "main");

@@ -3,9 +3,8 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Paste this class into your mod and generate all required imports
 
 
-import com.alekiponi.firmaciv.common.entity.FirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.SloopEntity;
-import com.ibm.icu.text.Normalizer2;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -14,7 +13,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
-public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<T> {
+public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     private final ModelPart transom_port;
     private final ModelPart transom_starboard;
@@ -38,6 +37,7 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     private final ModelPart jibsail_main;
     private final ModelPart forestay;
     private final ModelPart shrouds;
+    private final ModelPart rudder;
 
 
     public SloopEntityModel() {
@@ -64,6 +64,7 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         this.waterocclusion = root.getChild("waterocclusion");
         this.forestay = root.getChild("forestay");
         this.shrouds = root.getChild("shrouds");
+        this.rudder = root.getChild("rudder");
 
     }
 
@@ -170,12 +171,12 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
         PartDefinition cube_r20 = keel.addOrReplaceChild("cube_r20", CubeListBuilder.create().texOffs(218, 266).addBox(-2.7926F, -90.5F, -1.0F, 12.0F, 36.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -71.5F, -54.7926F, 0.0F, -1.5708F, 3.1416F));
 
-        PartDefinition rudder = keel.addOrReplaceChild("rudder", CubeListBuilder.create(), PartPose.offset(0.5F, -30.8441F, 15.4742F));
+        PartDefinition rudder = partdefinition.addOrReplaceChild("rudder", CubeListBuilder.create(), PartPose.offset(0.0F, 11.1559F, 47.4742F));
 
-        PartDefinition cube_r21 = rudder.addOrReplaceChild("cube_r21", CubeListBuilder.create().texOffs(133, 363).addBox(-1.0F, -11.0F, -0.5F, 2.0F, 14.0F, 1.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r21 = rudder.addOrReplaceChild("cube_r17", CubeListBuilder.create().texOffs(133, 363).addBox(-1.0F, -11.0F, -0.5F, 2.0F, 14.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(131, 361).addBox(-1.0F, 3.0F, -1.5F, 2.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -8.5183F, -2.7718F, 1.5708F, 0.0F, -1.5708F));
 
-        PartDefinition cube_r22 = rudder.addOrReplaceChild("cube_r22", CubeListBuilder.create().texOffs(132, 362).addBox(-5.5F, -23.25F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.0F))
+        PartDefinition cube_r22 = rudder.addOrReplaceChild("cube_r18", CubeListBuilder.create().texOffs(132, 362).addBox(-5.5F, -23.25F, -1.0F, 2.0F, 11.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(132, 362).addBox(-13.5F, -12.25F, -1.0F, 10.0F, 36.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 13.2985F, 9.965F, 1.5708F, -1.3963F, -1.5708F));
 
         PartDefinition sidewall_starboard = partdefinition.addOrReplaceChild("sidewall_starboard", CubeListBuilder.create(), PartPose.offset(35.5F, 16.0F, 4.0F));
@@ -487,8 +488,8 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
 
         mainsail_main.yRot = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
-        float windWorldAngle = pBoat.getWindAngleAndSpeed()[0];
-        float windSpeed = pBoat.getWindAngleAndSpeed()[1] / 16f;
+        float windWorldAngle = pBoat.getLocalWindAngleAndSpeed()[0];
+        float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] / 16f;
         float sailWorldAngle = pBoat.getSailWorldRotation();
         int airFoilDirection = 1;
 
@@ -541,6 +542,9 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
                 } else {
                     mixFunction = windDifference / 30f;
                 }
+                if(windSpeed < 1){
+                    mixFunction*=0.5;
+                }
 
                 if (mixFunction >= 0.9f) {
                     luffFunction = (float) (5 * Math.sin(0.1 * ((zindex * mainsail_section_widths) + animationTickFloat))) * falloff;
@@ -560,8 +564,8 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
     private static void animateJibsail(SloopEntity pBoat, float pPartialTicks, ModelPart jibsail_main, ModelPart[][] sails, float mastRotation, int animationTick) {
         ModelPart jibsail = jibsail_main.getChild("jibsail");
 
-        float windWorldAngle = pBoat.getWindAngleAndSpeed()[0];
-        float windSpeed = pBoat.getWindAngleAndSpeed()[1] / 16f;
+        float windWorldAngle = pBoat.getLocalWindAngleAndSpeed()[0];
+        float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] / 16f;
         float sailWorldAngle = Mth.wrapDegrees(pBoat.getYRot());
         int airFoilDirection = 1;
 
@@ -624,6 +628,10 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
 
     }
 
+    private static void animateRudder(SloopEntity pBoat, float pPartialTicks, ModelPart rudder, float rudderRotation) {
+        rudder.yRot = Mth.rotLerp(pPartialTicks, rudder.yRot, rudderRotation);
+    }
+
     public ModelPart getWaterocclusion() {
         return this.waterocclusion;
     }
@@ -637,8 +645,9 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         if (jibSailParts[0][0] == null) {
             jibSailParts = getJibsailParts(this);
         }
-        animateMainsail(pEntity, limbSwing, mainsail_main, mainSailParts, (float) Math.toRadians(pEntity.getSailRotation()), pEntity.getSailAnimationTicks());
-        animateJibsail(pEntity, limbSwing, jibsail_main, jibSailParts, (float) Math.toRadians(pEntity.getSailRotation()), pEntity.getSailAnimationTicks());
+        animateMainsail(pEntity, limbSwing, mainsail_main, mainSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.getSailAnimationTicks());
+        animateJibsail(pEntity, limbSwing, jibsail_main, jibSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.getSailAnimationTicks());
+        animateRudder(pEntity, limbSwing, rudder, (float) Math.toRadians(pEntity.getRudderRotation()));
     }
 
     private ModelPart[][] mainSailParts = new ModelPart[mainsail_horizontal_sections][mainsail_vertical_sections];
@@ -707,5 +716,6 @@ public class SloopEntityModel<T extends FirmacivBoatEntity> extends EntityModel<
         forestay.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         jibsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         shrouds.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        rudder.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }

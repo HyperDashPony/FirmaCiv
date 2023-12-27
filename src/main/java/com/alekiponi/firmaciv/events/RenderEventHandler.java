@@ -14,10 +14,14 @@ import net.minecraftforge.fml.common.Mod;
 
 
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public final class RenderEvents {
+public final class RenderEventHandler {
 
-    private RenderEvents() {
+
+
+    private RenderEventHandler() {
     }
+
+
 
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -42,9 +46,9 @@ public final class RenderEvents {
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), VehiclePartRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
 
-        event.registerEntityRenderer(FirmacivEntities.OUTRIGGER.get(), OutriggerRenderer::new);
+        //event.registerEntityRenderer(FirmacivEntities.OUTRIGGER.get(), OutriggerRenderer::new);
 
-        event.registerEntityRenderer(FirmacivEntities.SLOOP.get(), SloopRenderer::new);
+        //event.registerEntityRenderer(FirmacivEntities.SLOOP.get(), SloopRenderer::new);
 
     }
 

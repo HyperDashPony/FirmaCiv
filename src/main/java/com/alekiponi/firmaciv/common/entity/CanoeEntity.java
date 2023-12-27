@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class CanoeEntity extends FirmacivBoatEntity {
+public class CanoeEntity extends AbstractFirmacivBoatEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
             EntityDataSerializers.INT);
     public final int PASSENGER_NUMBER = 3;
@@ -27,7 +27,7 @@ public class CanoeEntity extends FirmacivBoatEntity {
     protected final float DAMAGE_RECOVERY = 2.0f;
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
 
-    public CanoeEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+    public CanoeEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
 
         final String name = entityType.toString().split("canoe.")[1];
@@ -45,9 +45,10 @@ public class CanoeEntity extends FirmacivBoatEntity {
         return CLEATS;
     }
 
+
     @Override
-    protected void controlBoat() {
-        if (this.isVehicle() && this.getControllingPassenger() instanceof Player player) {
+    protected void tickControlBoat() {
+        if (this.isVehicle()) {
             if (getControllingCompartment() != null) {
                 boolean inputUp = this.getControllingCompartment().getInputUp();
                 boolean inputDown = this.getControllingCompartment().getInputDown();
@@ -55,14 +56,19 @@ public class CanoeEntity extends FirmacivBoatEntity {
                 boolean inputRight = this.getControllingCompartment().getInputRight();
                 float f = 0.0f;
                 float paddleMultiplier = 1.0f;
-                if (player.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
-                    paddleMultiplier = 1.6f;
+                if(this.getControllingPassenger() instanceof Player player){
+                    if (player.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
+                        paddleMultiplier = 1.6f;
+                    }
                 }
+
 
                 int i = 0;
                 for (Entity entity : this.getTruePassengers()) {
-                    if (entity instanceof Player) {
-                        i++;
+                    if (entity instanceof Player player2) {
+                        if (player2.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
+                            i++;
+                        }
                     }
                 }
                 if (i == 2) {
@@ -70,18 +76,18 @@ public class CanoeEntity extends FirmacivBoatEntity {
                 }
 
                 if (inputLeft) {
-                    --this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()-1);
                 }
 
                 if (inputRight) {
-                    ++this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()+1);
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
                     f += 0.0025F * paddleMultiplier;
                 }
 
-                this.setYRot(this.getYRot() + this.deltaRotation);
+                this.setYRot(this.getYRot() + this.getDeltaRotation());
 
                 if (inputUp) {
                     f += 0.0275F * paddleMultiplier;
@@ -98,12 +104,14 @@ public class CanoeEntity extends FirmacivBoatEntity {
             }
 
         }
+
+
     }
 
     @Nullable
     @Override
     public Entity getPilotVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(1);
         }
 
@@ -134,11 +142,11 @@ public class CanoeEntity extends FirmacivBoatEntity {
                     case 2 -> {
                         localX = 1.0f;
                         localZ = 0.0f;
-                        localY += 0.2f;
+                        localY += 0.28f;
                     }
                 }
             }
-            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
+            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
@@ -163,7 +171,7 @@ public class CanoeEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getPassengerNumber() {
+    public int getMaxPassengers() {
         return PASSENGER_NUMBER;
     }
 

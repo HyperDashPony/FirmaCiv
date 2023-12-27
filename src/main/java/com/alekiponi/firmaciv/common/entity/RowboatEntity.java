@@ -26,7 +26,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class RowboatEntity extends FirmacivBoatEntity {
+public class RowboatEntity extends AbstractFirmacivBoatEntity {
 
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(RowboatEntity.class,
             EntityDataSerializers.INT);
@@ -42,7 +42,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
 
-    public RowboatEntity(final EntityType<? extends FirmacivBoatEntity> entityType, final Level level) {
+    public RowboatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
 
         final String name = entityType.toString().split("rowboat.")[1];
@@ -56,7 +56,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getPassengerNumber() {
+    public int getMaxPassengers() {
         return this.PASSENGER_NUMBER;
     }
 
@@ -116,7 +116,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
                     }
                 }
             }
-            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
+            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
@@ -139,59 +139,49 @@ public class RowboatEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    protected void controlBoat() {
+    protected void tickControlBoat() {
         if (this.isVehicle()) {
             if (getControllingCompartment() != null) {
                 boolean inputUp = this.getControllingCompartment().getInputUp();
                 boolean inputDown = this.getControllingCompartment().getInputDown();
                 boolean inputLeft = this.getControllingCompartment().getInputLeft();
                 boolean inputRight = this.getControllingCompartment().getInputRight();
-                if (getControllingPassenger() instanceof LocalPlayer) {
-                    Minecraft mc = Minecraft.getInstance();
-                    if (mc.options.getCameraType() != CameraType.THIRD_PERSON_FRONT) {
-                        inputDown = this.getControllingCompartment().getInputUp();
-                        inputUp = this.getControllingCompartment().getInputDown();
-                        inputLeft = this.getControllingCompartment().getInputRight();
-                        inputRight = this.getControllingCompartment().getInputLeft();
-                    }
-                }
                 float paddleMultiplier = 1.0f;
                 if (this.getOars().getCount() > 0) {
                     paddleMultiplier = 1.6f;
                     if (this.getOars().getCount() == 1) {
                         if (this.getDeltaMovement().length() > 0.1f) {
-                            ++this.deltaRotation;
+                            this.setDeltaRotation(this.getDeltaRotation()+1);
                         }
-
                     }
                 }
 
-                float f = 0.0F;
+                float acceleration = 0.0F;
                 if (inputLeft) {
-                    --this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()-1);
                 }
 
                 if (inputRight) {
-                    ++this.deltaRotation;
+                    this.setDeltaRotation(this.getDeltaRotation()+1);
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    f += 0.0025F * paddleMultiplier;
+                    acceleration += 0.0025F * paddleMultiplier;
                 }
 
-                this.setYRot(this.getYRot() + this.deltaRotation);
+                this.setYRot(this.getYRot() + this.getDeltaRotation());
 
                 if (inputUp) {
-                    f += 0.0275F * paddleMultiplier;
+                    acceleration += 0.0275F * paddleMultiplier;
                 }
 
                 if (inputDown) {
-                    f -= 0.0125F * paddleMultiplier;
+                    acceleration -= 0.0125F * paddleMultiplier;
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
                 this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
         }
@@ -215,7 +205,7 @@ public class RowboatEntity extends FirmacivBoatEntity {
     @Nullable
     @Override
     public Entity getPilotVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(0);
         }
         return null;

@@ -24,9 +24,9 @@ import net.minecraftforge.fml.common.Mod;
 import static com.alekiponi.firmaciv.common.block.CanoeComponentBlock.*;
 
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class FirmacivBlockEvents {
+public final class BlockEventHandler {
 
-    private FirmacivBlockEvents() {
+    private BlockEventHandler() {
     }
 
     @SubscribeEvent

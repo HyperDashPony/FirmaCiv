@@ -2,39 +2,43 @@ package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
-import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class SloopEntity extends FirmacivBoatEntity {
-
+public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public final int PASSENGER_NUMBER = 14;
 
     public final int[] CLEATS = {};
 
+    protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
+            SloopEntity.class, EntityDataSerializers.FLOAT);
+
+    protected static final EntityDataAccessor<Float> DATA_ID_RUDDER_ROTATION = SynchedEntityData.defineId(
+            SloopEntity.class, EntityDataSerializers.FLOAT);
+
+    protected static final EntityDataAccessor<Boolean> DATA_ID_MAINSAIL_ACTIVE = SynchedEntityData.defineId(
+            SloopEntity.class, EntityDataSerializers.BOOLEAN);
+
     public final int[][] COMPARTMENT_ROTATIONS = {{7, 85}, {8, 85}, {9, 85}, {10, -85}, {11, -85}, {12, -85}};
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
-
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
-    protected float sailRotation;
-    protected int sailState;
     protected int sailAnimationTicks;
 
-    protected double windAngle;
-
-    protected double windSpeed;
-
-    public SloopEntity(EntityType<? extends FirmacivBoatEntity> entityType, Level level) {
+    public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -44,9 +48,10 @@ public class SloopEntity extends FirmacivBoatEntity {
     }
 
     @Override
-    public int getPassengerNumber() {
+    public int getMaxPassengers() {
         return this.PASSENGER_NUMBER;
     }
+
 
     @Override
     public int[] getCleats() {
@@ -66,14 +71,6 @@ public class SloopEntity extends FirmacivBoatEntity {
     @Override
     public int[][] getCompartmentRotationsArray() {
         return COMPARTMENT_ROTATIONS;
-    }
-
-    @Override
-    public AABB getBoundingBoxForCulling() {
-        float bbRadius = 10f;
-        Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
-        Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
-        return new AABB(startingPoint, endingPoint);
     }
 
     // sailing stuff
@@ -172,7 +169,7 @@ public class SloopEntity extends FirmacivBoatEntity {
                     }
                 }
             }
-            final Vec3 vec3 = this.positionVehiclePartEntityLocally(localX, localY, localZ);
+            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
             moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
             if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
@@ -187,48 +184,44 @@ public class SloopEntity extends FirmacivBoatEntity {
     public void tick() {
         super.tick();
         this.sailBoat();
-        sailAnimationTicks = this.tickCount;
-        if(tickCount % 40 == 0){
-            Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
-            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
-            double speed = Math.abs(Math.round(windVector.length() * 320));
-            this.windSpeed = speed;
-            this.windAngle = Mth.wrapDegrees(direction);
+        if(this.level().isClientSide()){
+            sailAnimationTicks = this.tickCount;
         }
+
+        //TODO this is setup code for distance sail LODs
+
+        //TODO get the player from the minecraft instance instead
+        /*
+        if(this.level().isClientSide()){
+            Player nearestPlayer = this.level().getNearestPlayer(this, 32*16);
+            if(nearestPlayer != null){
+                float distance = this.distanceTo(nearestPlayer);
+                if(distance > 4*16){
+                    //render the simple sail instead
+                }
+            }
+        }*/
+
     }
 
-    // method to get sailing controls
-
-    // variable for sail angle
-
-    // method for getting wind stuff?
-
-    public float getSailRotation() {
-        return Mth.wrapDegrees(sailRotation);
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_ID_MAIN_BOOM_ROTATION, 0f);
+        this.entityData.define(DATA_ID_RUDDER_ROTATION, 0f);
+        this.entityData.define(DATA_ID_MAINSAIL_ACTIVE, false);
     }
+
 
     public float getSailWorldRotation() {
-        return Mth.wrapDegrees(sailRotation + Mth.wrapDegrees(this.getYRot()));
+        return Mth.wrapDegrees(getMainBoomRotation() + Mth.wrapDegrees(this.getYRot()));
     }
 
     public int getSailAnimationTicks(){ return sailAnimationTicks;};
 
-    public float[] getWindAngleAndSpeed() {
-        return new float[]{(float) windAngle, (float) windSpeed};
-    }
-
-
-    public int getSailState() {
-        return sailState;
-    }
-
-    public void setSailState(int state) {
-        sailState = state;
-    }
-
     @Nullable
     public Entity getSailingVehiclePartAsEntity() {
-        if (this.isVehicle() && this.getPassengers().size() == this.getPassengerNumber()) {
+        if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(13);
         }
         return null;
@@ -238,49 +231,109 @@ public class SloopEntity extends FirmacivBoatEntity {
     public EmptyCompartmentEntity getSailingCompartment() {
         final Entity vehiclePart = this.getSailingVehiclePartAsEntity();
 
-        if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) return null;
-
-        if (!(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity))
+        if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) {
             return null;
+        }
 
-        if (!emptyCompartmentEntity.isVehicle() || !(emptyCompartmentEntity.getFirstPassenger() instanceof LocalPlayer))
+        if (!(vehiclePart.getFirstPassenger() instanceof EmptyCompartmentEntity emptyCompartmentEntity)) {
             return null;
-
+        }
         return emptyCompartmentEntity;
     }
 
-    protected void sailBoat() {
-        if (this.isVehicle()) {
-            if (getSailingCompartment() != null) {
-                boolean inputUp = this.getSailingCompartment().getInputUp();
-                boolean inputDown = this.getSailingCompartment().getInputDown();
-                boolean inputLeft = this.getSailingCompartment().getInputLeft();
-                boolean inputRight = this.getSailingCompartment().getInputRight();
-                if (inputLeft) {
-                    if (sailRotation > -45) {
-                        --this.sailRotation;
-                    }
-                }
-
-                if (inputRight) {
-                    if (sailRotation < 45) {
-                        ++this.sailRotation;
-                    }
-                }
-
-                if (inputUp) {
-                    if (sailState < 3) {
-                        sailState++;
-                    }
-                }
-
-                if (inputDown) {
-                    if (sailState > 0) {
-                        sailState--;
-                    }
+    @Override
+    protected void tickControlBoat() {
+        if (getControllingCompartment() != null) {
+            boolean inputUp = this.getControllingCompartment().getInputUp();
+            boolean inputDown = this.getControllingCompartment().getInputDown();
+            boolean inputLeft = this.getControllingCompartment().getInputLeft();
+            boolean inputRight = this.getControllingCompartment().getInputRight();
+            if (inputLeft) {
+                if(this.getRudderRotation() < 45){
+                    this.setRudderRotation(this.getRudderRotation() + 1);
                 }
             }
+
+            if (inputRight) {
+                if(this.getRudderRotation() > -45){
+                    this.setRudderRotation(this.getRudderRotation() - 1);
+                }
+            }
+
+            if(!inputRight && !inputLeft){
+                if(this.getRudderRotation() > 0){
+                    this.setRudderRotation(this.getRudderRotation()-1);
+                }
+                if(this.getRudderRotation() < 0){
+                    this.setRudderRotation(this.getRudderRotation()+1);
+                }
+                if(Math.abs(this.getRudderRotation()) < 1){
+                    this.setRudderRotation(0f);
+                }
+            }
+
         }
     }
 
+    protected void sailBoat() {
+        if (getSailingCompartment() != null) {
+            boolean inputUp = this.getSailingCompartment().getInputUp();
+            boolean inputDown = this.getSailingCompartment().getInputDown();
+            boolean inputLeft = this.getSailingCompartment().getInputLeft();
+            boolean inputRight = this.getSailingCompartment().getInputRight();
+            if (inputLeft) {
+                if (this.getMainBoomRotation() < 45) {
+                    this.setMainBoomRotation(this.getMainBoomRotation()+1);
+                }
+            }
+
+            if (inputRight) {
+                if (this.getMainBoomRotation() > -45) {
+                    this.setMainBoomRotation(this.getMainBoomRotation()-1);
+                }
+            }
+
+
+        }
+    }
+
+    public void setMainBoomRotation(float rotation){
+        this.entityData.set(DATA_ID_MAIN_BOOM_ROTATION, Mth.clamp(rotation, -45, 45));
+    }
+
+    public float getMainBoomRotation(){
+        return this.entityData.get(DATA_ID_MAIN_BOOM_ROTATION);
+    }
+
+    public void setMainsailActive(boolean mainsail){
+        this.entityData.set(DATA_ID_MAINSAIL_ACTIVE, mainsail);
+    }
+
+    public boolean getMainsailActive(){
+        return this.entityData.get(DATA_ID_MAINSAIL_ACTIVE);
+    }
+
+    public void setRudderRotation(float rotation){
+        this.entityData.set(DATA_ID_RUDDER_ROTATION, Mth.clamp(rotation, -45, 45));
+    }
+
+    public float getRudderRotation(){
+        return this.entityData.get(DATA_ID_RUDDER_ROTATION);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.setMainBoomRotation(pCompound.getFloat("mainBoomRotation"));
+        this.setRudderRotation(pCompound.getFloat("rudderRotation"));
+        this.setMainsailActive(pCompound.getBoolean("mainsailActive"));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putFloat("mainBoomRotation", this.getMainBoomRotation());
+        pCompound.putFloat("rudderRotation", this.getRudderRotation());
+        pCompound.putBoolean("mainsailActive", this.getMainsailActive());
+    }
 }

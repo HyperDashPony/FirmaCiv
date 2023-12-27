@@ -52,15 +52,9 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
         }
 
         if (f > 0.0F) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
-        float f2 = pEntity.getBubbleAngle(pPartialTicks);
-        if (!Mth.equal(f2, 0.0F)) {
-            poseStack.mulPose(
-                    (new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F),
-                            1.0F, 0.0F, 1.0F));
-        }
 
         Pair<ResourceLocation, SloopEntityModel> pair = sloopResources;
         ResourceLocation resourcelocation = pair.getFirst();

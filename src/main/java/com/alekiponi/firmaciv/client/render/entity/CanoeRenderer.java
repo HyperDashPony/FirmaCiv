@@ -31,6 +31,7 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final Map<BoatVariant, Pair<ResourceLocation, CanoeEntityModel>> canoeResources;
+    private float previousRotation = 0;
 
     public CanoeRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
@@ -47,6 +48,7 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
     @Override
     public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
             MultiBufferSource pBuffer, int pPackedLight) {
+
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
         pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
@@ -57,14 +59,7 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         }
 
         if (f > 0.0F) {
-            pMatrixStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
-        }
-
-        float f2 = pEntity.getBubbleAngle(pPartialTicks);
-        if (!Mth.equal(f2, 0.0F)) {
-            pMatrixStack.mulPose(
-                    (new Quaternionf()).setAngleAxis(pEntity.getBubbleAngle(pPartialTicks) * ((float) Math.PI / 180F),
-                            1.0F, 0.0F, 1.0F));
+            pMatrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
         }
 
         Pair<ResourceLocation, CanoeEntityModel> pair = getModelWithLocation(pEntity);

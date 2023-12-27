@@ -19,4 +19,5 @@ public class FirmacivHelper {
                 e -> !e.isSpectator() && e.isPickable(), range * range);
         return hit != null && from.distanceTo(hit.getLocation()) < range ? hit.getEntity() : null;
     }
+
 }
