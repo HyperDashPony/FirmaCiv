@@ -25,8 +25,6 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
     @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
-        // Don't do logic on client side
-        if (level.isClientSide()) return InteractionResult.PASS;
 
         final ItemStack heldStack = player.getItemInHand(hand);
 

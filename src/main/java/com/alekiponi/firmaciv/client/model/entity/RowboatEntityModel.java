@@ -280,7 +280,7 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw,
-            float pHeadPitch) {
+                          float pHeadPitch) {
     }
 
     public ModelPart getWaterocclusion() {
@@ -296,14 +296,14 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
     }
 
     public void setupAnim(RowboatEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
-            float pNetHeadYaw, float pHeadPitch) {
+                          float pNetHeadYaw, float pHeadPitch) {
         animatePaddle(pEntity, 0, this.getOarPort(), pLimbSwing);
         animatePaddle(pEntity, 1, this.getOarStarboard(), pLimbSwing);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
-            float red, float green, float blue, float alpha) {
+                               float red, float green, float blue, float alpha) {
         hull.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         bow_floor.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         seats.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

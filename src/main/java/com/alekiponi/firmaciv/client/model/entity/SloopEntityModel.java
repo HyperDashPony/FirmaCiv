@@ -11,7 +11,11 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 
 public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -483,26 +487,28 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         }
     }
 
+
     private static void animateMainsail(SloopEntity pBoat, float pPartialTicks, ModelPart mainsail_main, ModelPart[][] sails, float mastRotation, int animationTick) {
         //mainsail_main.y = 200;
 
-
         mainsail_main.yRot = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
-        float windWorldAngle = pBoat.getLocalWindAngleAndSpeed()[0];
+        float windWorldAngle = Mth.wrapDegrees(pBoat.getLocalWindAngleAndSpeed()[0]);
         float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] / 16f;
-        float sailWorldAngle = pBoat.getSailWorldRotation();
-        int airFoilDirection = 1;
+        float sailWorldAngle = Mth.wrapDegrees(pBoat.getSailWorldRotation());
+        int airFoilDirection = -1;
 
-        float windDifference = Mth.degreesDifference(windWorldAngle, sailWorldAngle);
-        if (windDifference < 0) {
-            airFoilDirection = -1;
+        float windDifference = Mth.wrapDegrees(Mth.degreesDifference(windWorldAngle, sailWorldAngle)-90f);
+        windDifference = Mth.wrapDegrees(Mth.degreesDifference(windWorldAngle, sailWorldAngle));
+        if (windDifference > 0) {
+            airFoilDirection = 1;
         }
         windDifference = Math.abs(windDifference);
 
         if (windSpeed < 0.1) {
             windSpeed = 0.1f;
         }
-        float animationTickFloat = -windSpeed * animationTick;
+        float animationTickFloat = animationTick+pPartialTicks;
+        animationTickFloat = (-windSpeed * animationTickFloat);
 
 
         for (int zindex = 0; zindex < mainsail_horizontal_sections; zindex++) {
@@ -542,9 +548,12 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
                 } else {
                     mixFunction = windDifference / 30f;
                 }
+
                 if(windSpeed < 1){
                     mixFunction*=0.5;
                 }
+
+                mixFunction = Mth.clamp(mixFunction,0, 0.92f);
 
                 if (mixFunction >= 0.9f) {
                     luffFunction = (float) (5 * Math.sin(0.1 * ((zindex * mainsail_section_widths) + animationTickFloat))) * falloff;
@@ -632,9 +641,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         rudder.yRot = Mth.rotLerp(pPartialTicks, rudder.yRot, rudderRotation);
     }
 
-    public ModelPart getWaterocclusion() {
-        return this.waterocclusion;
-    }
+
 
 
     public void setupAnim(SloopEntity pEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
@@ -645,8 +652,8 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         if (jibSailParts[0][0] == null) {
             jibSailParts = getJibsailParts(this);
         }
-        animateMainsail(pEntity, limbSwing, mainsail_main, mainSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.getSailAnimationTicks());
-        animateJibsail(pEntity, limbSwing, jibsail_main, jibSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.getSailAnimationTicks());
+        animateMainsail(pEntity, limbSwing, mainsail_main, mainSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
+        animateJibsail(pEntity, limbSwing, jibsail_main, jibSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
         animateRudder(pEntity, limbSwing, rudder, (float) Math.toRadians(pEntity.getRudderRotation()));
     }
 
@@ -690,6 +697,14 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
 
         return sails;
     }
+
+    public ModelPart getWaterocclusion() {
+        return this.waterocclusion;
+    }
+
+    public ModelPart getJibsailMain(){return this.jibsail_main;}
+
+    public ModelPart getMainsailMain(){return this.mainsail_main;}
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,

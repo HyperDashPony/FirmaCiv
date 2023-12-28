@@ -69,6 +69,22 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
             super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
             return;
         }
+
+        //TODO this is setup code for distance sail LODs
+
+        //TODO get the player from the minecraft instance instead
+
+        //TODO also cancel animation when LOD is triggered
+        /*
+        if(this.level().isClientSide()){
+            Player nearestPlayer = this.level().getNearestPlayer(this, 32*16);
+            if(nearestPlayer != null){
+                float distance = this.distanceTo(nearestPlayer);
+                if(distance > 4*16){
+                    //render the simple sail instead
+                }
+            }
+        }*/
         sloopModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 

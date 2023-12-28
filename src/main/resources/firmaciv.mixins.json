@@ -6,7 +6,8 @@
   "mixins": [
     "minecraft.PlayerModelMixin",
     "minecraft.MobMixin",
-    "minecraft.PlayerMixin"
+    "minecraft.PlayerMixin",
+    "minecraft.LivingEntityMixin"
   ],
   "client": [
     "client.ClientPacketListenerMixin",

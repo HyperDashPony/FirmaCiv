@@ -2,7 +2,6 @@ package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -10,9 +9,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -36,7 +34,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
-    protected int sailAnimationTicks;
 
     public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
@@ -183,26 +180,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public void tick() {
         super.tick();
-        this.sailBoat();
-        if(this.level().isClientSide()){
-            sailAnimationTicks = this.tickCount;
-        }
-
-        //TODO this is setup code for distance sail LODs
-
-        //TODO get the player from the minecraft instance instead
-        /*
-        if(this.level().isClientSide()){
-            Player nearestPlayer = this.level().getNearestPlayer(this, 32*16);
-            if(nearestPlayer != null){
-                float distance = this.distanceTo(nearestPlayer);
-                if(distance > 4*16){
-                    //render the simple sail instead
-                }
-            }
-        }*/
-
+        this.tickSailBoat();
+        this.tickDestroyPlants();
     }
+
 
     @Override
     protected void defineSynchedData() {
@@ -216,8 +197,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public float getSailWorldRotation() {
         return Mth.wrapDegrees(getMainBoomRotation() + Mth.wrapDegrees(this.getYRot()));
     }
-
-    public int getSailAnimationTicks(){ return sailAnimationTicks;};
 
     @Nullable
     public Entity getSailingVehiclePartAsEntity() {
@@ -241,6 +220,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         return emptyCompartmentEntity;
     }
 
+    @Override
+    protected void tickPaddlingEffects() {
+    }
     @Override
     protected void tickControlBoat() {
         if (getControllingCompartment() != null) {
@@ -275,7 +257,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         }
     }
 
-    protected void sailBoat() {
+    protected void tickSailBoat() {
         if (getSailingCompartment() != null) {
             boolean inputUp = this.getSailingCompartment().getInputUp();
             boolean inputDown = this.getSailingCompartment().getInputDown();
@@ -294,6 +276,16 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             }
 
 
+        }
+    }
+
+    protected void tickWindInput() {
+        if (this.status != Boat.Status.ON_LAND) {
+            Vec3 windMovement = new Vec3(this.getWindVector().x, 0, this.getWindVector().y).normalize();
+            double windFunction = Mth.clamp(this.getWindVector().length(), 0.0001, 0.010);
+            windMovement = windMovement.multiply(windFunction, windFunction, windFunction);
+
+            this.setDeltaMovement(this.getDeltaMovement().add(windMovement));
         }
     }
 

@@ -158,11 +158,11 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
 
                 float acceleration = 0.0F;
                 if (inputLeft) {
-                    this.setDeltaRotation(this.getDeltaRotation()-1);
+                    this.setDeltaRotation(this.getDeltaRotation()-0.9f);
                 }
 
                 if (inputRight) {
-                    this.setDeltaRotation(this.getDeltaRotation()+1);
+                    this.setDeltaRotation(this.getDeltaRotation()+0.9f);
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
@@ -183,6 +183,11 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
                         .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
                                 Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
                 this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+
+                if(this.getDeltaRotation() < 1 && inputUp){
+                    this.setPaddleState(true, true);
+                }
+
             }
         }
     }

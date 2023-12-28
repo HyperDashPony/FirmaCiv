@@ -4,9 +4,12 @@ import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.render.entity.CanoeRenderer;
 import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.item.AbstractNavItem;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -40,9 +43,6 @@ public class FirmacivClientEvents {
 
         ItemProperties.register(FirmacivItems.BAROMETER.get(), new ResourceLocation(Firmaciv.MOD_ID, "altitude"),
                 new ClampedItemPropertyFunction() {
-                    private double rotation;
-                    private double rota;
-                    private long lastUpdateTick;
 
                     public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel,
                             @Nullable LivingEntity livingEntity, int p_174668_) {
@@ -76,12 +76,12 @@ public class FirmacivClientEvents {
         ItemProperties.register(FirmacivItems.FIRMACIV_COMPASS.get(),
                 new ResourceLocation(Firmaciv.MOD_ID, "firmaciv_compass_direction"),
                 new ClampedItemPropertyFunction() {
-                    private double rotation;
-                    private double rota;
-                    private long lastUpdateTick;
 
                     public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel,
                             @Nullable LivingEntity livingEntity, int p_174668_) {
+
+
+                        float rotation = 0;
 
                         Entity entity = livingEntity != null ? livingEntity : pStack.getEntityRepresentation();
                         if (entity == null) {
@@ -97,7 +97,12 @@ public class FirmacivClientEvents {
                                 double direction;
                                 if (pLevel.dimensionType().natural()) {
                                     assert livingEntity != null;
-                                    direction = ((Mth.wrapDegrees(entity.getYRot()) + 180) % 360) / 360;
+                                    if(livingEntity instanceof LocalPlayer && pLevel.isClientSide() && livingEntity.getVehicle() instanceof EmptyCompartmentEntity){
+                                        rotation = Minecraft.getInstance().getCameraEntity().getYRot();
+                                    } else {
+                                        rotation = entity.getYRot();
+                                    }
+                                    direction = ((Mth.wrapDegrees(rotation) + 180) % 360) / 360;
                                 } else {
                                     direction = Math.random();
                                 }

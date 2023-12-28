@@ -4,7 +4,9 @@ import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractCompartmentEnt
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.google.common.collect.Lists;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
@@ -38,6 +40,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -60,9 +63,24 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
     protected static final EntityDataAccessor<Float> DATA_ID_DELTA_ROTATION = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
 
+    protected static final EntityDataAccessor<Vector3f> DATA_ID_WIND_VECTOR = SynchedEntityData.defineId(
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.VECTOR3);
+
+    protected static final EntityDataAccessor<Integer> DATA_ID_WIND_LERP_TICKS = SynchedEntityData.defineId(
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.INT);
+
+    protected static final EntityDataAccessor<Float> DATA_ID_WIND_ANGLE = SynchedEntityData.defineId(
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
+
+    protected static final EntityDataAccessor<Float> DATA_ID_WIND_SPEED = SynchedEntityData.defineId(
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
+
+
 
     protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
     public final int MAX_PASSENGER_NUMBER = 0;
+
+    public final int WIND_UPDATE_TICKS = 40;
 
     public final int[] CLEATS = {};
     public final int[] CAN_ADD_ONLY_BLOCKS = {};
@@ -89,16 +107,23 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
     protected Status oldStatus;
     protected double lastYd;
 
+
     protected double windAngle;
 
     protected double windSpeed;
-    Vec2 windVector;
+    protected double oldWindAngle;
+
+    protected double oldWindSpeed;
+
+    protected int windLerpTicks;
 
     public AbstractFirmacivBoatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
-        this.windVector = Climate.getWindVector(this.level(), this.blockPosition());
-        this.updateWind(false);
+        Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
+        this.setWindVector(windVector);
+        this.tickUpdateWind(false);
+        windLerpTicks = 0;
     }
 
     public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
@@ -136,21 +161,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         return entityDimensions.height;
     }
 
-    protected float getDamageThreshold() {
-        return this.DAMAGE_THRESHOLD;
-    }
 
-    protected float getDamageRecovery() {
-        return this.DAMAGE_RECOVERY;
-    }
-
-    public void setDeltaRotation(float deltaRotation) {
-        this.entityData.set(DATA_ID_DELTA_ROTATION, deltaRotation);
-    }
-
-    public float getDeltaRotation() {
-        return this.entityData.get(DATA_ID_DELTA_ROTATION);
-    }
 
     @Override
     protected Entity.MovementEmission getMovementEmission() {
@@ -164,6 +175,10 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         this.entityData.define(DATA_ID_PADDLE_LEFT, false);
         this.entityData.define(DATA_ID_PADDLE_RIGHT, false);
         this.entityData.define(DATA_ID_DELTA_ROTATION, 0f);
+        this.entityData.define(DATA_ID_WIND_VECTOR, new Vector3f(0, 0, 0));
+        this.entityData.define(DATA_ID_WIND_ANGLE, 0f);
+        this.entityData.define(DATA_ID_WIND_SPEED, 0f);
+        this.entityData.define(DATA_ID_WIND_LERP_TICKS, 0);
     }
 
     @Override
@@ -323,14 +338,14 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
 
         this.checkInsideBlocks();
 
-        //this.updateWind(true);
+        this.tickUpdateWind(true);
 
     }
 
     protected void tickWindInput() {
         if (this.status != Status.ON_LAND) {
-            Vec3 windMovement = new Vec3(this.getLocalWindVector().x, 0, this.getLocalWindVector().y).normalize();
-            double windFunction = Mth.clamp(this.getLocalWindVector().length(), 0.0001, 0.002);
+            Vec3 windMovement = new Vec3(this.getWindVector().x, 0, this.getWindVector().y).normalize();
+            double windFunction = Mth.clamp(this.getWindVector().length(), 0.0001, 0.004);
             windMovement = windMovement.multiply(windFunction, windFunction, windFunction);
 
             this.setDeltaMovement(this.getDeltaMovement().add(windMovement));
@@ -385,7 +400,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
                 this.invFriction = modifiedFriction;
             }
 
-            //tickWindInput();
+            tickWindInput();
 
             Vec3 vec3 = this.getDeltaMovement();
 
@@ -415,6 +430,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         }
 
     }
+
 
     protected void tickControlBoat() {
         if (getControllingCompartment() != null) {
@@ -447,8 +463,10 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
             this.setDeltaMovement(this.getDeltaMovement()
                     .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
                             Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
+
             this.setPaddleState(
                     inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+
         }
     }
 
@@ -523,23 +541,52 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         }
     }
 
-    protected void updateWind(boolean waitForWindUpdateTick) {
-        if (tickCount % 40 == 0 || !waitForWindUpdateTick) {
-            windVector = Climate.getWindVector(this.level(), this.blockPosition());
-            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
-            double speed = Math.abs(Math.round(windVector.length() * 320));
-            this.windSpeed = speed;
-            this.windAngle = Mth.wrapDegrees(direction);
+    protected void tickUpdateWind(boolean waitForWindUpdateTick) {
+        if (tickCount % WIND_UPDATE_TICKS == 0 || !waitForWindUpdateTick) {
+            Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
+            this.setWindVector(windVector);
+            updateLocalWindAngleAndSpeed();
         }
+        if(this.windLerpTicks > 0 && this.level().isClientSide()){
+            updateLocalWindAngleAndSpeed();
+        }
+
+    }
+
+    public void updateLocalWindAngleAndSpeed() {
+
+        double newDirection = FirmacivHelper.vec2ToWrappedDegrees(this.getWindVector());
+        double newSpeed = Math.abs(Math.round(this.getWindVector().length() * 320));
+
+        if(this.level().isClientSide()){
+            if(this.windLerpTicks > 0){
+                float lerpStep = ((WIND_UPDATE_TICKS)-this.windLerpTicks)/((float) WIND_UPDATE_TICKS);
+                double lerpedRot = Math.round(Mth.rotLerp(lerpStep, (float) this.oldWindAngle, (float) newDirection));
+
+                this.windLerpTicks--;
+
+                this.windAngle = Mth.wrapDegrees((float) Math.round(lerpedRot));
+
+                this.windSpeed = (float) this.oldWindSpeed;
+                return;
+            }
+
+            if(newDirection != this.windAngle || newSpeed != this.windSpeed){
+                this.oldWindAngle = this.windAngle;
+                this.oldWindSpeed = this.windSpeed;
+                this.windLerpTicks = WIND_UPDATE_TICKS;
+                return;
+            }
+        }
+
+        this.windAngle = Mth.wrapDegrees((float) Math.round(newDirection));
+        this.windSpeed = (float) newSpeed;
     }
 
     public float[] getLocalWindAngleAndSpeed() {
-        return new float[]{(float) windAngle, (float) windSpeed};
+        return new float[]{(float) this.windAngle, (float) this.windSpeed};
     }
 
-    public Vec2 getLocalWindVector() {
-        return windVector;
-    }
 
     @Nullable
     protected SoundEvent getPaddleSound() {
@@ -556,6 +603,22 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         }
     }
 
+    protected void tickDestroyPlants(){
+        BlockPos blockPos = this.blockPosition();
+        int size = (int) Math.ceil(this.getBoundingBox().getXsize());
+        size = size/2;
+        for(int x = -size;x <=size; x++){
+            for(int z = -size;z <=size; z++){
+                for(int y = 0; y <=1; y++){
+                    if(this.level().getBlockState(blockPos.offset(x,y,z)).is(TFCTags.Blocks.PLANTS)){
+                        this.level().destroyBlock(blockPos.offset(x,y,z),false);
+                    }
+                }
+
+            }
+        }
+
+    }
     protected void tickLerp() {
 
         if (this.isControlledByLocalInstance()) {
@@ -907,11 +970,46 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         this.entityData.set(DATA_ID_HURTDIR, hurtDirection);
     }
 
+    public void setWindVector(final Vec2 windVector) {
+        this.entityData.set(DATA_ID_WIND_VECTOR, new Vector3f(windVector.x, 0, windVector.y));
+    }
+
+    public Vec2 getWindVector() {
+        float x = this.entityData.get(DATA_ID_WIND_VECTOR).x;
+        float y = this.entityData.get(DATA_ID_WIND_VECTOR).z;
+        return new Vec2(x, y);
+    }
+
+    public int getWindLerpTicks() {
+        return this.entityData.get(DATA_ID_WIND_LERP_TICKS);
+    }
+
+    public void setWindLerpTicks(int ticks) {
+        this.entityData.set(DATA_ID_WIND_LERP_TICKS, ticks);
+    }
+
+    protected float getDamageThreshold() {
+        return this.DAMAGE_THRESHOLD;
+    }
+
+    protected float getDamageRecovery() {
+        return this.DAMAGE_RECOVERY;
+    }
+
+    public void setDeltaRotation(float deltaRotation) {
+        this.entityData.set(DATA_ID_DELTA_ROTATION, deltaRotation);
+    }
+
+    public float getDeltaRotation() {
+        return this.entityData.get(DATA_ID_DELTA_ROTATION);
+    }
+
+
 
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         this.setDeltaRotation(pCompound.getFloat("deltaRotation"));
-        this.updateWind(false);
+        this.tickUpdateWind(false);
     }
 
 
@@ -990,7 +1088,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
 
     @Override
     public AABB getBoundingBoxForCulling() {
-        float bbRadius = this.getBbWidth()*2+1;
+        float bbRadius = this.getBbWidth() * 2 + 1;
         Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
         Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
         return new AABB(startingPoint, endingPoint);

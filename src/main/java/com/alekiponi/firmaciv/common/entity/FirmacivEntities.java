@@ -72,12 +72,10 @@ public final class FirmacivEntities {
      */
 
 
-    /*
+
     public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
             () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(4F, 0.75F).clientTrackingRange(32)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
-
-     */
 
 
 
