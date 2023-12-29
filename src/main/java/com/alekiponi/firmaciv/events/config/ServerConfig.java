@@ -26,7 +26,7 @@ public class ServerConfig {
                         "Force creation of ships and rowboats from specified wood types. Turning this to false will make ships and rowboats craftable from any wood type.")
                 .define("shipWoodRestriction", true);
 
-        this.forceReducedDebugInfo = builder.apply("forceReducedDebugInfo").comment("Force reduceDebugInfo gamerule.")
+        this.forceReducedDebugInfo = builder.apply("forceReducedDebugInfo").comment("Force reduceDebugInfo gamerule. Turn this to FALSE if you want coordinates bad.")
                 .define("forceReducedDebugInfo", true);
 
         this.disableVanillaBoatFunctionality = builder.apply("disableVanillaBoatFunctionality")

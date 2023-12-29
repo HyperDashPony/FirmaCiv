@@ -49,15 +49,6 @@ public class ForgeEventHandler {
         }
     }
 
-    /*
-    @SubscribeEvent
-    public static void onPlayerLeave(LivingHurtEvent event){
-        if(event.getSource().is(DamageTypes.IN_WALL)){
-            if(event.getEntity().getVehicle() instanceof EmptyCompartmentEntity){
-                event.setCanceled(true);
-            }
-        }
-    }*/
 
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){

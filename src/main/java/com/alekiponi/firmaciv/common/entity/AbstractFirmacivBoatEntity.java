@@ -59,15 +59,11 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-
     protected static final EntityDataAccessor<Float> DATA_ID_DELTA_ROTATION = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
 
     protected static final EntityDataAccessor<Vector3f> DATA_ID_WIND_VECTOR = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.VECTOR3);
-
-    protected static final EntityDataAccessor<Integer> DATA_ID_WIND_LERP_TICKS = SynchedEntityData.defineId(
-            AbstractFirmacivBoatEntity.class, EntityDataSerializers.INT);
 
     protected static final EntityDataAccessor<Float> DATA_ID_WIND_ANGLE = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
@@ -178,7 +174,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         this.entityData.define(DATA_ID_WIND_VECTOR, new Vector3f(0, 0, 0));
         this.entityData.define(DATA_ID_WIND_ANGLE, 0f);
         this.entityData.define(DATA_ID_WIND_SPEED, 0f);
-        this.entityData.define(DATA_ID_WIND_LERP_TICKS, 0);
     }
 
     @Override
@@ -322,6 +317,8 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         super.tick();
         this.tickLerp();
 
+        tickWindInput();
+
         this.tickFloatBoat();
         this.tickControlBoat();
         if (this.isControlledByLocalInstance()) {
@@ -343,13 +340,46 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
     }
 
     protected void tickWindInput() {
-        if (this.status != Status.ON_LAND) {
-            Vec3 windMovement = new Vec3(this.getWindVector().x, 0, this.getWindVector().y).normalize();
-            double windFunction = Mth.clamp(this.getWindVector().length(), 0.0001, 0.004);
-            windMovement = windMovement.multiply(windFunction, windFunction, windFunction);
+        if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
+            double windFunction = Mth.clamp(this.getWindVector().length(), 0.001, 0.002*this.getBoundingBox().getXsize());
 
-            this.setDeltaMovement(this.getDeltaMovement().add(windMovement));
+            float windDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getYRot()));
+
+            /*
+            if(Math.abs(windDifference) < 90){
+                float angleMultiplier = Math.abs((Math.abs(windDifference)-90)/90);
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * windFunction*0.45*angleMultiplier, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * windFunction*0.45*angleMultiplier));
+            }
+
+
+            this.setDeltaMovement(this.getDeltaMovement()
+                    .add(Mth.sin(-this.getLocalWindAngleAndSpeed()[0] * ((float) Math.PI / 180F)) * windFunction*0.55, 0.0D,
+                            Mth.cos(this.getLocalWindAngleAndSpeed()[0] * ((float) Math.PI / 180F)) * windFunction*0.55));
+*/
+
+
+            /*
+            if(windDifference > 4){
+                this.setYRot(this.getYRot()-0.1f);
+            } else if(windDifference < -4){
+                this.setYRot(this.getYRot()+0.1f);
+            }*/
         }
+    }
+
+    protected void tickUpdateWind(boolean waitForWindUpdateTick) {
+        if (tickCount % WIND_UPDATE_TICKS == 0 || !waitForWindUpdateTick) {
+            Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
+            windVector = new Vec2(0,1);
+            this.setWindVector(windVector);
+            updateLocalWindAngleAndSpeed();
+        }
+        if(this.windLerpTicks > 0 && this.level().isClientSide()){
+            updateLocalWindAngleAndSpeed();
+        }
+
     }
 
     protected void tickFloatBoat() {
@@ -400,7 +430,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
                 this.invFriction = modifiedFriction;
             }
 
-            tickWindInput();
+
 
             Vec3 vec3 = this.getDeltaMovement();
 
@@ -541,17 +571,8 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         }
     }
 
-    protected void tickUpdateWind(boolean waitForWindUpdateTick) {
-        if (tickCount % WIND_UPDATE_TICKS == 0 || !waitForWindUpdateTick) {
-            Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
-            this.setWindVector(windVector);
-            updateLocalWindAngleAndSpeed();
-        }
-        if(this.windLerpTicks > 0 && this.level().isClientSide()){
-            updateLocalWindAngleAndSpeed();
-        }
 
-    }
+
 
     public void updateLocalWindAngleAndSpeed() {
 
@@ -571,7 +592,7 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
                 return;
             }
 
-            if(newDirection != this.windAngle || newSpeed != this.windSpeed){
+            if(newDirection != this.windAngle){
                 this.oldWindAngle = this.windAngle;
                 this.oldWindSpeed = this.windSpeed;
                 this.windLerpTicks = WIND_UPDATE_TICKS;
@@ -980,14 +1001,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         return new Vec2(x, y);
     }
 
-    public int getWindLerpTicks() {
-        return this.entityData.get(DATA_ID_WIND_LERP_TICKS);
-    }
-
-    public void setWindLerpTicks(int ticks) {
-        this.entityData.set(DATA_ID_WIND_LERP_TICKS, ticks);
-    }
-
     protected float getDamageThreshold() {
         return this.DAMAGE_THRESHOLD;
     }
@@ -1092,5 +1105,13 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
         Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
         return new AABB(startingPoint, endingPoint);
+    }
+
+    @Override
+    public void onAboveBubbleCol(boolean pDownwards) {
+    }
+
+    @Override
+    public void onInsideBubbleColumn(boolean pDownwards) {
     }
 }

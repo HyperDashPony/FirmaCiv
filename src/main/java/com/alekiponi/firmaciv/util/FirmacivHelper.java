@@ -37,7 +37,7 @@ public class FirmacivHelper {
         } else if(y == 0 && x < 0){
             direction = 90;
         } else if(y != 0 && x != 0){
-            direction = Math.round(Math.toDegrees(Math.atan(x / y)));
+            direction = Math.round(Math.toDegrees(Math.atan(y / x)));
             //quadrant correction because probably I'm bad at math?
             if (x <= 0 && y <= 0) {
                 direction += 90;
@@ -51,6 +51,60 @@ public class FirmacivHelper {
         }
 
         return Mth.wrapDegrees(direction);
+    }
+
+    public static float sailForceMultiplierTable(float sailForceAngle){
+        sailForceAngle = (Math.abs(Mth.wrapDegrees(sailForceAngle)));
+        float multiplier = 0;
+        if(sailForceAngle < 15){
+            multiplier =  0f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 30){
+            multiplier = 5f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 45){
+            multiplier = 15f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 60){
+            multiplier = 20f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 75){
+            multiplier = 23f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 90){
+            multiplier = 27f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 105){
+            multiplier = 29f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 120){
+            multiplier = 32f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 135){
+            multiplier = 33f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 150){
+            multiplier = 30f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 165){
+            multiplier = 25f;
+            return multiplier/35f;
+        }
+        if(sailForceAngle < 180){
+            multiplier = 20f;
+            return multiplier/35f;
+        }
+        return multiplier/35f;
     }
 
 }

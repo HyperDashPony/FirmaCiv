@@ -85,9 +85,15 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
                 }
             }
         }*/
+
+
         sloopModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 
+        if(pEntity.getMainsailActive()){
+            sloopModel.getMainsailMain()
+                    .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
 
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());

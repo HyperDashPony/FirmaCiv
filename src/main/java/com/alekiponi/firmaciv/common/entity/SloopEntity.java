@@ -2,6 +2,8 @@ package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.alekiponi.firmaciv.common.item.FirmacivItems;
+import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -9,6 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -179,8 +182,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public void tick() {
+        //this.setDeltaRotation((float) (-1*this.getRudderRotation()*0.25f*this.getDeltaMovement().length()));
+        this.setYRot(this.getYRot() + this.getDeltaRotation());
         super.tick();
-        this.tickSailBoat();
+        //this.tickSailBoat();
         this.tickDestroyPlants();
     }
 
@@ -196,6 +201,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public float getSailWorldRotation() {
         return Mth.wrapDegrees(getMainBoomRotation() + Mth.wrapDegrees(this.getYRot()));
+    }
+
+    public float getWindLocalRotation() {
+        return Mth.wrapDegrees(getLocalWindAngleAndSpeed()[0] - Mth.wrapDegrees(this.getYRot()));
     }
 
     @Nullable
@@ -223,6 +232,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     protected void tickPaddlingEffects() {
     }
+
     @Override
     protected void tickControlBoat() {
         if (getControllingCompartment() != null) {
@@ -230,6 +240,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             boolean inputDown = this.getControllingCompartment().getInputDown();
             boolean inputLeft = this.getControllingCompartment().getInputLeft();
             boolean inputRight = this.getControllingCompartment().getInputRight();
+            /*
             if (inputLeft) {
                 if(this.getRudderRotation() < 45){
                     this.setRudderRotation(this.getRudderRotation() + 1);
@@ -240,76 +251,139 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 if(this.getRudderRotation() > -45){
                     this.setRudderRotation(this.getRudderRotation() - 1);
                 }
+            }*/
+            if (inputLeft) {
+                this.setDeltaRotation(this.getDeltaRotation() - 1);
             }
 
-            if(!inputRight && !inputLeft){
-                if(this.getRudderRotation() > 0){
-                    this.setRudderRotation(this.getRudderRotation()-1);
+            if (inputRight) {
+                this.setDeltaRotation(this.getDeltaRotation() + 1);
+            }
+
+            if (!inputRight && !inputLeft) {
+                if (this.getRudderRotation() > 0) {
+                    this.setRudderRotation(this.getRudderRotation() - 0.4f);
                 }
-                if(this.getRudderRotation() < 0){
-                    this.setRudderRotation(this.getRudderRotation()+1);
+                if (this.getRudderRotation() < 0) {
+                    this.setRudderRotation(this.getRudderRotation() + 0.4f);
                 }
-                if(Math.abs(this.getRudderRotation()) < 1){
+                if (Math.abs(this.getRudderRotation()) < 1) {
                     this.setRudderRotation(0f);
                 }
             }
 
+            tickSailBoat();
+
+
+
+            /*
+            if (inputUp && !this.getMainsailActive()) {
+                this.setMainsailActive(true);
+            }
+
+            if (inputDown && this.getMainsailActive()) {
+                this.setMainsailActive(false);
+            }*/
         }
     }
 
     protected void tickSailBoat() {
-        if (getSailingCompartment() != null) {
-            boolean inputUp = this.getSailingCompartment().getInputUp();
-            boolean inputDown = this.getSailingCompartment().getInputDown();
-            boolean inputLeft = this.getSailingCompartment().getInputLeft();
-            boolean inputRight = this.getSailingCompartment().getInputRight();
-            if (inputLeft) {
+        if (getControllingCompartment() != null) {
+            boolean inputUp = this.getControllingCompartment().getInputUp();
+            boolean inputDown = this.getControllingCompartment().getInputDown();
+            boolean inputLeft = this.getControllingCompartment().getInputLeft();
+            boolean inputRight = this.getControllingCompartment().getInputRight();
+            if (inputUp) {
                 if (this.getMainBoomRotation() < 45) {
-                    this.setMainBoomRotation(this.getMainBoomRotation()+1);
+                    this.setMainBoomRotation(this.getMainBoomRotation() + 1);
                 }
             }
 
-            if (inputRight) {
-                if (this.getMainBoomRotation() > -45) {
-                    this.setMainBoomRotation(this.getMainBoomRotation()-1);
+            if (inputDown) {
+                if (this.getMainBoomRotation() > -180) {
+                    this.setMainBoomRotation(this.getMainBoomRotation() - 1);
                 }
             }
+
+            /*
+            if (inputUp && !this.getMainsailActive()) {
+                this.setMainsailActive(true);
+            }
+
+            if (inputDown && this.getMainsailActive()) {
+                this.setMainsailActive(false);
+            }*/
 
 
         }
     }
 
     protected void tickWindInput() {
-        if (this.status != Boat.Status.ON_LAND) {
-            Vec3 windMovement = new Vec3(this.getWindVector().x, 0, this.getWindVector().y).normalize();
-            double windFunction = Mth.clamp(this.getWindVector().length(), 0.0001, 0.010);
-            windMovement = windMovement.multiply(windFunction, windFunction, windFunction);
+        super.tickWindInput();
+        if (this.status == Boat.Status.IN_WATER || this.status == Boat.Status.IN_AIR) {
+            this.setMainsailActive(true);
+            if (this.getMainsailActive()) {
 
-            this.setDeltaMovement(this.getDeltaMovement().add(windMovement));
+                float windDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
+
+                double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.15;
+
+                double sailForce = this.getMainsailWindAngleAndForce()[1];
+                float sailForceAngle = this.getMainsailWindAngleAndForce()[0];
+                /*
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * windFunction*0.25*windForce, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * windFunction*0.25*windForce));*/
+
+
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-sailForceAngle * ((float) Math.PI / 180F)) * windFunction*0.75*sailForce, 0.0D,
+                                Mth.cos(sailForceAngle * ((float) Math.PI / 180F)) * windFunction*0.75*sailForce));
+
+
+            }
         }
     }
 
-    public void setMainBoomRotation(float rotation){
+    public void setMainBoomRotation(float rotation) {
         this.entityData.set(DATA_ID_MAIN_BOOM_ROTATION, Mth.clamp(rotation, -45, 45));
     }
 
-    public float getMainBoomRotation(){
-        return this.entityData.get(DATA_ID_MAIN_BOOM_ROTATION);
+    public float[] getMainsailWindAngleAndForce() {
+        //float windDifference = Mth.degreesDifference(Mth.wrapDegrees(this.getWindLocalRotation() -180), Mth.wrapDegrees(this.getMainBoomRotation()-this.getYRot()));
+
+        //windForceAngle = sail relative to wind angle * 2
+
+        float windWorldAngle = Mth.wrapDegrees(this.getLocalWindAngleAndSpeed()[0]);
+        float windSpeed = this.getLocalWindAngleAndSpeed()[1] / 16f;
+        float sailWorldAngle = Mth.wrapDegrees(this.getSailWorldRotation());
+
+        float windDifference = Mth.wrapDegrees(2*Mth.degreesDifference(windWorldAngle, sailWorldAngle)-180);
+
+        float windForceAngle = windDifference;
+
+        double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.4;
+        float windForce = FirmacivHelper.sailForceMultiplierTable(windDifference-180);
+        return new float[]{(float) windForceAngle, (float) windForce};
     }
 
-    public void setMainsailActive(boolean mainsail){
+    public float getMainBoomRotation() {
+        return Mth.wrapDegrees(this.entityData.get(DATA_ID_MAIN_BOOM_ROTATION));
+    }
+
+    public void setMainsailActive(boolean mainsail) {
         this.entityData.set(DATA_ID_MAINSAIL_ACTIVE, mainsail);
     }
 
-    public boolean getMainsailActive(){
+    public boolean getMainsailActive() {
         return this.entityData.get(DATA_ID_MAINSAIL_ACTIVE);
     }
 
-    public void setRudderRotation(float rotation){
+    public void setRudderRotation(float rotation) {
         this.entityData.set(DATA_ID_RUDDER_ROTATION, Mth.clamp(rotation, -45, 45));
     }
 
-    public float getRudderRotation(){
+    public float getRudderRotation() {
         return this.entityData.get(DATA_ID_RUDDER_ROTATION);
     }
 

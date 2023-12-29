@@ -43,6 +43,8 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     private final ModelPart shrouds;
     private final ModelPart rudder;
 
+    private final ModelPart wind_indicator;
+    private final ModelPart sail_force_indicator;
 
     public SloopEntityModel() {
         ModelPart root = createBodyLayer().bakeRoot();
@@ -69,6 +71,8 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         this.forestay = root.getChild("forestay");
         this.shrouds = root.getChild("shrouds");
         this.rudder = root.getChild("rudder");
+        this.wind_indicator = root.getChild("wind_indicator");
+        this.sail_force_indicator = root.getChild("sail_force_indicator");
 
     }
 
@@ -401,10 +405,25 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
 
         PartDefinition jibsail = jibsail_main.addOrReplaceChild("jibsail", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
+        PartDefinition sail_force_indicator = partdefinition.addOrReplaceChild("sail_force_indicator", CubeListBuilder.create().texOffs(115, 533).addBox(-1.6953F, -1.0F, 1.6499F, 2.0F, 2.0F, 97.0F, new CubeDeformation(0.0F)), PartPose.offset(0.6953F, -54.0F, -2.6499F));
+
+        PartDefinition cube_r54 = sail_force_indicator.addOrReplaceChild("cube_r54", CubeListBuilder.create().texOffs(184, 602).addBox(11.0F, -1.0F, 1.5F, 3.0F, 2.0F, 28.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-9.5519F, 0.0F, 11.3644F, 0.0F, 0.7854F, 0.0F));
+
+        PartDefinition cube_r55 = sail_force_indicator.addOrReplaceChild("cube_r55", CubeListBuilder.create().texOffs(184, 602).addBox(-11.5F, -1.0F, -9.0F, 3.0F, 2.0F, 28.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0547F, 0.0F, 14.8999F, 0.0F, -0.7854F, 0.0F));
+
+        PartDefinition wind_indicator = partdefinition.addOrReplaceChild("wind_indicator", CubeListBuilder.create().texOffs(0, 549).addBox(-1.6953F, -1.0F, 1.6499F, 2.0F, 2.0F, 97.0F, new CubeDeformation(0.0F)), PartPose.offset(0.6953F, -13.0F, -2.6499F));
+
+        PartDefinition cube_r56 = wind_indicator.addOrReplaceChild("cube_r56", CubeListBuilder.create().texOffs(69, 618).addBox(11.0F, -1.0F, 1.5F, 3.0F, 2.0F, 28.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-9.5519F, 0.0F, 11.3644F, 0.0F, 0.7854F, 0.0F));
+
+        PartDefinition cube_r57 = wind_indicator.addOrReplaceChild("cube_r57", CubeListBuilder.create().texOffs(69, 618).addBox(-11.5F, -1.0F, -9.0F, 3.0F, 2.0F, 28.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0547F, 0.0F, 14.8999F, 0.0F, -0.7854F, 0.0F));
+
         // GENERATED MODEL PARTS, DO NOT REPLACE FROM BLOCKBENCH
         {
+
             generateMainsail(mainsail_main);
             generateJibsail(jibsail_main);
+
+
         }
 
         return LayerDefinition.create(meshdefinition, 1024, 1024);
@@ -492,13 +511,13 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         //mainsail_main.y = 200;
 
         mainsail_main.yRot = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
+
         float windWorldAngle = Mth.wrapDegrees(pBoat.getLocalWindAngleAndSpeed()[0]);
         float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] / 16f;
         float sailWorldAngle = Mth.wrapDegrees(pBoat.getSailWorldRotation());
         int airFoilDirection = -1;
 
-        float windDifference = Mth.wrapDegrees(Mth.degreesDifference(windWorldAngle, sailWorldAngle)-90f);
-        windDifference = Mth.wrapDegrees(Mth.degreesDifference(windWorldAngle, sailWorldAngle));
+        float windDifference = Mth.wrapDegrees(Mth.degreesDifference(windWorldAngle, sailWorldAngle));
         if (windDifference > 0) {
             airFoilDirection = 1;
         }
@@ -563,10 +582,14 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
 
                 sails[zindex][yindex].x = (finalfunction);
             }
+
+
         }
 
         ModelPart gaff = mainsail_main.getChild("gaff");
         gaff.yRot = (float) Math.tan(sails[14][4].x / (15 * mainsail_section_widths));
+
+
 
     }
 
@@ -641,6 +664,25 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         rudder.yRot = Mth.rotLerp(pPartialTicks, rudder.yRot, rudderRotation);
     }
 
+    private static void animateWindIndicator(SloopEntity pBoat, float pPartialTicks, ModelPart wind_indicator){
+        float windAngle = (float) Math.toRadians(pBoat.getWindLocalRotation());
+        wind_indicator.yRot = (float) (windAngle);
+        wind_indicator.zScale = 1;
+        wind_indicator.xScale = 1;
+        wind_indicator.zScale = pBoat.getLocalWindAngleAndSpeed()[1]/64;
+        //wind_indicator.xScale = pBoat.getLocalWindAngleAndSpeed()[1]/64;
+    }
+
+    private static void animateSailforceIndicator(SloopEntity pBoat, float pPartialTicks, ModelPart sail_force_indicator){
+        float sailForceAngle = (float) Math.toRadians(pBoat.getMainsailWindAngleAndForce()[0]-pBoat.getYRot());
+        float sailForce = Mth.clamp(pBoat.getMainsailWindAngleAndForce()[1], 0.1f, 10f);
+        sail_force_indicator.yRot =(float) (sailForceAngle);
+        sail_force_indicator.zScale = 1;
+        sail_force_indicator.xScale = 1;
+        sail_force_indicator.zScale = sailForce;
+        sail_force_indicator.xScale = sailForce;
+    }
+
 
 
 
@@ -653,8 +695,10 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
             jibSailParts = getJibsailParts(this);
         }
         animateMainsail(pEntity, limbSwing, mainsail_main, mainSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
-        animateJibsail(pEntity, limbSwing, jibsail_main, jibSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
+        //animateJibsail(pEntity, limbSwing, jibsail_main, jibSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
         animateRudder(pEntity, limbSwing, rudder, (float) Math.toRadians(pEntity.getRudderRotation()));
+        animateWindIndicator(pEntity, limbSwing, wind_indicator);
+        animateSailforceIndicator(pEntity, limbSwing, sail_force_indicator);
     }
 
     private ModelPart[][] mainSailParts = new ModelPart[mainsail_horizontal_sections][mainsail_vertical_sections];
@@ -713,7 +757,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         transom_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         bowsprit.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hull_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        mainsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        //mainsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         mast.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         keel.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         sidewall_starboard.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
@@ -729,8 +773,11 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         hold_netting.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         //waterocclusion.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         forestay.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        jibsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        //jibsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         shrouds.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         rudder.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        wind_indicator.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        sail_force_indicator.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+
     }
 }
