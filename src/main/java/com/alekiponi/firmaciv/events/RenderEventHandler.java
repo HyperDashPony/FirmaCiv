@@ -7,6 +7,7 @@ import com.alekiponi.firmaciv.client.model.entity.RowboatEntityModel;
 import com.alekiponi.firmaciv.client.render.entity.*;
 import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -45,6 +46,7 @@ public final class RenderEventHandler {
 
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), VehiclePartRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_COLLISION_ENTITY.get(), VehicleCollisionEntityRenderer::new);
 
         //event.registerEntityRenderer(FirmacivEntities.OUTRIGGER.get(), OutriggerRenderer::new);
 

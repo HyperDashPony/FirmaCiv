@@ -4,6 +4,7 @@ import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -62,6 +63,11 @@ public final class FirmacivEntities {
             "vehicle_cleat",
             () -> EntityType.Builder.of(VehicleCleatEntity::new, MobCategory.MISC).sized(0.4F, 0.4F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_cleat").toString()));
+
+    public static final RegistryObject<EntityType<VehicleCollisionEntity>> VEHICLE_COLLISION_ENTITY = ENTITY_TYPES.register(
+            "vehicle_collision",
+            () -> EntityType.Builder.of(VehicleCollisionEntity::new, MobCategory.MISC).sized(0.2F, 0.2F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_collision").toString()));
 
 
     /*

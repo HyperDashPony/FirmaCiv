@@ -68,7 +68,7 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
                 boolean inputDown = this.getControllingCompartment().getInputDown();
                 boolean inputLeft = this.getControllingCompartment().getInputLeft();
                 boolean inputRight = this.getControllingCompartment().getInputRight();
-                float f = 0.0f;
+                float acceleration = 0.0f;
                 float paddleMultiplier = 1.0f;
                 if (player.isHolding(FirmacivItems.KAYAK_PADDLE.get())) {
                     paddleMultiplier = 2.0f;
@@ -83,22 +83,29 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
                 }
 
                 if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    f += 0.0025F * paddleMultiplier;
+                    acceleration += 0.0025F * paddleMultiplier;
                 }
 
                 this.setYRot(this.getYRot() + this.getDeltaRotation());
 
                 if (inputUp) {
-                    f += 0.0275F * paddleMultiplier;
+                    acceleration += 0.0275F * paddleMultiplier;
                 }
 
                 if (inputDown) {
-                    f -= 0.0125F * paddleMultiplier;
+                    acceleration -= 0.0125F * paddleMultiplier;
+                }
+
+                if(acceleration > this.getAcceleration()){
+                    this.setAcceleration(acceleration);
+                } else {
+                    this.setAcceleration(this.getAcceleration()-0.010f);
+                    acceleration = this.getAcceleration();
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f));
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
                 this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
             }
         }

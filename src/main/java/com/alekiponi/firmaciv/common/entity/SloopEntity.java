@@ -27,6 +27,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.FLOAT);
 
+    protected static final EntityDataAccessor<Float> DATA_ID_MAINSHEET_LENGTH = SynchedEntityData.defineId(
+            SloopEntity.class, EntityDataSerializers.FLOAT);
+
     protected static final EntityDataAccessor<Float> DATA_ID_RUDDER_ROTATION = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.FLOAT);
 
@@ -182,10 +185,56 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public void tick() {
-        //this.setDeltaRotation((float) (-1*this.getRudderRotation()*0.25f*this.getDeltaMovement().length()));
-        this.setYRot(this.getYRot() + this.getDeltaRotation());
+
+
         super.tick();
+        if(this.status == Status.IN_WATER || this.status == Status.IN_AIR){
+            if(this.status == Status.IN_WATER){
+                this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f * this.getDeltaMovement().length()));
+            }
+
+            float rotationImpact = 0;
+
+            float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
+
+            if (windDifference > 4) {
+                rotationImpact = 1f;
+            } else if (windDifference < -4) {
+                rotationImpact = -1f;
+            }
+
+            rotationImpact = (float) (rotationImpact * this.getDeltaMovement().length());
+
+            this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
+            this.setYRot(this.getYRot() + this.getDeltaRotation());
+
+            float boomWindDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
+
+            float sheet = this.getMainsheetLength();
+            float boom = this.getMainBoomRotation();
+
+            if(sheet > Math.abs(boom)){
+                if(boom < 0){
+                    boom--;
+                } else if (boom!=0){
+                    boom ++;
+                }
+            }
+
+            if(boomWindDifference < -171){
+                boomWindDifference = Mth.wrapDegrees(boomWindDifference-180);
+            }
+            if (boomWindDifference > 9) {
+                boom += 3f;
+            } else if (boomWindDifference < -9) {
+                boom -= 3f;
+            }
+
+            this.setMainBoomRotation(boom);
+        }
+
         //this.tickSailBoat();
+
         this.tickDestroyPlants();
     }
 
@@ -196,6 +245,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         this.entityData.define(DATA_ID_MAIN_BOOM_ROTATION, 0f);
         this.entityData.define(DATA_ID_RUDDER_ROTATION, 0f);
         this.entityData.define(DATA_ID_MAINSAIL_ACTIVE, false);
+        this.entityData.define(DATA_ID_MAINSHEET_LENGTH, 0f);
     }
 
 
@@ -203,9 +253,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         return Mth.wrapDegrees(getMainBoomRotation() + Mth.wrapDegrees(this.getYRot()));
     }
 
-    public float getWindLocalRotation() {
-        return Mth.wrapDegrees(getLocalWindAngleAndSpeed()[0] - Mth.wrapDegrees(this.getYRot()));
-    }
 
     @Nullable
     public Entity getSailingVehiclePartAsEntity() {
@@ -240,32 +287,25 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             boolean inputDown = this.getControllingCompartment().getInputDown();
             boolean inputLeft = this.getControllingCompartment().getInputLeft();
             boolean inputRight = this.getControllingCompartment().getInputRight();
-            /*
+
             if (inputLeft) {
-                if(this.getRudderRotation() < 45){
+                if (this.getRudderRotation() < 45) {
                     this.setRudderRotation(this.getRudderRotation() + 1);
                 }
             }
 
             if (inputRight) {
-                if(this.getRudderRotation() > -45){
+                if (this.getRudderRotation() > -45) {
                     this.setRudderRotation(this.getRudderRotation() - 1);
                 }
-            }*/
-            if (inputLeft) {
-                this.setDeltaRotation(this.getDeltaRotation() - 1);
-            }
-
-            if (inputRight) {
-                this.setDeltaRotation(this.getDeltaRotation() + 1);
             }
 
             if (!inputRight && !inputLeft) {
                 if (this.getRudderRotation() > 0) {
-                    this.setRudderRotation(this.getRudderRotation() - 0.4f);
+                    this.setRudderRotation(this.getRudderRotation() - 0.8f);
                 }
                 if (this.getRudderRotation() < 0) {
-                    this.setRudderRotation(this.getRudderRotation() + 0.4f);
+                    this.setRudderRotation(this.getRudderRotation() + 0.8f);
                 }
                 if (Math.abs(this.getRudderRotation()) < 1) {
                     this.setRudderRotation(0f);
@@ -295,13 +335,13 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             boolean inputRight = this.getControllingCompartment().getInputRight();
             if (inputUp) {
                 if (this.getMainBoomRotation() < 45) {
-                    this.setMainBoomRotation(this.getMainBoomRotation() + 1);
+                    this.setMainsheetLength(this.getMainsheetLength() + 1);
                 }
             }
 
             if (inputDown) {
-                if (this.getMainBoomRotation() > -180) {
-                    this.setMainBoomRotation(this.getMainBoomRotation() - 1);
+                if (this.getMainsheetLength() > 0) {
+                    this.setMainsheetLength(this.getMainsheetLength() - 1);
                 }
             }
 
@@ -320,34 +360,34 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     protected void tickWindInput() {
         super.tickWindInput();
-        if (this.status == Boat.Status.IN_WATER || this.status == Boat.Status.IN_AIR) {
+        if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
             this.setMainsailActive(true);
             if (this.getMainsailActive()) {
+                double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.3;
 
-                float windDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
-
-                double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.15;
-
-                double sailForce = this.getMainsailWindAngleAndForce()[1];
+                float sailForce = this.getMainsailWindAngleAndForce()[1];
                 float sailForceAngle = this.getMainsailWindAngleAndForce()[0];
-                /*
-                this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * windFunction*0.25*windForce, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * windFunction*0.25*windForce));*/
 
+                if (sailForce > this.getAcceleration()) {
+                    this.setAcceleration(sailForce);
+                } else {
+                    this.setAcceleration(this.getAcceleration() - 0.003f);
+                    sailForce = this.getAcceleration();
+                }
 
                 this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-sailForceAngle * ((float) Math.PI / 180F)) * windFunction*0.75*sailForce, 0.0D,
-                                Mth.cos(sailForceAngle * ((float) Math.PI / 180F)) * windFunction*0.75*sailForce));
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce));
+
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-(Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce, 0.0D,
+                                Mth.cos((Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce));
 
 
             }
         }
     }
 
-    public void setMainBoomRotation(float rotation) {
-        this.entityData.set(DATA_ID_MAIN_BOOM_ROTATION, Mth.clamp(rotation, -45, 45));
-    }
 
     public float[] getMainsailWindAngleAndForce() {
         //float windDifference = Mth.degreesDifference(Mth.wrapDegrees(this.getWindLocalRotation() -180), Mth.wrapDegrees(this.getMainBoomRotation()-this.getYRot()));
@@ -358,17 +398,29 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         float windSpeed = this.getLocalWindAngleAndSpeed()[1] / 16f;
         float sailWorldAngle = Mth.wrapDegrees(this.getSailWorldRotation());
 
-        float windDifference = Mth.wrapDegrees(2*Mth.degreesDifference(windWorldAngle, sailWorldAngle)-180);
+        float windDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
 
-        float windForceAngle = windDifference;
+        float windForceAngle = Mth.wrapDegrees(1 * windDifference - 180);
 
-        double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.4;
-        float windForce = FirmacivHelper.sailForceMultiplierTable(windDifference-180);
+
+        float windForce = FirmacivHelper.sailForceMultiplierTable(windForceAngle);
         return new float[]{(float) windForceAngle, (float) windForce};
     }
 
     public float getMainBoomRotation() {
         return Mth.wrapDegrees(this.entityData.get(DATA_ID_MAIN_BOOM_ROTATION));
+    }
+
+    public void setMainBoomRotation(float rotation) {
+        this.entityData.set(DATA_ID_MAIN_BOOM_ROTATION, Mth.clamp(rotation, -1 * getMainsheetLength(), getMainsheetLength()));
+    }
+
+    public float getMainsheetLength() {
+        return Mth.wrapDegrees(this.entityData.get(DATA_ID_MAINSHEET_LENGTH));
+    }
+
+    public void setMainsheetLength(float length) {
+        this.entityData.set(DATA_ID_MAINSHEET_LENGTH, Mth.clamp(length, 0, 45));
     }
 
     public void setMainsailActive(boolean mainsail) {

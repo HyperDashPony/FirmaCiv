@@ -179,6 +179,13 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
                     acceleration -= 0.0125F * paddleMultiplier;
                 }
 
+                if(acceleration > this.getAcceleration()){
+                    this.setAcceleration(acceleration);
+                } else {
+                    this.setAcceleration(this.getAcceleration()-0.005f);
+                    acceleration = this.getAcceleration();
+                }
+
                 this.setDeltaMovement(this.getDeltaMovement()
                         .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
                                 Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));

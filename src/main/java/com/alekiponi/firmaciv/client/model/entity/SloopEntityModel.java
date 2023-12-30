@@ -11,11 +11,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.Vec3;
 
 public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -674,7 +670,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     }
 
     private static void animateSailforceIndicator(SloopEntity pBoat, float pPartialTicks, ModelPart sail_force_indicator){
-        float sailForceAngle = (float) Math.toRadians(pBoat.getMainsailWindAngleAndForce()[0]-pBoat.getYRot());
+        float sailForceAngle = (float) Math.toRadians(Mth.wrapDegrees(pBoat.getMainsailWindAngleAndForce()[0]));
         float sailForce = Mth.clamp(pBoat.getMainsailWindAngleAndForce()[1], 0.1f, 10f);
         sail_force_indicator.yRot =(float) (sailForceAngle);
         sail_force_indicator.zScale = 1;
