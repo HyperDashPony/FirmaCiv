@@ -17,11 +17,11 @@ import javax.annotation.Nullable;
 
 public class SloopEntity extends AbstractFirmacivBoatEntity {
 
-    public final int PASSENGER_NUMBER = 16;
+    public final int PASSENGER_NUMBER = 17;
 
     public final int[] CLEATS = {};
 
-    public final int[] COLLIDERS = {14,15};
+    public final int[] COLLIDERS = {14,15,16};
 
     protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.FLOAT);
@@ -185,6 +185,12 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 //collider 2
                 localZ = -0.6f;
                 localX = -2.0f;
+                localY += -0.00f;
+            }
+            case 16 -> {
+                //collider 2
+                localZ = 0f;
+                localX = 2.0f;
                 localY += -0.00f;
             }
         }
@@ -394,7 +400,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected void tickWindInput() {
         super.tickWindInput();
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            this.setMainsailActive(true);
+            this.setMainsailActive(false);
             if (this.getMainsailActive()) {
                 double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.3;
 

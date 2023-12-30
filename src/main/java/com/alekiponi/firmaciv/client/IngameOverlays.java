@@ -157,6 +157,9 @@ public enum IngameOverlays {
                     if ((float) height % 2.0 != 0) {
                         stack.translate(0f, 0.5f, 0.0f);
                     }
+                    if ((float) width % 2.0 != 0) {
+                        stack.translate(0.5f, 0f, 0.0f);
+                    }
                     if (emptyCompartmentEntity.getTrueVehicle() != null && emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity() != null) {
                         if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger()
                                 .is(emptyCompartmentEntity)) {

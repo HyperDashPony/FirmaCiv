@@ -113,8 +113,10 @@ public class VehicleCleatEntity extends Entity {
                         thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY() + 0.55f, thisVehicle.getZ());
                     }
 
-                    thisVehicle.setDeltaMovement(movementVector);
-                    thisVehicle.setYRot(finalRotation);
+                    float intermediateRotation = Mth.clamp(finalRotation, -2.0f, 2.0f);
+
+                    thisVehicle.setDeltaMovement(thisVehicle.getDeltaMovement().add(movementVector));
+                    thisVehicle.setDeltaRotation(thisVehicle.getDeltaRotation() + finalRotation);
 
                 }
 

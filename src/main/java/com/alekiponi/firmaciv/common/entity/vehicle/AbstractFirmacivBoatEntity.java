@@ -1,6 +1,7 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.common.entities.predator.Predator;
@@ -28,6 +29,7 @@ import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     public static final int PADDLE_LEFT = 0;
@@ -63,12 +65,15 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     protected int windLerpTicks;
 
+    protected Vec3 oldPosition;
+
     public AbstractFirmacivBoatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
         Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
         this.setWindVector(windVector);
         this.tickUpdateWind(false);
         windLerpTicks = 0;
+        oldPosition = this.getPosition(0);
     }
 
     protected void defineSynchedData() {
@@ -84,7 +89,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     @Override
     public void tick() {
-
         if (!this.level().isClientSide()) {
             if (this.getPassengers().size() < this.getMaxPassengers()) {
                 final VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
@@ -94,39 +98,21 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             }
         }
 
-        /*
-        if(this.getBoundingBox().contract(0,0.1,0).inflate(0.6,0,0.6).contains(pPlayer.getPosition(0))){
-            // if the player is moving TOWARDS the boat
-            Vec3 playerMove = pPlayer.getPosition(0).add(pPlayer.getDeltaMovement());
-            if(this.getBoundingBox().inflate(0,2,0).contains(playerMove)){
-                Vec3 newPlayerPos = pPlayer.getPosition(0).multiply(1,0,1);
-                newPlayerPos = newPlayerPos.add(0,this.getY() + this.getBoundingBox().getYsize()+0.05,0);
-                newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x())*0.1,0,  (this.getZ() - newPlayerPos.z())*0.1);
-                pPlayer.setPos(newPlayerPos);
-            }
-        }*/
-
         final List<Entity> playersToHop = this.level()
                 .getEntities(this, this.getBoundingBox().inflate(0.1, -0.01, 0.1), EntitySelector.pushableBy(this));
 
         if (!playersToHop.isEmpty()) {
             for (final Entity entity : playersToHop) {
-                if(entity instanceof Player player){
-                    if(player.getDeltaMovement().y() > 0.01){
-                        Vec3 newPlayerPos = player.getPosition(0).multiply(1,0,1);
-                        newPlayerPos = newPlayerPos.add(0,this.getY() + this.getBoundingBox().getYsize()+0.05,0);
-                        newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x())*0.1,0,  (this.getZ() - newPlayerPos.z())*0.1);
+                if (entity instanceof Player player) {
+                    if (player.getDeltaMovement().y() > 0.01) {
+                        Vec3 newPlayerPos = player.getPosition(0).multiply(1, 0, 1);
+                        newPlayerPos = newPlayerPos.add(0, this.getY() + this.getBoundingBox().getYsize() + 0.05, 0);
+                        newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x()) * 0.2, 0, (this.getZ() - newPlayerPos.z()) * 0.2);
                         player.setPos(newPlayerPos);
                     }
-
                 }
             }
         }
-
-        if(this.level().isClientSide()){
-
-        }
-
 
 
         this.oldStatus = this.status;
@@ -148,7 +134,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
         tickWindInput();
 
-
         this.tickFloatBoat();
         this.tickControlBoat();
         if (this.isControlledByLocalInstance()) {
@@ -160,14 +145,31 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             this.move(MoverType.SELF, this.getDeltaMovement());
         }
 
-        final List<Entity> playersToTakeWith = this.level()
-                .getEntities(this, this.getBoundingBox().inflate(0,-this.getBoundingBox().getYsize()+2,0).move(0,this.getBoundingBox().getYsize(),0), EntitySelector.pushableBy(this));
+        List<Entity> entitiesToTakeWith = this.level()
+                .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.pushableBy(this));
 
-        if (!playersToTakeWith.isEmpty()) {
-            for (final Entity entity : playersToTakeWith) {
-                if(entity instanceof Player player){
-                    player.setDeltaMovement(player.getDeltaMovement().multiply(0.1,1,0.1).add(this.getDeltaMovement().multiply(0.9,0,0.9)));
+
+        for (Entity entity : this.getPassengers()) {
+            if (entity.isVehicle() && entity.getFirstPassenger() instanceof VehicleCollisionEntity collider) {
+                entitiesToTakeWith.addAll(this.level()
+                        .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.pushableBy(collider)));
+            }
+        }
+
+        entitiesToTakeWith = entitiesToTakeWith.stream().distinct().collect(Collectors.toList());
+
+        if (!entitiesToTakeWith.isEmpty()) {
+            for (final Entity entity : entitiesToTakeWith) {
+                if (!entity.isPassenger()) {
+                    if (this.getPosition(0).subtract(this.xOld, this.yOld, this.zOld).length() > 0.01) {
+                        if (entity instanceof Player player) {
+                            player.move(MoverType.PLAYER, this.getDeltaMovement());
+                            player.setDeltaMovement(player.getDeltaMovement().multiply(0.9, 1.0, 0.9));
+                        }
+                    }
                 }
+
+
             }
         }
 
@@ -201,10 +203,12 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                             Mth.cos(this.getLocalWindAngleAndSpeed()[0] * ((float) Math.PI / 180F)) * windFunction * 0.55));
 
 
-            if (windDifference > 1) {
-                this.setDeltaRotation(this.getDeltaRotation() - 0.1f);
-            } else if (windDifference < -1) {
-                this.setDeltaRotation(this.getDeltaRotation() + 0.1f);
+            if(this.status == Status.IN_WATER){
+                if (windDifference > 1) {
+                    this.setDeltaRotation(this.getDeltaRotation() - 0.1f);
+                } else if (windDifference < -1) {
+                    this.setDeltaRotation(this.getDeltaRotation() + 0.1f);
+                }
             }
 
         }
@@ -339,13 +343,13 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                 acceleration -= backward * paddleMultiplier;
             }
 
-            if(Math.abs(acceleration) > Math.abs(this.getAcceleration())){
+            if (Math.abs(acceleration) > Math.abs(this.getAcceleration())) {
                 this.setAcceleration(acceleration);
             } else {
-                if(this.getAcceleration() > 0){
-                    this.setAcceleration(this.getAcceleration()-this.getMomentumSubtractor());
+                if (this.getAcceleration() > 0) {
+                    this.setAcceleration(this.getAcceleration() - this.getMomentumSubtractor());
                 } else {
-                    this.setAcceleration(this.getAcceleration()+this.getMomentumSubtractor());
+                    this.setAcceleration(this.getAcceleration() + this.getMomentumSubtractor());
                 }
                 acceleration = this.getAcceleration();
             }

@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -48,25 +49,10 @@ public class VehicleCollisionEntity extends Entity {
                     if(player.getDeltaMovement().y() > 0){
                         Vec3 newPlayerPos = player.getPosition(0).multiply(1,0,1);
                         newPlayerPos = newPlayerPos.add(0,this.getY() + this.getBoundingBox().getYsize()+0.05,0);
-                        newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x())*0.1,0,  (this.getZ() - newPlayerPos.z())*0.1);
+                        newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x())*0.2,0,  (this.getZ() - newPlayerPos.z())*0.2);
                         player.setPos(newPlayerPos);
                     }
 
-                }
-            }
-        }
-
-        final List<Entity> playersToTakeWith = this.level()
-                .getEntities(this, this.getBoundingBox().inflate(0,-this.getBoundingBox().getYsize()+2,0).move(0,this.getBoundingBox().getYsize(),0), EntitySelector.pushableBy(this));
-
-        if (!playersToTakeWith.isEmpty()) {
-            for (final Entity entity : playersToTakeWith) {
-                if(entity instanceof Player player){
-                    if(this.getRootVehicle() instanceof AbstractFirmacivBoatEntity boat) {
-                        if (!boat.getBoundingBox().inflate(0, -boat.getBoundingBox().getYsize() + 2, 0).move(0, boat.getBoundingBox().getYsize(), 0).contains(player.getPosition(0))) {
-                            player.setDeltaMovement(player.getDeltaMovement().multiply(0.1, 1, 0.1).add(boat.getDeltaMovement().multiply(0.9, 0, 0.9)));
-                        }
-                    }
                 }
             }
         }

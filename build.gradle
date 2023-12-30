@@ -162,8 +162,11 @@ dependencies {
     implementation fg.deobf("curse.maven:patchouli-306770:4636277")
 
 
+    /*
     fg.deobf("curse.maven:better-third-person-435044:4596768")
     runtimeOnly fg.deobf("curse.maven:better-third-person-435044:4596768")
+
+     */
 
     /*
     fg.deobf("curse.maven:jei-238222:4712868")
