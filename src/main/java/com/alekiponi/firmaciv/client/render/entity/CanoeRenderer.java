@@ -2,8 +2,8 @@ package com.alekiponi.firmaciv.client.render.entity;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
+import com.alekiponi.firmaciv.util.BoatVariant;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -19,7 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Quaternionf;
 import org.slf4j.Logger;
 
 import java.util.Map;

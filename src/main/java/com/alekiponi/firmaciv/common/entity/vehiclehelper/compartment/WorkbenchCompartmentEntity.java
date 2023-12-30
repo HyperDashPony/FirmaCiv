@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.common.entity.vehiclehelper;
+package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import com.alekiponi.firmaciv.common.menu.CompartmentCraftingMenu;
 import net.minecraft.core.BlockPos;

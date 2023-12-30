@@ -2,8 +2,8 @@ package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
+import com.alekiponi.firmaciv.util.BoatVariant;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;

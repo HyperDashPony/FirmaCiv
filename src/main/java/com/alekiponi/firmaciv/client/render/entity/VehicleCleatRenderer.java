@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.client.render.entity;
 
-import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

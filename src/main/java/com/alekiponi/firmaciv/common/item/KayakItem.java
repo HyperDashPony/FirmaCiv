@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.common.item;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.KayakEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;

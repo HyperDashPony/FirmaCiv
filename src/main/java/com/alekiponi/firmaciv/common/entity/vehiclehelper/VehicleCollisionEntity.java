@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
-import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
-import com.alekiponi.firmaciv.common.entity.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

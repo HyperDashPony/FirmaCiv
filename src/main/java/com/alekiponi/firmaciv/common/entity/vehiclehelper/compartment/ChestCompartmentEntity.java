@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.common.entity.vehiclehelper;
+package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.common.container.RestrictedChestContainer;

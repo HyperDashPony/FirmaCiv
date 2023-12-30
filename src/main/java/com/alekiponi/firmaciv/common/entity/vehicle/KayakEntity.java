@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.common.entity;
+package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;

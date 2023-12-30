@@ -1,7 +1,9 @@
-package com.alekiponi.firmaciv.common.entity;
+package com.alekiponi.firmaciv.common.entity.vehicle;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.entity.vehiclecapability.BoatCapability;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
@@ -45,7 +47,7 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class AbstractFirmacivBoatEntity extends Entity {
+public abstract class AbstractFirmacivBoatEntity extends Entity implements BoatCapability {
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
     public static final double PADDLE_SOUND_TIME = Math.PI / 4;
@@ -292,60 +294,9 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
     }
 
 
-    @Override
-    public void tick() {
-
-        if (!this.level().isClientSide()) {
-            if (this.getPassengers().size() < this.getMaxPassengers()) {
-                final VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
-                newPart.setPos(this.getX(), this.getY(), this.getZ());
-                this.level().addFreshEntity(newPart);
-                newPart.startRiding(this);
-            }
-        }
-
-        this.oldStatus = this.status;
-        this.status = this.getStatus();
-
-
-        if (this.getHurtTime() > 0) {
-            this.setHurtTime(this.getHurtTime() - 1);
-        }
-
-        if (this.getDamage() > 0.0F) {
-            this.setDamage(this.getDamage() - getDamageRecovery());
-        }
-
-        this.tickEffects();
-
-        super.tick();
-        this.tickLerp();
-
-        tickWindInput();
-
-
-        this.tickFloatBoat();
-        this.tickControlBoat();
-        if (this.isControlledByLocalInstance()) {
-            if (this.level().isClientSide()) {
-
-                this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
-            }
-
-            this.move(MoverType.SELF, this.getDeltaMovement());
-        }
-
-
-        this.tickPaddlingEffects();
-
-        this.checkInsideBlocks();
-
-        this.tickUpdateWind(true);
-
-    }
 
     protected void tickWindInput() {
-        if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
+        if (this.status == AbstractFirmacivBoatEntity.Status.IN_WATER || this.status == AbstractFirmacivBoatEntity.Status.IN_AIR) {
             double windFunction = Mth.clamp(this.getWindVector().length(), 0.001, 0.002*this.getBoundingBox().getXsize());
 
             float windDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getYRot()));
@@ -393,204 +344,6 @@ public abstract class AbstractFirmacivBoatEntity extends Entity {
         }
 
     }
-
-    protected void tickFloatBoat() {
-
-        double gravAccel = -0.04F;
-        double d1 = this.isNoGravity() ? 0.0D : (double) gravAccel;
-
-        double d2 = 0.0D;
-        this.invFriction = 0.05F;
-        if (this.oldStatus == Status.IN_AIR && this.status != Status.IN_AIR && this.status != Status.ON_LAND) {
-            this.waterLevel = this.getY(1.0D);
-            this.setPos(this.getX(), (double) (this.getWaterLevelAbove() - this.getBbHeight()) + 0.101D, this.getZ());
-            this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
-            this.lastYd = 0.0D;
-            this.status = Status.IN_WATER;
-        } else {
-
-            if (this.status == Status.IN_WATER) {
-                d2 = ((this.waterLevel - this.getY()) / (double) this.getBbHeight()) + 0.1;
-                this.invFriction = 0.9F;
-            } else if (this.status == Status.UNDER_FLOWING_WATER) {
-                d1 = -7.0E-4D;
-                this.invFriction = 0.9F;
-            } else if (this.status == Status.UNDER_WATER) {
-                d2 = 0.01F;
-                this.invFriction = 0.45F;
-            } else if (this.status == Status.IN_AIR) {
-                this.invFriction = 0.9F;
-            } else if (this.status == Status.ON_LAND) {
-                this.invFriction = this.landFriction;
-                if (invFriction > 0.5F) {
-                    invFriction = 0.5F;
-                }
-                if (this.getControllingPassenger() instanceof Player) {
-                    this.landFriction /= 2.0F;
-                }
-            }
-
-            if (Math.abs(this.getDeltaRotation()) > 0) {
-                float rotationalFriction = (Math.abs(this.getDeltaRotation()) / 48.0F);
-
-                float modifiedFriction = this.invFriction - rotationalFriction;
-                if (modifiedFriction > 2.0F) {
-                    modifiedFriction = 2.0F;
-                } else if (modifiedFriction < 0.0F) {
-                    modifiedFriction = 0.0F;
-                }
-                this.invFriction = modifiedFriction;
-            }
-
-
-
-            Vec3 vec3 = this.getDeltaMovement();
-
-            this.setDeltaMovement(vec3.x * (double) this.invFriction, vec3.y + d1, vec3.z * (double) this.invFriction);
-
-            if (this.getControllingCompartment() != null) {
-                double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
-
-
-                if (this.getControllingCompartment().getInputLeft() || this.getControllingCompartment()
-                        .getInputRight()) {
-                    this.setDeltaRotation(((this.invFriction / 3.0F)) * this.getDeltaRotation());
-                    this.setDeltaRotation((float) (turnSpeedFactor * this.getDeltaRotation()));
-
-                } else {
-                    this.setDeltaRotation(this.getDeltaRotation() * (this.invFriction / 2.0F));
-                }
-            }
-
-
-            if (d2 > 0.0D) {
-                Vec3 vec31 = this.getDeltaMovement();
-                this.setDeltaMovement(vec31.x, (vec31.y + d2 * 0.06153846016296973D) * 0.75D, vec31.z);
-            }
-
-
-        }
-
-    }
-
-
-    protected void tickControlBoat() {
-        if (getControllingCompartment() != null) {
-            boolean inputUp = this.getControllingCompartment().getInputUp();
-            boolean inputDown = this.getControllingCompartment().getInputDown();
-            boolean inputLeft = this.getControllingCompartment().getInputLeft();
-            boolean inputRight = this.getControllingCompartment().getInputRight();
-            float acceleration = 0;
-            if (inputLeft) {
-                this.setDeltaRotation(this.getDeltaRotation() - 1);
-            }
-
-            if (inputRight) {
-                this.setDeltaRotation(this.getDeltaRotation() + 1);
-            }
-
-            if (inputRight != inputLeft && !inputUp && !inputDown) {
-                acceleration += 0.005F;
-            }
-
-            this.setYRot(this.getYRot() + this.getDeltaRotation());
-            if (inputUp) {
-                acceleration += 0.055F;
-            }
-
-            if (inputDown) {
-                acceleration -= 0.025F;
-            }
-
-            if(acceleration > this.getAcceleration()){
-                this.setAcceleration(acceleration);
-            } else {
-                this.setAcceleration(this.getAcceleration()-0.005f);
-                acceleration = this.getAcceleration();
-            }
-
-            this.setDeltaMovement(this.getDeltaMovement()
-                    .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
-                            Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
-
-            this.setPaddleState(
-                    inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
-
-        }
-    }
-
-    protected void tickEffects() {
-        if (this.status == Status.IN_WATER && !this.getPassengers().isEmpty()) {
-            if (Math.abs(this.getDeltaRotation()) > 2) {
-                this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(),
-                        this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
-                if (this.random.nextInt(20) == 0) {
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(),
-                            this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
-                }
-                if (this.getControllingCompartment() != null && Math.abs(
-                        this.getDeltaRotation()) > 5 && (this.getControllingCompartment()
-                        .getInputRight() || this.getControllingCompartment().getInputLeft())) {
-                    this.level()
-                            .playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimHighSpeedSplashSound(),
-                                    this.getSoundSource(), 0.2F, 0.8F + 0.4F * this.random.nextFloat(), false);
-
-
-                    Vec3 splashOffset = this.getDeltaMovement().yRot(45);
-                    if (this.getControllingCompartment().getInputLeft()) {
-                        splashOffset = this.getDeltaMovement().yRot(-45);
-                    }
-                    splashOffset.normalize();
-
-                    for (int i = 0; i < 8; i++) {
-                        this.level().addParticle(ParticleTypes.BUBBLE_POP,
-                                this.getX() + (double) this.random.nextFloat() + splashOffset.x * 2 + this.getDeltaMovement().x * i,
-                                this.getY() + 0.7D,
-                                this.getZ() + (double) this.random.nextFloat() + splashOffset.z * 2 + this.getDeltaMovement().x * i,
-                                0.0D, 0.0D, 0.0D);
-                        this.level().addParticle(ParticleTypes.SPLASH,
-                                this.getX() + (double) this.random.nextFloat() + splashOffset.x * 2 + this.getDeltaMovement().x * i,
-                                this.getY() + 0.7D,
-                                this.getZ() + (double) this.random.nextFloat() + splashOffset.z * 2 + this.getDeltaMovement().x * i,
-                                0.0D, 0.0D, 0.0D);
-                    }
-                }
-
-            } else if (this.getDeltaMovement().length() > 0.10) {
-                if (this.random.nextInt(8) == 0) {
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), this.getSwimSound(),
-                            this.getSoundSource(), 0.1F, 0.8F + 0.4F * this.random.nextFloat(), false);
-                    this.level().addParticle(ParticleTypes.SPLASH, this.getX() + (double) this.random.nextFloat(),
-                            this.getY() + 0.7D, this.getZ() + (double) this.random.nextFloat(), 0.0D, 0.0D, 0.0D);
-                }
-            }
-        }
-    }
-
-    protected void tickPaddlingEffects() {
-        for (int i = 0; i <= 1; ++i) {
-            if (this.getPaddleState(i)) {
-                if (!this.isSilent() && (double) (this.paddlePositions[i] % ((float) Math.PI * 2F)) <= (double) ((float) Math.PI / 4F) && (double) ((this.paddlePositions[i] + ((float) Math.PI / 8F)) % ((float) Math.PI * 2F)) >= (double) ((float) Math.PI / 4F)) {
-                    SoundEvent soundevent = this.getPaddleSound();
-                    if (soundevent != null) {
-                        Vec3 vec3 = this.getViewVector(1.0F);
-                        double d0 = i == 1 ? -vec3.z : vec3.z;
-                        double d1 = i == 1 ? vec3.x : -vec3.x;
-                        this.level().playSound(null, this.getX() + d0, this.getY(), this.getZ() + d1, soundevent,
-                                this.getSoundSource(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
-                        this.level().gameEvent(this.getControllingPassenger(), GameEvent.SPLASH,
-                                new BlockPos((int) (this.getX() + d0), (int) this.getY(), (int) (this.getZ() + d1)));
-                    }
-                }
-
-                this.paddlePositions[i] += ((float) Math.PI / 8F);
-            } else {
-                this.paddlePositions[i] = 0.0F;
-            }
-        }
-    }
-
-
 
 
     public void updateLocalWindAngleAndSpeed() {

@@ -1,9 +1,8 @@
 package com.alekiponi.firmaciv.client.render.entity;
 
-import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -13,7 +12,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;

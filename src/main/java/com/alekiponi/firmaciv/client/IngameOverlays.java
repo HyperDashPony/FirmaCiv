@@ -5,8 +5,8 @@
 
 package com.alekiponi.firmaciv.client;
 
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.alekiponi.firmaciv.util.FirmacivTags;

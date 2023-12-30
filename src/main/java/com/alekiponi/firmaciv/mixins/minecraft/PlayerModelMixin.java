@@ -1,9 +1,9 @@
 package com.alekiponi.firmaciv.mixins.minecraft;
 
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.KayakEntity;
-import com.alekiponi.firmaciv.common.entity.RowboatEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;

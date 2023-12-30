@@ -1,9 +1,9 @@
-package com.alekiponi.firmaciv.common.entity.vehiclehelper;
+package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.RowboatEntity;
-import com.alekiponi.firmaciv.common.entity.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.network.PacketHandler;
 import com.alekiponi.firmaciv.network.ServerboundCompartmentInputPacket;
 import com.alekiponi.firmaciv.util.FirmacivTags;
@@ -17,7 +17,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;

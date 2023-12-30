@@ -1,10 +1,18 @@
 package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.Firmaciv;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AnvilCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.ChestCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.WorkbenchCompartmentEntity;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;

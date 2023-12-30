@@ -1,8 +1,9 @@
-package com.alekiponi.firmaciv.common.entity;
+package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

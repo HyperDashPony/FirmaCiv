@@ -1,7 +1,8 @@
-package com.alekiponi.firmaciv.common.entity.vehiclehelper;
+package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
-import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
-import com.alekiponi.firmaciv.common.entity.KayakEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

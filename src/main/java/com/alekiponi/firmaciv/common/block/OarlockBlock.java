@@ -1,8 +1,8 @@
 package com.alekiponi.firmaciv.common.block;
 
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.events.config.FirmacivConfig;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.minecraft.core.BlockPos;

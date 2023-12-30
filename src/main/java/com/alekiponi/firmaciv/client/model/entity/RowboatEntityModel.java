@@ -2,7 +2,7 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;

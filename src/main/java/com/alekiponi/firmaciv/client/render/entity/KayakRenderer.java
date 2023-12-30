@@ -2,7 +2,7 @@ package com.alekiponi.firmaciv.client.render.entity;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.KayakEntityModel;
-import com.alekiponi.firmaciv.common.entity.KayakEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Quaternionf;
 
 @OnlyIn(Dist.CLIENT)
 public class KayakRenderer extends EntityRenderer<KayakEntity> {

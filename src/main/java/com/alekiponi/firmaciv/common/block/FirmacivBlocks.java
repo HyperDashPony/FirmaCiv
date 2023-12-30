@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;

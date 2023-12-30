@@ -4,7 +4,7 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.5.2
 
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;

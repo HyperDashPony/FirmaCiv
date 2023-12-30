@@ -1,7 +1,6 @@
 package com.alekiponi.firmaciv.network;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
-import com.google.common.graph.Network;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;

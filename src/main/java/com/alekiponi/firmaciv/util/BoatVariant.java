@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.common.entity;
+package com.alekiponi.firmaciv.util;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;

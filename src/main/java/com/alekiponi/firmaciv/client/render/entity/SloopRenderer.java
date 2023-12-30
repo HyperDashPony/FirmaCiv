@@ -2,30 +2,20 @@ package com.alekiponi.firmaciv.client.render.entity;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.SloopEntityModel;
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.SloopEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 @OnlyIn(Dist.CLIENT)
 public class SloopRenderer extends EntityRenderer<SloopEntity> {

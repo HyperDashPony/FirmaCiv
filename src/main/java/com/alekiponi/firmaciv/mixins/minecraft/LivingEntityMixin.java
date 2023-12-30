@@ -1,6 +1,6 @@
 package com.alekiponi.firmaciv.mixins.minecraft;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;

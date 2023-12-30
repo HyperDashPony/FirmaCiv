@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.common.entity.vehiclehelper;
+package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
