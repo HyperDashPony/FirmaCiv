@@ -1,18 +1,13 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.entities.predator.Predator;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
-import net.minecraft.BlockUtil;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ServerboundPaddleBoatPacket;
@@ -21,26 +16,14 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.WaterlilyBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
@@ -111,6 +94,41 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             }
         }
 
+        /*
+        if(this.getBoundingBox().contract(0,0.1,0).inflate(0.6,0,0.6).contains(pPlayer.getPosition(0))){
+            // if the player is moving TOWARDS the boat
+            Vec3 playerMove = pPlayer.getPosition(0).add(pPlayer.getDeltaMovement());
+            if(this.getBoundingBox().inflate(0,2,0).contains(playerMove)){
+                Vec3 newPlayerPos = pPlayer.getPosition(0).multiply(1,0,1);
+                newPlayerPos = newPlayerPos.add(0,this.getY() + this.getBoundingBox().getYsize()+0.05,0);
+                newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x())*0.1,0,  (this.getZ() - newPlayerPos.z())*0.1);
+                pPlayer.setPos(newPlayerPos);
+            }
+        }*/
+
+        final List<Entity> playersToHop = this.level()
+                .getEntities(this, this.getBoundingBox().inflate(0.1, -0.01, 0.1), EntitySelector.pushableBy(this));
+
+        if (!playersToHop.isEmpty()) {
+            for (final Entity entity : playersToHop) {
+                if(entity instanceof Player player){
+                    if(player.getDeltaMovement().y() > 0.01){
+                        Vec3 newPlayerPos = player.getPosition(0).multiply(1,0,1);
+                        newPlayerPos = newPlayerPos.add(0,this.getY() + this.getBoundingBox().getYsize()+0.05,0);
+                        newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x())*0.1,0,  (this.getZ() - newPlayerPos.z())*0.1);
+                        player.setPos(newPlayerPos);
+                    }
+
+                }
+            }
+        }
+
+        if(this.level().isClientSide()){
+
+        }
+
+
+
         this.oldStatus = this.status;
         this.status = this.getStatus();
 
@@ -142,6 +160,16 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             this.move(MoverType.SELF, this.getDeltaMovement());
         }
 
+        final List<Entity> playersToTakeWith = this.level()
+                .getEntities(this, this.getBoundingBox().inflate(0,-this.getBoundingBox().getYsize()+2,0).move(0,this.getBoundingBox().getYsize(),0), EntitySelector.pushableBy(this));
+
+        if (!playersToTakeWith.isEmpty()) {
+            for (final Entity entity : playersToTakeWith) {
+                if(entity instanceof Player player){
+                    player.setDeltaMovement(player.getDeltaMovement().multiply(0.1,1,0.1).add(this.getDeltaMovement().multiply(0.9,0,0.9)));
+                }
+            }
+        }
 
         this.tickPaddlingEffects();
 
@@ -284,6 +312,12 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             boolean inputLeft = this.getControllingCompartment().getInputLeft();
             boolean inputRight = this.getControllingCompartment().getInputRight();
             float acceleration = 0;
+            float paddleMultiplier = this.getPaddleMultiplier();
+
+            float forward = getPaddleAcceleration()[0];
+            float backward = getPaddleAcceleration()[1];
+            float turning = getPaddleAcceleration()[2];
+
             if (inputLeft) {
                 this.setDeltaRotation(this.getDeltaRotation() - 1);
             }
@@ -293,25 +327,25 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             }
 
             if (inputRight != inputLeft && !inputUp && !inputDown) {
-                acceleration += 0.005F;
+                acceleration += turning * paddleMultiplier;
             }
 
 
             if (inputUp) {
-                acceleration += 0.055F;
+                acceleration += forward * paddleMultiplier;
             }
 
             if (inputDown) {
-                acceleration -= 0.025F;
+                acceleration -= backward * paddleMultiplier;
             }
 
             if(Math.abs(acceleration) > Math.abs(this.getAcceleration())){
                 this.setAcceleration(acceleration);
             } else {
                 if(this.getAcceleration() > 0){
-                    this.setAcceleration(this.getAcceleration()-0.005f);
+                    this.setAcceleration(this.getAcceleration()-this.getMomentumSubtractor());
                 } else {
-                    this.setAcceleration(this.getAcceleration()+0.005f);
+                    this.setAcceleration(this.getAcceleration()+this.getMomentumSubtractor());
                 }
                 acceleration = this.getAcceleration();
             }
@@ -325,6 +359,25 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
         }
     }
+
+    protected abstract float getPaddleMultiplier();
+
+    protected float[] getPaddleAcceleration() {
+        float forward = 0.0275F;
+        float backward = 0.0125F;
+        float turning = 0.0025F;
+        return new float[]{forward, backward, turning};
+    }
+
+    @Override
+    public void playerTouch(Player pPlayer) {
+        /*
+        //if the player is touching from the side only
+        */
+
+    }
+
+    protected abstract float getMomentumSubtractor();
 
     protected void tickEffects() {
         if (this.status == Status.IN_WATER && !this.getPassengers().isEmpty()) {

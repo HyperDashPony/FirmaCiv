@@ -17,9 +17,11 @@ import javax.annotation.Nullable;
 
 public class SloopEntity extends AbstractFirmacivBoatEntity {
 
-    public final int PASSENGER_NUMBER = 14;
+    public final int PASSENGER_NUMBER = 16;
 
     public final int[] CLEATS = {};
+
+    public final int[] COLLIDERS = {14,15};
 
     protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.FLOAT);
@@ -37,6 +39,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
+
+    protected final float DAMAGE_THRESHOLD = 80.0f;
+    protected final float DAMAGE_RECOVERY = 2.0f;
 
     public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
@@ -59,6 +64,11 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[] getColliders() {
+        return COLLIDERS;
+    }
+
+    @Override
     public int[] getCanAddOnlyBlocks() {
         return CAN_ADD_ONLY_BLOCKS;
     }
@@ -73,111 +83,122 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         return COMPARTMENT_ROTATIONS;
     }
 
-    // sailing stuff
-    @Override
-    protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
-        if (this.hasPassenger(passenger)) {
-            float localX = 0.0F;
-            float localZ = 0.0F;
-            float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
-            if (this.getPassengers().size() > 1) {
-                switch (this.getPassengers().indexOf(passenger)) {
-                    case 0 -> {
-                        // aft pilot / tiller seat
-                        localZ = 0.6f;
-                        localX = -2.3f;
-                        localY += 0.6f;
-                    }
-                    case 1 -> {
-                        // hold lower port
-                        localZ = -0.35f;
-                        localX = -0.4f;
-                        localY += -0.1f;
-                    }
-                    case 2 -> {
-                        // hold lower starboard
-                        localZ = 0.35f;
-                        localX = -0.4f;
-                        localY += -0.1f;
-                    }
-                    case 3 -> {
-                        // hold middle port
-                        localZ = -0.35f;
-                        localX = 0.475f;
-                        localY += -0.1f;
-                    }
-                    case 4 -> {
-                        //hold middle starboard
-                        localZ = 0.35f;
-                        localX = 0.475f;
-                        localY += -0.1f;
-                    }
-                    case 5 -> {
-                        //hold upper port
-                        localZ = -0.35f;
-                        localX = 1.35f;
-                        localY += -0.1f;
-                    }
-                    case 6 -> {
-                        //hold upper starboard
-                        localZ = 0.35f;
-                        localX = 1.35f;
-                        localY += -0.1f;
-                    }
-                    case 7 -> {
-                        //port side fore
-                        localX = 0.3f;
-                        localZ = -1.4f;
-                        localY += 0.6f;
-                    }
-                    case 8 -> {
-                        //port side mid
-                        localX = -0.5f;
-                        localZ = -1.33f;
-                        localY += 0.6f;
-                    }
-                    case 9 -> {
-                        //port side aft
-                        localX = -1.3f;
-                        localZ = -1.26f;
-                        localY += 0.6f;
 
-                    }
-                    case 10 -> {
-                        //starboard side fore
-                        localX = 0.3f;
-                        localZ = 1.4f;
-                        localY += 0.6f;
-                    }
-                    case 11 -> {
-                        //starboard side mid
-                        localX = -0.5f;
-                        localZ = 1.33f;
-                        localY += 0.6f;
-                    }
-                    case 12 -> {
-                        //starboard side aft
-                        localX = -1.3f;
-                        localZ = 1.26f;
-                        localY += 0.6f;
-                    }
-                    case 13 -> {
-                        //sailing station
-                        localZ = -0.6f;
-                        localX = -2.3f;
-                        localY += 0.6f;
-                    }
-                }
+    @Override
+    protected Vec3 positionRiderByIndex(int index){
+        float localX = 0.0F;
+        float localZ = 0.0F;
+        float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()));
+        switch (index) {
+            case 0 -> {
+                // aft pilot / tiller seat
+                localZ = 0.6f;
+                localX = -2.3f;
+                localY += 0.6f;
             }
-            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
-            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-            if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
-                passenger.setYRot(this.getYRot());
-            } else if (!(passenger instanceof VehiclePartEntity)) {
-                super.positionRider(passenger, moveFunction);
+            case 1 -> {
+                // hold lower port
+                localZ = -0.35f;
+                localX = -0.4f;
+                localY += -0.1f;
+            }
+            case 2 -> {
+                // hold lower starboard
+                localZ = 0.35f;
+                localX = -0.4f;
+                localY += -0.1f;
+            }
+            case 3 -> {
+                // hold middle port
+                localZ = -0.35f;
+                localX = 0.475f;
+                localY += -0.1f;
+            }
+            case 4 -> {
+                //hold middle starboard
+                localZ = 0.35f;
+                localX = 0.475f;
+                localY += -0.1f;
+            }
+            case 5 -> {
+                //hold upper port
+                localZ = -0.35f;
+                localX = 1.35f;
+                localY += -0.1f;
+            }
+            case 6 -> {
+                //hold upper starboard
+                localZ = 0.35f;
+                localX = 1.35f;
+                localY += -0.1f;
+            }
+            case 7 -> {
+                //port side fore
+                localX = 0.3f;
+                localZ = -1.4f;
+                localY += 0.6f;
+            }
+            case 8 -> {
+                //port side mid
+                localX = -0.5f;
+                localZ = -1.33f;
+                localY += 0.6f;
+            }
+            case 9 -> {
+                //port side aft
+                localX = -1.3f;
+                localZ = -1.26f;
+                localY += 0.6f;
+
+            }
+            case 10 -> {
+                //starboard side fore
+                localX = 0.3f;
+                localZ = 1.4f;
+                localY += 0.6f;
+            }
+            case 11 -> {
+                //starboard side mid
+                localX = -0.5f;
+                localZ = 1.33f;
+                localY += 0.6f;
+            }
+            case 12 -> {
+                //starboard side aft
+                localX = -1.3f;
+                localZ = 1.26f;
+                localY += 0.6f;
+            }
+            case 13 -> {
+                //sailing station
+                localZ = -0.6f;
+                localX = -2.3f;
+                localY += 0.6f;
+            }
+            case 14 -> {
+                //collider 1
+                localZ = 0.6f;
+                localX = -2.0f;
+                localY += -0.00f;
+            }
+            case 15 -> {
+                //collider 2
+                localZ = -0.6f;
+                localX = -2.0f;
+                localY += -0.00f;
             }
         }
+        return new Vec3(localX, localY, localZ);
+    }
+
+    @Override
+    protected float getDamageThreshold() {
+        return DAMAGE_THRESHOLD;
+    }
+
+    @Override
+    protected float getDamageRecovery() {
+        return DAMAGE_RECOVERY;
     }
 
     @Override
@@ -283,29 +304,31 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             boolean inputLeft = this.getControllingCompartment().getInputLeft();
             boolean inputRight = this.getControllingCompartment().getInputRight();
 
+            float rudder = this.getRudderRotation();
             if (inputLeft) {
-                if (this.getRudderRotation() < 45) {
-                    this.setRudderRotation(this.getRudderRotation() + 1);
+                if (rudder < 45) {
+                    rudder++;
                 }
             }
 
             if (inputRight) {
-                if (this.getRudderRotation() > -45) {
-                    this.setRudderRotation(this.getRudderRotation() - 1);
+                if (rudder > -45) {
+                    rudder--;
                 }
             }
 
             if (!inputRight && !inputLeft) {
-                if (this.getRudderRotation() > 0) {
-                    this.setRudderRotation(this.getRudderRotation() - 0.8f);
+                if (rudder > 0) {
+                    rudder -= 0.8f;
                 }
-                if (this.getRudderRotation() < 0) {
-                    this.setRudderRotation(this.getRudderRotation() + 0.8f);
+                if (rudder < 0) {
+                    rudder += 0.8f;
                 }
-                if (Math.abs(this.getRudderRotation()) < 1) {
-                    this.setRudderRotation(0f);
+                if (Math.abs(rudder) < 1) {
+                    rudder = 0;
                 }
             }
+            this.setRudderRotation(rudder);
 
             tickSailBoat();
 
@@ -320,6 +343,21 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 this.setMainsailActive(false);
             }*/
         }
+    }
+
+    @Override
+    protected float getPaddleMultiplier() {
+        return 0;
+    }
+
+    @Override
+    protected float[] getPaddleAcceleration() {
+        return new float[]{0, 0, 0};
+    }
+
+    @Override
+    protected float getMomentumSubtractor() {
+        return 0.003f;
     }
 
     protected void tickSailBoat() {
@@ -366,7 +404,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 if (sailForce > this.getAcceleration()) {
                     this.setAcceleration(sailForce);
                 } else {
-                    this.setAcceleration(this.getAcceleration() - 0.003f);
+                    this.setAcceleration(this.getAcceleration() - this.getMomentumSubtractor());
                     sailForce = this.getAcceleration();
                 }
 

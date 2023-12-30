@@ -657,7 +657,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     }
 
     private static void animateRudder(SloopEntity pBoat, float pPartialTicks, ModelPart rudder, float rudderRotation) {
-        rudder.yRot = Mth.rotLerp(pPartialTicks, rudder.yRot, rudderRotation);
+        rudder.yRot = rudderRotation;// Mth.rotLerp(pPartialTicks, rudder.yRot, rudderRotation);
     }
 
     private static void animateWindIndicator(SloopEntity pBoat, float pPartialTicks, ModelPart wind_indicator){
@@ -772,8 +772,8 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         //jibsail_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         shrouds.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         rudder.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        wind_indicator.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        sail_force_indicator.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        //wind_indicator.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        //sail_force_indicator.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 
     }
 }

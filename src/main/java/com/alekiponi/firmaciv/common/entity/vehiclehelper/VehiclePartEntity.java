@@ -55,10 +55,10 @@ public class VehiclePartEntity extends Entity {
             // Try not to be empty
             if (this.getPassengers().isEmpty()) {
                 boolean shouldAddCleatInstead = false;
-
+                boolean shouldAddColliderInstead = false;
                 if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
                     for (int i : vehicle.getCleats()) {
-                        if (vehicle.getPassengers().get(i).is(this)) {
+                        if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
 
                             shouldAddCleatInstead = true;
 
@@ -77,20 +77,43 @@ public class VehiclePartEntity extends Entity {
                     }
                 }
 
+                if(!shouldAddCleatInstead){
+                    if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
+                        for (int i : vehicle.getColliders()) {
+                            if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
 
-                if (!shouldAddCleatInstead) {
-                    final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
-                            .create(this.level());
+                                shouldAddColliderInstead = true;
 
-                    // Can maybe just assert not null? Doesn't really matter I guess
-                    if (newCompartment != null) {
-                        newCompartment.setYRot(this.getVehicle().getYRot() + this.getCompartmentRotation());
-                        newCompartment.setPos(this.getX(), this.getY(), this.getZ());
-                        if (!newCompartment.startRiding(this)) {
-                            Firmaciv.LOGGER.error("New Compartment: {} unable to ride Vehicle Part: {}", newCompartment,
-                                    this);
+                                final VehicleCollisionEntity collider = FirmacivEntities.VEHICLE_COLLISION_ENTITY.get()
+                                        .create(this.level());
+                                collider.setPos(this.getX(), this.getY(), this.getZ());
+                                if (!collider.startRiding(this)) {
+                                    Firmaciv.LOGGER.error("New Collider: {} unable to ride Vehicle Part: {}", collider, this);
+                                }
+                                this.level().addFreshEntity(collider);
+                                break;
+
+                            }
                         }
-                        this.level().addFreshEntity(newCompartment);
+                    }
+                }
+
+
+                if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
+                    if (!shouldAddCleatInstead && !shouldAddColliderInstead) {
+                        final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
+                                .create(this.level());
+
+                        // Can maybe just assert not null? Doesn't really matter I guess
+                        if (newCompartment != null) {
+                            newCompartment.setYRot(this.getVehicle().getYRot() + this.getCompartmentRotation());
+                            newCompartment.setPos(this.getX(), this.getY(), this.getZ());
+                            if (!newCompartment.startRiding(this)) {
+                                Firmaciv.LOGGER.error("New Compartment: {} unable to ride Vehicle Part: {}", newCompartment,
+                                        this);
+                            }
+                            this.level().addFreshEntity(newCompartment);
+                        }
                     }
                 }
 

@@ -39,6 +39,9 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     public final int[] CAN_ADD_ONLY_BLOCKS = {2, 1};
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
+    protected final float DAMAGE_THRESHOLD = 80.0f;
+    protected final float DAMAGE_RECOVERY = 2.0f;
+
 
     public RowboatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
@@ -64,65 +67,68 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[] getColliders() {
+        return new int[0];
+    }
+
+    @Override
     public int[] getCanAddOnlyBlocks() {
         return CAN_ADD_ONLY_BLOCKS;
     }
 
-    @Override
-    protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
-        if (this.hasPassenger(passenger)) {
-            float localX = 0.0F;
-            float localZ = 0.0F;
-            float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
-            if (this.getPassengers().size() > 1) {
-                switch (this.getPassengers().indexOf(passenger)) {
-                    case 0 -> {
-                        // front / pilot seat
-                        localX = 1.1f;
-                        localZ = 0.0f;
-                        localY += 0.2f;
-                    }
-                    case 1 -> {
-                        // back right seat
-                        localX = -0.95f;
-                        localZ = 0.375f;
-                        localY += 0.1f;
-                    }
-                    case 2 -> {
-                        // back left seat
-                        localX = -0.95f;
-                        localZ = -0.375f;
-                        localY += 0.1f;
-                    }
-                    case 3 -> {
-                        // middle right seat
-                        localX = -0.1f;
-                        localZ = 0.375f;
-                        localY += 0.1f;
-                    }
-                    case 4 -> {
-                        // middle left seat
-                        localX = -0.1f;
-                        localZ = -0.375f;
-                        localY += 0.1f;
-                    }
-                    case 5 -> {
-                        // cleat
-                        localX = 1.7f;
-                        localZ = 0f;
-                        localY += 0.6f;
-                    }
-                }
+    protected Vec3 positionRiderByIndex(int index){
+        float localX = 0.0F;
+        float localZ = 0.0F;
+        float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()));
+        switch (index) {
+            case 0 -> {
+                // front / pilot seat
+                localX = 1.1f;
+                localZ = 0.0f;
+                localY += 0.2f;
             }
-            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
-            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-            if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
-                passenger.setYRot(this.getYRot());
-            } else if (!(passenger instanceof VehiclePartEntity)) {
-                super.positionRider(passenger, moveFunction);
+            case 1 -> {
+                // back right seat
+                localX = -0.95f;
+                localZ = 0.375f;
+                localY += 0.1f;
+            }
+            case 2 -> {
+                // back left seat
+                localX = -0.95f;
+                localZ = -0.375f;
+                localY += 0.1f;
+            }
+            case 3 -> {
+                // middle right seat
+                localX = -0.1f;
+                localZ = 0.375f;
+                localY += 0.1f;
+            }
+            case 4 -> {
+                // middle left seat
+                localX = -0.1f;
+                localZ = -0.375f;
+                localY += 0.1f;
+            }
+            case 5 -> {
+                // cleat
+                localX = 1.7f;
+                localZ = 0f;
+                localY += 0.6f;
             }
         }
+        return new Vec3(localX, localY, localZ);
+    }
+
+    @Override
+    protected float getDamageThreshold() {
+        return DAMAGE_THRESHOLD;
+    }
+
+    @Override
+    protected float getDamageRecovery() {
+        return DAMAGE_RECOVERY;
     }
 
     @Override
@@ -137,67 +143,19 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected void tickControlBoat() {
-        if (this.isVehicle()) {
-            if (getControllingCompartment() != null) {
-                boolean inputUp = this.getControllingCompartment().getInputUp();
-                boolean inputDown = this.getControllingCompartment().getInputDown();
-                boolean inputLeft = this.getControllingCompartment().getInputLeft();
-                boolean inputRight = this.getControllingCompartment().getInputRight();
-                float paddleMultiplier = 1.0f;
-                if (this.getOars().getCount() > 0) {
-                    paddleMultiplier = 1.6f;
-                    if (this.getOars().getCount() == 1) {
-                        if (this.getDeltaMovement().length() > 0.1f) {
-                            this.setDeltaRotation(this.getDeltaRotation()+1);
-                        }
-                    }
-                }
-
-                float acceleration = 0.0F;
-                if (inputLeft) {
-                    this.setDeltaRotation(this.getDeltaRotation()-0.9f);
-                }
-
-                if (inputRight) {
-                    this.setDeltaRotation(this.getDeltaRotation()+0.9f);
-                }
-
-                if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    acceleration += 0.0025F * paddleMultiplier;
-                }
-
-                if (inputUp) {
-                    acceleration += 0.0275F * paddleMultiplier;
-                }
-
-                if (inputDown) {
-                    acceleration -= 0.0125F * paddleMultiplier;
-                }
-
-                if(Math.abs(acceleration) > Math.abs(this.getAcceleration())){
-                    this.setAcceleration(acceleration);
-                } else {
-                    if(this.getAcceleration() > 0){
-                        this.setAcceleration(this.getAcceleration()-0.005f);
-                    } else {
-                        this.setAcceleration(this.getAcceleration()+0.005f);
-                    }
-                    acceleration = this.getAcceleration();
-                }
-
-                this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
-                this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
-
-                if(this.getDeltaRotation() < 1 && inputUp){
-                    this.setPaddleState(true, true);
-                }
-
-            }
+    protected float getPaddleMultiplier() {
+        float paddleMultiplier = 1.0f;
+        if (this.getOars().getCount() > 0) {
+            paddleMultiplier = 1.6f;
         }
+        return paddleMultiplier;
     }
+
+    @Override
+    protected float getMomentumSubtractor() {
+        return 0.005f;
+    }
+
 
     @Override
     public int getCompartmentRotation(int i) {

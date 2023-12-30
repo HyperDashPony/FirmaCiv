@@ -74,9 +74,8 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<VehicleCollisionEntity>> VEHICLE_COLLISION_ENTITY = ENTITY_TYPES.register(
             "vehicle_collision",
-            () -> EntityType.Builder.of(VehicleCollisionEntity::new, MobCategory.MISC).sized(0.2F, 0.2F)
+            () -> EntityType.Builder.of(VehicleCollisionEntity::new, MobCategory.MISC).sized(1.5F, 0.75F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_collision").toString()));
-
 
     /*
     public static final RegistryObject<EntityType<FirmacivBoatEntity>> OUTRIGGER = ENTITY_TYPES.register("outrigger",
@@ -85,14 +84,9 @@ public final class FirmacivEntities {
 
      */
 
-
-
     public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
-            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(4F, 0.75F).clientTrackingRange(32)
+            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F).clientTrackingRange(32)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
-
-
-
 
 
     public static void register(IEventBus eventBus) {

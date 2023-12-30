@@ -20,6 +20,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -60,6 +62,9 @@ public abstract class AbstractVehicle extends Entity {
 
 
     public final int[] CLEATS = {};
+
+    public final int[] COLLIDERS = {};
+
     public final int[] CAN_ADD_ONLY_BLOCKS = {};
 
     public final int[][] COMPARTMENT_ROTATIONS = {};
@@ -89,9 +94,7 @@ public abstract class AbstractVehicle extends Entity {
         this.blocksBuilding = true;
     }
 
-    public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
-        return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
-    }
+
 
     // consider these reference implementations
 
@@ -99,25 +102,17 @@ public abstract class AbstractVehicle extends Entity {
         return MAX_PASSENGER_NUMBER;
     }
 
-    public int[] getCleats() {
-        return CLEATS;
-    }
+    public abstract int[] getCleats();
 
-    public int getCompartmentRotation(int i) {
-        return COMPARTMENT_ROTATIONS[i][0];
-    }
+    public abstract int[] getColliders();
 
-    public float getPassengerSizeLimit() {
-        return PASSENGER_SIZE_LIMIT;
-    }
+    public abstract int getCompartmentRotation(int i);
 
-    public int[][] getCompartmentRotationsArray() {
-        return COMPARTMENT_ROTATIONS;
-    }
+    public abstract float getPassengerSizeLimit();
 
-    public int[] getCanAddOnlyBlocks() {
-        return CAN_ADD_ONLY_BLOCKS;
-    }
+    public abstract int[][] getCompartmentRotationsArray();
+
+    public abstract int[] getCanAddOnlyBlocks();
 
     @Override
     protected float getEyeHeight(final Pose pose, final EntityDimensions entityDimensions) {
@@ -142,10 +137,16 @@ public abstract class AbstractVehicle extends Entity {
         return canVehicleCollide(this, other);
     }
 
+    public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
+        return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
+    }
+
     @Override
     public boolean canBeCollidedWith() {
         return true;
     }
+
+
 
     @Override
     public boolean isPushable() {
@@ -243,6 +244,9 @@ public abstract class AbstractVehicle extends Entity {
     protected void tickDestroyPlants(){
         BlockPos blockPos = this.blockPosition();
         int size = (int) Math.ceil(this.getBoundingBox().getXsize());
+        if(size % 2 != 0){
+            size++;
+        }
         size = size/2;
         for(int x = -size;x <=size; x++){
             for(int z = -size;z <=size; z++){
@@ -485,31 +489,31 @@ public abstract class AbstractVehicle extends Entity {
                 passenger.stopRiding();
             }
 
-            float localX = 0.0F;
-            float localZ = 0.0F;
-            float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
+            final Vec3 position = positionRiderByIndex(this.getPassengers().indexOf(passenger));
+            final Vec3 vec3 = this.positionLocally((float) position.x, (float)position.y, (float)position.z);
+            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + position.y, this.getZ() + vec3.z);
+            passenger.setPos(this.getX() + vec3.x, this.getY() + position.y, this.getZ() + vec3.z);
+            passenger.setYRot(this.getYRot());
+        }
+    }
 
-            if (this.getPassengers().size() > 1) {
-                switch (this.getPassengers().indexOf(passenger)) {
-                    case 0 -> {
-                        localX = 0.3f;
-                        localZ = 0.0f;
-                    }
-                    case 1 -> {
-                        localX = -0.7f;
-                        localZ = 0.0f;
-                    }
-                }
+    protected Vec3 positionRiderByIndex(int index){
+        float localX = 0.0F;
+        float localZ = 0.0F;
+        float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()));
+        switch (index) {
+            case 0 -> {
+                localX = 0.3f;
+                localZ = 0.0f;
+                localY += 0.0f;
             }
-
-            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
-            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-
-            if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
-                passenger.setYRot(this.getYRot());
+            case 1 -> {
+                localX = -0.7f;
+                localZ = 0.0f;
+                localY += 0.0f;
             }
         }
+        return new Vec3(localX, localY, localZ);
     }
 
     protected Vec3 positionLocally(float localX, float localY, float localZ) {
@@ -590,13 +594,9 @@ public abstract class AbstractVehicle extends Entity {
         this.entityData.set(DATA_ID_HURTDIR, hurtDirection);
     }
 
-    protected float getDamageThreshold() {
-        return this.DAMAGE_THRESHOLD;
-    }
+    protected abstract float getDamageThreshold();
 
-    protected float getDamageRecovery() {
-        return this.DAMAGE_RECOVERY;
-    }
+    protected abstract float getDamageRecovery();
 
     public void setDeltaRotation(float deltaRotation) {
         this.entityData.set(DATA_ID_DELTA_ROTATION, deltaRotation);

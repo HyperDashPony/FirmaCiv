@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -35,6 +36,16 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
         return this.PASSENGER_SIZE_LIMIT;
     }
 
+    @Override
+    public int[][] getCompartmentRotationsArray() {
+        return new int[0][];
+    }
+
+    @Override
+    public int[] getCanAddOnlyBlocks() {
+        return new int[0];
+    }
+
     @Nullable
     @Override
     public Entity getPilotVehiclePartAsEntity() {
@@ -51,6 +62,28 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[] getCleats() {
+        return new int[0];
+    }
+
+    @Override
+    public int[] getColliders() {
+        return new int[0];
+    }
+
+    @Override
+    public int getCompartmentRotation(int i) {
+        return 0;
+    }
+
+    protected Vec3 positionRiderByIndex(int index){
+        float localX = 0.0F;
+        float localZ = 0.0F;
+        float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()));
+        return new Vec3(localX, localY, localZ);
+    }
+
+    @Override
     protected float getDamageThreshold() {
         return this.DAMAGE_THRESHOLD;
     }
@@ -61,56 +94,19 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected void tickControlBoat() {
-        if (this.isVehicle() && this.getControllingPassenger() instanceof Player player) {
-            if (getControllingCompartment() != null) {
-                boolean inputUp = this.getControllingCompartment().getInputUp();
-                boolean inputDown = this.getControllingCompartment().getInputDown();
-                boolean inputLeft = this.getControllingCompartment().getInputLeft();
-                boolean inputRight = this.getControllingCompartment().getInputRight();
-                float acceleration = 0.0f;
-                float paddleMultiplier = 1.0f;
-                if (player.isHolding(FirmacivItems.KAYAK_PADDLE.get())) {
-                    paddleMultiplier = 2.0f;
-                }
-
-                if (inputLeft) {
-                    this.setDeltaRotation(this.getDeltaRotation()-1);
-                }
-
-                if (inputRight) {
-                    this.setDeltaRotation(this.getDeltaRotation()+1);
-                }
-
-                if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    acceleration += 0.0025F * paddleMultiplier;
-                }
-
-                if (inputUp) {
-                    acceleration += 0.0275F * paddleMultiplier;
-                }
-
-                if (inputDown) {
-                    acceleration -= 0.0125F * paddleMultiplier;
-                }
-
-                if(Math.abs(acceleration) > Math.abs(this.getAcceleration())){
-                    this.setAcceleration(acceleration);
-                } else {
-                    if(this.getAcceleration() > 0){
-                        this.setAcceleration(this.getAcceleration()-0.010f);
-                    } else {
-                        this.setAcceleration(this.getAcceleration()+0.010f);
-                    }
-                    acceleration = this.getAcceleration();
-                }
-
-                this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
-                this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+    protected float getPaddleMultiplier() {
+        float paddleMultiplier = 1.0f;
+        if(this.getControllingPassenger() instanceof Player player){
+            if (player.isHolding(FirmacivItems.KAYAK_PADDLE.get())) {
+                paddleMultiplier = 2.0f;
             }
         }
+        return paddleMultiplier;
+    }
+
+    @Override
+    protected float getMomentumSubtractor() {
+        return 0.010f;
     }
 
     @Override

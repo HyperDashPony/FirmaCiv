@@ -42,80 +42,56 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[][] getCompartmentRotationsArray() {
+        return new int[0][];
+    }
+
+    @Override
+    public int[] getCanAddOnlyBlocks() {
+        return new int[0];
+    }
+
+    @Override
     public int[] getCleats() {
         return CLEATS;
     }
 
+    @Override
+    public int[] getColliders() {
+        return new int[0];
+    }
 
     @Override
-    protected void tickControlBoat() {
-        if (this.isVehicle()) {
-            if (getControllingCompartment() != null) {
-                boolean inputUp = this.getControllingCompartment().getInputUp();
-                boolean inputDown = this.getControllingCompartment().getInputDown();
-                boolean inputLeft = this.getControllingCompartment().getInputLeft();
-                boolean inputRight = this.getControllingCompartment().getInputRight();
-                float acceleration = 0.0f;
-                float paddleMultiplier = 1.0f;
-                if(this.getControllingPassenger() instanceof Player player){
-                    if (player.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
-                        paddleMultiplier = 1.6f;
-                    }
-                }
+    public int getCompartmentRotation(int i) {
+        return 0;
+    }
 
-
-                int i = 0;
-                for (Entity entity : this.getTruePassengers()) {
-                    if (entity instanceof Player player2) {
-                        if (player2.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
-                            i++;
-                        }
-                    }
-                }
-                if (i == 2) {
-                    paddleMultiplier = 2.0f;
-                }
-
-                if (inputLeft) {
-                    this.setDeltaRotation(this.getDeltaRotation()-1);
-                }
-
-                if (inputRight) {
-                    this.setDeltaRotation(this.getDeltaRotation()+1);
-                }
-
-                if (inputRight != inputLeft && !inputUp && !inputDown) {
-                    acceleration += 0.0025F * paddleMultiplier;
-                }
-
-                if (inputUp) {
-                    acceleration += 0.0275F * paddleMultiplier;
-                }
-
-                if (inputDown) {
-                    acceleration -= 0.0125F * paddleMultiplier;
-                }
-
-                if(Math.abs(acceleration) > Math.abs(this.getAcceleration())){
-                    this.setAcceleration(acceleration);
-                } else {
-                    if(this.getAcceleration() > 0){
-                        this.setAcceleration(this.getAcceleration()-0.010f);
-                    } else {
-                        this.setAcceleration(this.getAcceleration()+0.010f);
-                    }
-                    acceleration = this.getAcceleration();
-                }
-
-                this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration));
-                this.setPaddleState(inputRight && !inputLeft || inputUp, inputLeft && !inputRight || inputUp);
+    @Override
+    protected float getPaddleMultiplier() {
+        float paddleMultiplier = 1.0f;
+        if(this.getControllingPassenger() instanceof Player player){
+            if (player.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
+                paddleMultiplier = 1.6f;
             }
-
         }
 
+        int i = 0;
+        for (Entity entity : this.getTruePassengers()) {
+            if (entity instanceof Player player2) {
+                if (player2.isHolding(FirmacivItems.CANOE_PADDLE.get())) {
+                    i++;
+                }
+            }
+        }
+        if (i == 2) {
+            paddleMultiplier = 2.0f;
+        }
+        return paddleMultiplier;
+    }
 
+    @Override
+    protected float getMomentumSubtractor(){
+        return 0.010f;
     }
 
     @Nullable
@@ -128,43 +104,31 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
         return null;
     }
 
-    @Override
-    protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
-        if (this.hasPassenger(passenger)) {
-            float localX = 0.0F;
-            float localZ = 0.0F;
-            float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()) + passenger.getMyRidingOffset());
-            if (this.getPassengers().size() > 1) {
-                switch (this.getPassengers().indexOf(passenger)) {
-                    case 0 -> {
-                        //forward seat
-                        localX = 0.3f;
-                        localZ = 0.0f;
-                        localY += 0.0625f;
-                    }
-                    case 1 -> {
-                        //rear seat
-                        localX = -0.7f;
-                        localZ = 0.0f;
-                        localY += 0.0625f;
-                    }
-                    //cleat
-                    case 2 -> {
-                        localX = 1.0f;
-                        localZ = 0.0f;
-                        localY += 0.28f;
-                    }
-                }
+    protected Vec3 positionRiderByIndex(int index){
+        float localX = 0.0F;
+        float localZ = 0.0F;
+        float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()));
+        switch (index) {
+            case 0 -> {
+                //forward seat
+                localX = 0.3f;
+                localZ = 0.0f;
+                localY += 0.0625f;
             }
-            final Vec3 vec3 = this.positionLocally(localX, localY, localZ);
-            moveFunction.accept(passenger, this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-            passenger.setPos(this.getX() + vec3.x, this.getY() + (double) localY, this.getZ() + vec3.z);
-            if (!this.level().isClientSide() && passenger instanceof VehiclePartEntity) {
-                passenger.setYRot(this.getYRot());
-            } else if (!(passenger instanceof VehiclePartEntity)) {
-                super.positionRider(passenger, moveFunction);
+            case 1 -> {
+                //rear seat
+                localX = -0.7f;
+                localZ = 0.0f;
+                localY += 0.0625f;
+            }
+            //cleat
+            case 2 -> {
+                localX = 1.0f;
+                localZ = 0.0f;
+                localY += 0.28f;
             }
         }
+        return new Vec3(localX, localY, localZ);
     }
 
     @Override

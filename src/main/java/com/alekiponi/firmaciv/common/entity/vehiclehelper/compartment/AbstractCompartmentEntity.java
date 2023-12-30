@@ -259,22 +259,6 @@ public abstract class AbstractCompartmentEntity extends Entity {
         this.entityData.define(DATA_BLOCK_TYPE_ITEM, ItemStack.EMPTY);
     }
 
-    @Override
-    public boolean canCollideWith(final Entity other) {
-        if(this instanceof EmptyCompartmentEntity){
-            return false;
-        }
-        return canVehicleCollide(this, other);
-    }
-
-    public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
-        return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
-    }
-    @Override
-    public boolean canBeCollidedWith() {
-        return !(this instanceof EmptyCompartmentEntity);
-    }
-
     public float getDamage() {
         return this.entityData.get(DATA_ID_DAMAGE);
     }
