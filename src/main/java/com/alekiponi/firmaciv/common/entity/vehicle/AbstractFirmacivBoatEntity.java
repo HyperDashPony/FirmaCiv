@@ -143,6 +143,8 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             }
 
             this.move(MoverType.SELF, this.getDeltaMovement());
+
+
         }
 
         List<Entity> entitiesToTakeWith = this.level()
@@ -152,26 +154,25 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         for (Entity entity : this.getPassengers()) {
             if (entity.isVehicle() && entity.getFirstPassenger() instanceof VehicleCollisionEntity collider) {
                 entitiesToTakeWith.addAll(this.level()
-                        .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.pushableBy(collider)));
+                        .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.pushableBy(this)));
             }
         }
 
         entitiesToTakeWith = entitiesToTakeWith.stream().distinct().collect(Collectors.toList());
 
+        Vec3 deltaMovement = this.getDeltaMovement();
+
         if (!entitiesToTakeWith.isEmpty()) {
             for (final Entity entity : entitiesToTakeWith) {
-                if (!entity.isPassenger()) {
-                    if (this.getPosition(0).subtract(this.xOld, this.yOld, this.zOld).length() > 0.01) {
-                        if (entity instanceof Player player) {
-                            player.move(MoverType.PLAYER, this.getDeltaMovement());
-                            player.setDeltaMovement(player.getDeltaMovement().multiply(0.9, 1.0, 0.9));
-                        }
+                if (!entity.isPassenger() && !(entity instanceof AbstractVehicle)) {
+                    if (entity instanceof Player player) {
+                        player.move(MoverType.PLAYER, this.getDeltaMovement());
+                        player.setDeltaMovement(player.getDeltaMovement().multiply(0.9, 1.0, 0.9));
                     }
                 }
-
-
             }
         }
+
 
         this.tickPaddlingEffects();
 
@@ -203,7 +204,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                             Mth.cos(this.getLocalWindAngleAndSpeed()[0] * ((float) Math.PI / 180F)) * windFunction * 0.55));
 
 
-            if(this.status == Status.IN_WATER){
+            if (this.status == Status.IN_WATER) {
                 if (windDifference > 1) {
                     this.setDeltaRotation(this.getDeltaRotation() - 0.1f);
                 } else if (windDifference < -1) {
@@ -346,9 +347,11 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             if (Math.abs(acceleration) > Math.abs(this.getAcceleration())) {
                 this.setAcceleration(acceleration);
             } else {
-                if (this.getAcceleration() > 0) {
+                if (Math.abs(this.getAcceleration()) < 1) {
+                    this.setAcceleration(0);
+                } else if (this.getAcceleration() > 0) {
                     this.setAcceleration(this.getAcceleration() - this.getMomentumSubtractor());
-                } else {
+                } else if (this.getAcceleration() < 0) {
                     this.setAcceleration(this.getAcceleration() + this.getMomentumSubtractor());
                 }
                 acceleration = this.getAcceleration();
