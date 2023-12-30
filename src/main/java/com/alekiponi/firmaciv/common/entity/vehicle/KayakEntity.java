@@ -86,8 +86,6 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
                     acceleration += 0.0025F * paddleMultiplier;
                 }
 
-                this.setYRot(this.getYRot() + this.getDeltaRotation());
-
                 if (inputUp) {
                     acceleration += 0.0275F * paddleMultiplier;
                 }
@@ -96,10 +94,14 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
                     acceleration -= 0.0125F * paddleMultiplier;
                 }
 
-                if(acceleration > this.getAcceleration()){
+                if(Math.abs(acceleration) > Math.abs(this.getAcceleration())){
                     this.setAcceleration(acceleration);
                 } else {
-                    this.setAcceleration(this.getAcceleration()-0.010f);
+                    if(this.getAcceleration() > 0){
+                        this.setAcceleration(this.getAcceleration()-0.010f);
+                    } else {
+                        this.setAcceleration(this.getAcceleration()+0.010f);
+                    }
                     acceleration = this.getAcceleration();
                 }
 

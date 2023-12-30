@@ -183,7 +183,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public void tick() {
 
-
         super.tick();
         if(this.status == Status.IN_WATER || this.status == Status.IN_AIR){
             if(this.status == Status.IN_WATER){
@@ -203,7 +202,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             rotationImpact = (float) (rotationImpact * this.getDeltaMovement().length());
 
             this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
-            this.setYRot(this.getYRot() + this.getDeltaRotation());
 
             float boomWindDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
 
