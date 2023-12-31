@@ -16,6 +16,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -32,8 +34,6 @@ import java.util.UUID;
 public class VehicleCleatEntity extends Entity {
 
     public static final String LEASH_TAG = "Leash";
-    private static final EntityDataAccessor<Byte> DATA_MOB_FLAGS_ID = SynchedEntityData.defineId(
-            VehicleCleatEntity.class, EntityDataSerializers.BYTE);
     @Nullable
     private Entity leashHolder;
     private int delayedLeashHolderId;
@@ -61,9 +61,11 @@ public class VehicleCleatEntity extends Entity {
         super.tick();
 
         tickLerp();
-        if (!this.level().isClientSide) {
-            this.tickLeash();
+        if(!this.level().isClientSide()){
+
         }
+        this.tickLeash();
+
 
     }
 
@@ -83,51 +85,78 @@ public class VehicleCleatEntity extends Entity {
     }
 
     protected void tickLeash() {
+
+
         if (this.leashInfoTag != null) {
             this.restoreLeashFromSave();
         }
-
-        if (this.leashHolder != null) {
-            if (!this.isAlive() || !this.leashHolder.isAlive()) {
+        Entity leashHolder = this.getLeashHolder();
+        if (leashHolder != null) {
+            if (!this.isAlive() || !leashHolder.isAlive()) {
                 this.dropLeash(true, true);
             }
+
             if (this.getVehicle().isPassenger() && this.getVehicle()
-                    .getVehicle() instanceof AbstractFirmacivBoatEntity && this.leashHolder instanceof Player player) {
-                if (this.distanceTo(this.leashHolder) > 4f) {
+                    .getVehicle() instanceof AbstractFirmacivBoatEntity thisVehicle) {
+                if(leashHolder instanceof Player){
+                    if (this.distanceTo(leashHolder) > 4f) {
+                        Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
+                        Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y,
+                                vectorToVehicle.z * -0.1f);
+                        double vehicleSize = Mth.clamp(thisVehicle.getBbWidth(), 1, 100);
+                        movementVector = movementVector.multiply(1/vehicleSize, 0, 1/vehicleSize);
 
-                    AbstractFirmacivBoatEntity thisVehicle = (AbstractFirmacivBoatEntity) this.getVehicle().getVehicle();
-                    Vec3 vectorToVehicle = player.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
-                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y,
-                            vectorToVehicle.z * -0.1f);
+                        double d0 = leashHolder.getPosition(0).x - this.getX();
+                        double d2 = leashHolder.getPosition(0).z - this.getZ();
+
+                        float finalRotation = Mth.wrapDegrees(
+                                (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI))- 90.0F);
+
+                        double difference = (leashHolder.getY()) - thisVehicle.getY();
+                        if (leashHolder.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement()
+                                .length() < 0.02f && leashHolder instanceof Player) {
+                            thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY() + 0.55f, thisVehicle.getZ());
+                        }
 
 
-                    double d0 = player.getPosition(0).x - thisVehicle.getX();
-                    double d2 = player.getPosition(0).z - thisVehicle.getZ();
+                        float approach = Mth.approachDegrees(thisVehicle.getYRot(),finalRotation,6);
+
+                        thisVehicle.setDeltaMovement(thisVehicle.getDeltaMovement().add(movementVector));
+                        thisVehicle.setDeltaRotation(-1*(thisVehicle.getYRot() - approach));
+
+                    }
+                } if(leashHolder instanceof HangingEntity){
+                    Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
+                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.005f, thisVehicle.getDeltaMovement().y,
+                            vectorToVehicle.z * -0.005f);
+                    double d0 = leashHolder.getPosition(0).x - this.getX();
+                    double d2 = leashHolder.getPosition(0).z - this.getZ();
 
                     float finalRotation = Mth.wrapDegrees(
-                            (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
+                            (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI))- 90.0F);
 
-                    double difference = (player.getY()) - thisVehicle.getY();
-                    if (player.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement()
-                            .length() < 0.02f) {
-                        thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY() + 0.55f, thisVehicle.getZ());
+                    float approach = Mth.approachDegrees(thisVehicle.getYRot(),finalRotation,4f);
+                    if(Mth.degreesDifferenceAbs(thisVehicle.getYRot(), finalRotation) < 4){
+                        thisVehicle.setDeltaRotation(0);
+                        thisVehicle.setYRot(thisVehicle.getYRot());
+                    } else {
+                        thisVehicle.setDeltaRotation(-1*(thisVehicle.getYRot() - approach));
                     }
-
-                    float intermediateRotation = Mth.clamp(finalRotation, -2.0f, 2.0f);
-
-                    thisVehicle.setDeltaMovement(thisVehicle.getDeltaMovement().add(movementVector));
-                    thisVehicle.setDeltaRotation(thisVehicle.getDeltaRotation() + finalRotation);
+                    if(this.distanceTo(leashHolder) > 1){
+                        thisVehicle.setDeltaMovement(movementVector);
+                    }
 
                 }
 
+
             }
-            if (this.distanceTo(this.leashHolder) > 10f && this.leashHolder instanceof Player player) {
+            if (leashHolder instanceof Player player && this.distanceTo(leashHolder) > 10f) {
                 this.dropLeash(true, !player.getAbilities().instabuild);
             }
 
         }
-        if (this.leashHolder != null) {
-            if (this.leashHolder.isPassenger() && this.leashHolder.getVehicle() instanceof EmptyCompartmentEntity) {
+        if (leashHolder != null) {
+            if (leashHolder.isPassenger() && leashHolder.getVehicle() instanceof EmptyCompartmentEntity) {
                 this.dropLeash(true, true);
             }
         }
@@ -248,7 +277,7 @@ public class VehicleCleatEntity extends Entity {
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(DATA_MOB_FLAGS_ID, (byte) 0);
+
     }
 
     @Override
@@ -281,5 +310,13 @@ public class VehicleCleatEntity extends Entity {
         } else if (this.leashInfoTag != null) {
             pCompound.put("Leash", this.leashInfoTag.copy());
         }
+    }
+
+    @Override
+    public AABB getBoundingBoxForCulling() {
+        float bbRadius = 10 * 2 + 1;
+        Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
+        Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
+        return new AABB(startingPoint, endingPoint);
     }
 }
