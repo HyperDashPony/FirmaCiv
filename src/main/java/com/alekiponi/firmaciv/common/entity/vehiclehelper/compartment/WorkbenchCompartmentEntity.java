@@ -1,6 +1,5 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
-import com.alekiponi.firmaciv.common.menu.CompartmentCraftingMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -58,13 +58,19 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
     @Override
     public @Nullable AbstractContainerMenu createMenu(final int id, final Inventory playerInventory,
             final Player player) {
-        return new CompartmentCraftingMenu(id, playerInventory, new ContainerLevelAccess() {
+        return new CraftingMenu(id, playerInventory, new ContainerLevelAccess() {
             @Override
             public <T> Optional<T> evaluate(final BiFunction<Level, BlockPos, T> function) {
                 return Optional.of(function.apply(WorkbenchCompartmentEntity.this.level(),
                         WorkbenchCompartmentEntity.this.blockPosition()));
             }
-        });
+        }) {
+            @Override
+            public boolean stillValid(final Player player) {
+                final BlockPos blockPos = WorkbenchCompartmentEntity.this.blockPosition();
+                return player.distanceToSqr(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5) <= 64;
+            }
+        };
     }
 
     @Override
