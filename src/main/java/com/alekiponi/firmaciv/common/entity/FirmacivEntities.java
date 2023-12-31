@@ -77,10 +77,10 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(VehicleCollisionEntity::new, MobCategory.MISC).sized(1.5F, 0.75F).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_collider").toString()));
 
-    public static final RegistryObject<EntityType<VehicleSwitchEntity>> VEHICLE_SWITCH_ENTITY_25 = ENTITY_TYPES.register(
-            "vehicle_switch_25",
-            () -> EntityType.Builder.of(VehicleSwitchEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).noSummon()
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_25").toString()));
+    public static final RegistryObject<EntityType<VehicleSwitchEntity>> VEHICLE_SWITCH_ENTITY_50 = ENTITY_TYPES.register(
+            "vehicle_switch_50",
+            () -> EntityType.Builder.of(VehicleSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon()
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_50").toString()));
 
     /*
     public static final RegistryObject<EntityType<FirmacivBoatEntity>> OUTRIGGER = ENTITY_TYPES.register("outrigger",

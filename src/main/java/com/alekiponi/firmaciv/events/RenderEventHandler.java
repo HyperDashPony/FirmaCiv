@@ -20,10 +20,8 @@ import net.minecraftforge.fml.common.Mod;
 public final class RenderEventHandler {
 
 
-
     private RenderEventHandler() {
     }
-
 
 
     @SubscribeEvent
@@ -47,7 +45,7 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), InvisibleHelperRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.VEHICLE_SWITCH_ENTITY_25.get(), InvisibleHelperRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_SWITCH_ENTITY_50.get(), InvisibleHelperRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_COLLISION_ENTITY.get(), InvisibleHelperRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);

@@ -6,6 +6,7 @@
 package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
@@ -179,10 +180,35 @@ public enum IngameOverlays {
                         }
                     }
                 } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity  && vehicleCleatEntity.isPassenger()) {
+                    if ((float) height % 2.0 != 0) {
+                        stack.translate(0f, 0.5f, 0.0f);
+                    }
+                    if ((float) width % 2.0 != 0) {
+                        stack.translate(0.5f, 0f, 0.0f);
+                    }
                     stack.scale(1.0F, 1.0F, 1.0F);
                     stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
                     if (vehicleCleatEntity.getVehicle().getVehicle() != null) {
                         graphics.blit(TEXTURE, 0, 0, 54, 0, 9, 9);
+                    }
+                } else if (entity instanceof VehicleSwitchEntity vehicleSwitchEntity  && vehicleSwitchEntity.isPassenger()) {
+                    if ((float) height % 2.0 != 0) {
+                        stack.translate(0f, 0.5f, 0.0f);
+                    }
+                    if ((float) width % 2.0 != 0) {
+                        stack.translate(0.5f, 0f, 0.0f);
+                    }
+                    stack.scale(1.0F, 1.0F, 1.0F);
+                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
+                    if (vehicleSwitchEntity.getVehicle().getVehicle() != null) {
+                        if(vehicleSwitchEntity.getSwitched()){
+                            graphics.blit(TEXTURE, 0, 0, 18, 0, 9, 9);
+                            graphics.blit(TEXTURE, 0, 10, 72, 0, 9, 9);
+                        } else {
+                            graphics.blit(TEXTURE, 0, 0, 18, 0, 9, 9);
+                            graphics.blit(TEXTURE, 0, -10, 63, 0, 9, 9);
+                        }
+
                     }
                 }
 

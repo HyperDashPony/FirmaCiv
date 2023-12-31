@@ -106,7 +106,7 @@ public class VehiclePartEntity extends AbstractInvisibleHelper {
 
                                 shouldAddSwitchInstead = true;
 
-                                final VehicleSwitchEntity switchEntity = FirmacivEntities.VEHICLE_SWITCH_ENTITY_25.get()
+                                final VehicleSwitchEntity switchEntity = FirmacivEntities.VEHICLE_SWITCH_ENTITY_50.get()
                                         .create(this.level());
                                 switchEntity.setPos(this.getX(), this.getY(), this.getZ());
                                 if (!switchEntity.startRiding(this)) {

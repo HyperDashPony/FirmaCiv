@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
@@ -17,10 +18,10 @@ import javax.annotation.Nullable;
 
 public class SloopEntity extends AbstractFirmacivBoatEntity {
 
-    public final int PASSENGER_NUMBER = 18;
+    public final int PASSENGER_NUMBER = 22;
 
-    public final int[] CLEATS = {};
-    public final int[] COLLIDERS = {14,15,16};
+    public final int[] CLEATS = {18,19,20,21};
+    public final int[] COLLIDERS = {14, 15, 16};
 
     public final int[] SWITCHES = {17};
 
@@ -93,7 +94,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
 
     @Override
-    protected Vec3 positionRiderByIndex(int index){
+    protected Vec3 positionRiderByIndex(int index) {
         float localX = 0.0F;
         float localZ = 0.0F;
         float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()));
@@ -102,7 +103,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 // aft pilot / tiller seat
                 localZ = 0.6f;
                 localX = -2.3f;
-                localY += 0.6f;
+                localY += 0.625f;
             }
             case 1 -> {
                 // hold lower port
@@ -144,44 +145,44 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 //port side fore
                 localX = 0.3f;
                 localZ = -1.4f;
-                localY += 0.6f;
+                localY += 0.625f;
             }
             case 8 -> {
                 //port side mid
                 localX = -0.5f;
                 localZ = -1.33f;
-                localY += 0.6f;
+                localY += 0.625f;
             }
             case 9 -> {
                 //port side aft
                 localX = -1.3f;
                 localZ = -1.26f;
-                localY += 0.6f;
+                localY += 0.625f;
 
             }
             case 10 -> {
                 //starboard side fore
                 localX = 0.3f;
                 localZ = 1.4f;
-                localY += 0.6f;
+                localY += 0.625f;
             }
             case 11 -> {
                 //starboard side mid
                 localX = -0.5f;
                 localZ = 1.33f;
-                localY += 0.6f;
+                localY += 0.625f;
             }
             case 12 -> {
                 //starboard side aft
                 localX = -1.3f;
                 localZ = 1.26f;
-                localY += 0.6f;
+                localY += 0.625f;
             }
             case 13 -> {
                 //sailing station
                 localZ = -0.6f;
                 localX = -2.3f;
-                localY += 0.6f;
+                localY += 0.625f;
             }
             case 14 -> {
                 //collider 1
@@ -204,9 +205,34 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             case 17 -> {
                 //mainsail switch
                 localZ = 0f;
-                localX = 0.0f;
-                localY += 2.00f;
+                localX = 2f;
+                localY += 2.625f;
             }
+            case 18 -> {
+                //cleat port fore
+                localZ = -1.8f;
+                localX = 1.2f;
+                localY += 0.8f;
+            }
+            case 19 -> {
+                //cleat starboard fore
+                localZ = 1.8f;
+                localX = 1.2f;
+                localY += 0.8f;
+            }
+            case 20 -> {
+                //cleat port aft
+                localZ = -1.8f;
+                localX = -2.25f;
+                localY += 0.9f;
+            }
+            case 21 -> {
+                //cleat starboard aft
+                localZ = 1.8f;
+                localX = -2.25f;
+                localY += 0.9f;
+            }
+
         }
         return new Vec3(localX, localY, localZ);
     }
@@ -225,7 +251,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public void tick() {
 
 
-        if(this.status == Status.IN_WATER || this.status == Status.IN_AIR){
+
+        if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
             float rotationImpact = 0;
 
             float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
@@ -245,16 +272,16 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             float sheet = this.getMainsheetLength();
             float boom = this.getMainBoomRotation();
 
-            if(sheet > Math.abs(boom)){
-                if(boom < 0){
+            if (sheet > Math.abs(boom)) {
+                if (boom < 0) {
                     boom--;
-                } else if (boom!=0){
-                    boom ++;
+                } else if (boom != 0) {
+                    boom++;
                 }
             }
 
-            if(boomWindDifference < -171){
-                boomWindDifference = Mth.wrapDegrees(boomWindDifference-180);
+            if (boomWindDifference < -171) {
+                boomWindDifference = Mth.wrapDegrees(boomWindDifference - 180);
             }
             if (boomWindDifference > 9) {
                 boom += 2f;
@@ -268,10 +295,17 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         //this.tickSailBoat();
 
         this.tickDestroyPlants();
-        if(this.status == Status.IN_WATER){
+        if (this.status == Status.IN_WATER) {
             this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f * this.getDeltaMovement().length()));
         }
         super.tick();
+        if(this.getPassengers().get(this.getSwitches()[0]).getFirstPassenger() instanceof VehicleSwitchEntity switchEntity){
+            if(switchEntity.getSwitched()){
+                this.setMainsailActive(true);
+            } else {
+                this.setMainsailActive(false);
+            }
+        }
     }
 
 
@@ -414,7 +448,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected void tickWindInput() {
         super.tickWindInput();
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            this.setMainsailActive(true);
+            //this.setMainsailActive(true);
             if (this.getMainsailActive()) {
                 double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.3;
 

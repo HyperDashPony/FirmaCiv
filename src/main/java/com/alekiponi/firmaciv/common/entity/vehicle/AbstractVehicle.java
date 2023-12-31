@@ -1,27 +1,23 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
-import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.BlockUtil;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -35,15 +31,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractVehicle extends Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
@@ -54,7 +49,6 @@ public abstract class AbstractVehicle extends Entity {
             AbstractVehicle.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> DATA_ID_DELTA_ROTATION = SynchedEntityData.defineId(
             AbstractVehicle.class, EntityDataSerializers.FLOAT);
-
     protected static final EntityDataAccessor<Float> DATA_ID_ACCELERATION = SynchedEntityData.defineId(
             AbstractVehicle.class, EntityDataSerializers.FLOAT);
 
@@ -257,6 +251,39 @@ public abstract class AbstractVehicle extends Entity {
         }
 
     }
+
+    protected void tickTakeEntitiesForARide(){
+        if(this.getDeltaMovement().length() > 0.01){
+            List<Entity> entitiesToTakeWith = this.level()
+                    .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS);
+
+            for (Entity entity : this.getPassengers()) {
+                if (entity.isVehicle() && entity.getFirstPassenger() instanceof VehicleCollisionEntity collider) {
+                    entitiesToTakeWith.addAll(this.level()
+                            .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS));
+                }
+            }
+
+            entitiesToTakeWith = entitiesToTakeWith.stream().distinct().collect(Collectors.toList());
+
+            if (!entitiesToTakeWith.isEmpty()) {
+                for (final Entity entity : entitiesToTakeWith) {
+                    if (entity instanceof LocalPlayer player && !entity.isPassenger()) {
+                        if (this.level().isClientSide()) {
+                            if (!player.input.jumping) {
+                                player.move(MoverType.SELF, this.getDeltaMovement().multiply(1, 0, 1));
+                            }
+                            player.setDeltaMovement(player.getDeltaMovement().multiply(0.9, 1, 0.9));
+                        }
+                    } else if (!(entity instanceof AbstractFirmacivBoatEntity) && !entity.isPassenger()) {
+                        entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().multiply(0.45, 0, 0.45)));
+                    }
+                }
+            }
+        }
+    }
+
+    protected abstract void tickCleatInput();
     protected void tickLerp() {
 
         if (this.isControlledByLocalInstance()) {
@@ -335,6 +362,8 @@ public abstract class AbstractVehicle extends Entity {
 
         return l + 1;
     }
+
+
 
     public float getGroundFriction() {
         AABB aabb = this.getBoundingBox();

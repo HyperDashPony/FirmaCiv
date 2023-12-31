@@ -36,6 +36,11 @@ public class PacketHandler {
                 .decoder(ServerboundCompartmentInputPacket::decoder)
                 .consumerMainThread(ServerboundCompartmentInputPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(ServerboundSwitchEntityPacket.class, id = id++)
+                .encoder(ServerboundSwitchEntityPacket::encoder)
+                .decoder(ServerboundSwitchEntityPacket::decoder)
+                .consumerMainThread(ServerboundSwitchEntityPacket::handle)
+                .add();
     }
 
     public static void clientSendPacket(Object msg){

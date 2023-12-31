@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
+import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -31,29 +32,8 @@ public class VehicleCollisionEntity extends AbstractInvisibleHelper {
 
     @Override
     public void tick() {
-        /*
-        Player nearestPlayer = this.level().getNearestPlayer(this, 32*16);
-        if(nearestPlayer != null){
-            Vec3 newPos = nearestPlayer.getPosition(0).multiply(1, 0, 1);
-            this.setPos(newPos);
-        }*/
 
-        final List<Entity> list = this.level()
-                .getEntities(this, this.getBoundingBox().inflate(0.1, -0.01, 0.1), EntitySelector.pushableBy(this));
-
-        if (!list.isEmpty()) {
-            for (final Entity entity : list) {
-                if(entity instanceof Player player){
-                    if(player.getDeltaMovement().y() > 0){
-                        Vec3 newPlayerPos = player.getPosition(0).multiply(1,0,1);
-                        newPlayerPos = newPlayerPos.add(0,this.getY() + this.getBoundingBox().getYsize()+0.05,0);
-                        newPlayerPos = newPlayerPos.add((this.getX() - newPlayerPos.x())*0.2,0,  (this.getZ() - newPlayerPos.z())*0.2);
-                        player.setPos(newPlayerPos);
-                    }
-
-                }
-            }
-        }
+        FirmacivHelper.tickHopPlayersOnboard(this);
 
         if(!this.isPassenger()){
             this.kill();

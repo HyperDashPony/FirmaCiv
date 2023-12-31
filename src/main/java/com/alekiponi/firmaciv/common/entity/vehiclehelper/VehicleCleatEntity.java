@@ -33,7 +33,8 @@ import java.util.UUID;
 
 public class VehicleCleatEntity extends Entity {
 
-    public static final String LEASH_TAG = "Leash";
+    protected static final EntityDataAccessor<Integer> DATA_ID_LEASHHOLDER_ID = SynchedEntityData.defineId(
+            VehicleCleatEntity.class, EntityDataSerializers.INT);
     @Nullable
     private Entity leashHolder;
     private int delayedLeashHolderId;
@@ -53,7 +54,6 @@ public class VehicleCleatEntity extends Entity {
 
 
     public void tick() {
-
         if (!this.isPassenger()) {
             this.dropLeash(true, true);
             this.kill();
@@ -61,11 +61,19 @@ public class VehicleCleatEntity extends Entity {
         super.tick();
 
         tickLerp();
-        if(!this.level().isClientSide()){
-
-        }
         this.tickLeash();
 
+        if (tickCount < 2) {
+            if (!this.level().isClientSide()) {
+                if (this.leashHolder != null) {
+                    this.setLeashHolderId(this.leashHolder.getId());
+                }
+            } else {
+                if (this.level().getEntity(this.getLeashHolderId()) != null) {
+                    this.leashHolder = this.level().getEntity(this.getLeashHolderId());
+                }
+            }
+        }
 
     }
 
@@ -86,7 +94,6 @@ public class VehicleCleatEntity extends Entity {
 
     protected void tickLeash() {
 
-
         if (this.leashInfoTag != null) {
             this.restoreLeashFromSave();
         }
@@ -94,64 +101,6 @@ public class VehicleCleatEntity extends Entity {
         if (leashHolder != null) {
             if (!this.isAlive() || !leashHolder.isAlive()) {
                 this.dropLeash(true, true);
-            }
-
-            if (this.getVehicle().isPassenger() && this.getVehicle()
-                    .getVehicle() instanceof AbstractFirmacivBoatEntity thisVehicle) {
-                if(leashHolder instanceof Player){
-                    if (this.distanceTo(leashHolder) > 4f) {
-                        Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
-                        Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.1f, thisVehicle.getDeltaMovement().y,
-                                vectorToVehicle.z * -0.1f);
-                        double vehicleSize = Mth.clamp(thisVehicle.getBbWidth(), 1, 100);
-                        movementVector = movementVector.multiply(1/vehicleSize, 0, 1/vehicleSize);
-
-                        double d0 = leashHolder.getPosition(0).x - this.getX();
-                        double d2 = leashHolder.getPosition(0).z - this.getZ();
-
-                        float finalRotation = Mth.wrapDegrees(
-                                (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI))- 90.0F);
-
-                        double difference = (leashHolder.getY()) - thisVehicle.getY();
-                        if (leashHolder.getY() > thisVehicle.getY() && difference >= 0.4 && difference <= 1.0 && thisVehicle.getDeltaMovement()
-                                .length() < 0.02f && leashHolder instanceof Player) {
-                            thisVehicle.setPos(thisVehicle.getX(), thisVehicle.getY() + 0.55f, thisVehicle.getZ());
-                        }
-
-
-                        float approach = Mth.approachDegrees(thisVehicle.getYRot(),finalRotation,6);
-
-                        thisVehicle.setDeltaMovement(thisVehicle.getDeltaMovement().add(movementVector));
-                        thisVehicle.setDeltaRotation(-1*(thisVehicle.getYRot() - approach));
-
-                    }
-                } if(leashHolder instanceof HangingEntity){
-                    Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(thisVehicle.getPosition(0)).normalize();
-                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.005f, thisVehicle.getDeltaMovement().y,
-                            vectorToVehicle.z * -0.005f);
-                    double d0 = leashHolder.getPosition(0).x - this.getX();
-                    double d2 = leashHolder.getPosition(0).z - this.getZ();
-
-                    float finalRotation = Mth.wrapDegrees(
-                            (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI))- 90.0F);
-
-                    float approach = Mth.approachDegrees(thisVehicle.getYRot(),finalRotation,4f);
-                    if(Mth.degreesDifferenceAbs(thisVehicle.getYRot(), finalRotation) < 4){
-                        thisVehicle.setDeltaRotation(0);
-                        thisVehicle.setYRot(thisVehicle.getYRot());
-                    } else {
-                        thisVehicle.setDeltaRotation(-1*(thisVehicle.getYRot() - approach));
-                    }
-                    if(this.distanceTo(leashHolder) > 1){
-                        thisVehicle.setDeltaMovement(movementVector);
-                    }
-
-                }
-
-
-            }
-            if (leashHolder instanceof Player player && this.distanceTo(leashHolder) > 10f) {
-                this.dropLeash(true, !player.getAbilities().instabuild);
             }
 
         }
@@ -277,7 +226,7 @@ public class VehicleCleatEntity extends Entity {
 
     @Override
     protected void defineSynchedData() {
-
+        this.entityData.define(DATA_ID_LEASHHOLDER_ID, -1);
     }
 
     @Override
@@ -318,5 +267,13 @@ public class VehicleCleatEntity extends Entity {
         Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
         Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
         return new AABB(startingPoint, endingPoint);
+    }
+
+    public void setLeashHolderId(int id) {
+        this.entityData.set(DATA_ID_LEASHHOLDER_ID, id);
+    }
+
+    public int getLeashHolderId() {
+        return this.entityData.get(DATA_ID_LEASHHOLDER_ID);
     }
 }

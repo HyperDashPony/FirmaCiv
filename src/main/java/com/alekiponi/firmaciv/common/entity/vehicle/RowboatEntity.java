@@ -67,6 +67,11 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[] getSwitches() {
+        return new int[0];
+    }
+
+    @Override
     public int[] getColliders() {
         return new int[0];
     }
