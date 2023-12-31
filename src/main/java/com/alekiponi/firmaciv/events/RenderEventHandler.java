@@ -5,6 +5,9 @@ import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
 import com.alekiponi.firmaciv.client.model.entity.KayakEntityModel;
 import com.alekiponi.firmaciv.client.model.entity.RowboatEntityModel;
 import com.alekiponi.firmaciv.client.render.entity.*;
+import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.CompartmentRenderer;
+import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.InvisibleHelperRenderer;
+import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.VehicleCleatRenderer;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,11 +46,11 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
 
-        event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), VehiclePartRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.VEHICLE_COLLISION_ENTITY.get(), VehicleCollisionEntityRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), InvisibleHelperRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_SWITCH_ENTITY_25.get(), InvisibleHelperRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_COLLISION_ENTITY.get(), InvisibleHelperRenderer::new);
 
-        //event.registerEntityRenderer(FirmacivEntities.OUTRIGGER.get(), OutriggerRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.SLOOP.get(), SloopRenderer::new);
 

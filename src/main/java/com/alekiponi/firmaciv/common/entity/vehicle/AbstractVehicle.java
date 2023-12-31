@@ -99,6 +99,8 @@ public abstract class AbstractVehicle extends Entity {
 
     public abstract int[] getCleats();
 
+    public abstract int[] getSwitches();
+
     public abstract int[] getColliders();
 
     public abstract int getCompartmentRotation(int i);

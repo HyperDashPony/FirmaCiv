@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.client.render.entity;
+package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;

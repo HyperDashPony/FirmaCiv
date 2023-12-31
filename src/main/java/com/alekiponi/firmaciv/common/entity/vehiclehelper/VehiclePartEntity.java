@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
-public class VehiclePartEntity extends Entity {
+public class VehiclePartEntity extends AbstractInvisibleHelper {
 
     protected static final EntityDataAccessor<Float> DATA_ID_COMPARTMENT_ROTATION = SynchedEntityData.defineId(
             VehiclePartEntity.class, EntityDataSerializers.FLOAT);
@@ -56,6 +56,7 @@ public class VehiclePartEntity extends Entity {
             if (this.getPassengers().isEmpty()) {
                 boolean shouldAddCleatInstead = false;
                 boolean shouldAddColliderInstead = false;
+                boolean shouldAddSwitchInstead = false;
                 if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
                     for (int i : vehicle.getCleats()) {
                         if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
@@ -98,9 +99,30 @@ public class VehiclePartEntity extends Entity {
                     }
                 }
 
+                if(!shouldAddCleatInstead && !shouldAddColliderInstead){
+                    if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
+                        for (int i : vehicle.getSwitches()) {
+                            if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
+
+                                shouldAddSwitchInstead = true;
+
+                                final VehicleSwitchEntity switchEntity = FirmacivEntities.VEHICLE_SWITCH_ENTITY_25.get()
+                                        .create(this.level());
+                                switchEntity.setPos(this.getX(), this.getY(), this.getZ());
+                                if (!switchEntity.startRiding(this)) {
+                                    Firmaciv.LOGGER.error("New Switch: {} unable to ride Vehicle Part: {}", switchEntity, this);
+                                }
+                                this.level().addFreshEntity(switchEntity);
+                                break;
+
+                            }
+                        }
+                    }
+                }
+
 
                 if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
-                    if (!shouldAddCleatInstead && !shouldAddColliderInstead) {
+                    if (!shouldAddCleatInstead && !shouldAddColliderInstead && !shouldAddSwitchInstead) {
                         final EmptyCompartmentEntity newCompartment = FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get()
                                 .create(this.level());
 

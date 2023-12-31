@@ -17,11 +17,12 @@ import javax.annotation.Nullable;
 
 public class SloopEntity extends AbstractFirmacivBoatEntity {
 
-    public final int PASSENGER_NUMBER = 17;
+    public final int PASSENGER_NUMBER = 18;
 
     public final int[] CLEATS = {};
-
     public final int[] COLLIDERS = {14,15,16};
+
+    public final int[] SWITCHES = {17};
 
     protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.FLOAT);
@@ -38,6 +39,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public final int[][] COMPARTMENT_ROTATIONS = {{7, 85}, {8, 85}, {9, 85}, {10, -85}, {11, -85}, {12, -85}};
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
+
+
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
     protected final float DAMAGE_THRESHOLD = 80.0f;
@@ -61,6 +64,11 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public int[] getCleats() {
         return this.CLEATS;
+    }
+
+    @Override
+    public int[] getSwitches() {
+        return SWITCHES;
     }
 
     @Override
@@ -188,10 +196,16 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 localY += -0.00f;
             }
             case 16 -> {
-                //collider 2
+                //collider 3
                 localZ = 0f;
                 localX = 2.0f;
                 localY += -0.00f;
+            }
+            case 17 -> {
+                //mainsail switch
+                localZ = 0f;
+                localX = 0.0f;
+                localY += 2.00f;
             }
         }
         return new Vec3(localX, localY, localZ);
