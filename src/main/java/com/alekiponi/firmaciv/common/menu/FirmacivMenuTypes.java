@@ -13,9 +13,6 @@ import static com.alekiponi.firmaciv.Firmaciv.MOD_ID;
 public final class FirmacivMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, MOD_ID);
 
-    public static final RegistryObject<MenuType<CompartmentCraftingMenu>> WORKBENCH = register("workbench",
-            (windowId, inv, data) -> new CompartmentCraftingMenu(windowId, inv));
-
     @SuppressWarnings("SameParameterValue")
     private static <C extends AbstractContainerMenu> RegistryObject<MenuType<C>> register(final String name,
             final IContainerFactory<C> factory) {
