@@ -210,12 +210,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public void tick() {
 
-        super.tick();
-        if(this.status == Status.IN_WATER || this.status == Status.IN_AIR){
-            if(this.status == Status.IN_WATER){
-                this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f * this.getDeltaMovement().length()));
-            }
 
+        if(this.status == Status.IN_WATER || this.status == Status.IN_AIR){
             float rotationImpact = 0;
 
             float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
@@ -247,9 +243,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 boomWindDifference = Mth.wrapDegrees(boomWindDifference-180);
             }
             if (boomWindDifference > 9) {
-                boom += 3f;
+                boom += 2f;
             } else if (boomWindDifference < -9) {
-                boom -= 3f;
+                boom -= 2f;
             }
 
             this.setMainBoomRotation(boom);
@@ -258,6 +254,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         //this.tickSailBoat();
 
         this.tickDestroyPlants();
+        if(this.status == Status.IN_WATER){
+            this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f * this.getDeltaMovement().length()));
+        }
+        super.tick();
     }
 
 
@@ -400,7 +400,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected void tickWindInput() {
         super.tickWindInput();
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            this.setMainsailActive(false);
+            this.setMainsailActive(true);
             if (this.getMainsailActive()) {
                 double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.3;
 

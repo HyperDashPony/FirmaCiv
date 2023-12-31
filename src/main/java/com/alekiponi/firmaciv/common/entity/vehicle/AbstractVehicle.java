@@ -95,12 +95,7 @@ public abstract class AbstractVehicle extends Entity {
     }
 
 
-
-    // consider these reference implementations
-
-    public int getMaxPassengers() {
-        return MAX_PASSENGER_NUMBER;
-    }
+    public abstract int getMaxPassengers();
 
     public abstract int[] getCleats();
 

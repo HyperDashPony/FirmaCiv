@@ -506,7 +506,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     private static void animateMainsail(SloopEntity pBoat, float pPartialTicks, ModelPart mainsail_main, ModelPart[][] sails, float mastRotation, int animationTick) {
         //mainsail_main.y = 200;
 
-        mainsail_main.yRot = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
+        mainsail_main.yRot = mastRotation;//Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
 
         float windWorldAngle = Mth.wrapDegrees(pBoat.getLocalWindAngleAndSpeed()[0]);
         float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] / 16f;
