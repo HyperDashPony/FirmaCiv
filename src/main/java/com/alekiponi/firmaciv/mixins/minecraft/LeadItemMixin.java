@@ -21,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LeadItem.class)
 public abstract class LeadItemMixin {
 
+
+    //TODO clean this up and dont cancel the original
     @Inject(method = "bindPlayerMobs", at = @At("HEAD"), cancellable = true)
     private static void injectBindPlayerCleat(Player pPlayer, Level pLevel, BlockPos pPos, CallbackInfoReturnable<InteractionResult> cir){
         LeashFenceKnotEntity leashfenceknotentity = null;

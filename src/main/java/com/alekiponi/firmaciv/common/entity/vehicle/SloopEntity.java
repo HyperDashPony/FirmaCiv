@@ -63,22 +63,22 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
 
     @Override
-    public int[] getCleats() {
+    public int[] getCleatIndices() {
         return this.CLEATS;
     }
 
     @Override
-    public int[] getSwitches() {
+    public int[] getSwitchIndices() {
         return SWITCHES;
     }
 
     @Override
-    public int[] getColliders() {
+    public int[] getColliderIndices() {
         return COLLIDERS;
     }
 
     @Override
-    public int[] getCanAddOnlyBlocks() {
+    public int[] getCanAddOnlyBlocksIndices() {
         return CAN_ADD_ONLY_BLOCKS;
     }
 
@@ -299,7 +299,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f * this.getDeltaMovement().length()));
         }
         super.tick();
-        if(this.getPassengers().get(this.getSwitches()[0]).getFirstPassenger() instanceof VehicleSwitchEntity switchEntity){
+        if(this.getPassengers().get(this.getSwitchIndices()[0]).getFirstPassenger() instanceof VehicleSwitchEntity switchEntity){
             if(switchEntity.getSwitched()){
                 this.setMainsailActive(true);
             } else {

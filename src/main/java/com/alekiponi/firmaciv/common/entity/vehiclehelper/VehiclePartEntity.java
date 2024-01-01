@@ -58,7 +58,7 @@ public class VehiclePartEntity extends AbstractInvisibleHelper {
                 boolean shouldAddColliderInstead = false;
                 boolean shouldAddSwitchInstead = false;
                 if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
-                    for (int i : vehicle.getCleats()) {
+                    for (int i : vehicle.getCleatIndices()) {
                         if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
 
                             shouldAddCleatInstead = true;
@@ -80,7 +80,7 @@ public class VehiclePartEntity extends AbstractInvisibleHelper {
 
                 if(!shouldAddCleatInstead){
                     if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
-                        for (int i : vehicle.getColliders()) {
+                        for (int i : vehicle.getColliderIndices()) {
                             if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
 
                                 shouldAddColliderInstead = true;
@@ -101,7 +101,7 @@ public class VehiclePartEntity extends AbstractInvisibleHelper {
 
                 if(!shouldAddCleatInstead && !shouldAddColliderInstead){
                     if (vehicle.getPassengers().size() == ((AbstractFirmacivBoatEntity) this.getVehicle()).getMaxPassengers()) {
-                        for (int i : vehicle.getSwitches()) {
+                        for (int i : vehicle.getSwitchIndices()) {
                             if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
 
                                 shouldAddSwitchInstead = true;

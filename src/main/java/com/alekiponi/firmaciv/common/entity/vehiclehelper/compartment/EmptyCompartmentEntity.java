@@ -156,16 +156,14 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     @Override
     public void tick() {
         if (this.getTrueVehicle() != null) {
-            if (tickCount < 100 && this.getTrueVehicle()
+            if (tickCount < 10 && this.getTrueVehicle()
                     .getPilotVehiclePartAsEntity() != null && !(this.getTrueVehicle() instanceof CanoeEntity)) {
                 canAddNonPlayers = !(this.getTrueVehicle().getPilotVehiclePartAsEntity() == this.getVehicle());
             }
-            if (tickCount < 100 && this.isPassenger()) {
-                for (int i : this.getTrueVehicle().getCanAddOnlyBlocks()) {
-                    if (this.getTrueVehicle().getPassengers().size() == this.getTrueVehicle().getMaxPassengers()) {
-                        if (this.getTrueVehicle().getPassengers().get(i) == this.getVehicle()) {
-                            canAddOnlyBlocks = true;
-                        }
+            if (tickCount < 10 && this.isPassenger()) {
+                for(AbstractCompartmentEntity compartment : this.getTrueVehicle().getCanAddOnlyBlocks()){
+                    if(compartment.getVehicle() == this.getVehicle()){
+                        canAddOnlyBlocks = true;
                     }
                 }
             }

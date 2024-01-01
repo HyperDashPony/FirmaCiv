@@ -62,22 +62,22 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getCleats() {
+    public int[] getCleatIndices() {
         return this.CLEATS;
     }
 
     @Override
-    public int[] getSwitches() {
+    public int[] getSwitchIndices() {
         return new int[0];
     }
 
     @Override
-    public int[] getColliders() {
+    public int[] getColliderIndices() {
         return new int[0];
     }
 
     @Override
-    public int[] getCanAddOnlyBlocks() {
+    public int[] getCanAddOnlyBlocksIndices() {
         return CAN_ADD_ONLY_BLOCKS;
     }
 

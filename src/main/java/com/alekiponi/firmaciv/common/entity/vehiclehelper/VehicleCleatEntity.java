@@ -102,13 +102,20 @@ public class VehicleCleatEntity extends Entity {
             if (!this.isAlive() || !leashHolder.isAlive()) {
                 this.dropLeash(true, true);
             }
-
-        }
-        if (leashHolder != null) {
             if (leashHolder.isPassenger() && leashHolder.getVehicle() instanceof EmptyCompartmentEntity) {
                 this.dropLeash(true, true);
             }
+            if (this.distanceTo(leashHolder) > 10f) {
+                if(leashHolder instanceof Player player){
+                    this.dropLeash(true, !player.getAbilities().instabuild);
+                } else {
+                    this.dropLeash(true,true);
+                }
+
+            }
+
         }
+
     }
 
     protected void tickLerp() {

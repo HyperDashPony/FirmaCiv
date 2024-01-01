@@ -42,7 +42,7 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getCanAddOnlyBlocks() {
+    public int[] getCanAddOnlyBlocksIndices() {
         return new int[0];
     }
 
@@ -62,17 +62,17 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getCleats() {
+    public int[] getCleatIndices() {
         return new int[0];
     }
 
     @Override
-    public int[] getSwitches() {
+    public int[] getSwitchIndices() {
         return new int[0];
     }
 
     @Override
-    public int[] getColliders() {
+    public int[] getColliderIndices() {
         return new int[0];
     }
 

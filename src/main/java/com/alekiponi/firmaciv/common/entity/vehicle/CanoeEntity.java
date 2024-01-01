@@ -47,22 +47,22 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getCanAddOnlyBlocks() {
+    public int[] getCanAddOnlyBlocksIndices() {
         return new int[0];
     }
 
     @Override
-    public int[] getCleats() {
+    public int[] getCleatIndices() {
         return CLEATS;
     }
 
     @Override
-    public int[] getSwitches() {
+    public int[] getSwitchIndices() {
         return new int[0];
     }
 
     @Override
-    public int[] getColliders() {
+    public int[] getColliderIndices() {
         return new int[0];
     }
 

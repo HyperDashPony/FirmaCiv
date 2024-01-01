@@ -3,6 +3,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.google.common.collect.ImmutableList;
@@ -37,6 +38,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,14 +90,64 @@ public abstract class AbstractVehicle extends Entity {
         this.blocksBuilding = true;
     }
 
-
     public abstract int getMaxPassengers();
 
-    public abstract int[] getCleats();
+    public abstract int[] getCleatIndices();
 
-    public abstract int[] getSwitches();
+    public abstract int[] getSwitchIndices();
 
-    public abstract int[] getColliders();
+    public abstract int[] getColliderIndices();
+
+    public abstract int[] getCanAddOnlyBlocksIndices();
+
+    public ArrayList<VehicleCleatEntity> getCleats(){
+        ArrayList<VehicleCleatEntity> list = new ArrayList<VehicleCleatEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getCleatIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity cleat) {
+                    list.add(cleat);
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<VehicleSwitchEntity> getSwitches(){
+        ArrayList<VehicleSwitchEntity> list = new ArrayList<VehicleSwitchEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getSwitchIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof VehicleSwitchEntity switchEntity) {
+                    list.add(switchEntity);
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<VehicleCollisionEntity> getColliders(){
+        ArrayList<VehicleCollisionEntity> list = new ArrayList<VehicleCollisionEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getColliderIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCollisionEntity collider) {
+                    list.add(collider);
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<AbstractCompartmentEntity> getCanAddOnlyBlocks(){
+        ArrayList<AbstractCompartmentEntity> list = new ArrayList<AbstractCompartmentEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getCanAddOnlyBlocksIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof AbstractCompartmentEntity compartment) {
+                    list.add(compartment);
+                }
+            }
+        }
+        return list;
+    }
+
 
     public abstract int getCompartmentRotation(int i);
 
@@ -103,7 +155,7 @@ public abstract class AbstractVehicle extends Entity {
 
     public abstract int[][] getCompartmentRotationsArray();
 
-    public abstract int[] getCanAddOnlyBlocks();
+
 
     @Override
     protected float getEyeHeight(final Pose pose, final EntityDimensions entityDimensions) {
@@ -257,11 +309,9 @@ public abstract class AbstractVehicle extends Entity {
             List<Entity> entitiesToTakeWith = this.level()
                     .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS);
 
-            for (Entity entity : this.getPassengers()) {
-                if (entity.isVehicle() && entity.getFirstPassenger() instanceof VehicleCollisionEntity collider) {
-                    entitiesToTakeWith.addAll(this.level()
-                            .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS));
-                }
+            for (VehicleCollisionEntity collider : this.getColliders()) {
+                entitiesToTakeWith.addAll(this.level()
+                        .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS));
             }
 
             entitiesToTakeWith = entitiesToTakeWith.stream().distinct().collect(Collectors.toList());
@@ -499,7 +549,7 @@ public abstract class AbstractVehicle extends Entity {
 
     public boolean isBeingTowed() {
         if (this.getPassengers().size() == this.getMaxPassengers()) {
-            for (int i : this.getCleats()) {
+            for (int i : this.getCleatIndices()) {
                 if (this.getPassengers().get(i).getFirstPassenger() instanceof VehicleCleatEntity vehicleCleat) {
                     return vehicleCleat.isLeashed() && this.getDeltaMovement().length() != 0;
                 }
