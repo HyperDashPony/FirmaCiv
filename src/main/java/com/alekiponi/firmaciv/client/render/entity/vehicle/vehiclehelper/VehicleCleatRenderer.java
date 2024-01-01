@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -34,10 +35,10 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
     }
 
     private static void addVertexPair(VertexConsumer pConsumer, Matrix4f pMatrix, float p_174310_, float p_174311_,
-            float p_174312_, int pEntityBlockLightLevel, int pLeashHolderBlockLightLevel,
-            int pEntitySkyLightLevel, int pLeashHolderSkyLightLevel, float p_174317_,
-            float p_174318_, float p_174319_, float p_174320_, int pIndex,
-            boolean p_174322_) {
+                                      float p_174312_, int pEntityBlockLightLevel, int pLeashHolderBlockLightLevel,
+                                      int pEntitySkyLightLevel, int pLeashHolderSkyLightLevel, float p_174317_,
+                                      float p_174318_, float p_174319_, float p_174320_, int pIndex,
+                                      boolean p_174322_) {
         float f = (float) pIndex / 24.0F;
         int i = (int) Mth.lerp(f, (float) pEntityBlockLightLevel, (float) pLeashHolderBlockLightLevel);
         int j = (int) Mth.lerp(f, (float) pEntitySkyLightLevel, (float) pLeashHolderSkyLightLevel);
@@ -61,23 +62,26 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
     }
 
     public void render(VehicleCleatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
-            MultiBufferSource pBuffer, int pPackedLight) {
+                       MultiBufferSource pBuffer, int pPackedLight) {
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
         Entity entity = pEntity.getLeashHolder();
         if (entity != null) {
             float rotation = 0f;
-            if(pEntity.getVehicle().getVehicle() instanceof AbstractFirmacivBoatEntity trueVehicle){
+            if (pEntity.getVehicle().getVehicle() instanceof AbstractFirmacivBoatEntity trueVehicle) {
                 rotation = trueVehicle.getYRot();
             } else {
                 rotation = pEntityYaw;
             }
             pPoseStack.pushPose();
-            pPoseStack.scale(-0.8F, -0.8F, 0.8F);
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(rotation));
-            if (pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity) {
+            pPoseStack.scale(0.8F, 0.8F, 0.8F);
+            pPoseStack.translate(-0.25f, 0.35f, 0.0f);
+            pPoseStack.mulPose(Axis.ZP.rotationDegrees(90));
+            if (pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof RowboatEntity) {
+                //pPoseStack.scale(-0.8F, -0.8F, 0.8F);
+                //pPoseStack.mulPose(Axis.YP.rotationDegrees(rotation));
+            } else if(pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity){
                 pPoseStack.scale(0.8F, 0.8F, 0.8F);
-                pPoseStack.translate(-0.25f, -0.35f, 0.f);
-                pPoseStack.mulPose(Axis.ZP.rotationDegrees(90));
+                pPoseStack.translate(0f, -0.0625f, 0.0f);
             }
             this.model.setupAnim(pEntity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(KNOT_LOCATION));
@@ -89,7 +93,7 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
     }
 
     private <E extends Entity> void renderLeash(VehicleCleatEntity pEntity, float pPartialTicks, PoseStack pPoseStack,
-            MultiBufferSource pBuffer, E pLeashHolder) {
+                                                MultiBufferSource pBuffer, E pLeashHolder) {
         pPoseStack.pushPose();
         Vec3 vec3 = pLeashHolder.getRopeHoldPosition(pPartialTicks);
         double d0 = (double) (Mth.lerp(pPartialTicks, pEntity.getYRot(),
