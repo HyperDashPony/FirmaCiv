@@ -66,11 +66,6 @@ public class VehicleCollisionEntity extends AbstractInvisibleHelper {
     }
 
     @Override
-    public void playerTouch(Player pPlayer) {
-
-    }
-
-    @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
 
     }

@@ -52,7 +52,6 @@ public class VehicleCleatEntity extends Entity {
         super(pEntityType, pLevel);
     }
 
-
     public void tick() {
         if (!this.isPassenger()) {
             this.dropLeash(true, true);

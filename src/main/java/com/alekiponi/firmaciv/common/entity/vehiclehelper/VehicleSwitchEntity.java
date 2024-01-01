@@ -35,6 +35,14 @@ public class VehicleSwitchEntity extends AbstractInvisibleHelper {
         return InteractionResult.PASS;
     }
 
+    @Override
+    public void tick(){
+        if(!this.isPassenger()){
+            this.kill();
+        }
+        super.tick();
+    }
+
 
     public void setSwitched(boolean switched) {
         this.entityData.set(DATA_ID_SWITCH, switched);

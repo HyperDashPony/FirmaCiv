@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
@@ -11,10 +12,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class SloopEntity extends AbstractFirmacivBoatEntity {
 
@@ -306,6 +310,108 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 this.setMainsailActive(false);
             }
         }
+    }
+
+    @Override
+    protected void tickCleatInput(){
+        if(this.getMainsailActive()){
+            return;
+        }
+        int count = 0;
+        ArrayList<VehicleCleatEntity> cleats = this.getCleats();
+        ArrayList<VehicleCleatEntity> leashedCleats = new ArrayList<VehicleCleatEntity>();
+        for(VehicleCleatEntity cleat : cleats){
+            if(cleat.isLeashed()){
+                leashedCleats.add(cleat);
+                count++;
+            }
+        }
+        if (count == 2){
+            VehicleCleatEntity cleat1 = leashedCleats.get(0);
+            VehicleCleatEntity cleat2 = leashedCleats.get(1);
+            Entity leashHolder1 = cleat1.getLeashHolder();
+            Entity leashHolder2 = cleat2.getLeashHolder();
+            if(leashHolder1 != null && leashHolder2 != null){
+                if(leashHolder1.is(leashHolder2)){
+                    count = 1;
+                } else {
+                    double d0 = leashHolder1.getPosition(0).x - leashHolder2.getX();
+                    double d2 = leashHolder1.getPosition(0).z - leashHolder2.getZ();
+
+                    float finalRotation = Mth.wrapDegrees(
+                            (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
+
+                    float approach = Mth.approachDegrees(this.getYRot(), finalRotation, 0.25f);
+                    if (Mth.degreesDifferenceAbs(this.getYRot(), finalRotation) < 0.5) {
+                        this.setDeltaRotation(0);
+                        this.setYRot(this.getYRot());
+                    } else {
+                        this.setDeltaRotation(-1 * (this.getYRot() - approach));
+                    }
+
+                    Vec3 vectorToVehicle1 = leashHolder1.getPosition(0).vectorTo(cleat1.getPosition(0)).normalize();
+
+                    Vec3 vectorToVehicle2 = leashHolder2.getPosition(0).vectorTo(cleat2.getPosition(0)).normalize();
+
+                    Vec3 movementVector1 = new Vec3(vectorToVehicle1.x * -0.002f, this.getDeltaMovement().y,
+                            vectorToVehicle1.z * -0.002f);
+
+                    Vec3 movementVector2 = new Vec3(vectorToVehicle2.x * -0.002f, this.getDeltaMovement().y,
+                            vectorToVehicle1.z * -0.002f);
+
+                    if (cleat1.distanceTo(leashHolder1) > 1) {
+                        this.setDeltaMovement(movementVector1);
+                    }
+                    if (cleat2.distanceTo(leashHolder1) > 1) {
+                        this.setDeltaMovement(movementVector2);
+                    }
+
+                }
+            }
+
+        } if(count == 1){
+            VehicleCleatEntity cleat = leashedCleats.get(0);
+            Entity leashHolder = cleat.getLeashHolder();
+            if(leashHolder != null){
+                if (leashHolder instanceof Player) {
+                    if (this.distanceTo(leashHolder) > 4f) {
+                        Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
+                        Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.01f, this.getDeltaMovement().y,
+                                vectorToVehicle.z * -0.01f);
+                        double vehicleSize = Mth.clamp(this.getBbWidth(), 1, 100);
+                        movementVector = movementVector.multiply(1 / vehicleSize, 0, 1 / vehicleSize);
+
+                        this.setDeltaMovement(movementVector);
+
+                    }
+                }
+                if (leashHolder instanceof HangingEntity) {
+                    Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
+                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.001f, this.getDeltaMovement().y,
+                            vectorToVehicle.z * -0.001f);
+
+                    if (cleat.distanceTo(leashHolder) > 1) {
+                        this.setDeltaMovement(movementVector);
+                    }
+
+                }
+            }
+        }
+        if(count != 1 && count != 2){
+            for(VehicleCleatEntity cleat : leashedCleats){
+                Entity leashHolder = cleat.getLeashHolder();
+                if(leashHolder != null){
+                    Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
+                    Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.01f/count, this.getDeltaMovement().y,
+                            vectorToVehicle.z * -0.01f/count);
+
+                    if (cleat.distanceTo(leashHolder) > 1) {
+                        this.setDeltaMovement(movementVector);
+                    }
+                }
+            }
+        }
+
     }
 
 
