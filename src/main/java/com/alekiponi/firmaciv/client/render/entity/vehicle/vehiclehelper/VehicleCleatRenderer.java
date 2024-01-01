@@ -1,5 +1,7 @@
 package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 
+import com.alekiponi.firmaciv.Firmaciv;
+import com.alekiponi.firmaciv.client.model.entity.CleatEntityKnotModel;
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
@@ -7,7 +9,6 @@ import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.model.LeashKnotModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -25,13 +26,12 @@ import org.joml.Matrix4f;
 
 public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
 
-    private static final ResourceLocation KNOT_LOCATION = new ResourceLocation("textures/entity/lead_knot.png");
-    private final LeashKnotModel<VehicleCleatEntity> model;
+    private static final ResourceLocation CLEAT_KNOT = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/cleat_knot.png");
+    private final CleatEntityKnotModel model;
 
     public VehicleCleatRenderer(EntityRendererProvider.Context pContext) {
-
         super(pContext);
-        this.model = new LeashKnotModel<VehicleCleatEntity>(pContext.bakeLayer(ModelLayers.LEASH_KNOT));
+        this.model = new CleatEntityKnotModel();
     }
 
     private static void addVertexPair(VertexConsumer pConsumer, Matrix4f pMatrix, float p_174310_, float p_174311_,
@@ -73,20 +73,21 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
                 rotation = pEntityYaw;
             }
             pPoseStack.pushPose();
-            pPoseStack.scale(0.8F, 0.8F, 0.8F);
-            pPoseStack.translate(-0.25f, 0.35f, 0.0f);
-            pPoseStack.mulPose(Axis.ZP.rotationDegrees(90));
-            if (pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof RowboatEntity) {
-                //pPoseStack.scale(-0.8F, -0.8F, 0.8F);
-                //pPoseStack.mulPose(Axis.YP.rotationDegrees(rotation));
-            } else if(pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity){
-                pPoseStack.scale(0.8F, 0.8F, 0.8F);
-                pPoseStack.translate(0f, -0.0625f, 0.0f);
+            pPoseStack.translate(0f, 1.5f, 0f);
+            pPoseStack.mulPose(Axis.ZP.rotationDegrees(180));
+
+            if ((pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof RowboatEntity)) {
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(rotation));
+            } else {
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(rotation + 90));
             }
             this.model.setupAnim(pEntity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-            VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(KNOT_LOCATION));
+            VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(CLEAT_KNOT));
             this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                     1.0F, 1.0F);
+            if (!(pEntity.getVehicle().isPassenger() && pEntity.getVehicle().getVehicle() instanceof CanoeEntity)) {
+                model.getSides().render(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            }
             pPoseStack.popPose();
             this.renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, entity);
         }

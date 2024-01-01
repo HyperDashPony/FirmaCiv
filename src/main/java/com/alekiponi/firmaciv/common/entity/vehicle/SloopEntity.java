@@ -216,25 +216,25 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 //cleat port fore
                 localZ = -1.8f;
                 localX = 1.2f;
-                localY += 0.8f;
+                localY += 1.0f;
             }
             case 19 -> {
                 //cleat starboard fore
                 localZ = 1.8f;
                 localX = 1.2f;
-                localY += 0.8f;
+                localY += 1.0f;
             }
             case 20 -> {
                 //cleat port aft
                 localZ = -1.8f;
                 localX = -2.25f;
-                localY += 0.9f;
+                localY += 1.2f;
             }
             case 21 -> {
                 //cleat starboard aft
                 localZ = 1.8f;
                 localX = -2.25f;
-                localY += 0.9f;
+                localY += 1.2f;
             }
 
         }
@@ -342,7 +342,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                             (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
 
                     float approach = Mth.approachDegrees(this.getYRot(), finalRotation, 0.25f);
-                    if (Mth.degreesDifferenceAbs(this.getYRot(), finalRotation) < 0.5) {
+                    if (Mth.degreesDifferenceAbs(this.getYRot(), finalRotation) < 1.0) {
                         this.setDeltaRotation(0);
                         this.setYRot(this.getYRot());
                     } else {
@@ -354,15 +354,15 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     Vec3 vectorToVehicle2 = leashHolder2.getPosition(0).vectorTo(cleat2.getPosition(0)).normalize();
 
                     Vec3 movementVector1 = new Vec3(vectorToVehicle1.x * -0.002f, this.getDeltaMovement().y,
-                            vectorToVehicle1.z * -0.002f);
+                            vectorToVehicle1.z * -0.005f);
 
                     Vec3 movementVector2 = new Vec3(vectorToVehicle2.x * -0.002f, this.getDeltaMovement().y,
-                            vectorToVehicle1.z * -0.002f);
+                            vectorToVehicle1.z * -0.005f);
 
-                    if (cleat1.distanceTo(leashHolder1) > 1) {
+                    if (cleat1.distanceTo(leashHolder1) > 1.5) {
                         this.setDeltaMovement(movementVector1);
                     }
-                    if (cleat2.distanceTo(leashHolder1) > 1) {
+                    if (cleat2.distanceTo(leashHolder2) > 1.5) {
                         this.setDeltaMovement(movementVector2);
                     }
 

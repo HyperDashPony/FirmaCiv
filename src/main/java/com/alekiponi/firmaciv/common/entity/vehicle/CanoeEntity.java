@@ -130,7 +130,7 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
             case 2 -> {
                 localX = 1.0f;
                 localZ = 0.0f;
-                localY += 0.28f;
+                localY += 0.45f;
             }
         }
         return new Vec3(localX, localY, localZ);

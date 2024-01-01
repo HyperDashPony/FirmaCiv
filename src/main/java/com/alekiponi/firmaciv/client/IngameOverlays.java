@@ -15,6 +15,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -64,8 +65,7 @@ public enum IngameOverlays {
         if (mc.player != null) {
             Player player = mc.player;
 
-
-            if (setup(gui, mc)) {
+            if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
                 Entity entity = mc.crosshairPickEntity;
                 PoseStack stack = graphics.pose();
 
@@ -146,13 +146,13 @@ public enum IngameOverlays {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player player = mc.player;
-            if (setup(gui, mc)) {
+            if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
                 Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 3f);
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
 
-                if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity && emptyCompartmentEntity.isPassenger()) {
+                if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity && emptyCompartmentEntity.isPassenger() && !emptyCompartmentEntity.isVehicle()) {
                     stack.scale(1.0F, 1.0F, 1.0F);
                     stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
                     if ((float) height % 2.0 != 0) {
@@ -179,7 +179,7 @@ public enum IngameOverlays {
                             graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
                         }
                     }
-                } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity  && vehicleCleatEntity.isPassenger()) {
+                } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity  && vehicleCleatEntity.isPassenger() && !vehicleCleatEntity.isLeashed()) {
                     if ((float) height % 2.0 != 0) {
                         stack.translate(0f, 0.5f, 0.0f);
                     }

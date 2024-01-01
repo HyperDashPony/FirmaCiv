@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -81,10 +82,12 @@ public class VehicleCleatEntity extends Entity {
         if (this.getLeashHolder() == pPlayer) {
             this.dropLeash(true, !pPlayer.getAbilities().instabuild);
             this.gameEvent(GameEvent.ENTITY_INTERACT, pPlayer);
+
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else if (itemstack.is(Items.LEAD) && this.canBeLeashed(pPlayer)) {
             this.setLeashedTo(pPlayer, true);
             itemstack.shrink(1);
+            this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0F, 1.0F);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             return InteractionResult.PASS;
@@ -100,6 +103,12 @@ public class VehicleCleatEntity extends Entity {
         if (leashHolder != null) {
             if (!this.isAlive() || !leashHolder.isAlive()) {
                 this.dropLeash(true, true);
+
+            }
+            if(leashHolder instanceof LeashFenceKnotEntity leashFenceKnotEntity){
+                if(!leashFenceKnotEntity.survives()){
+                    this.dropLeash(true, true);
+                }
             }
             if (leashHolder.isPassenger() && leashHolder.getVehicle() instanceof EmptyCompartmentEntity) {
                 this.dropLeash(true, true);
@@ -110,7 +119,6 @@ public class VehicleCleatEntity extends Entity {
                 } else {
                     this.dropLeash(true,true);
                 }
-
             }
 
         }
@@ -142,10 +150,14 @@ public class VehicleCleatEntity extends Entity {
     public void dropLeash(boolean pBroadcastPacket, boolean pDropLeash) {
         if (this.leashHolder != null) {
             if (!this.level().isClientSide && pDropLeash) {
+                this.playSound(SoundEvents.LEASH_KNOT_BREAK, 1.0F, 1.0F);
                 if (leashHolder instanceof Player player) {
                     ItemHandlerHelper.giveItemToPlayer(player, Items.LEAD.getDefaultInstance());
                 } else {
                     this.spawnAtLocation(Items.LEAD);
+                    if(leashHolder instanceof LeashFenceKnotEntity){
+                        leashHolder.kill();
+                    }
                 }
 
             }
@@ -244,7 +256,7 @@ public class VehicleCleatEntity extends Entity {
 
     @Override
     public Vec3 getLeashOffset(float pPartialTick) {
-        return new Vec3(0.0D, this.getEyeHeight(), 0f);
+        return new Vec3(0.0f, 0f, 0f);
     }
 
     @Override

@@ -127,6 +127,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
         this.tickPaddlingEffects();
 
+        // all movement code should happen before collision check
         this.checkInsideBlocks();
 
         this.tickUpdateWind(true);
@@ -134,6 +135,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         //This should ALWAYS be the only time the Y rotation is set during any given tick
         this.setYRot(this.getYRot() + this.getDeltaRotation());
 
+        // all code that moves other entities should happen after collision check
         FirmacivHelper.tickHopPlayersOnboard(this);
 
         this.tickTakeEntitiesForARide();
@@ -358,7 +360,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
                         }
                     }
-                    if (leashHolder instanceof HangingEntity) {
+                    if (leashHolder instanceof HangingEntity && this.status != Status.ON_LAND) {
                         Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
                         Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.005f, this.getDeltaMovement().y,
                                 vectorToVehicle.z * -0.005f);
@@ -375,9 +377,12 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                         } else {
                             this.setDeltaRotation(-1 * (this.getYRot() - approach));
                         }
-                        if (cleat.distanceTo(leashHolder) > 1) {
+                        if (cleat.distanceTo(leashHolder) > 2) {
                             this.setDeltaMovement(movementVector);
+                        } else {
+                            this.setDeltaMovement(Vec3.ZERO);
                         }
+
 
                     }
                 }

@@ -118,9 +118,9 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
             }
             case 5 -> {
                 // cleat
-                localX = 1.7f;
+                localX = 1.720f;
                 localZ = 0f;
-                localY += 0.6f;
+                localY += 0.937f;
             }
         }
         return new Vec3(localX, localY, localZ);
