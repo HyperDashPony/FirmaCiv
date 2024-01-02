@@ -31,6 +31,8 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
 
     private final Map<BoatVariant, Pair<ResourceLocation, RowboatEntityModel>> rowboatResources;
 
+    private final RowboatEntityModel paintModel = new RowboatEntityModel();
+
     public RowboatRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 1.0f;
@@ -50,15 +52,6 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         poseStack.pushPose();
         poseStack.translate(0.0D, 0.4375D, 0.0D);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
-        float f = (float) pEntity.getHurtTime() - pPartialTicks;
-        float f1 = pEntity.getDamage() - pPartialTicks;
-        if (f1 < 0.0F) {
-            f1 = 0.0F;
-        }
-
-        if (f > 0.0F) {
-            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
-        }
 
         Pair<ResourceLocation, RowboatEntityModel> pair = getModelWithLocation(pEntity);
         RowboatEntityModel rowboatEntityModel = pair.getSecond();
@@ -67,26 +60,38 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         rowboatEntityModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
+        VertexConsumer baseVertexConsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
         if(pEntity.tickCount < 1){
             poseStack.popPose();
             super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
             return;
         }
-        rowboatEntityModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F,
+        rowboatEntityModel.renderToBuffer(poseStack, baseVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F,
                 1.0F, 1.0F, 1.0F);
+
         if (pEntity.getOars().getCount() >= 1) {
             rowboatEntityModel.getOarStarboard()
-                    .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+                    .render(poseStack, baseVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
         if (pEntity.getOars().getCount() == 2) {
-            rowboatEntityModel.getOarPort().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            rowboatEntityModel.getOarPort().render(poseStack, baseVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
         if (!pEntity.isUnderWater()) {
-            VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
+            VertexConsumer waterMaskVertexConsumer = pBuffer.getBuffer(RenderType.waterMask());
             rowboatEntityModel.getWaterocclusion()
-                    .render(poseStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+                    .render(poseStack, waterMaskVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
+        if(!pEntity.getPaint().isEmpty() && pEntity.getPaintColor() != null){
+            VertexConsumer paintVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getPaintTexture(pEntity)));
+            rowboatEntityModel.renderToBuffer(poseStack, paintVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        if(pEntity.getDamage() > 0 && pEntity.getDamage() < pEntity.getDamageThreshold()){
+            VertexConsumer damageVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getDamageTexture(pEntity)));
+            float alpha = Mth.clamp((pEntity.getDamage()/pEntity.getDamageThreshold())*0.75f, 0, 0.5f);
+            rowboatEntityModel.renderToBuffer(poseStack, damageVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+        }
+
+
 
         poseStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
@@ -96,6 +101,16 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
     public ResourceLocation getTextureLocation(RowboatEntity pEntity) {
         return new ResourceLocation(Firmaciv.MOD_ID,
                 "textures/entity/watercraft/rowboat/" + pEntity.getVariant() + ".png");
+    }
+
+    public ResourceLocation getPaintTexture(RowboatEntity pEntity) {
+        return new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/rowboat/paint/" + pEntity.getPaintColor() + ".png");
+    }
+
+    public ResourceLocation getDamageTexture(RowboatEntity pEntity) {
+        return new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/rowboat/" + "damage_overlay" + ".png");
     }
 
     public Pair<ResourceLocation, RowboatEntityModel> getModelWithLocation(RowboatEntity rowboat) {

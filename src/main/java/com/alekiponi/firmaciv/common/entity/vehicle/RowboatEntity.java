@@ -37,7 +37,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     public final int[] CAN_ADD_ONLY_BLOCKS = {2, 1};
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
-    protected final float DAMAGE_THRESHOLD = 80.0f;
+    protected final float DAMAGE_THRESHOLD = 128.0f;
     protected final float DAMAGE_RECOVERY = 2.0f;
 
 
@@ -130,7 +130,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected float getDamageThreshold() {
+    public float getDamageThreshold() {
         return DAMAGE_THRESHOLD;
     }
 
@@ -208,12 +208,12 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
         final ItemStack item = player.getItemInHand(hand);
-
         if (item.is(FirmacivItems.OAR.get()) && this.getOars().getCount() < 2) {
             this.addOar();
             item.split(1);
             return InteractionResult.SUCCESS;
         }
+        super.interact(player,hand);
         return InteractionResult.PASS;
     }
 

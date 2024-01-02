@@ -14,10 +14,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Random;
+import java.util.random.RandomGenerator;
+
 public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             new ResourceLocation(Firmaciv.MOD_ID, "rowboat_entity"), "main");
+
     private final ModelPart waterocclusion;
     private final ModelPart hull;
     private final ModelPart oar_port;
@@ -278,7 +282,6 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
     }
 
-    @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw,
                           float pHeadPitch) {
     }
@@ -297,6 +300,35 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
     public void setupAnim(RowboatEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
                           float pNetHeadYaw, float pHeadPitch) {
+        if(pEntity.getDamage() > pEntity.getDamageThreshold()){
+            float randomRotation = pEntity.getRandomRotation();
+            hull.xRot = 445.64559f * randomRotation;
+            bow_floor.yRot = 1.23056f * randomRotation;
+            seats.zRot = 0.45456f * randomRotation;
+            bow.zRot = 1.8797865f * randomRotation;
+            port_bow.yRot = 2.8973f * randomRotation;
+            starboard_bow.yRot =3.56895f * randomRotation;
+            port.zRot =4.9f * randomRotation;
+            starboard.xRot =8.2f * randomRotation;
+            oarlocks.xRot =7.4f * randomRotation;
+            keel.zRot =3.1f * randomRotation;
+            transom.yRot =6.0f * randomRotation;
+            cleat.xRot =3f * randomRotation;
+
+            float bottomOfBoat = 24;
+            hull.y = bottomOfBoat;
+            bow_floor.y = bottomOfBoat;
+            seats.y = bottomOfBoat;
+            bow.y = bottomOfBoat;
+            port_bow.y = bottomOfBoat;
+            starboard_bow.y = bottomOfBoat;
+            port.y = bottomOfBoat;
+            starboard.y = bottomOfBoat;
+            oarlocks.y = bottomOfBoat;
+            keel.y = bottomOfBoat;
+            transom.y = bottomOfBoat;
+            cleat.y = bottomOfBoat;
+        }
         animatePaddle(pEntity, 0, this.getOarPort(), pLimbSwing);
         animatePaddle(pEntity, 1, this.getOarStarboard(), pLimbSwing);
     }

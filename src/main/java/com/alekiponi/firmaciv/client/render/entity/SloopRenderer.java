@@ -35,15 +35,6 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
         poseStack.pushPose();
         poseStack.translate(0.0D, 0.5D, 0.0D);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
-        float f = (float) pEntity.getHurtTime() - pPartialTicks;
-        float f1 = pEntity.getDamage() - pPartialTicks;
-        if (f1 < 0.0F) {
-            f1 = 0.0F;
-        }
-
-        if (f > 0.0F) {
-            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) pEntity.getHurtDir()));
-        }
 
         Pair<ResourceLocation, SloopEntityModel> pair = sloopResources;
         ResourceLocation resourcelocation = pair.getFirst();

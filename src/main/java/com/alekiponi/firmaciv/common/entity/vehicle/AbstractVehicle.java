@@ -1,6 +1,5 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.MastEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
@@ -36,11 +35,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.event.level.NoteBlockEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity {
@@ -55,8 +54,13 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     protected static final EntityDataAccessor<Float> DATA_ID_ACCELERATION = SynchedEntityData.defineId(
             AbstractVehicle.class, EntityDataSerializers.FLOAT);
 
-    public final int MAX_PASSENGER_NUMBER = 0;
+    private static final EntityDataAccessor<ItemStack> DATA_ID_PAINT = SynchedEntityData.defineId(AbstractVehicle.class,
+            EntityDataSerializers.ITEM_STACK);
 
+
+    private float randomRotation;
+
+    public final int MAX_PASSENGER_NUMBER = 0;
 
     public final int[] CLEATS = {};
 
@@ -89,13 +93,12 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     public AbstractVehicle(final EntityType entityType, final Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
+        this.randomRotation = 0;
     }
 
     public abstract int getMaxPassengers();
 
     public abstract int[] getCleatIndices();
-
-
 
     public abstract int[] getColliderIndices();
 
@@ -164,6 +167,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         this.entityData.define(DATA_ID_DAMAGE, 0.0F);
         this.entityData.define(DATA_ID_DELTA_ROTATION, 0f);
         this.entityData.define(DATA_ID_ACCELERATION, 0f);
+        this.entityData.define(DATA_ID_PAINT, ItemStack.EMPTY);
     }
 
     @Override
@@ -222,11 +226,16 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
         final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
 
-        if (instantKill || this.getDamage() > getDamageThreshold()) {
-            if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+        if (instantKill) {
+            if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                 this.spawnAtLocation(this.getDropItem());
             }
             this.discard();
+        }
+        if (this.getDamage() > getDamageThreshold()) {
+            for(Entity entity : passengers){
+                entity.kill();
+            }
         }
 
         return true;
@@ -296,6 +305,9 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     }
 
     protected void tickTakeEntitiesForARide(){
+        if(this instanceof AbstractFirmacivBoatEntity && (this.status == Status.UNDER_WATER || this.status == Status.UNDER_FLOWING_WATER)){
+            return;
+        }
         if(this.getDeltaMovement().length() > 0.01){
             List<net.minecraft.world.entity.Entity> entitiesToTakeWith = this.level()
                     .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS);
@@ -681,19 +693,53 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         return this.entityData.get(DATA_ID_ACCELERATION);
     }
 
+    public float getRandomRotation(){
+        if(this.getDamage() > this.getDamageThreshold()){
+            return randomRotation;
+        } else {
+            return 1.0f;
+        }
+
+    }
+
+    public void setRandomRotation(float rotation){
+        randomRotation = rotation;
+    }
+
+    public ItemStack getPaint() {
+        return this.entityData.get(DATA_ID_PAINT);
+    }
+
+    public void setPaint(final ItemStack itemStack) {
+        this.entityData.set(DATA_ID_PAINT, itemStack.copy());
+    }
+
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         this.setDeltaRotation(pCompound.getFloat("deltaRotation"));
+        this.setPaint(ItemStack.of(pCompound.getCompound("paint")));
+        this.setHurtDir(pCompound.getInt("hurtDir"));
+        this.setDamage(pCompound.getFloat("damage"));
+        this.setHurtTime(pCompound.getInt("hurtTime"));
+        this.setRandomRotation(pCompound.getFloat("randomRotation"));
     }
 
 
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
         pCompound.putFloat("deltaRotation", this.getDeltaRotation());
+        pCompound.put("paint", this.getPaint().save(new CompoundTag()));
+        pCompound.putInt("hurtDir", this.getHurtDir());
+        pCompound.putFloat("damage", this.getDamage());
+        pCompound.putInt("hurtTime", this.getHurtTime());
+        pCompound.putFloat("randomRotation", this.getRandomRotation());
     }
 
     @Override
     protected boolean canAddPassenger(final net.minecraft.world.entity.Entity passenger) {
+        if(this.getDamage() > this.getDamageThreshold()){
+            return false;
+        }
         return this.getPassengers().size() < this.getMaxPassengers() && !this.isRemoved() && passenger instanceof AbstractVehiclePart;
     }
 

@@ -163,12 +163,12 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected float getDamageThreshold() {
+    public float getDamageThreshold() {
         return this.DAMAGE_THRESHOLD;
     }
 
     @Override
-    protected float getDamageRecovery() {
+    public float getDamageRecovery() {
         return this.DAMAGE_RECOVERY;
     }
 

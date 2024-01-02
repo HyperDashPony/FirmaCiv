@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
+import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
@@ -13,18 +14,29 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     public static final int PADDLE_LEFT = 0;
@@ -125,6 +137,11 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     @Override
     public void tick() {
+        if(this.tickCount < 5 && this.getRandomRotation() == 0){
+            Random r = new Random();
+            this.setRandomRotation(r.nextFloat());
+        }
+
         if (!this.level().isClientSide()) {
             if (this.getPassengers().size() < this.getMaxPassengers()) {
                 final AbstractVehiclePart newPart = FirmacivEntities.BOAT_VEHICLE_PART.get().create(this.level());
@@ -138,14 +155,28 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.oldStatus = this.status;
         this.status = this.getStatus();
 
-
         if (this.getHurtTime() > 0) {
             this.setHurtTime(this.getHurtTime() - 1);
         }
 
-        if (this.getDamage() > 0.0F) {
-            this.setDamage(this.getDamage() - getDamageRecovery());
+        if(this.getDamage() > this.getDamageThreshold()){
+            if( this.status == Status.IN_WATER){
+                this.setDeltaMovement(this.getDeltaMovement().add(0,-0.1,0));
+            }
+            for(Entity entity : this.getPassengers()){
+                entity.kill();
+            }
+            if(this.getDamage() > this.getDamageThreshold()*2){
+                this.kill();
+            }
         }
+
+        float damage = this.getDamage();
+
+        if((this.status == Status.UNDER_FLOWING_WATER || this.status == Status.UNDER_WATER) && this.getDamage() <= this.getDamageThreshold() && this.tickCount % 80 == 0){
+            this.hurt(this.damageSources().drown(),this.getDamageRecovery());
+        }
+
 
         this.tickEffects();
 
@@ -449,11 +480,39 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     }
 
     @Override
-    public void playerTouch(Player pPlayer) {
-        /*
-        //if the player is touching from the side only
-        */
+    public InteractionResult interact(final Player player, final InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(Tags.Items.DYES) && !stack.is(this.getPaint().getItem())) {
+            this.setPaint(stack.split(1));
+            player.swing(hand);
+            return InteractionResult.SUCCESS;
+        }
+        if (stack.is(Items.WATER_BUCKET)) {
+            this.setPaint(ItemStack.EMPTY);
+            player.swing(hand);
+            return InteractionResult.SUCCESS;
+        }
+        if(stack.is(this.getDropItem())){
+            if (this.getDamage() > 0.0F) {
+                this.setDamage(this.getDamage() - getDamageRecovery());
+                stack.split(1);
+                player.swing(hand);
+                this.level().playSound(null, this, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
+                        this.level().getRandom().nextFloat() * 0.1F + 0.9F);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return InteractionResult.PASS;
+    }
 
+    public DyeColor getPaintColor(){
+        ItemStack stack = this.getPaint();
+        if(!stack.isEmpty()){
+            if(stack.is(Tags.Items.DYES)){
+                return DyeColor.getColor(stack);
+            }
+        }
+        return null;
     }
 
     protected abstract float getMomentumSubtractor();

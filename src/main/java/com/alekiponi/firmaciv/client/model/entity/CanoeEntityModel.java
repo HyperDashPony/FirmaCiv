@@ -142,6 +142,19 @@ public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
             float headPitch) {
+        if(entity.getDamage() > entity.getDamageThreshold()){
+            float randomRotation = entity.getRandomRotation();
+            middle.yRot = 1.23056f * randomRotation;
+            end.zRot = 0.45456f * randomRotation;
+            end2.zRot = 1.8797865f * randomRotation;
+            cleat.xRot =3f * randomRotation;
+
+            float bottomOfBoat = 24;
+            middle.y = bottomOfBoat;
+            end.y = bottomOfBoat;
+            end2.y = bottomOfBoat;
+            cleat.y = bottomOfBoat;
+        }
 
     }
 

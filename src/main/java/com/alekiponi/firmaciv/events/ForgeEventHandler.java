@@ -40,6 +40,7 @@ public class ForgeEventHandler {
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
         if(event.getEntity().getVehicle() instanceof EmptyCompartmentEntity){
             event.getEntity().stopRiding();
+            event.getEntity().setPos(event.getEntity().getPosition(0).add(0,2,0));
         }
     }
 

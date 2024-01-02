@@ -47,7 +47,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
-    protected final float DAMAGE_THRESHOLD = 80.0f;
+    protected final float DAMAGE_THRESHOLD = 512.0f;
     protected final float DAMAGE_RECOVERY = 2.0f;
 
     public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {

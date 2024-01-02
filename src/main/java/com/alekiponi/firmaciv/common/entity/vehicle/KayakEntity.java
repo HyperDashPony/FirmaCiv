@@ -7,13 +7,19 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 
@@ -56,6 +62,43 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
         }
 
         return null;
+    }
+
+    @Override
+    public void tick() {
+
+        if (this.getDamage() > 0.0F) {
+            this.setDamage(this.getDamage() - getDamageRecovery());
+        }
+        super.tick();
+    }
+
+    @Override
+    public boolean hurt(final DamageSource damageSource, final float amount) {
+        if (this.isInvulnerableTo(damageSource)) return false;
+
+        if (this.level().isClientSide || this.isRemoved()) return true;
+
+        this.setHurtDir(-this.getHurtDir());
+        this.setHurtTime(10);
+        this.setDamage(this.getDamage() + amount * 10.0F);
+        this.markHurt();
+        this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+        final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
+
+        if (instantKill || this.getDamage() > getDamageThreshold()) {
+            if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                this.spawnAtLocation(this.getDropItem());
+            }
+            this.discard();
+        }
+
+        return true;
+    }
+
+    @Override
+    public InteractionResult interact(final Player player, final InteractionHand hand) {
+        return InteractionResult.PASS;
     }
 
     @Override
