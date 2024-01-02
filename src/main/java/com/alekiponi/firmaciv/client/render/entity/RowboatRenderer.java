@@ -59,8 +59,12 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         poseStack.translate(0.0f, 1.0625f, 0f);
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
+        if(pEntity.getDamage() > pEntity.getDamageThreshold()){
+            poseStack.mulPose(Axis.ZP.rotationDegrees(20));
+        }
         rowboatEntityModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer baseVertexConsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
+
         if(pEntity.tickCount < 1){
             poseStack.popPose();
             super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
@@ -85,9 +89,9 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
             VertexConsumer paintVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getPaintTexture(pEntity)));
             rowboatEntityModel.renderToBuffer(poseStack, paintVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
-        if(pEntity.getDamage() > 0 && pEntity.getDamage() < pEntity.getDamageThreshold()){
+        if(pEntity.getDamage() > 0){
             VertexConsumer damageVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getDamageTexture(pEntity)));
-            float alpha = Mth.clamp((pEntity.getDamage()/pEntity.getDamageThreshold())*0.75f, 0, 0.5f);
+            float alpha = Mth.clamp((pEntity.getDamage()/(pEntity.getDamageThreshold()))*0.75f, 0, 0.5f);
             rowboatEntityModel.renderToBuffer(poseStack, damageVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
         }
 

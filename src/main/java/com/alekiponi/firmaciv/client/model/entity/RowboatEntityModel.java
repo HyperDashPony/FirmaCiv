@@ -3,6 +3,7 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -13,6 +14,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.common.util.TextTable;
 
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -56,6 +58,11 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         this.keel = root.getChild("keel");
         this.transom = root.getChild("transom");
         this.cleat = root.getChild("cleat");
+    }
+
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -282,8 +289,57 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
     }
 
-    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw,
-                          float pHeadPitch) {
+    public static void animateDestruction(RowboatEntity pEntity, ModelPart[] bones){
+        float damage = pEntity.getDamage();
+        float threshold = pEntity.getDamageThreshold();
+        if(pEntity.tickCount > 1 && damage > threshold){
+            float randomRotation = pEntity.getRandomRotation();
+            for(ModelPart part : bones){
+                if(randomRotation < 0.333){
+                    part.yRot = (1+randomRotation)*randomRotation;
+                } else if(randomRotation < 0.666){
+                    part.xRot = (1+randomRotation)*randomRotation;
+                } else {
+                    part.zRot = (1+randomRotation)*randomRotation;
+                }
+            }
+            float bottomOfBoat = 24;
+            for(ModelPart part : bones){
+                part.y = bottomOfBoat;
+            }
+        }
+    }
+
+    public static ModelPart[] getAllParts(RowboatEntityModel rowboatEntityModel) {
+
+        ModelPart[] parts = new ModelPart[]{
+                rowboatEntityModel.waterocclusion,
+                rowboatEntityModel.hull,
+                rowboatEntityModel.oar_port,
+                rowboatEntityModel.oar_starboard,
+                rowboatEntityModel.bow_floor,
+                rowboatEntityModel.seats,
+                rowboatEntityModel.bow,
+                rowboatEntityModel.port_bow,
+                rowboatEntityModel.starboard_bow,
+                rowboatEntityModel.port,
+                rowboatEntityModel.starboard,
+                rowboatEntityModel.oarlocks,
+                rowboatEntityModel.keel,
+                rowboatEntityModel.transom,
+                rowboatEntityModel.cleat,
+        };
+
+        return parts;
+    }
+
+    private ModelPart[] allParts = new ModelPart[15];
+
+    public void setupAnim(RowboatEntity pEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+                          float headPitch) {
+        //animateDestruction(pEntity, allParts);
+        animatePaddle(pEntity, 0, this.getOarPort(), limbSwing);
+        animatePaddle(pEntity, 1, this.getOarStarboard(), limbSwing);
     }
 
     public ModelPart getWaterocclusion() {
@@ -296,41 +352,6 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
     public ModelPart getOarStarboard() {
         return this.oar_starboard;
-    }
-
-    public void setupAnim(RowboatEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
-                          float pNetHeadYaw, float pHeadPitch) {
-        if(pEntity.getDamage() > pEntity.getDamageThreshold()){
-            float randomRotation = pEntity.getRandomRotation();
-            hull.xRot = 445.64559f * randomRotation;
-            bow_floor.yRot = 1.23056f * randomRotation;
-            seats.zRot = 0.45456f * randomRotation;
-            bow.zRot = 1.8797865f * randomRotation;
-            port_bow.yRot = 2.8973f * randomRotation;
-            starboard_bow.yRot =3.56895f * randomRotation;
-            port.zRot =4.9f * randomRotation;
-            starboard.xRot =8.2f * randomRotation;
-            oarlocks.xRot =7.4f * randomRotation;
-            keel.zRot =3.1f * randomRotation;
-            transom.yRot =6.0f * randomRotation;
-            cleat.xRot =3f * randomRotation;
-
-            float bottomOfBoat = 24;
-            hull.y = bottomOfBoat;
-            bow_floor.y = bottomOfBoat;
-            seats.y = bottomOfBoat;
-            bow.y = bottomOfBoat;
-            port_bow.y = bottomOfBoat;
-            starboard_bow.y = bottomOfBoat;
-            port.y = bottomOfBoat;
-            starboard.y = bottomOfBoat;
-            oarlocks.y = bottomOfBoat;
-            keel.y = bottomOfBoat;
-            transom.y = bottomOfBoat;
-            cleat.y = bottomOfBoat;
-        }
-        animatePaddle(pEntity, 0, this.getOarPort(), pLimbSwing);
-        animatePaddle(pEntity, 1, this.getOarStarboard(), pLimbSwing);
     }
 
     @Override

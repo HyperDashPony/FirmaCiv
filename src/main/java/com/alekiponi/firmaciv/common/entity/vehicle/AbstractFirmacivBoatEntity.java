@@ -137,7 +137,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     @Override
     public void tick() {
-        if(this.tickCount < 5 && this.getRandomRotation() == 0){
+        if(this.getRandomRotation() == 0){
             Random r = new Random();
             this.setRandomRotation(r.nextFloat());
         }
@@ -173,7 +173,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
         float damage = this.getDamage();
 
-        if((this.status == Status.UNDER_FLOWING_WATER || this.status == Status.UNDER_WATER) && this.getDamage() <= this.getDamageThreshold() && this.tickCount % 80 == 0){
+        if((this.status == Status.UNDER_FLOWING_WATER || this.status == Status.UNDER_WATER) && this.getDamage() <= this.getDamageThreshold() && this.tickCount % 10 == 0){
             this.hurt(this.damageSources().drown(),this.getDamageRecovery());
         }
 

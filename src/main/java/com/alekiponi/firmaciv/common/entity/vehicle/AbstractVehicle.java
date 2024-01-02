@@ -221,7 +221,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
 
         this.setHurtDir(-this.getHurtDir());
         this.setHurtTime(10);
-        this.setDamage(this.getDamage() + amount * 10.0F);
+        this.setDamage(this.getDamage() + amount);
         this.markHurt();
         this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
         final boolean instantKill = damageSource.getEntity() instanceof Player && ((Player) damageSource.getEntity()).getAbilities().instabuild;
