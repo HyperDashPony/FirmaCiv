@@ -38,8 +38,11 @@ public class ServerboundSwitchEntityPacket implements Packet<ServerGamePacketLis
         context.get().enqueueWork(() -> {
             Entity entity = context.get().getSender().level().getEntity(this.entityID);
             ServerPlayer serverPlayer = context.get().getSender();
-            if(entity instanceof AbstractSwitchEntity && entity.distanceTo(serverPlayer) < 10){
-                ((AbstractSwitchEntity) entity).setSwitched(this.switched);
+            if(entity instanceof AbstractSwitchEntity) {
+                assert serverPlayer != null;
+                if (entity.distanceTo(serverPlayer) < 10) {
+                    ((AbstractSwitchEntity) entity).setSwitched(this.switched);
+                }
             }
 
         });

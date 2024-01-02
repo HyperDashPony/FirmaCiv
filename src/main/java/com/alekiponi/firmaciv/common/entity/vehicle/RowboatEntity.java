@@ -2,7 +2,6 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +10,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -68,6 +66,11 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public int[] getSailSwitchIndices() {
+        return new int[0];
+    }
+
+    @Override
+    public int[] getMastIndices() {
         return new int[0];
     }
 

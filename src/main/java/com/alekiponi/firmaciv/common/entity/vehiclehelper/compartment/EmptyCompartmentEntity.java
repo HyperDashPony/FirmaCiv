@@ -234,10 +234,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         pCompound.putLong("passengerRideTick", this.getPassengerRideTick());
 
         pCompound.putBoolean("inputLeft", this.getInputLeft());
-        pCompound.putBoolean("inputRight", this.getInputLeft());
-        pCompound.putBoolean("inputUp", this.getInputLeft());
-        pCompound.putBoolean("inputDown", this.getInputLeft());
-
+        pCompound.putBoolean("inputRight", this.getInputRight());
+        pCompound.putBoolean("inputUp", this.getInputUp());
+        pCompound.putBoolean("inputDown", this.getInputDown());
 
         super.readAdditionalSaveData(pCompound);
     }
@@ -254,7 +253,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     public void setInput(final boolean inputLeft, final boolean inputRight, final boolean inputUp,
             final boolean inputDown) {
-        if(this.getFirstPassenger() instanceof Player player){
+        if(this.getFirstPassenger() instanceof Player){
             boolean shouldUpdateServer = false;
             if(this.getInputLeft() != inputLeft){
                 this.setInputLeft(inputLeft);
@@ -273,14 +272,14 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                 shouldUpdateServer = true;
             }
             if(this.level().isClientSide() && shouldUpdateServer){
-                PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(inputLeft, inputRight, inputUp, inputDown));
+                PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(inputLeft, inputRight, inputUp, inputDown, this.getId()));
             }
         } else {
             this.setInputLeft(false);
             this.setInputRight(false);
             this.setInputUp(false);
             this.setInputDown(false);
-            PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(false, false, false, false));
+            PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(false, false, false, false, this.getId()));
         }
 
     }

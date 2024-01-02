@@ -45,10 +45,11 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
 
-        event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), InvisibleHelperRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.BOAT_VEHICLE_PART.get(), InvisibleHelperRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.SAIL_SWITCH_ENTITY.get(), InvisibleHelperRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_COLLISION_ENTITY.get(), InvisibleHelperRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.WINDLASS_SWITCH_ENTITY.get(), InvisibleHelperRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.MAST_ENTITY.get(), InvisibleHelperRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANCHOR_ENTITY.get(), AnchorRenderer::new);

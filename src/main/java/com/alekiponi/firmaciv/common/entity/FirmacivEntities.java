@@ -66,10 +66,10 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(AnvilCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "compartment_anvil").toString()));
 
-    public static final RegistryObject<EntityType<VehiclePartEntity>> VEHICLE_PART_ENTITY = ENTITY_TYPES.register(
-            "vehicle_part",
-            () -> EntityType.Builder.of(VehiclePartEntity::new, MobCategory.MISC).sized(0.00F, 0.00F).noSummon()
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_part").toString()));
+    public static final RegistryObject<EntityType<BoatVehiclePart>> BOAT_VEHICLE_PART = ENTITY_TYPES.register(
+            "vehicle_part_boat",
+            () -> EntityType.Builder.of(BoatVehiclePart::new, MobCategory.MISC).sized(0.00F, 0.00F).noSummon()
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_part_boat").toString()));
 
     public static final RegistryObject<EntityType<VehicleCleatEntity>> VEHICLE_CLEAT_ENTITY = ENTITY_TYPES.register(
             "vehicle_cleat",
@@ -88,13 +88,18 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<AnchorEntity>> ANCHOR_ENTITY = ENTITY_TYPES.register(
             "vehicle_anchor",
-            () -> EntityType.Builder.of(AnchorEntity::new, MobCategory.MISC).sized(1.00F, 1.00F).clientTrackingRange(16)
+            () -> EntityType.Builder.of(AnchorEntity::new, MobCategory.MISC).sized(1.00F, 1.00F).clientTrackingRange(16).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_anchor").toString()));
 
     public static final RegistryObject<EntityType<WindlassSwitchEntity>> WINDLASS_SWITCH_ENTITY = ENTITY_TYPES.register(
             "vehicle_switch_windlass",
-            () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
+            () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_windlass").toString()));
+
+    public static final RegistryObject<EntityType<MastEntity>> MAST_ENTITY = ENTITY_TYPES.register(
+            "vehicle_mast",
+            () -> EntityType.Builder.of(MastEntity::new, MobCategory.MISC).sized(0.3F, 8F).noSummon()
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_mast").toString()));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

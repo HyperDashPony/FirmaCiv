@@ -2,7 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -46,7 +46,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
     protected double lerpYRot;
     protected double lerpXRot;
     @Nullable
-    protected VehiclePartEntity ridingThisPart = null;
+    protected AbstractVehiclePart ridingThisPart = null;
     private int notRidingTicks = 0;
 
     public AbstractCompartmentEntity(final EntityType<?> entityType, final Level level) {
@@ -99,8 +99,8 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
     @Override
     public void tick() {
-        if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof VehiclePartEntity) {
-            ridingThisPart = (VehiclePartEntity) this.getVehicle();
+        if (ridingThisPart == null && this.isPassenger() && this.getVehicle() instanceof AbstractVehiclePart) {
+            ridingThisPart = (AbstractVehiclePart) this.getVehicle();
         }
 
         if (!this.isPassenger()) {

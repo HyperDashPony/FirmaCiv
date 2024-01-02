@@ -3,7 +3,7 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,7 +32,7 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
         float rotation = 0f;
-        if(pEntity.getTrueVehicle() != null && pEntity.getVehicle() instanceof VehiclePartEntity vehiclePart && pEntity.tickCount < 2){
+        if(pEntity.getTrueVehicle() != null && pEntity.getVehicle() instanceof AbstractVehiclePart vehiclePart && pEntity.tickCount < 2){
             rotation = pEntity.getTrueVehicle().getYRot() + vehiclePart.getCompartmentRotation();
         } else {
             rotation = pEntityYaw;

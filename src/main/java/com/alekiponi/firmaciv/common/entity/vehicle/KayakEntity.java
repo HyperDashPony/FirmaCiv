@@ -74,6 +74,11 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[] getMastIndices() {
+        return new int[0];
+    }
+
+    @Override
     public int[] getColliderIndices() {
         return new int[0];
     }

@@ -1,9 +1,9 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.MastEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.google.common.collect.ImmutableList;
@@ -36,6 +36,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.event.level.NoteBlockEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -528,11 +529,11 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         return compartments;
     }
 
-    public final List<VehiclePartEntity> getVehicleParts() {
-        final List<VehiclePartEntity> vehicleParts = Lists.newArrayList();
+    public final List<AbstractVehiclePart> getVehicleParts() {
+        final List<AbstractVehiclePart> vehicleParts = Lists.newArrayList();
 
         for (final net.minecraft.world.entity.Entity vehiclePart : this.getPassengers()) {
-            vehicleParts.add((VehiclePartEntity) vehiclePart);
+            vehicleParts.add((AbstractVehiclePart) vehiclePart);
         }
         return vehicleParts;
     }
@@ -551,7 +552,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     @Override
     protected void positionRider(final net.minecraft.world.entity.Entity passenger, final net.minecraft.world.entity.Entity.MoveFunction moveFunction) {
         if (this.hasPassenger(passenger)) {
-            if (!(passenger instanceof VehiclePartEntity)) {
+            if (!(passenger instanceof AbstractVehiclePart)) {
                 passenger.stopRiding();
             }
 
@@ -693,14 +694,14 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
 
     @Override
     protected boolean canAddPassenger(final net.minecraft.world.entity.Entity passenger) {
-        return this.getPassengers().size() < this.getMaxPassengers() && !this.isRemoved() && passenger instanceof VehiclePartEntity;
+        return this.getPassengers().size() < this.getMaxPassengers() && !this.isRemoved() && passenger instanceof AbstractVehiclePart;
     }
 
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
         net.minecraft.world.entity.Entity entity = this.getPilotVehiclePartAsEntity();
-        if (entity instanceof VehiclePartEntity vehiclePart) {
+        if (entity instanceof AbstractVehiclePart vehiclePart) {
             entity = vehiclePart.getFirstPassenger();
             if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
                 entity = emptyCompartmentEntity.getControllingPassenger();
@@ -721,7 +722,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     public EmptyCompartmentEntity getControllingCompartment() {
         final net.minecraft.world.entity.Entity vehiclePart = this.getPilotVehiclePartAsEntity();
 
-        if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) {
+        if (!(vehiclePart instanceof AbstractVehiclePart) || !vehiclePart.isVehicle()) {
             return null;
         }
 
@@ -748,7 +749,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
 
     @Override
     protected void addPassenger(net.minecraft.world.entity.Entity passenger) {
-        if (passenger instanceof VehiclePartEntity) {
+        if (passenger instanceof AbstractVehiclePart) {
             super.addPassenger(passenger);
         }
     }
@@ -760,7 +761,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
 
     @Override
     public AABB getBoundingBoxForCulling() {
-        float bbRadius = this.getBbWidth() * 2 + 1;
+        float bbRadius = this.getBbWidth() * 3 + 1;
         Vec3 startingPoint = new Vec3(this.getX() - bbRadius, this.getY() - bbRadius, this.getZ() - bbRadius);
         Vec3 endingPoint = new Vec3(this.getX() + bbRadius, this.getY() + bbRadius, this.getZ() + bbRadius);
         return new AABB(startingPoint, endingPoint);

@@ -5,6 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,11 +17,14 @@ public class ServerboundCompartmentInputPacket implements Packet<ServerGamePacke
     private final boolean inputUp;
     private final boolean inputDown;
 
-    public ServerboundCompartmentInputPacket(boolean inputLeft, boolean inputRight, boolean inputUp, boolean inputDown) {
+    private final int entityID;
+
+    public ServerboundCompartmentInputPacket(boolean inputLeft, boolean inputRight, boolean inputUp, boolean inputDown, int id) {
         this.inputLeft = inputLeft;
         this.inputRight = inputRight;
         this.inputUp = inputUp;
         this.inputDown = inputDown;
+        this.entityID = id;
     }
 
     public ServerboundCompartmentInputPacket(FriendlyByteBuf buffer) {
@@ -28,6 +32,7 @@ public class ServerboundCompartmentInputPacket implements Packet<ServerGamePacke
         this.inputRight = buffer.readBoolean();
         this.inputUp = buffer.readBoolean();
         this.inputDown = buffer.readBoolean();
+        this.entityID = buffer.readInt();
     }
 
     public void encoder(FriendlyByteBuf buffer) {
@@ -35,6 +40,7 @@ public class ServerboundCompartmentInputPacket implements Packet<ServerGamePacke
         buffer.writeBoolean(this.inputRight);
         buffer.writeBoolean(this.inputUp);
         buffer.writeBoolean(this.inputDown);
+        buffer.writeInt(this.entityID);
     }
 
     public static ServerboundCompartmentInputPacket decoder(FriendlyByteBuf buffer) {
@@ -43,10 +49,12 @@ public class ServerboundCompartmentInputPacket implements Packet<ServerGamePacke
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
+            Entity entity = context.get().getSender().level().getEntity(this.entityID);
             ServerPlayer player = context.get().getSender();
-            if (player != null && player.getVehicle() != null) {
-                if (player.getVehicle() instanceof EmptyCompartmentEntity compartmentEntity) {
-                    compartmentEntity.setInput(this.inputLeft, this.inputRight, this.inputUp, this.inputDown);
+            if(entity instanceof EmptyCompartmentEntity compartment) {
+                assert player != null;
+                if (player.distanceTo(compartment) < 2) {
+                    compartment.setInput(this.inputLeft, this.inputRight, this.inputUp, this.inputDown);
                 }
             }
         });

@@ -1,14 +1,12 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -63,6 +61,11 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public int[] getSailSwitchIndices() {
+        return new int[0];
+    }
+
+    @Override
+    public int[] getMastIndices() {
         return new int[0];
     }
 

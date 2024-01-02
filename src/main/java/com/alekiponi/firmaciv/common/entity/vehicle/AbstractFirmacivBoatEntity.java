@@ -86,6 +86,8 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     public abstract int[] getSailSwitchIndices();
 
+    public abstract int[] getMastIndices();
+
     public ArrayList<SailSwitchEntity> getSailSwitches(){
         ArrayList<SailSwitchEntity> list = new ArrayList<SailSwitchEntity>();
         if(this.getPassengers().size() == this.getMaxPassengers()) {
@@ -109,11 +111,23 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         return list;
     }
 
+    public ArrayList<MastEntity> getMasts(){
+        ArrayList<MastEntity> list = new ArrayList<MastEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getMastIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof MastEntity mast) {
+                    list.add(mast);
+                }
+            }
+        }
+        return list;
+    }
+
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
             if (this.getPassengers().size() < this.getMaxPassengers()) {
-                final VehiclePartEntity newPart = FirmacivEntities.VEHICLE_PART_ENTITY.get().create(this.level());
+                final AbstractVehiclePart newPart = FirmacivEntities.BOAT_VEHICLE_PART.get().create(this.level());
                 newPart.setPos(this.getX(), this.getY(), this.getZ());
                 this.level().addFreshEntity(newPart);
                 newPart.startRiding(this);
