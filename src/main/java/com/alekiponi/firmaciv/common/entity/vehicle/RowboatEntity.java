@@ -67,7 +67,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getSwitchIndices() {
+    public int[] getSailSwitchIndices() {
         return new int[0];
     }
 
@@ -225,6 +225,11 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_OARS, ItemStack.EMPTY);
+    }
+
+    @Override
+    public int[] getWindlassIndices() {
+        return new int[0];
     }
 
     @Override

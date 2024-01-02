@@ -42,6 +42,10 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
 
+    public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
+            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F).clientTrackingRange(32)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
+
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
             "compartment_empty",
             () -> EntityType.Builder.of(EmptyCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F).noSummon()
@@ -77,22 +81,20 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(VehicleCollisionEntity::new, MobCategory.MISC).sized(1.5F, 0.75F).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_collider").toString()));
 
-    public static final RegistryObject<EntityType<VehicleSwitchEntity>> VEHICLE_SWITCH_ENTITY_50 = ENTITY_TYPES.register(
-            "vehicle_switch_50",
-            () -> EntityType.Builder.of(VehicleSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon()
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_50").toString()));
+    public static final RegistryObject<EntityType<SailSwitchEntity>> SAIL_SWITCH_ENTITY = ENTITY_TYPES.register(
+            "vehicle_switch_sail",
+            () -> EntityType.Builder.of(SailSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon()
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_sail").toString()));
 
-    /*
-    public static final RegistryObject<EntityType<FirmacivBoatEntity>> OUTRIGGER = ENTITY_TYPES.register("outrigger",
-            () -> EntityType.Builder.of(FirmacivBoatEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "outrigger").toString()));
+    public static final RegistryObject<EntityType<AnchorEntity>> ANCHOR_ENTITY = ENTITY_TYPES.register(
+            "vehicle_anchor",
+            () -> EntityType.Builder.of(AnchorEntity::new, MobCategory.MISC).sized(1.00F, 1.00F).clientTrackingRange(16)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_anchor").toString()));
 
-     */
-
-    public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
-            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F).clientTrackingRange(32)
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
-
+    public static final RegistryObject<EntityType<WindlassSwitchEntity>> WINDLASS_SWITCH_ENTITY = ENTITY_TYPES.register(
+            "vehicle_switch_windlass",
+            () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_windlass").toString()));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

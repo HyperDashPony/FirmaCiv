@@ -5,6 +5,7 @@ import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
 import com.alekiponi.firmaciv.client.model.entity.KayakEntityModel;
 import com.alekiponi.firmaciv.client.model.entity.RowboatEntityModel;
 import com.alekiponi.firmaciv.client.render.entity.*;
+import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.AnchorRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.CompartmentRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.InvisibleHelperRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.VehicleCleatRenderer;
@@ -45,10 +46,12 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_PART_ENTITY.get(), InvisibleHelperRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.VEHICLE_SWITCH_ENTITY_50.get(), InvisibleHelperRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.SAIL_SWITCH_ENTITY.get(), InvisibleHelperRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_COLLISION_ENTITY.get(), InvisibleHelperRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.WINDLASS_SWITCH_ENTITY.get(), InvisibleHelperRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.ANCHOR_ENTITY.get(), AnchorRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.SLOOP.get(), SloopRenderer::new);
 

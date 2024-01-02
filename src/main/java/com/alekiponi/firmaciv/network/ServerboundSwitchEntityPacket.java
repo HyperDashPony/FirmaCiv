@@ -1,6 +1,6 @@
 package com.alekiponi.firmaciv.network;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractSwitchEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;
@@ -38,8 +38,8 @@ public class ServerboundSwitchEntityPacket implements Packet<ServerGamePacketLis
         context.get().enqueueWork(() -> {
             Entity entity = context.get().getSender().level().getEntity(this.entityID);
             ServerPlayer serverPlayer = context.get().getSender();
-            if(entity instanceof VehicleSwitchEntity && entity.distanceTo(serverPlayer) < 10){
-                ((VehicleSwitchEntity) entity).setSwitched(this.switched);
+            if(entity instanceof AbstractSwitchEntity && entity.distanceTo(serverPlayer) < 10){
+                ((AbstractSwitchEntity) entity).setSwitched(this.switched);
             }
 
         });

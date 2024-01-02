@@ -1,8 +1,7 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
@@ -25,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     public static final int PADDLE_LEFT = 0;
@@ -82,6 +82,33 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     }
 
+    public abstract int[] getWindlassIndices();
+
+    public abstract int[] getSailSwitchIndices();
+
+    public ArrayList<SailSwitchEntity> getSailSwitches(){
+        ArrayList<SailSwitchEntity> list = new ArrayList<SailSwitchEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getSailSwitchIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof SailSwitchEntity switchEntity) {
+                    list.add(switchEntity);
+                }
+            }
+        }
+        return list;
+    }
+    public ArrayList<WindlassSwitchEntity> getWindlasses(){
+        ArrayList<WindlassSwitchEntity> list = new ArrayList<WindlassSwitchEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getWindlassIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof WindlassSwitchEntity windlass) {
+                    list.add(windlass);
+                }
+            }
+        }
+        return list;
+    }
+
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
@@ -113,6 +140,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
         this.tickWindInput();
         this.tickCleatInput();
+        this.tickAnchorInput();
 
         this.tickFloatBoat();
         this.tickControlBoat();
@@ -141,8 +169,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.tickTakeEntitiesForARide();
 
     }
-
-
 
     protected void tickWindInput() {
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
@@ -269,7 +295,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     }
 
-
     protected void tickControlBoat() {
         if (getControllingCompartment() != null) {
             boolean inputUp = this.getControllingCompartment().getInputUp();
@@ -331,7 +356,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     protected void tickCleatInput(){
         for(VehicleCleatEntity cleat : this.getCleats()){
             if(cleat.isLeashed()){
-                Entity leashHolder = cleat.getLeashHolder();
+                net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
                 if(leashHolder != null){
                     if (leashHolder instanceof Player) {
                         if (this.distanceTo(leashHolder) > 4f) {
@@ -390,6 +415,14 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             }
         }
 
+    }
+
+    protected void tickAnchorInput(){
+        for(WindlassSwitchEntity windlass : this.getWindlasses()){
+            if(windlass.getAnchored()){
+                this.setDeltaMovement(Vec3.ZERO);
+            }
+        }
     }
 
     protected abstract float getPaddleMultiplier();

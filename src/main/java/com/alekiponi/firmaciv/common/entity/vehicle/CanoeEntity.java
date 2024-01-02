@@ -37,6 +37,11 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[] getWindlassIndices() {
+        return new int[0];
+    }
+
+    @Override
     public float getPassengerSizeLimit() {
         return PASSENGER_SIZE_LIMIT;
     }
@@ -57,7 +62,7 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getSwitchIndices() {
+    public int[] getSailSwitchIndices() {
         return new int[0];
     }
 

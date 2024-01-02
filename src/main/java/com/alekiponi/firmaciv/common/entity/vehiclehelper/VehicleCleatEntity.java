@@ -1,6 +1,5 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
-import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -14,10 +13,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
@@ -32,12 +29,12 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class VehicleCleatEntity extends Entity {
+public class VehicleCleatEntity extends net.minecraft.world.entity.Entity {
 
     protected static final EntityDataAccessor<Integer> DATA_ID_LEASHHOLDER_ID = SynchedEntityData.defineId(
             VehicleCleatEntity.class, EntityDataSerializers.INT);
     @Nullable
-    private Entity leashHolder;
+    private net.minecraft.world.entity.Entity leashHolder;
     private int delayedLeashHolderId;
     @Nullable
     private CompoundTag leashInfoTag;
@@ -99,7 +96,7 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashInfoTag != null) {
             this.restoreLeashFromSave();
         }
-        Entity leashHolder = this.getLeashHolder();
+        net.minecraft.world.entity.Entity leashHolder = this.getLeashHolder();
         if (leashHolder != null) {
             if (!this.isAlive() || !leashHolder.isAlive()) {
                 this.dropLeash(true, true);
@@ -187,7 +184,7 @@ public class VehicleCleatEntity extends Entity {
     }
 
     @Nullable
-    public Entity getLeashHolder() {
+    public net.minecraft.world.entity.Entity getLeashHolder() {
         if (this.leashHolder == null && this.delayedLeashHolderId != 0 && this.level().isClientSide) {
             this.leashHolder = this.level().getEntity(this.delayedLeashHolderId);
         }
@@ -198,7 +195,7 @@ public class VehicleCleatEntity extends Entity {
     /**
      * Sets the entity to be leashed to.
      */
-    public void setLeashedTo(Entity pLeashHolder, boolean pBroadcastPacket) {
+    public void setLeashedTo(net.minecraft.world.entity.Entity pLeashHolder, boolean pBroadcastPacket) {
         this.leashHolder = pLeashHolder;
         this.leashInfoTag = null;
         if (!this.level().isClientSide && pBroadcastPacket && this.level() instanceof ServerLevel) {
@@ -217,7 +214,7 @@ public class VehicleCleatEntity extends Entity {
         if (this.leashInfoTag != null && this.level() instanceof ServerLevel) {
             if (this.leashInfoTag.hasUUID("UUID")) {
                 UUID uuid = this.leashInfoTag.getUUID("UUID");
-                Entity entity = ((ServerLevel) this.level()).getEntity(uuid);
+                net.minecraft.world.entity.Entity entity = ((ServerLevel) this.level()).getEntity(uuid);
                 if (entity != null) {
                     this.setLeashedTo(entity, true);
                     return;

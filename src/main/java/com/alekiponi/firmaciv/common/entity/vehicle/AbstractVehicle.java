@@ -3,7 +3,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.google.common.collect.ImmutableList;
@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractVehicle extends Entity {
+public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
             AbstractVehicle.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(
@@ -83,7 +83,7 @@ public abstract class AbstractVehicle extends Entity {
     protected Status oldStatus;
     protected double lastYd;
 
-    private ImmutableList<Entity> passengers = ImmutableList.of();
+    private ImmutableList<net.minecraft.world.entity.Entity> passengers = ImmutableList.of();
 
     public AbstractVehicle(final EntityType entityType, final Level level) {
         super(entityType, level);
@@ -94,7 +94,7 @@ public abstract class AbstractVehicle extends Entity {
 
     public abstract int[] getCleatIndices();
 
-    public abstract int[] getSwitchIndices();
+
 
     public abstract int[] getColliderIndices();
 
@@ -112,17 +112,7 @@ public abstract class AbstractVehicle extends Entity {
         return list;
     }
 
-    public ArrayList<VehicleSwitchEntity> getSwitches(){
-        ArrayList<VehicleSwitchEntity> list = new ArrayList<VehicleSwitchEntity>();
-        if(this.getPassengers().size() == this.getMaxPassengers()) {
-            for (int i : this.getSwitchIndices()) {
-                if (this.getPassengers().get(i).getFirstPassenger() instanceof VehicleSwitchEntity switchEntity) {
-                    list.add(switchEntity);
-                }
-            }
-        }
-        return list;
-    }
+
 
     public ArrayList<VehicleCollisionEntity> getColliders(){
         ArrayList<VehicleCollisionEntity> list = new ArrayList<VehicleCollisionEntity>();
@@ -163,8 +153,8 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     @Override
-    protected Entity.MovementEmission getMovementEmission() {
-        return Entity.MovementEmission.EVENTS;
+    protected net.minecraft.world.entity.Entity.MovementEmission getMovementEmission() {
+        return net.minecraft.world.entity.Entity.MovementEmission.EVENTS;
     }
 
     protected void defineSynchedData() {
@@ -176,11 +166,11 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     @Override
-    public boolean canCollideWith(final Entity other) {
+    public boolean canCollideWith(final net.minecraft.world.entity.Entity other) {
         return canVehicleCollide(this, other);
     }
 
-    public static boolean canVehicleCollide(final Entity vehicle, final Entity entity) {
+    public static boolean canVehicleCollide(final net.minecraft.world.entity.Entity vehicle, final net.minecraft.world.entity.Entity entity) {
         return (entity.canBeCollidedWith() || entity.isPushable()) && !vehicle.isPassengerOfSameVehicle(entity);
     }
 
@@ -204,7 +194,7 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     @Nullable
-    public Entity getCompAsEntityFromIndex(int index) {
+    public net.minecraft.world.entity.Entity getCompAsEntityFromIndex(int index) {
         if (this.getPassengers().size() == this.getMaxPassengers()) {
             if (this.getPassengers().get(index).isVehicle()) {
                 return this.getPassengers().get(index).getFirstPassenger();
@@ -242,7 +232,7 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     @Override
-    public void push(final Entity entity) {
+    public void push(final net.minecraft.world.entity.Entity entity) {
         if (entity instanceof AbstractVehicle) {
             if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
                 super.push(entity);
@@ -306,7 +296,7 @@ public abstract class AbstractVehicle extends Entity {
 
     protected void tickTakeEntitiesForARide(){
         if(this.getDeltaMovement().length() > 0.01){
-            List<Entity> entitiesToTakeWith = this.level()
+            List<net.minecraft.world.entity.Entity> entitiesToTakeWith = this.level()
                     .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS);
 
             for (VehicleCollisionEntity collider : this.getColliders()) {
@@ -317,7 +307,7 @@ public abstract class AbstractVehicle extends Entity {
             entitiesToTakeWith = entitiesToTakeWith.stream().distinct().collect(Collectors.toList());
 
             if (!entitiesToTakeWith.isEmpty()) {
-                for (final Entity entity : entitiesToTakeWith) {
+                for (final net.minecraft.world.entity.Entity entity : entitiesToTakeWith) {
                     if (entity instanceof LocalPlayer player && !entity.isPassenger()) {
                         if (this.level().isClientSide()) {
                             if (!player.input.jumping) {
@@ -514,10 +504,10 @@ public abstract class AbstractVehicle extends Entity {
         return isUnderwater ? Status.UNDER_WATER : null;
     }
 
-    public final List<Entity> getTruePassengers() {
-        final List<Entity> truePassengers = Lists.newArrayList();
+    public final List<net.minecraft.world.entity.Entity> getTruePassengers() {
+        final List<net.minecraft.world.entity.Entity> truePassengers = Lists.newArrayList();
 
-        for (final Entity vehiclePart : this.getPassengers()) {
+        for (final net.minecraft.world.entity.Entity vehiclePart : this.getPassengers()) {
             if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity compartmentEntity) {
                 if (compartmentEntity.isVehicle()) {
                     truePassengers.add(compartmentEntity.getFirstPassenger());
@@ -530,7 +520,7 @@ public abstract class AbstractVehicle extends Entity {
     public final List<AbstractCompartmentEntity> getCompartments() {
         final List<AbstractCompartmentEntity> compartments = Lists.newArrayList();
 
-        for (final Entity vehiclePart : this.getPassengers()) {
+        for (final net.minecraft.world.entity.Entity vehiclePart : this.getPassengers()) {
             if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity compartmentEntity) {
                 compartments.add(compartmentEntity);
             }
@@ -541,7 +531,7 @@ public abstract class AbstractVehicle extends Entity {
     public final List<VehiclePartEntity> getVehicleParts() {
         final List<VehiclePartEntity> vehicleParts = Lists.newArrayList();
 
-        for (final Entity vehiclePart : this.getPassengers()) {
+        for (final net.minecraft.world.entity.Entity vehiclePart : this.getPassengers()) {
             vehicleParts.add((VehiclePartEntity) vehiclePart);
         }
         return vehicleParts;
@@ -559,7 +549,7 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     @Override
-    protected void positionRider(final Entity passenger, final Entity.MoveFunction moveFunction) {
+    protected void positionRider(final net.minecraft.world.entity.Entity passenger, final net.minecraft.world.entity.Entity.MoveFunction moveFunction) {
         if (this.hasPassenger(passenger)) {
             if (!(passenger instanceof VehiclePartEntity)) {
                 passenger.stopRiding();
@@ -597,7 +587,7 @@ public abstract class AbstractVehicle extends Entity {
                 -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
     }
 
-    protected void clampRotation(final Entity entity) {
+    protected void clampRotation(final net.minecraft.world.entity.Entity entity) {
         entity.setYBodyRot(this.getYRot());
         float f = Mth.wrapDegrees(entity.getYRot() - this.getYRot());
         float f1 = Mth.clamp(f, -105.0F, 105.0F);
@@ -628,10 +618,10 @@ public abstract class AbstractVehicle extends Entity {
 
             this.causeFallDamage(this.fallDistance, 1, this.damageSources().fall());
             if (!this.level().isClientSide && !this.isRemoved()) {
-                for (Entity passenger : this.getTruePassengers()) {
+                for (net.minecraft.world.entity.Entity passenger : this.getTruePassengers()) {
                     passenger.causeFallDamage(this.fallDistance, 1, this.damageSources().fall());
                 }
-                for (Entity passenger : this.getPassengers()) {
+                for (net.minecraft.world.entity.Entity passenger : this.getPassengers()) {
                     if (passenger.isVehicle()) {
                         passenger.getFirstPassenger().kill();
                     }
@@ -702,14 +692,14 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     @Override
-    protected boolean canAddPassenger(final Entity passenger) {
+    protected boolean canAddPassenger(final net.minecraft.world.entity.Entity passenger) {
         return this.getPassengers().size() < this.getMaxPassengers() && !this.isRemoved() && passenger instanceof VehiclePartEntity;
     }
 
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        Entity entity = this.getPilotVehiclePartAsEntity();
+        net.minecraft.world.entity.Entity entity = this.getPilotVehiclePartAsEntity();
         if (entity instanceof VehiclePartEntity vehiclePart) {
             entity = vehiclePart.getFirstPassenger();
             if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
@@ -729,7 +719,7 @@ public abstract class AbstractVehicle extends Entity {
 
     @Nullable
     public EmptyCompartmentEntity getControllingCompartment() {
-        final Entity vehiclePart = this.getPilotVehiclePartAsEntity();
+        final net.minecraft.world.entity.Entity vehiclePart = this.getPilotVehiclePartAsEntity();
 
         if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) {
             return null;
@@ -743,7 +733,7 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     @Nullable
-    public Entity getPilotVehiclePartAsEntity() {
+    public net.minecraft.world.entity.Entity getPilotVehiclePartAsEntity() {
         if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(0);
         }
@@ -757,7 +747,7 @@ public abstract class AbstractVehicle extends Entity {
 
 
     @Override
-    protected void addPassenger(Entity passenger) {
+    protected void addPassenger(net.minecraft.world.entity.Entity passenger) {
         if (passenger instanceof VehiclePartEntity) {
             super.addPassenger(passenger);
         }

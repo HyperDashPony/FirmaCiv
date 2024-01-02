@@ -1,16 +1,13 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehiclePartEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -22,12 +19,13 @@ import java.util.ArrayList;
 
 public class SloopEntity extends AbstractFirmacivBoatEntity {
 
-    public final int PASSENGER_NUMBER = 22;
+    public final int PASSENGER_NUMBER = 23;
 
     public final int[] CLEATS = {18,19,20,21};
     public final int[] COLLIDERS = {14, 15, 16};
-
     public final int[] SWITCHES = {17};
+
+    public final int[] WINDLASSES = {22};
 
     protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.FLOAT);
@@ -44,7 +42,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public final int[][] COMPARTMENT_ROTATIONS = {{7, 85}, {8, 85}, {9, 85}, {10, -85}, {11, -85}, {12, -85}};
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
-
 
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
@@ -72,7 +69,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getSwitchIndices() {
+    public int[] getSailSwitchIndices() {
         return SWITCHES;
     }
 
@@ -236,7 +233,12 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 localX = -2.25f;
                 localY += 1.2f;
             }
-
+            case 22 -> {
+                //windlass
+                localZ = -1.2f;
+                localX = 2.7f;
+                localY += 1.0f;
+            }
         }
         return new Vec3(localX, localY, localZ);
     }
@@ -253,8 +255,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public void tick() {
-
-
 
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
             float rotationImpact = 0;
@@ -296,14 +296,13 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             this.setMainBoomRotation(boom);
         }
 
-        //this.tickSailBoat();
-
         this.tickDestroyPlants();
         if (this.status == Status.IN_WATER) {
             this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f * this.getDeltaMovement().length()));
         }
+
         super.tick();
-        if(this.getPassengers().get(this.getSwitchIndices()[0]).getFirstPassenger() instanceof VehicleSwitchEntity switchEntity){
+        for(SailSwitchEntity switchEntity : this.getSailSwitches()){
             if(switchEntity.getSwitched()){
                 this.setMainsailActive(true);
             } else {
@@ -329,8 +328,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         if (count == 2){
             VehicleCleatEntity cleat1 = leashedCleats.get(0);
             VehicleCleatEntity cleat2 = leashedCleats.get(1);
-            Entity leashHolder1 = cleat1.getLeashHolder();
-            Entity leashHolder2 = cleat2.getLeashHolder();
+            net.minecraft.world.entity.Entity leashHolder1 = cleat1.getLeashHolder();
+            net.minecraft.world.entity.Entity leashHolder2 = cleat2.getLeashHolder();
             if(leashHolder1 != null && leashHolder2 != null){
                 if(leashHolder1.is(leashHolder2)){
                     count = 1;
@@ -371,7 +370,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
         } if(count == 1){
             VehicleCleatEntity cleat = leashedCleats.get(0);
-            Entity leashHolder = cleat.getLeashHolder();
+            net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
             if(leashHolder != null){
                 if (leashHolder instanceof Player) {
                     if (this.distanceTo(leashHolder) > 4f) {
@@ -399,7 +398,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         }
         if(count != 1 && count != 2){
             for(VehicleCleatEntity cleat : leashedCleats){
-                Entity leashHolder = cleat.getLeashHolder();
+                net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
                 if(leashHolder != null){
                     Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
                     Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.01f/count, this.getDeltaMovement().y,
@@ -424,6 +423,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         this.entityData.define(DATA_ID_MAINSHEET_LENGTH, 0f);
     }
 
+    @Override
+    public int[] getWindlassIndices() {
+        return WINDLASSES;
+    }
 
     public float getSailWorldRotation() {
         return Mth.wrapDegrees(getMainBoomRotation() + Mth.wrapDegrees(this.getYRot()));
@@ -431,7 +434,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
 
     @Nullable
-    public Entity getSailingVehiclePartAsEntity() {
+    public net.minecraft.world.entity.Entity getSailingVehiclePartAsEntity() {
         if (this.isVehicle() && this.getPassengers().size() == this.getMaxPassengers()) {
             return this.getPassengers().get(13);
         }
@@ -440,7 +443,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     @Nullable
     public EmptyCompartmentEntity getSailingCompartment() {
-        final Entity vehiclePart = this.getSailingVehiclePartAsEntity();
+        final net.minecraft.world.entity.Entity vehiclePart = this.getSailingVehiclePartAsEntity();
 
         if (!(vehiclePart instanceof VehiclePartEntity) || !vehiclePart.isVehicle()) {
             return null;
@@ -581,6 +584,14 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         }
     }
 
+    @Override
+    protected void tickAnchorInput(){
+        for(WindlassSwitchEntity windlass : this.getWindlasses()){
+            if(windlass.getAnchored() && !this.getMainsailActive()){
+                this.setDeltaMovement(Vec3.ZERO);
+            }
+        }
+    }
 
     public float[] getMainsailWindAngleAndForce() {
         //float windDifference = Mth.degreesDifference(Mth.wrapDegrees(this.getWindLocalRotation() -180), Mth.wrapDegrees(this.getMainBoomRotation()-this.getYRot()));

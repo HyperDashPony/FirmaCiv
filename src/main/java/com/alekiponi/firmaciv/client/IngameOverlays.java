@@ -6,7 +6,9 @@
 package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.SailSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.WindlassSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
@@ -15,11 +17,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec2;
@@ -66,7 +66,7 @@ public enum IngameOverlays {
             Player player = mc.player;
 
             if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
-                Entity entity = mc.crosshairPickEntity;
+                net.minecraft.world.entity.Entity entity = mc.crosshairPickEntity;
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
@@ -147,7 +147,7 @@ public enum IngameOverlays {
         if (mc.player != null) {
             Player player = mc.player;
             if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
-                Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 3f);
+                net.minecraft.world.entity.Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 3f);
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();
@@ -191,7 +191,7 @@ public enum IngameOverlays {
                     if (vehicleCleatEntity.getVehicle().getVehicle() != null) {
                         graphics.blit(TEXTURE, 0, 0, 54, 0, 9, 9);
                     }
-                } else if (entity instanceof VehicleSwitchEntity vehicleSwitchEntity  && vehicleSwitchEntity.isPassenger()) {
+                } else if (entity instanceof SailSwitchEntity sailSwitch  && sailSwitch.isPassenger()) {
                     if ((float) height % 2.0 != 0) {
                         stack.translate(0f, 0.5f, 0.0f);
                     }
@@ -200,12 +200,31 @@ public enum IngameOverlays {
                     }
                     stack.scale(1.0F, 1.0F, 1.0F);
                     stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
-                    if (vehicleSwitchEntity.getVehicle().getVehicle() != null) {
-                        if(vehicleSwitchEntity.getSwitched()){
+                    if (sailSwitch.getVehicle().getVehicle() != null) {
+                        if(sailSwitch.getSwitched()){
                             graphics.blit(TEXTURE, 0, 0, 18, 0, 9, 9);
                             graphics.blit(TEXTURE, 0, 10, 72, 0, 9, 9);
                         } else {
                             graphics.blit(TEXTURE, 0, 0, 18, 0, 9, 9);
+                            graphics.blit(TEXTURE, 0, -10, 63, 0, 9, 9);
+                        }
+
+                    }
+                } else if (entity instanceof WindlassSwitchEntity windlassSwitch  && windlassSwitch.isPassenger()) {
+                    if ((float) height % 2.0 != 0) {
+                        stack.translate(0f, 0.5f, 0.0f);
+                    }
+                    if ((float) width % 2.0 != 0) {
+                        stack.translate(0.5f, 0f, 0.0f);
+                    }
+                    stack.scale(1.0F, 1.0F, 1.0F);
+                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
+                    if (windlassSwitch.getVehicle().getVehicle() != null) {
+                        if(!windlassSwitch.getSwitched()){
+                            graphics.blit(TEXTURE, 0, 0, 81, 0, 9, 9);
+                            graphics.blit(TEXTURE, 0, 10, 72, 0, 9, 9);
+                        } else {
+                            graphics.blit(TEXTURE, 0, 0, 81, 0, 9, 9);
                             graphics.blit(TEXTURE, 0, -10, 63, 0, 9, 9);
                         }
 

@@ -18,9 +18,6 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 
 public class KayakEntity extends AbstractFirmacivBoatEntity {
-
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(KayakEntity.class,
-            EntityDataSerializers.INT);
     public final int PASSENGER_NUMBER = 1;
     protected final float DAMAGE_THRESHOLD = 10.0f;
     protected final float DAMAGE_RECOVERY = 1.0f;
@@ -29,6 +26,11 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
 
     public KayakEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    public int[] getWindlassIndices() {
+        return new int[0];
     }
 
     @Override
@@ -67,7 +69,7 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getSwitchIndices() {
+    public int[] getSailSwitchIndices() {
         return new int[0];
     }
 

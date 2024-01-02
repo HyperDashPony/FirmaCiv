@@ -1,11 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
-import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.network.PacketHandler;
-import com.alekiponi.firmaciv.network.ServerboundCompartmentInputPacket;
 import com.alekiponi.firmaciv.network.ServerboundSwitchEntityPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,14 +12,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public class VehicleSwitchEntity extends AbstractInvisibleHelper {
+public abstract class AbstractSwitchEntity extends AbstractInvisibleHelper {
 
-    public VehicleSwitchEntity(EntityType<?> pEntityType, Level pLevel) {
+    public AbstractSwitchEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     protected static final EntityDataAccessor<Boolean> DATA_ID_SWITCH = SynchedEntityData.defineId(
-            VehicleSwitchEntity.class, EntityDataSerializers.BOOLEAN);
+            AbstractSwitchEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
