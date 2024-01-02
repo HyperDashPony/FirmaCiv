@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.ChestCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.WorkbenchCompartmentEntity;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.minecraft.world.entity.EntityType;
@@ -19,6 +20,10 @@ public class CompartmentType<T extends AbstractCompartmentEntity> {
     public static final CompartmentType<WorkbenchCompartmentEntity> WORKBENCH = register(
             FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), WorkbenchCompartmentEntity::new,
             itemStack -> itemStack.is(FirmacivTags.Items.WORKBENCHES));
+
+    public static final CompartmentType<ChestCompartmentEntity> CHEST = register(
+            FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), ChestCompartmentEntity::new,
+            itemStack -> itemStack.is(FirmacivTags.Items.CHESTS));
 
     private final EntityType<T> entityType;
     private final CompartmentFactory<T> factory;

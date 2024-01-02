@@ -19,6 +19,12 @@ public class ChestCompartmentEntity extends ContainerCompartmentEntity {
         super(entityType, level, 18);
     }
 
+    public ChestCompartmentEntity(final EntityType<? extends ChestCompartmentEntity> entityType, final Level level,
+            final ItemStack itemStack) {
+        this(entityType, level);
+        this.setBlockTypeItem(itemStack);
+    }
+
     @Override
     public void remove(final RemovalReason removalReason) {
         if (!this.level().isClientSide && removalReason.shouldDestroy()) {
