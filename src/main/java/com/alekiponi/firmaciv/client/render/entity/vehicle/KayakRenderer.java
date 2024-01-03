@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.client.render.entity;
+package com.alekiponi.firmaciv.client.render.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.KayakEntityModel;

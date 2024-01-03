@@ -96,6 +96,16 @@ public final class FirmacivEntities {
             () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_windlass").toString()));
 
+    public static final RegistryObject<EntityType<CannonballEntity>> CANNONBALL_ENTITY = ENTITY_TYPES.register(
+            "cannonball",
+            () -> EntityType.Builder.of(CannonballEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(32).clientTrackingRange(32)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "cannonball").toString()));
+
+    public static final RegistryObject<EntityType<CannonEntity>> CANNON_ENTITY = ENTITY_TYPES.register(
+            "cannon",
+            () -> EntityType.Builder.of(CannonEntity::new, MobCategory.MISC).sized(0.8F, 0.8F)
+                    .build(new ResourceLocation(Firmaciv.MOD_ID, "cannon").toString()));
+
     public static final RegistryObject<EntityType<MastEntity>> MAST_ENTITY = ENTITY_TYPES.register(
             "vehicle_mast",
             () -> EntityType.Builder.of(MastEntity::new, MobCategory.MISC).sized(0.3F, 8F).noSummon()

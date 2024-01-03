@@ -224,7 +224,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
         this.setHurtDir(-this.getHurtDir());
         this.setHurtTime(10);
-        this.setDamage(this.getDamage() + amount * 8);
+        this.setDamage(this.getDamage() + amount * 5);
 
         this.markHurt();
         this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());

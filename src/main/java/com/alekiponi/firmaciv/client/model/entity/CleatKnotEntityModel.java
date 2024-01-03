@@ -14,13 +14,13 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class CleatEntityKnotModel<T extends VehicleCleatEntity> extends EntityModel<T> {
+public class CleatKnotEntityModel<T extends VehicleCleatEntity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Firmaciv.MOD_ID, "cleat_knot_model"), "main");
 	private final ModelPart sides;
 	private final ModelPart middle;
 
-	public CleatEntityKnotModel() {
+	public CleatKnotEntityModel() {
 		ModelPart root = createBodyLayer().bakeRoot();
 		this.sides = root.getChild("sides");
 		this.middle = root.getChild("middle");

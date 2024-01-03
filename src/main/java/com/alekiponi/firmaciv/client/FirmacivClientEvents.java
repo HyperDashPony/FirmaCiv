@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.client.render.entity.CanoeRenderer;
+import com.alekiponi.firmaciv.client.render.entity.vehicle.CanoeRenderer;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;

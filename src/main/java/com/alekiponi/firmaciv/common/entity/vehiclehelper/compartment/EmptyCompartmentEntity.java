@@ -206,7 +206,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             }
         }
 
-        if(!this.level().isClientSide() && !(this.getFirstPassenger() instanceof Player)){
+        if(!(this.getFirstPassenger() instanceof Player)){
             this.setInputLeft(false);
             this.setInputRight(false);
             this.setInputUp(false);

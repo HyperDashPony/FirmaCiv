@@ -1,7 +1,7 @@
 package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.client.model.entity.CleatEntityKnotModel;
+import com.alekiponi.firmaciv.client.model.entity.CleatKnotEntityModel;
 import com.alekiponi.firmaciv.client.render.util.FirmacivRenderHelper;
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
@@ -20,11 +20,11 @@ import net.minecraft.resources.ResourceLocation;
 public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
 
     private static final ResourceLocation CLEAT_KNOT = new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/cleat_knot.png");
-    private final CleatEntityKnotModel model;
+    private final CleatKnotEntityModel model;
 
     public VehicleCleatRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
-        this.model = new CleatEntityKnotModel();
+        this.model = new CleatKnotEntityModel();
     }
 
 
