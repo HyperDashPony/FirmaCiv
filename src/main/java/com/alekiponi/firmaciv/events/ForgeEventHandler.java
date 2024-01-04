@@ -1,14 +1,20 @@
 package com.alekiponi.firmaciv.events;
 
 import com.alekiponi.firmaciv.Firmaciv;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.SailSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.WindlassSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.events.config.FirmacivConfig;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -38,9 +44,19 @@ public class ForgeEventHandler {
 
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
-        if(event.getEntity().getVehicle() instanceof EmptyCompartmentEntity){
-            event.getEntity().stopRiding();
-            event.getEntity().setPos(event.getEntity().getPosition(0).add(0,2,0));
+        Player player = event.getEntity();
+        // should be dedicated server and remote LAN player behavior
+        if(!(player.level().getServer() instanceof IntegratedServer) && player.getVehicle() instanceof EmptyCompartmentEntity compartment){
+            player.stopRiding();
+            player.setPos(compartment.getRootVehicle().getDismountLocationForPassenger(player));
+            if(compartment.isPassenger() && compartment.getRootVehicle() instanceof AbstractFirmacivBoatEntity boat){
+                for(SailSwitchEntity sail : boat.getSailSwitches()){
+                    sail.setSwitched(false);
+                }
+                for(WindlassSwitchEntity windlass : boat.getWindlasses()){
+                    windlass.setSwitched(true);
+                }
+            }
         }
     }
 

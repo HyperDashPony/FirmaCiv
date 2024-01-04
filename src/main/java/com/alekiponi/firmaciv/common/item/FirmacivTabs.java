@@ -40,6 +40,9 @@ public class FirmacivTabs {
                         pOutput.accept(FirmacivBlocks.OARLOCK.get());
                         pOutput.accept(FirmacivItems.COPPER_BOLT.get());
 
+                        pOutput.accept(FirmacivItems.CANNON.get());
+                        pOutput.accept(FirmacivItems.CANNONBALL.get());
+
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME_ANGLED.get());
 
 

@@ -35,11 +35,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity {
@@ -73,6 +72,8 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
     protected final float DAMAGE_RECOVERY = 2.0f;
 
+    private LinkedList<Double> speedOverTime;
+
     protected float invFriction;
     protected int lerpSteps;
     protected double lerpX;
@@ -94,6 +95,10 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         super(entityType, level);
         this.blocksBuilding = true;
         this.randomRotation = 0;
+        this.speedOverTime = new LinkedList<Double>();
+        for(int i = 0; i < 5; i ++){
+            this.speedOverTime.add(0.0);
+        }
     }
 
     public abstract int getMaxPassengers();
@@ -321,14 +326,12 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
 
             if (!entitiesToTakeWith.isEmpty()) {
                 for (final net.minecraft.world.entity.Entity entity : entitiesToTakeWith) {
-                    if (entity instanceof LocalPlayer player && !entity.isPassenger()) {
-                        if (this.level().isClientSide()) {
-                            if (!player.input.jumping) {
-                                player.move(MoverType.SELF, this.getDeltaMovement().multiply(1, 0, 1));
-                            }
-                            player.setDeltaMovement(player.getDeltaMovement().multiply(0.9, 1, 0.9));
+                    if (this.level().isClientSide() && entity instanceof LocalPlayer player && !entity.isPassenger()) {
+                        if (!player.input.jumping) {
+                            player.move(MoverType.SELF, this.getDeltaMovement().multiply(1.0, 0, 1.0));
                         }
-                    } else if (!(entity instanceof AbstractFirmacivBoatEntity) && !entity.isPassenger()) {
+                        player.setDeltaMovement(player.getDeltaMovement().multiply(0.9, 1, 0.9));
+                    } else if (!(entity instanceof AbstractFirmacivBoatEntity) && !entity.isPassenger() && !(entity instanceof Player))  {
                         entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().multiply(0.45, 0, 0.45)));
                     }
                 }
@@ -792,6 +795,23 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         return this.status == Status.UNDER_WATER || this.status == Status.UNDER_FLOWING_WATER;
     }
 
+    public double getSmoothSpeedMS(){
+        if(this.everyNTickUnique(1)){
+            double speed = this.getDeltaMovement().length()*20;
+            this.speedOverTime.poll();
+            this.speedOverTime.offer(speed);
+        }
+        double average = 0;
+        for(double d : speedOverTime.stream().toList()){
+            average += d;
+        }
+        average = average/speedOverTime.size();
+        return average;
+    }
+
+    public boolean everyNTickUnique(int n){
+        return (this.tickCount + this.getId()) % n == 0;
+    }
 
     @Override
     protected void addPassenger(net.minecraft.world.entity.Entity passenger) {

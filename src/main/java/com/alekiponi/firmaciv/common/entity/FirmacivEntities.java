@@ -98,7 +98,7 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<CannonballEntity>> CANNONBALL_ENTITY = ENTITY_TYPES.register(
             "cannonball",
-            () -> EntityType.Builder.of(CannonballEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(32).clientTrackingRange(32)
+            () -> EntityType.Builder.of(CannonballEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(32).clientTrackingRange(32).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "cannonball").toString()));
 
     public static final RegistryObject<EntityType<CannonEntity>> CANNON_ENTITY = ENTITY_TYPES.register(

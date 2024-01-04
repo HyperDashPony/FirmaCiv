@@ -2,11 +2,13 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.SloopEntityModel;
+import com.alekiponi.firmaciv.client.render.util.FirmacivRenderHelper;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
+import net.dries007.tfc.client.RenderHelpers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -72,8 +74,33 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
                 1.0F, 1.0F);
 
         if(pEntity.getMainsailActive()){
-            sloopModel.getMainsailMain()
-                    .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            if(!pEntity.getPaint().isEmpty() && pEntity.getPaintColor() != null){
+                double[] color = FirmacivRenderHelper.getColorFromName(pEntity.getPaintColor().getName());
+                double factor = 1.0;
+                if(color[0] == color[1] && color[1] == color[2]){
+                    factor = 0.9;
+                }
+                double invFactor = 1-factor;
+                color[0]*=factor;
+                color[1]*=factor;
+                color[2]*=factor;
+                color[0]+=invFactor;
+                color[1]+=invFactor;
+                color[2]+=invFactor;
+                sloopModel.getMainsailMain()
+                        .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,(float)color[0], (float)color[1],
+                                (float)color[2], 1.0F);
+            } else {
+                sloopModel.getMainsailMain()
+                        .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                                1.0F, 1.0F);
+            }
+
+        }
+        if(pEntity.getJibsailActive()){
+            sloopModel.getJibsailMain()
+                    .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                            1.0F, 1.0F);
         }
 
         if (!pEntity.isUnderWater()) {

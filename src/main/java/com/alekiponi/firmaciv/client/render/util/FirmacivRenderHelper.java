@@ -76,4 +76,94 @@ public class FirmacivRenderHelper {
         pPoseStack.popPose();
     }
 
+    public static double[] getColorFromName(String name){
+        switch (name) {
+            case "white" -> {
+                return new double[]{1,1,1};
+            }
+            case "orange" -> {
+                return new double[]{
+                        216.0/255.0,
+                        137.0/255.0,
+                        41.0/255.0};
+            }
+            case "magenta" -> {
+                return new double[]{
+                        201.0/255.0,
+                        104.0/255.0,
+                        195.0/255.0};
+            }
+            case "light_blue" -> {
+                return new double[]{
+                        141.0/255.0,
+                        183.0/255.0,
+                        241.0/255.0};
+            }
+            case "yellow" -> {
+                return new double[]{
+                        228.0/255.0,
+                        228.0/255.0,
+                        41.0/255.0};
+            }
+            case "lime" -> {
+                return new double[]{
+                        129.0/255.0,
+                        209.0/255.0,
+                        28.0/255.0};
+            }
+            case "pink" -> {
+                return new double[]{
+                        244.0/255.0,
+                        178.0/255.0,
+                        211.0/255.0};
+            }
+            case "gray" -> {
+                return new double[]{0.33,0.33,0.33};
+            }
+            case "light_gray" -> {
+                return new double[]{0.66,0.66,0.66};
+            }
+            case "cyan" -> {
+                return new double[]{
+                        59.0/255.0,
+                        140.0/255.0,
+                        74.0/255.0};
+            }
+            case "purple" -> {
+                return new double[]{
+                        128.0/255.0,
+                        47.0/255.0,
+                        176.0/255.0};
+            }
+            case "blue" -> {
+                return new double[]{
+                        51.0/255.0,
+                        93.0/255.0,
+                        193.0/255.0};
+            }
+            case "brown" -> {
+                return new double[]{
+                        121.0/255.0,
+                        69.0/255.0,
+                        33.0/255.0};
+            }
+            case "green" -> {
+                return new double[]{
+                        73.0/255.0,
+                        106.0/255.0,
+                        24.0/255.0};
+            }
+            case "red" -> {
+                return new double[]{
+                        207.0/255.0,
+                        67.0/255.0,
+                        62.0/255.0};
+            }
+            case "black" -> {
+                return new double[]{0,0,0};
+            }
+        }
+        return new double[]{0,0,0};
+    }
+
 }

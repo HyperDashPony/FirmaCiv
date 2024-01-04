@@ -2,7 +2,6 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
-import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
@@ -18,13 +17,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -310,24 +306,12 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                 this.invFriction = modifiedFriction;
             }
 
+            this.tickTurnSpeedFactor();
+
 
             Vec3 vec3 = this.getDeltaMovement();
 
             this.setDeltaMovement(vec3.x * (double) this.invFriction, vec3.y + d1, vec3.z * (double) this.invFriction);
-
-            if (this.getControllingCompartment() != null) {
-                double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
-
-
-                if (this.getControllingCompartment().getInputLeft() || this.getControllingCompartment()
-                        .getInputRight()) {
-                    this.setDeltaRotation(((this.invFriction / 3.0F)) * this.getDeltaRotation());
-                    this.setDeltaRotation((float) (turnSpeedFactor * this.getDeltaRotation()));
-
-                } else {
-                    this.setDeltaRotation(this.getDeltaRotation() * (this.invFriction / 2.0F));
-                }
-            }
 
 
             if (d2 > 0.0D) {
@@ -338,6 +322,21 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
         }
 
+    }
+
+    protected void tickTurnSpeedFactor(){
+        if (this.getControllingCompartment() != null) {
+            double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
+
+            if (this.getControllingCompartment().getInputLeft() || this.getControllingCompartment()
+                    .getInputRight()) {
+                this.setDeltaRotation(((this.invFriction / 3.0F)) * this.getDeltaRotation());
+                this.setDeltaRotation((float) (turnSpeedFactor * this.getDeltaRotation()));
+
+            } else {
+                this.setDeltaRotation(this.getDeltaRotation() * (this.invFriction / 2.0F));
+            }
+        }
     }
 
     protected void tickControlBoat() {
@@ -591,7 +590,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     public void updateLocalWindAngleAndSpeed() {
 
         double newDirection = FirmacivHelper.vec2ToWrappedDegrees(this.getWindVector());
-        double newSpeed = Math.abs(Math.round(this.getWindVector().length() * 320));
+        double newSpeed = Math.abs(this.getWindVector().length());
 
         if (this.level().isClientSide()) {
             if (this.windLerpTicks > 0) {

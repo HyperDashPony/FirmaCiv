@@ -1,9 +1,11 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
+import com.alekiponi.firmaciv.common.entity.CannonEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.network.PacketHandler;
 import com.alekiponi.firmaciv.network.ServerboundCompartmentInputPacket;
 import com.alekiponi.firmaciv.util.FirmacivTags;
@@ -18,9 +20,11 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
@@ -116,8 +120,12 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                 localY += 0.0f;
             }
         }
+
         if (passenger.getBbHeight() <= 0.7) {
             localY -= 0.2f;
+        }
+        if (passenger instanceof CannonEntity) {
+            localY += 0.15f;
         }
         if (passenger.getBbWidth() > 0.9f) {
             localX += 0.2f;
@@ -139,8 +147,13 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             livingEntity.setYBodyRot(this.getYRot());
             livingEntity.setYHeadRot(livingEntity.getYHeadRot() + this.getYRot());
             this.clampRotation(livingEntity);
+        } else if(passenger instanceof CannonEntity cannon){
+            cannon.setYRot(-this.getYRot()-180);
+            if(cannon.getXRot() > 5){
+                cannon.setXRot(5);
+            }
         }
-        this.clampRotation(passenger);
+        //this.clampRotation(passenger);
     }
 
     @Override
@@ -187,11 +200,14 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                     float maxSize = 0.6f;
                     maxSize = this.getTrueVehicle().getPassengerSizeLimit();
                     if (this.getPassengers()
-                            .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
-                        if (!(entity instanceof Predator)) {
-                            entity.startRiding(this);
-                            this.setPassengerRideTick(Calendars.SERVER.getTicks());
+                            .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize) {
+                        if(entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)){
+                            if (!(entity instanceof Predator)) {
+                                entity.startRiding(this);
+                                this.setPassengerRideTick(Calendars.SERVER.getTicks());
+                            }
                         }
+
                     }
                 }
 
@@ -329,6 +345,21 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
         final ItemStack item = player.getItemInHand(hand);
+
+        if(this.canAddNonPlayers() && !this.canAddOnlyBLocks() && item.is(FirmacivItems.CANNON.get()) && this.getRootVehicle() instanceof SloopEntity){
+            CannonEntity cannon = FirmacivEntities.CANNON_ENTITY.get().create(this.level());
+            cannon.moveTo(this.getPosition(0));
+            cannon.setYRot(-this.getYRot()-180);
+            cannon.startRiding(this);
+            if (!this.level().isClientSide()) {
+                this.level().addFreshEntity(cannon);
+            }
+            player.awardStat(Stats.ITEM_USED.get(FirmacivItems.CANNON.get()));
+            if (!player.getAbilities().instabuild) {
+                item.shrink(1);
+            }
+            return InteractionResult.SUCCESS;
+        }
 
         if (player.isSecondaryUseActive()) {
             if (!getPassengers().isEmpty() && !(getPassengers().get(0) instanceof Player)) {

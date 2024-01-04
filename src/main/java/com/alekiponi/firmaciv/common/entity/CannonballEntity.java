@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -85,6 +86,9 @@ public class CannonballEntity extends Entity {
                     if(entity instanceof AbstractFirmacivBoatEntity){
                         entity.hurt(this.damageSources().explosion(this, entity), 100);
                     }
+                    if(entity instanceof Boat){
+                        entity.hurt(this.damageSources().explosion(this, entity), 1000);
+                    }
                 }
                 return;
             }
@@ -97,7 +101,8 @@ public class CannonballEntity extends Entity {
                 return;
             }
         }
-        this.level().addParticle(ParticleTypes.SMOKE, 0, 0 + 0.5D, 0, 0.0D, 0.0D, 0.0D);
+
+        this.level().addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, this.getX(), this.getY() + 0.5D, this.getZ(), 0.0D, 0.0D, 0.0D);
         //this.tickLerp();
 
         this.updateInWaterStateAndDoFluidPushing();

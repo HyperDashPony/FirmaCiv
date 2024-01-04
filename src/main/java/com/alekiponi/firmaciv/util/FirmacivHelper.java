@@ -127,7 +127,7 @@ public class FirmacivHelper {
 
             if (!entitiesToHop.isEmpty()) {
                 for (final Entity entity : entitiesToHop) {
-                    if (entity instanceof LocalPlayer player) {
+                    if (entity instanceof LocalPlayer player && !player.isPassenger()) {
                         if (player.input.jumping) {
                             Vec3 newPlayerPos = player.getPosition(0).multiply(1, 0, 1);
                             newPlayerPos = newPlayerPos.add(0, thisEntity.getY() + thisEntity.getBoundingBox().getYsize() + 0.05, 0);

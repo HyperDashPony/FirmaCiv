@@ -5,31 +5,34 @@
 
 package com.alekiponi.firmaciv.client;
 
+import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.SailSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.WindlassSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
+import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
-import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public enum IngameOverlays {
     COMPARTMENT_STATUS(IngameOverlays::renderCompartmentStatus),
@@ -37,8 +40,12 @@ public enum IngameOverlays {
 
     SAILING_ELEMENT(IngameOverlays::renderSailingElement);
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation("firmaciv",
+    public static final ResourceLocation COMPARTMENT_ICONS = new ResourceLocation(Firmaciv.MOD_ID,
             "textures/gui/icons/compartment_icons.png");
+    public static final ResourceLocation SAILING_ICONS = new ResourceLocation(Firmaciv.MOD_ID,
+            "textures/gui/icons/sailing_icons.png");
+    public static final ResourceLocation SPEEDOMETER_ICONS = new ResourceLocation(Firmaciv.MOD_ID,
+            "textures/gui/icons/speedometer_icons.png");
     final IGuiOverlay overlay;
     private final String id;
 
@@ -52,7 +59,7 @@ public enum IngameOverlays {
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
         above(event, VanillaGuiOverlay.CROSSHAIR, COMPARTMENT_STATUS);
         above(event, VanillaGuiOverlay.CROSSHAIR, PASSENGER_STATUS);
-        //above(event, VanillaGuiOverlay.CROSSHAIR, SAILING_ELEMENT);
+        above(event, VanillaGuiOverlay.HOTBAR, SAILING_ELEMENT);
     }
 
     private static void above(RegisterGuiOverlaysEvent event, VanillaGuiOverlay vanilla, IngameOverlays overlay) {
@@ -106,7 +113,7 @@ public enum IngameOverlays {
                 }
 
                 if (!string.equals("")) {
-                    graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), false);
+                    graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), true);
                 }
 
                 stack.popPose();
@@ -120,20 +127,56 @@ public enum IngameOverlays {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player player = mc.player;
-            Vec2 windVector = Climate.getWindVector(player.level(), player.blockPosition());
-            double direction = Math.round(Math.toDegrees(Math.atan(windVector.x / windVector.y)));
-            double speed = Math.round(windVector.length() * 320 * 0.5399568);
 
-            if (setup(gui, mc)) {
+            if (setup(gui, mc)  && !player.isSpectator()) {
                 PoseStack stack = graphics.pose();
-
                 stack.pushPose();
-                stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
-                stack.scale(1.0F, 1.0F, 1.0F);
+                if(player.getRootVehicle() instanceof SloopEntity sloopEntity){
+                    if(sloopEntity.getControllingCompartment() != null && sloopEntity.getControllingCompartment().hasExactlyOnePlayerPassenger() && sloopEntity.getControllingCompartment().getFirstPassenger().equals(player)){
 
-                String string = "speed: " + speed + " knots, direction: " + direction;
+                        int offhandOffset = 3;
+                        if(!player.getOffhandItem().isEmpty()){
+                            offhandOffset = 26;
+                        }
+                        stack.scale(1.0F, 1.0F, 1.0F);
 
-                graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), false);
+                        int x = width / 2;
+                        int y = height - gui.rightHeight;
+
+                        stack.translate((float)(x + 1), (float)(y + 4), 0.0F);
+                        if ((float) height % 2.0 != 0) {
+                            stack.translate(0f, 0.5f, 0.0f);
+                        }
+                        if ((float) width % 2.0 != 0) {
+                            stack.translate(0.5f, 0f, 0.0f);
+                        }
+
+                        int windSpeed = (int)(sloopEntity.getLocalWindAngleAndSpeed()[1]*160);
+                        windSpeed = Mth.clamp(windSpeed, 1, 20);
+                        int ticksBetweenFrames = Mth.clamp(Math.abs(windSpeed-20), 1, 10);
+                        int ticks = sloopEntity.tickCount/ticksBetweenFrames;
+                        int frameIndex = ticks%(32);
+
+                        double speedMS = sloopEntity.getSmoothSpeedMS();
+                        int speedometerIndex = Mth.clamp((int)(speedMS-2)*2,0,31);
+
+                        int angle = Math.round((Mth.wrapDegrees(sloopEntity.getWindLocalRotation())/360)*64);
+                        angle = angle+32;
+                        if(angle == 64){
+                            angle = 0;
+                        }
+                        // TODO config to add numerical speed instead, config for units
+                        //graphics.drawString(mc.font, string, (-108)-mc.font.width(string) / 2, 101-26, Color.WHITE.getRGB(), true);
+                        graphics.blit(SAILING_ICONS, -126, 3-offhandOffset, 32*angle, (32)*(angle/8), 32, 32);
+                        graphics.blit(SPEEDOMETER_ICONS, -126-8, 3-offhandOffset+(32-16), 16*speedometerIndex, (16)*(speedometerIndex/16), 16, 16);
+                        graphics.blit(SPEEDOMETER_ICONS, -126-8, 3-offhandOffset+(32-32), 16*frameIndex, 32+(16)*(frameIndex/16), 16, 16);
+                    }
+                    if(player.getVehicle() instanceof EmptyCompartmentEntity compartment){
+                        if(sloopEntity.getControllingCompartment() == compartment){
+
+                        }
+                    }
+                }
 
                 stack.popPose();
             }
@@ -164,19 +207,22 @@ public enum IngameOverlays {
                     if (emptyCompartmentEntity.getTrueVehicle() != null && emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity() != null) {
                         if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger()
                                 .is(emptyCompartmentEntity)) {
-                            graphics.blit(TEXTURE, 0, 0, 0, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 0, 0, 9, 9);
                             if (emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity && player.getItemInHand(
                                     player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)) {
-                                graphics.blit(TEXTURE, -12, 0, 9, 0, 9, 9);
+                                graphics.blit(COMPARTMENT_ICONS, -12, 0, 9, 0, 9, 9);
                             }
 
                         } else if (player.getItemInHand(player.getUsedItemHand())
                                 .is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)) {
-                            graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
-                        } else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()) {
-                            graphics.blit(TEXTURE, 0, 0, 36, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 9, 0, 9, 9);
+                        } else if (player.getItemInHand(player.getUsedItemHand())
+                                .is(FirmacivItems.CANNON.get()) && !emptyCompartmentEntity.canAddOnlyBLocks() && emptyCompartmentEntity.getRootVehicle() instanceof SloopEntity) {
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 9, 0, 9, 9);
+                        }else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()) {
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 36, 0, 9, 9);
                         } else if (!emptyCompartmentEntity.isVehicle() && emptyCompartmentEntity.canAddOnlyBLocks()) {
-                            graphics.blit(TEXTURE, 0, 0, 9, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 9, 0, 9, 9);
                         }
                     }
                 } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity  && vehicleCleatEntity.isPassenger() && !vehicleCleatEntity.isLeashed()) {
@@ -189,7 +235,7 @@ public enum IngameOverlays {
                     stack.scale(1.0F, 1.0F, 1.0F);
                     stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
                     if (vehicleCleatEntity.getVehicle().getVehicle() != null) {
-                        graphics.blit(TEXTURE, 0, 0, 54, 0, 9, 9);
+                        graphics.blit(COMPARTMENT_ICONS, 0, 0, 54, 0, 9, 9);
                     }
                 } else if (entity instanceof SailSwitchEntity sailSwitch  && sailSwitch.isPassenger()) {
                     if ((float) height % 2.0 != 0) {
@@ -202,11 +248,11 @@ public enum IngameOverlays {
                     stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
                     if (sailSwitch.getVehicle().getVehicle() != null) {
                         if(sailSwitch.getSwitched()){
-                            graphics.blit(TEXTURE, 0, 0, 18, 0, 9, 9);
-                            graphics.blit(TEXTURE, 0, 10, 72, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 18, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 10, 72, 0, 9, 9);
                         } else {
-                            graphics.blit(TEXTURE, 0, 0, 18, 0, 9, 9);
-                            graphics.blit(TEXTURE, 0, -10, 63, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 18, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, -10, 63, 0, 9, 9);
                         }
 
                     }
@@ -221,11 +267,11 @@ public enum IngameOverlays {
                     stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
                     if (windlassSwitch.getVehicle().getVehicle() != null) {
                         if(!windlassSwitch.getSwitched()){
-                            graphics.blit(TEXTURE, 0, 0, 81, 0, 9, 9);
-                            graphics.blit(TEXTURE, 0, 10, 72, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 81, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 10, 72, 0, 9, 9);
                         } else {
-                            graphics.blit(TEXTURE, 0, 0, 81, 0, 9, 9);
-                            graphics.blit(TEXTURE, 0, -10, 63, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 81, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, -10, 63, 0, 9, 9);
                         }
 
                     }
