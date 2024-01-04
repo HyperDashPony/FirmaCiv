@@ -45,8 +45,11 @@ public class ForgeEventHandler {
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
         Player player = event.getEntity();
-        // should be dedicated server and remote LAN player behavior
-        if(!(player.level().getServer() instanceof IntegratedServer) && player.getVehicle() instanceof EmptyCompartmentEntity compartment){
+
+        if(player.level().getServer().isSingleplayer() && player.level().getServer().isSingleplayerOwner(player.getGameProfile())){
+            // do singleplayer behavior
+        } else if(player.getVehicle() instanceof EmptyCompartmentEntity compartment){
+            // do multiplayer behavior
             player.stopRiding();
             player.setPos(compartment.getRootVehicle().getDismountLocationForPassenger(player));
             if(compartment.isPassenger() && compartment.getRootVehicle() instanceof AbstractFirmacivBoatEntity boat){

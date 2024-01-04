@@ -29,17 +29,6 @@ public class FirmacivHelper {
         double x = vec2.normalized().x;
         double y = vec2.normalized().y;
         double direction = 0;
-        //direction = Math.round(Math.toDegrees(Math.atan2(x, y)));
-
-        /*if(x == 0 && y > 0){
-            direction = 0;
-        } else if(x == 0 && y < 0){
-            direction = 180;
-        } else if (y == 0 && x > 0) {
-            direction = -90;
-        } else if(y == 0 && x < 0){
-            direction = 90;
-        } else*/
         if (y != 0 && x != 0) {
             direction = Math.round(Math.toDegrees(Math.atan(y / x)));
             //quadrant correction because probably I'm bad at math?

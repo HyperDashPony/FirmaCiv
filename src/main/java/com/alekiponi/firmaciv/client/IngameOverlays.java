@@ -153,12 +153,12 @@ public enum IngameOverlays {
 
                         int windSpeed = (int)(sloopEntity.getLocalWindAngleAndSpeed()[1]*160);
                         windSpeed = Mth.clamp(windSpeed, 1, 20);
-                        int ticksBetweenFrames = Mth.clamp(Math.abs(windSpeed-20), 1, 10);
+                        int ticksBetweenFrames = Mth.clamp(Math.abs(windSpeed-20), 1, 20);
                         int ticks = sloopEntity.tickCount/ticksBetweenFrames;
                         int frameIndex = ticks%(32);
 
                         double speedMS = sloopEntity.getSmoothSpeedMS();
-                        int speedometerIndex = Mth.clamp((int)(speedMS-2)*2,0,31);
+                        int speedometerIndex = Mth.clamp((int)(speedMS-2)*4,0,31);
 
                         int angle = Math.round((Mth.wrapDegrees(sloopEntity.getWindLocalRotation())/360)*64);
                         angle = angle+32;
