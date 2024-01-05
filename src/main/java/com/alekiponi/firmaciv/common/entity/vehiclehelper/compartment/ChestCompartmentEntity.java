@@ -10,6 +10,7 @@ import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -22,7 +23,9 @@ public class ChestCompartmentEntity extends ContainerCompartmentEntity {
     public ChestCompartmentEntity(final EntityType<? extends ChestCompartmentEntity> entityType, final Level level,
             final ItemStack itemStack) {
         this(entityType, level);
-        this.setBlockTypeItem(itemStack);
+        if (itemStack.getItem() instanceof BlockItem blockItem) {
+            this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
+        }
     }
 
     @Override
