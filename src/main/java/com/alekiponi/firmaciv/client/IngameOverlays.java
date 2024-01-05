@@ -152,13 +152,15 @@ public enum IngameOverlays {
                         }
 
                         int windSpeed = (int)(sloopEntity.getLocalWindAngleAndSpeed()[1]*160);
+                        DecimalFormat df = new DecimalFormat("###.#");
+                        String displayBoatSpeed = df.format(sloopEntity.getSmoothSpeedMS()) + "m/s";
                         windSpeed = Mth.clamp(windSpeed, 1, 20);
                         int ticksBetweenFrames = Mth.clamp(Math.abs(windSpeed-20), 1, 20);
                         int ticks = sloopEntity.tickCount/ticksBetweenFrames;
                         int frameIndex = ticks%(32);
 
                         double speedMS = sloopEntity.getSmoothSpeedMS();
-                        int speedometerIndex = Mth.clamp((int)(speedMS-2)*4,0,31);
+                        int speedometerIndex = Mth.clamp((int)(speedMS-2)*2,0,31);
 
                         int angle = Math.round((Mth.wrapDegrees(sloopEntity.getWindLocalRotation())/360)*64);
                         angle = angle+32;
@@ -166,7 +168,9 @@ public enum IngameOverlays {
                             angle = 0;
                         }
                         // TODO config to add numerical speed instead, config for units
-                        //graphics.drawString(mc.font, string, (-108)-mc.font.width(string) / 2, 101-26, Color.WHITE.getRGB(), true);
+                        if(mc.options.renderDebug){
+                            graphics.drawString(mc.font, displayBoatSpeed, -134, -8-offhandOffset, Color.WHITE.getRGB(), true);
+                        }
                         graphics.blit(SAILING_ICONS, -126, 3-offhandOffset, 32*angle, (32)*(angle/8), 32, 32);
                         graphics.blit(SPEEDOMETER_ICONS, -126-8, 3-offhandOffset+(32-16), 16*speedometerIndex, (16)*(speedometerIndex/16), 16, 16);
                         graphics.blit(SPEEDOMETER_ICONS, -126-8, 3-offhandOffset+(32-32), 16*frameIndex, 32+(16)*(frameIndex/16), 16, 16);

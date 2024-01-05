@@ -405,6 +405,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     @Override
     public Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
+        if(this.getTrueVehicle().getSmoothSpeedMS() > 2){
+            return this.getTrueVehicle().getDismountLocationForPassenger(passenger);
+        }
         double y = this.getTrueVehicle().getDismountLocationForPassenger(passenger).y();
 
         final Vec3 escapeVector = getCollisionHorizontalEscapeVector(this.getBbWidth() * Mth.SQRT_OF_TWO,

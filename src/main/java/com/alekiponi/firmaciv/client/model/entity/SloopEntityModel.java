@@ -594,7 +594,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
 
         float windWorldAngle = pBoat.getLocalWindAngleAndSpeed()[0];
         float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1]*20f;
-        float sailWorldAngle = Mth.wrapDegrees(pBoat.getYRot());
+        float sailWorldAngle = Mth.wrapDegrees(pBoat.getSailWorldRotation());
         int airFoilDirection = 1;
 
         float windDifference = Mth.degreesDifference(windWorldAngle, sailWorldAngle);
@@ -602,19 +602,34 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
             airFoilDirection = -1;
         }
 
-        //jibsail.yRot =0;
+        jibsail_main.yRot =0;
         windDifference = Math.abs(windDifference);
+        /*
         float windDifferenceForAngle = windDifference;
         if (windDifferenceForAngle > 90) {
             windDifferenceForAngle = Math.abs(windDifference - 180);
         }
-        windDifferenceForAngle = airFoilDirection * (float) Math.toRadians(Mth.clamp(windDifferenceForAngle / 2, 0.0f, 30f));
-        jibsail.yRot = Mth.rotLerp(pPartialTicks, jibsail.yRot, windDifferenceForAngle);
+        //windDifferenceForAngle = airFoilDirection * (float) Math.toRadians(Mth.clamp(windDifferenceForAngle / 2, 0.0f, 30f));
+
+         */
 
         if (windSpeed < 0.1) {
             windSpeed = 0.1f;
         }
         float animationTickFloat = -windSpeed * animationTick;
+
+        if(windSpeed < 2){
+            mastRotation*= windSpeed/2;
+        }
+
+        float boatWorldAngle = Mth.wrapDegrees(pBoat.getYRot());
+        float boatWindDifference = Mth.degreesDifferenceAbs(windWorldAngle, boatWorldAngle);
+        if(boatWindDifference < 10 || boatWindDifference > 170){
+            jibsail.yRot = -mastRotation;
+            airFoilDirection*=-1;
+        } else {
+            jibsail.yRot = mastRotation;
+        }
 
 
         for (int zindex = 0; zindex < jibsail_horizontal_sections; zindex++) {

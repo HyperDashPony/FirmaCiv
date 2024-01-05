@@ -44,12 +44,16 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected static final EntityDataAccessor<Boolean> DATA_ID_JIBSAIL_ACTIVE = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.BOOLEAN);
 
+    protected static final EntityDataAccessor<Integer> DATA_ID_TICKS_NO_RIDERS = SynchedEntityData.defineId(
+            SloopEntity.class, EntityDataSerializers.INT);
+
     public final int[][] COMPARTMENT_ROTATIONS = {{7, 85}, {8, 85}, {9, 85}, {10, -85}, {11, -85}, {12, -85}};
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
 
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
+    protected final int SAIL_TOGGLE_TICKS = 20;
     protected final float DAMAGE_THRESHOLD = 512.0f;
     protected final float DAMAGE_RECOVERY = 2.0f;
 
@@ -276,6 +280,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public void tick() {
 
+
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
             float rotationImpact = 0;
 
@@ -322,7 +327,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             this.setDeltaRotation(Mth.clamp(this.getDeltaRotation(),-1,1));
         }
 
-        super.tick();
+
         int ind = 0;
         for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
             if(ind == 0){
@@ -332,15 +337,30 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 this.setJibsailActive(switchEntity.getSwitched());
             }
             ind++;
+
+        }
+        if(this.getEntitiesToTakeWith().isEmpty() && this.getTruePassengers().isEmpty()){
+            this.setTicksNoRiders(this.getTicksNoRiders()+1);
+            if(this.getTicksNoRiders() >= SAIL_TOGGLE_TICKS){
+                for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
+                    switchEntity.setSwitched(false);
+                }
+                this.setJibsailActive(false);
+                this.setMainsailActive(false);
+            }
+        } else {
+            this.setTicksNoRiders(0);
         }
         if(!this.getMainsailActive() && !this.getJibsailActive()){
             this.setMainsheetLength(0);
         }
+
+        super.tick();
     }
 
     @Override
     protected void tickCleatInput() {
-        if (this.getMainsailActive()) {
+        if (this.getMainsailActive() || this.getJibsailActive()) {
             return;
         }
         int count = 0;
@@ -350,6 +370,11 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             if (cleat.isLeashed()) {
                 leashedCleats.add(cleat);
                 count++;
+            }
+        }
+        for(VehicleCleatEntity leashedCleat : leashedCleats){
+            if(this.getEntitiesToTakeWith().contains(leashedCleat.getLeashHolder())){
+                return;
             }
         }
         if (count == 2) {
@@ -454,6 +479,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         this.entityData.define(DATA_ID_RUDDER_ROTATION, 0f);
         this.entityData.define(DATA_ID_MAINSAIL_ACTIVE, false);
         this.entityData.define(DATA_ID_JIBSAIL_ACTIVE, false);
+        this.entityData.define(DATA_ID_TICKS_NO_RIDERS, 0);
         this.entityData.define(DATA_ID_MAINSHEET_LENGTH, 0f);
     }
 
@@ -613,6 +639,27 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                         .add(Mth.sin(-(Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce, 0.0D,
                                 Mth.cos((Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce));
             }
+            if (this.getJibsailActive()) {
+                double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.1;
+
+                float sailForce = this.getMainsailWindAngleAndForce()[1];
+                float sailForceAngle = this.getMainsailWindAngleAndForce()[0];
+
+                if (sailForce > this.getAcceleration()) {
+                    this.setAcceleration(sailForce);
+                } else {
+                    this.setAcceleration(this.getAcceleration() - this.getMomentumSubtractor());
+                    sailForce = this.getAcceleration();
+                }
+
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce, 0.0D,
+                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce));
+
+                this.setDeltaMovement(this.getDeltaMovement()
+                        .add(Mth.sin(-(Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce, 0.0D,
+                                Mth.cos((Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce));
+            }
             for(WindlassSwitchEntity windlass : this.getWindlasses()){
                 if(windlass.getAnchored()){
                     this.setDeltaMovement(this.getDeltaMovement().multiply(0.5,1,0.5));
@@ -674,6 +721,14 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public boolean getJibsailActive() {
         return this.entityData.get(DATA_ID_JIBSAIL_ACTIVE);
+    }
+
+    public void setTicksNoRiders(int ticks) {
+        this.entityData.set(DATA_ID_TICKS_NO_RIDERS, ticks);
+    }
+
+    public int getTicksNoRiders() {
+        return this.entityData.get(DATA_ID_TICKS_NO_RIDERS);
     }
 
     public void setRudderRotation(float rotation) {

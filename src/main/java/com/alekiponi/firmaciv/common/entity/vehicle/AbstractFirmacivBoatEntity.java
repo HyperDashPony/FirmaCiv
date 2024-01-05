@@ -402,7 +402,10 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             if(cleat.isLeashed()){
                 net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
                 if(leashHolder != null){
-                    if (leashHolder instanceof Player) {
+                    if (leashHolder instanceof Player player) {
+                        if(this.getEntitiesToTakeWith().contains(player)){
+                            return;
+                        }
                         if (this.distanceTo(leashHolder) > 4f) {
                             Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
                             Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.5f, this.getDeltaMovement().y,

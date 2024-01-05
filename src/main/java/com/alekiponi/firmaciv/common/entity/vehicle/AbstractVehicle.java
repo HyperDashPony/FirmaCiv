@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractInvisibleHelper;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
@@ -314,29 +315,55 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
             return;
         }
         if(this.getDeltaMovement().length() > 0.01){
-            List<net.minecraft.world.entity.Entity> entitiesToTakeWith = this.level()
-                    .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS);
-
-            for (VehicleCollisionEntity collider : this.getColliders()) {
-                entitiesToTakeWith.addAll(this.level()
-                        .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.NO_SPECTATORS));
-            }
-
-            entitiesToTakeWith = entitiesToTakeWith.stream().distinct().collect(Collectors.toList());
+            List<Entity> entitiesToTakeWith = this.getEntitiesToTakeWith();
 
             if (!entitiesToTakeWith.isEmpty()) {
-                for (final net.minecraft.world.entity.Entity entity : entitiesToTakeWith) {
-                    if (this.level().isClientSide() && entity instanceof LocalPlayer player && !entity.isPassenger()) {
-                        if (!player.input.jumping) {
-                            player.move(MoverType.SELF, this.getDeltaMovement().multiply(1.0, 0, 1.0));
+                for (final Entity entity : entitiesToTakeWith) {
+                    if (this.level().isClientSide() && entity instanceof LocalPlayer player && !entity.isPassenger() && (Math.abs(this.getBoundingBox().maxY-player.getBoundingBox().minY) < 0.01)) {
+                        if(this.getSmoothSpeedMS() > 4){
+                            if(!player.input.jumping || Math.abs(player.getDeltaMovement().y) > 0.05 ){
+                                player.setPos(this.getDismountLocationForPassenger(player));
+                            }
+                            //player.setPos(player.getPosition(0).add(this.getDeltaMovement()));
+                        } else {
+                            if(player.input.jumping || player.input.left || player.input.right || player.input.up || player.input.down){
+                                player.setDeltaMovement(player.getDeltaMovement().multiply(1.0,1,1.0).add(this.getDeltaMovement().multiply(0.45,0,0.45)));
+                            } else {
+                                player.setPos(player.getPosition(0).add(this.getDeltaMovement()));
+                                if(player.getDeltaMovement().length() > this.getDeltaMovement().length()+0.01){
+                                    player.setDeltaMovement(Vec3.ZERO);
+                                }
+                            }
                         }
-                        player.setDeltaMovement(player.getDeltaMovement().multiply(0.9, 1, 0.9));
-                    } else if (!(entity instanceof AbstractFirmacivBoatEntity) && !entity.isPassenger() && !(entity instanceof Player))  {
+
+                    }
+                    if (!(entity instanceof AbstractVehicle) && !entity.isPassenger() && !(entity instanceof Player))  {
                         entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().multiply(0.45, 0, 0.45)));
                     }
                 }
             }
         }
+    }
+
+    protected List<Entity> getEntitiesToTakeWith(){
+        List<Entity> entities = this.level()
+                .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.pushableBy(this));
+
+        for (VehicleCollisionEntity collider : this.getColliders()) {
+            entities.addAll(this.level()
+                    .getEntities(collider, collider.getBoundingBox().inflate(0, -collider.getBoundingBox().getYsize() + 2, 0).move(0, collider.getBoundingBox().getYsize(), 0), EntitySelector.pushableBy(this)));
+        }
+
+        entities = entities.stream().distinct().collect(Collectors.toList());
+
+        List<Entity> entitiesToTakeWith = new ArrayList<>();
+        for(Entity entity : entities){
+            if(!entity.isPassenger() && !(entity instanceof AbstractVehicle)){
+                entitiesToTakeWith.add(entity);
+            }
+        }
+
+        return entitiesToTakeWith;
     }
 
     protected abstract void tickCleatInput();
@@ -526,7 +553,9 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         for (final net.minecraft.world.entity.Entity vehiclePart : this.getPassengers()) {
             if (vehiclePart.isVehicle() && vehiclePart.getFirstPassenger() instanceof AbstractCompartmentEntity compartmentEntity) {
                 if (compartmentEntity.isVehicle()) {
-                    truePassengers.add(compartmentEntity.getFirstPassenger());
+                    if(compartmentEntity.getFirstPassenger() instanceof LivingEntity){
+                        truePassengers.add(compartmentEntity.getFirstPassenger());
+                    }
                 }
             }
         }
@@ -601,6 +630,9 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     protected Vec3 positionLocally(float localX, float localY, float localZ) {
         return (new Vec3(localX, 0, localZ)).yRot(
                 -this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
+    }
+    protected Vec3 positionLocally(Vec3 vec) {
+        return (positionLocally((float) vec.x, (float) vec.y, (float) vec.z));
     }
 
     protected void clampRotation(final net.minecraft.world.entity.Entity entity) {
@@ -796,7 +828,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     }
 
     public double getSmoothSpeedMS(){
-        if(this.everyNTickUnique(1)){
+        if(this.everyNTickUnique(3)){
             double speed = this.getDeltaMovement().length()*20;
             this.speedOverTime.poll();
             this.speedOverTime.offer(speed);
