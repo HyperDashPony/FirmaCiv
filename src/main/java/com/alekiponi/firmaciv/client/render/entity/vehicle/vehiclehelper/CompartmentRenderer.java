@@ -1,9 +1,8 @@
 package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,7 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,52 +26,51 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
         this.blockRenderer = pContext.getBlockRenderDispatcher();
     }
 
-    public void render(AbstractCompartmentEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
-        if(pEntity instanceof EmptyCompartmentEntity){
+    public void render(final AbstractCompartmentEntity compartmentEntity, final float entityYaw,
+            final float partialTicks, final PoseStack poseStack, final MultiBufferSource bufferSource,
+            final int packedLight) {
+        super.render(compartmentEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
+
+        if (compartmentEntity.tickCount < 2) {
             return;
         }
-        super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
-        float rotation = 0f;
-        if(pEntity.getTrueVehicle() != null && pEntity.getVehicle() instanceof AbstractVehiclePart vehiclePart && pEntity.tickCount < 2){
-            rotation = pEntity.getTrueVehicle().getYRot() + vehiclePart.getCompartmentRotation();
+        final float rotation;
+        if (compartmentEntity.getTrueVehicle() != null && compartmentEntity.getVehicle() instanceof AbstractVehiclePart vehiclePart && compartmentEntity.tickCount < 2) {
+            rotation = compartmentEntity.getTrueVehicle().getYRot() + vehiclePart.getCompartmentRotation();
         } else {
-            rotation = pEntityYaw;
+            rotation = entityYaw;
         }
 
-        if(pEntity.tickCount < 2){
-            return;
+        poseStack.pushPose();
+        poseStack.mulPose(Axis.YP.rotationDegrees(180 - rotation));
+        poseStack.mulPose(Axis.YP.rotationDegrees(180));
+        if (compartmentEntity.getTrueVehicle() instanceof CanoeEntity) {
+            poseStack.scale(0.6F, 0.6F, 0.6F);
+        } else {
+            poseStack.scale(0.6875F, 0.6875F, 0.6875F);
         }
-        BlockState blockstate = null;
-        if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
-            blockstate = bi.getBlock().defaultBlockState();
-        }
-        if (blockstate != null) {
-            pPoseStack.pushPose();
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - rotation));
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
-            if(pEntity.getTrueVehicle() instanceof CanoeEntity){
-                pPoseStack.scale(0.6F, 0.6F, 0.6F);
-            } else {
-                pPoseStack.scale(0.6875F, 0.6875F, 0.6875F);
+
+        poseStack.translate(-0.5F, 0, -0.5F);
+        {
+            if (compartmentEntity.getDisplayBlockState().getRenderShape() != RenderShape.INVISIBLE) {
+                this.renderCompartmentContents(compartmentEntity, partialTicks,
+                        compartmentEntity.getDisplayBlockState(), poseStack, bufferSource, packedLight);
             }
-
-            pPoseStack.translate(-0.5F, 00F, -0.5F);
-
-            this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);
-            pPoseStack.popPose();
         }
 
+        poseStack.popPose();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(AbstractCompartmentEntity pEntity) {
+    public ResourceLocation getTextureLocation(final AbstractCompartmentEntity compartmentEntity) {
         return null;
     }
 
-    protected void renderCompartmentContents(AbstractCompartmentEntity pEntity, float pPartialTicks, BlockState pState,
-                                             PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
-        this.blockRenderer.renderSingleBlock(pState, pPoseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+    protected void renderCompartmentContents(final AbstractCompartmentEntity compartmentEntity,
+            final float partialTicks, final BlockState blockState, final PoseStack poseStack,
+            final MultiBufferSource bufferSource, final int packedLight) {
+        this.blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, packedLight,
+                OverlayTexture.NO_OVERLAY);
     }
 }

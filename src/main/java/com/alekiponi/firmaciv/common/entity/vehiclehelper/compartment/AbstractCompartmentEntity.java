@@ -5,7 +5,9 @@ import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.common.fluids.TFCFluids;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,10 +20,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
@@ -37,6 +43,8 @@ public abstract class AbstractCompartmentEntity extends Entity {
             AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(
             AbstractCompartmentEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DATA_ID_DISPLAY_BLOCK = SynchedEntityData.defineId(
+            AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
     public int lifespan = 6000;
@@ -61,6 +69,10 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
     public void setBlockTypeItem(final ItemStack itemStack) {
         this.entityData.set(DATA_BLOCK_TYPE_ITEM, itemStack.copy());
+
+        if (itemStack.getItem() instanceof BlockItem blockItem) {
+            this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
+        }
     }
 
     @Override
@@ -68,6 +80,8 @@ public abstract class AbstractCompartmentEntity extends Entity {
         this.setBlockTypeItem(ItemStack.of(compoundTag.getCompound("dataBlockTypeItem")));
         this.lifespan = compoundTag.getInt("Lifespan");
         this.notRidingTicks = compoundTag.getInt("notRidingTicks");
+        this.setDisplayBlockState(NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK),
+                compoundTag.getCompound("heldBlock")));
     }
 
     @Override
@@ -75,6 +89,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
         compoundTag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
         compoundTag.putInt("Lifespan", this.lifespan);
         compoundTag.putInt("notRidingTicks", this.notRidingTicks);
+        compoundTag.put("heldBlock", NbtUtils.writeBlockState(this.getDisplayBlockState()));
     }
 
     public Item getDropItem() {
@@ -272,6 +287,15 @@ public abstract class AbstractCompartmentEntity extends Entity {
         this.entityData.define(DATA_ID_HURT_DIR, 1);
         this.entityData.define(DATA_ID_DAMAGE, 0F);
         this.entityData.define(DATA_BLOCK_TYPE_ITEM, ItemStack.EMPTY);
+        this.entityData.define(DATA_ID_DISPLAY_BLOCK, Block.getId(Blocks.AIR.defaultBlockState()));
+    }
+
+    public BlockState getDisplayBlockState() {
+        return Block.stateById(this.getEntityData().get(DATA_ID_DISPLAY_BLOCK));
+    }
+
+    public void setDisplayBlockState(final BlockState blockState) {
+        this.getEntityData().set(DATA_ID_DISPLAY_BLOCK, Block.getId(blockState));
     }
 
     public float getDamage() {
