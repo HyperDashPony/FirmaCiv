@@ -1,6 +1,7 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.Container;
@@ -14,6 +15,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,12 +25,14 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         protected void onOpen(final Level level, final BlockPos blockPos, final BlockState blockState) {
             BarrelCompartmentEntity.this.playSound(SoundEvents.BARREL_OPEN);
-            // TODO update the open state, need to rework compartment rendering first
+            BarrelCompartmentEntity.this.setDisplayBlockState(
+                    BarrelCompartmentEntity.this.getDisplayBlockState().setValue(BarrelBlock.OPEN, true));
         }
 
         protected void onClose(final Level level, final BlockPos blockPos, final BlockState blockState) {
             BarrelCompartmentEntity.this.playSound(SoundEvents.BARREL_CLOSE);
-            // TODO update the open state, need to rework compartment rendering first
+            BarrelCompartmentEntity.this.setDisplayBlockState(
+                    BarrelCompartmentEntity.this.getDisplayBlockState().setValue(BarrelBlock.OPEN, false));
         }
 
         @Override
@@ -50,9 +54,10 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
     }
 
     public BarrelCompartmentEntity(final EntityType<? extends BarrelCompartmentEntity> entityType, final Level level,
-            final ItemStack itemStack) {
+            final ItemStack ignoredItemStack) {
         this(entityType, level);
-        this.setBlockTypeItem(itemStack);
+        this.setDisplayBlockState(Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.UP)
+                .setValue(BarrelBlock.OPEN, false));
     }
 
     @Override
