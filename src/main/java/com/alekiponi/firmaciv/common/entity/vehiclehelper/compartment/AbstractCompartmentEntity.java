@@ -32,9 +32,6 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 
 public abstract class AbstractCompartmentEntity extends Entity {
-
-    private static final EntityDataAccessor<ItemStack> DATA_BLOCK_TYPE_ITEM = SynchedEntityData.defineId(
-            AbstractCompartmentEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
             AbstractCompartmentEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ID_HURT_DIR = SynchedEntityData.defineId(
@@ -46,7 +43,6 @@ public abstract class AbstractCompartmentEntity extends Entity {
     private static final float DAMAGE_TO_BREAK = 8.0f;
     private static final float DAMAGE_RECOVERY = 0.5f;
     public int lifespan = 6000;
-
     protected int lerpSteps;
     protected double lerpX;
     protected double lerpY;
@@ -57,25 +53,13 @@ public abstract class AbstractCompartmentEntity extends Entity {
     protected AbstractVehiclePart ridingThisPart = null;
     private int notRidingTicks = 0;
 
-    public AbstractCompartmentEntity(final EntityType<? extends AbstractCompartmentEntity> entityType, final Level level) {
+    public AbstractCompartmentEntity(final EntityType<? extends AbstractCompartmentEntity> entityType,
+            final Level level) {
         super(entityType, level);
-    }
-
-    public ItemStack getBlockTypeItem() {
-        return this.entityData.get(DATA_BLOCK_TYPE_ITEM);
-    }
-
-    public void setBlockTypeItem(final ItemStack itemStack) {
-        this.entityData.set(DATA_BLOCK_TYPE_ITEM, itemStack.copy());
-
-        if (itemStack.getItem() instanceof BlockItem blockItem) {
-            this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
-        }
     }
 
     @Override
     protected void readAdditionalSaveData(final CompoundTag compoundTag) {
-        this.setBlockTypeItem(ItemStack.of(compoundTag.getCompound("dataBlockTypeItem")));
         this.lifespan = compoundTag.getInt("Lifespan");
         this.notRidingTicks = compoundTag.getInt("notRidingTicks");
         this.setDisplayBlockState(NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK),
@@ -84,14 +68,13 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
     @Override
     protected void addAdditionalSaveData(final CompoundTag compoundTag) {
-        compoundTag.put("dataBlockTypeItem", this.getBlockTypeItem().save(new CompoundTag()));
         compoundTag.putInt("Lifespan", this.lifespan);
         compoundTag.putInt("notRidingTicks", this.notRidingTicks);
         compoundTag.put("heldBlock", NbtUtils.writeBlockState(this.getDisplayBlockState()));
     }
 
     public Item getDropItem() {
-        return this.getBlockTypeItem().getItem();
+        return this.getDisplayBlockState().getBlock().asItem();
     }
 
     @Override
@@ -106,7 +89,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
     @Nullable
     public AbstractFirmacivBoatEntity getTrueVehicle() {
-        if(this.getRootVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity){
+        if (this.getRootVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity) {
             return firmacivBoatEntity;
         }
         return null;
@@ -271,7 +254,6 @@ public abstract class AbstractCompartmentEntity extends Entity {
         this.entityData.define(DATA_ID_HURT, 0);
         this.entityData.define(DATA_ID_HURT_DIR, 1);
         this.entityData.define(DATA_ID_DAMAGE, 0F);
-        this.entityData.define(DATA_BLOCK_TYPE_ITEM, ItemStack.EMPTY);
         this.entityData.define(DATA_ID_DISPLAY_BLOCK, Block.getId(Blocks.AIR.defaultBlockState()));
     }
 
