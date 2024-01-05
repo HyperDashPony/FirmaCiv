@@ -31,15 +31,22 @@ public class PacketHandler {
 
     public static void init(){
         int id = 0;
-        INSTANCE.messageBuilder(ServerboundCompartmentInputPacket.class, id = id++)
+        INSTANCE.messageBuilder(ServerboundCompartmentInputPacket.class, id)
                 .encoder(ServerboundCompartmentInputPacket::encoder)
                 .decoder(ServerboundCompartmentInputPacket::decoder)
                 .consumerMainThread(ServerboundCompartmentInputPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ServerboundSwitchEntityPacket.class, id = id++)
+        id++;
+        INSTANCE.messageBuilder(ServerboundSwitchEntityPacket.class, id)
                 .encoder(ServerboundSwitchEntityPacket::encoder)
                 .decoder(ServerboundSwitchEntityPacket::decoder)
                 .consumerMainThread(ServerboundSwitchEntityPacket::handle)
+                .add();
+        id++;
+        INSTANCE.messageBuilder(ServerBoundSailUpdatePacket.class, id)
+                .encoder(ServerBoundSailUpdatePacket::encoder)
+                .decoder(ServerBoundSailUpdatePacket::decoder)
+                .consumerMainThread(ServerBoundSailUpdatePacket::handle)
                 .add();
     }
 

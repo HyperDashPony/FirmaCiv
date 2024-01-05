@@ -834,7 +834,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
             this.speedOverTime.offer(speed);
         }
         double average = 0;
-        for(double d : speedOverTime.stream().toList()){
+        for(double d : speedOverTime){
             average += d;
         }
         average = average/speedOverTime.size();

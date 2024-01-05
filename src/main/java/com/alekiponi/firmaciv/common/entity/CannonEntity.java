@@ -35,6 +35,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -209,7 +211,7 @@ public class CannonEntity extends Entity {
             Vec3i currentPos = new Vec3i(Mth.floor(startPos.add(rayCastStep).x), Mth.floor(startPos.add(rayCastStep).y), Mth.floor((startPos.add(rayCastStep).z)));
             BlockPos blockPos = new BlockPos(currentPos);
             cannonball.setPos(startPos.add(rayCastStep));
-            if(!this.level().getBlockState(blockPos).isAir() && blockPos != this.blockPosition()){
+            if(!this.level().getBlockState(blockPos).isAir() && blockPos != this.blockPosition() && this.level().getBlockState(blockPos).canBeReplaced(Fluids.WATER)){
                 cannonball.discard();
                 cannonball.explode(3);
                 break;

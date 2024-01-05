@@ -2,6 +2,8 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.network.PacketHandler;
+import com.alekiponi.firmaciv.network.ServerBoundSailUpdatePacket;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -23,7 +25,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public final int[] CLEATS = {18, 19, 20, 21};
     public final int[] COLLIDERS = {14, 15, 16};
-    public final int[] SAIL_SWITCHES = {17,24};
+    public final int[] SAIL_SWITCHES = {17, 24};
 
     public final int[] WINDLASSES = {22};
 
@@ -83,7 +85,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public int[] getMastIndices() { return MASTS; }
+    public int[] getMastIndices() {
+        return MASTS;
+    }
 
     @Override
     public int[] getColliderIndices() {
@@ -280,21 +284,28 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public void tick() {
 
-
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            float rotationImpact = 0;
-
-            float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
-
-            if (windDifference > 4) {
-                rotationImpact = 1f;
-            } else if (windDifference < -4) {
-                rotationImpact = -1f;
+            if (this.status == Status.IN_WATER) {
+                this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f *
+                        (Mth.clamp(this.getDeltaMovement().length(), 0.05f, 1))));
+                this.setDeltaRotation(Mth.clamp(this.getDeltaRotation(), -1f, 1f));
             }
 
-            rotationImpact = (float) (rotationImpact * this.getDeltaMovement().length());
+            if(this.getMainsailActive() || this.getJibsailActive()){
+                float rotationImpact = 0;
 
-            this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
+                float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
+
+                if (windDifference > 4) {
+                    rotationImpact = 1f;
+                } else if (windDifference < -4) {
+                    rotationImpact = -1f;
+                }
+
+                rotationImpact = (float) (rotationImpact * this.getDeltaMovement().length());
+
+                this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
+            }
 
             float boomWindDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
 
@@ -308,40 +319,53 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     boom++;
                 }
             }
-
+            boolean flag = false;
             if (boomWindDifference < -171) {
                 boomWindDifference = Mth.wrapDegrees(boomWindDifference - 180);
             }
-            if (boomWindDifference > 9) {
+            if (boomWindDifference > 4) {
                 boom += 2f;
-            } else if (boomWindDifference < -9) {
+                flag = true;
+            } else if (boomWindDifference < -4) {
                 boom -= 2f;
+                flag = true;
+            }
+            if (boomWindDifference > 1 && !flag) {
+                boom += 0.5f;
+                flag = true;
+            } else if (boomWindDifference < -1 && !flag) {
+                boom -= 0.5f;
+                flag = true;
+            }
+            if (boomWindDifference > 0.5 && !flag) {
+                boom += 0.2f;
+                flag = true;
+            } else if (boomWindDifference < -0.5 && !flag) {
+                boom -= 0.2f;
+                flag = true;
             }
 
             this.setMainBoomRotation(boom);
+
         }
 
         this.tickDestroyPlants();
-        if (this.status == Status.IN_WATER) {
-            this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f * this.getDeltaMovement().length()));
-            this.setDeltaRotation(Mth.clamp(this.getDeltaRotation(),-1,1));
-        }
 
 
         int ind = 0;
         for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
-            if(ind == 0){
+            if (ind == 0) {
                 this.setMainsailActive(switchEntity.getSwitched());
             }
-            if(ind == 1){
+            if (ind == 1) {
                 this.setJibsailActive(switchEntity.getSwitched());
             }
             ind++;
 
         }
-        if(this.getEntitiesToTakeWith().isEmpty() && this.getTruePassengers().isEmpty()){
-            this.setTicksNoRiders(this.getTicksNoRiders()+1);
-            if(this.getTicksNoRiders() >= SAIL_TOGGLE_TICKS){
+        if (this.getEntitiesToTakeWith().isEmpty() && this.getTruePassengers().isEmpty()) {
+            this.setTicksNoRiders(this.getTicksNoRiders() + 1);
+            if (this.getTicksNoRiders() >= SAIL_TOGGLE_TICKS) {
                 for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
                     switchEntity.setSwitched(false);
                 }
@@ -351,7 +375,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         } else {
             this.setTicksNoRiders(0);
         }
-        if(!this.getMainsailActive() && !this.getJibsailActive()){
+        if (!this.getMainsailActive() && !this.getJibsailActive()) {
             this.setMainsheetLength(0);
         }
 
@@ -372,8 +396,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 count++;
             }
         }
-        for(VehicleCleatEntity leashedCleat : leashedCleats){
-            if(this.getEntitiesToTakeWith().contains(leashedCleat.getLeashHolder())){
+        for (VehicleCleatEntity leashedCleat : leashedCleats) {
+            if (this.getEntitiesToTakeWith().contains(leashedCleat.getLeashHolder())) {
                 return;
             }
         }
@@ -428,8 +452,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 if (leashHolder instanceof Player) {
                     if (this.distanceTo(leashHolder) > 4f) {
                         Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
-                        Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.01f, this.getDeltaMovement().y,
-                                vectorToVehicle.z * -0.01f);
+                        Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.03f, this.getDeltaMovement().y,
+                                vectorToVehicle.z * -0.03f);
                         double vehicleSize = Mth.clamp(this.getBbWidth(), 1, 100);
                         movementVector = movementVector.multiply(1 / vehicleSize, 0, 1 / vehicleSize);
 
@@ -467,7 +491,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected void tickTurnSpeedFactor(){
+    protected void tickTurnSpeedFactor() {
         // TODO make this cleaner in the inheritance structure
         // shouldn't be used for larger boats...
     }
@@ -530,13 +554,22 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             float rudder = this.getRudderRotation();
             if (inputLeft) {
                 if (rudder < 45) {
-                    rudder++;
+                    if (rudder < 0) {
+                        rudder += 2;
+                    } else {
+                        rudder += 1;
+                    }
                 }
             }
 
             if (inputRight) {
                 if (rudder > -45) {
-                    rudder--;
+                    if (rudder > 0) {
+                        rudder -= 2;
+                    } else {
+                        rudder -= 1;
+                    }
+
                 }
             }
 
@@ -553,18 +586,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             }
             this.setRudderRotation(rudder);
 
+
             tickSailBoat();
-
-
-
-            /*
-            if (inputUp && !this.getMainsailActive()) {
-                this.setMainsailActive(true);
-            }
-
-            if (inputDown && this.getMainsailActive()) {
-                this.setMainsailActive(false);
-            }*/
         }
     }
 
@@ -580,7 +603,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     protected float getMomentumSubtractor() {
-        return 0.003f;
+        return 0.001f;
     }
 
     protected void tickSailBoat() {
@@ -589,80 +612,94 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             boolean inputDown = this.getControllingCompartment().getInputDown();
             boolean inputLeft = this.getControllingCompartment().getInputLeft();
             boolean inputRight = this.getControllingCompartment().getInputRight();
+            float sheet = this.getMainsheetLength();
             if (inputUp) {
-                if (this.getMainBoomRotation() < 45) {
-                    this.setMainsheetLength(this.getMainsheetLength() + 1);
+                if (sheet < 45) {
+                    sheet++;
                 }
             }
 
             if (inputDown) {
-                if (this.getMainsheetLength() > 0) {
-                    this.setMainsheetLength(this.getMainsheetLength() - 1);
+                if (sheet > 0) {
+                    sheet--;
                 }
             }
 
-            /*
-            if (inputUp && !this.getMainsailActive()) {
-                this.setMainsailActive(true);
+            this.setMainsheetLength(sheet);
+            if (this.level().isClientSide() && (inputUp || inputDown)) {
+                PacketHandler.clientSendPacket(new ServerBoundSailUpdatePacket(sheet, this.getId()));
             }
-
-            if (inputDown && this.getMainsailActive()) {
-                this.setMainsailActive(false);
-            }*/
-
-
         }
     }
 
     protected void tickWindInput() {
         super.tickWindInput();
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            //this.setMainsailActive(true);
+            float windFunction = (float) (Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.4);
+
+            float sailForce = this.getMainsailWindAngleAndForce()[1];
+            float sailForceAngle = Mth.wrapDegrees(this.getMainsailWindAngleAndForce()[0]);
+
+            float acceleration = windFunction * sailForce;
             if (this.getMainsailActive()) {
-                double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.3;
-
-                float sailForce = this.getMainsailWindAngleAndForce()[1];
-                float sailForceAngle = this.getMainsailWindAngleAndForce()[0];
-
-                if (sailForce > this.getAcceleration()) {
-                    this.setAcceleration(sailForce);
-                } else {
+                if (acceleration > this.getAcceleration()) {
+                    this.setAcceleration(acceleration);
+                } else if (this.getAcceleration() > this.getMomentumSubtractor()) {
                     this.setAcceleration(this.getAcceleration() - this.getMomentumSubtractor());
-                    sailForce = this.getAcceleration();
+                    acceleration = this.getAcceleration();
                 }
 
-                this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce));
+                float keelFactor = 0.6f;
+                float sailFactor = 1 - keelFactor;
+
+                Vec3 sailAccelerationWithKeel = new Vec3(
+                        Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration * keelFactor,
+                        0.0D,
+                        Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration * keelFactor);
+
+                Vec3 sailAccelerationWithSail = new Vec3(
+                        Mth.sin(-(Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * acceleration * sailFactor,
+                        0.0D,
+                        Mth.cos((Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * acceleration * sailFactor);
 
                 this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-(Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce, 0.0D,
-                                Mth.cos((Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce));
+                        .add(sailAccelerationWithKeel).add(sailAccelerationWithSail));
+
+
+
             }
             if (this.getJibsailActive()) {
-                double windFunction = Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.1;
+                windFunction = (float) (Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.1);
+                acceleration = windFunction * sailForce;
 
-                float sailForce = this.getMainsailWindAngleAndForce()[1];
-                float sailForceAngle = this.getMainsailWindAngleAndForce()[0];
-
-                if (sailForce > this.getAcceleration()) {
-                    this.setAcceleration(sailForce);
-                } else {
-                    this.setAcceleration(this.getAcceleration() - this.getMomentumSubtractor());
-                    sailForce = this.getAcceleration();
+                if(!this.getMainsailActive()){
+                    if (acceleration > this.getAcceleration()) {
+                        this.setAcceleration(acceleration);
+                    } else if (this.getAcceleration() > this.getMomentumSubtractor()) {
+                        this.setAcceleration(this.getAcceleration() - this.getMomentumSubtractor());
+                        acceleration = this.getAcceleration();
+                    }
                 }
 
-                this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce, 0.0D,
-                                Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * windFunction * 0.75 * sailForce));
+                float keelFactor = 0.8f;
+                float sailFactor = 1 - keelFactor;
+
+                Vec3 sailAccelerationWithKeel = new Vec3(
+                        Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * acceleration * keelFactor,
+                        0.0D,
+                        Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * acceleration * keelFactor);
+
+                Vec3 sailAccelerationWithSail = new Vec3(
+                        Mth.sin(-(Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * acceleration * sailFactor,
+                        0.0D,
+                        Mth.cos((Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * acceleration * sailFactor);
 
                 this.setDeltaMovement(this.getDeltaMovement()
-                        .add(Mth.sin(-(Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce, 0.0D,
-                                Mth.cos((Mth.wrapDegrees(sailForceAngle)) * ((float) Math.PI / 180F)) * windFunction * 0.25 * sailForce));
+                        .add(sailAccelerationWithKeel).add(sailAccelerationWithSail));
             }
-            for(WindlassSwitchEntity windlass : this.getWindlasses()){
-                if(windlass.getAnchored()){
-                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.5,1,0.5));
+            for (WindlassSwitchEntity windlass : this.getWindlasses()) {
+                if (windlass.getAnchored()) {
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.5, 1, 0.5));
                 }
             }
         }
@@ -671,23 +708,24 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     protected void tickAnchorInput() {
         for (WindlassSwitchEntity windlass : this.getWindlasses()) {
-            if (windlass.getAnchored() && !this.getMainsailActive()) {
+            if (windlass.getAnchored() && !this.getMainsailActive() && this.getJibsailActive()) {
                 this.setDeltaMovement(Vec3.ZERO);
             }
         }
     }
 
     public float[] getMainsailWindAngleAndForce() {
-        //float windDifference = Mth.degreesDifference(Mth.wrapDegrees(this.getWindLocalRotation() -180), Mth.wrapDegrees(this.getMainBoomRotation()-this.getYRot()));
+        float windDifference = Mth.degreesDifference(this.getWindLocalRotation(), Mth.wrapDegrees(this.getMainBoomRotation()));
 
-        //windForceAngle = sail relative to wind angle * 2
+        // calculate wind force for lifting body scenario
+        float windForceAngle = Mth.wrapDegrees(2 * windDifference + this.getYRot());
 
-        float windDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
+        if (Math.abs(windDifference) < 120) {
+            // calculate wind force for dragging body scenario
+            windForceAngle = this.getLocalWindAngleAndSpeed()[0];
+        }
 
-        float windForceAngle = Mth.wrapDegrees(1 * windDifference - 180);
-
-
-        float windForce = FirmacivHelper.sailForceMultiplierTable(windForceAngle);
+        float windForce = FirmacivHelper.sailForceMultiplierTable(windDifference);
         return new float[]{(float) windForceAngle, (float) windForce};
     }
 

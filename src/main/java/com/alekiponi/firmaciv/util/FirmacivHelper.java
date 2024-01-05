@@ -54,15 +54,15 @@ public class FirmacivHelper {
             return multiplier / 35f;
         }
         if (sailForceAngle < 20) {
-            multiplier = 5f;
+            multiplier = 2f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 25) {
-            multiplier = 10f;
+            multiplier = 4f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 30) {
-            multiplier = 15f;
+            multiplier = 5f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 45) {
@@ -70,39 +70,39 @@ public class FirmacivHelper {
             return multiplier / 35f;
         }
         if (sailForceAngle < 60) {
-            multiplier = 23f;
+            multiplier = 25f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 75) {
-            multiplier = 25f;
-            return multiplier / 35f;
-        }
-        if (sailForceAngle < 90) {
-            multiplier = 27f;
-            return multiplier / 35f;
-        }
-        if (sailForceAngle < 105) {
-            multiplier = 29f;
-            return multiplier / 35f;
-        }
-        if (sailForceAngle < 120) {
             multiplier = 32f;
             return multiplier / 35f;
         }
-        if (sailForceAngle < 135) {
-            multiplier = 33f;
+        if (sailForceAngle < 90) {
+            multiplier = 35f;
             return multiplier / 35f;
         }
-        if (sailForceAngle < 150) {
+        if (sailForceAngle < 105) {
+            multiplier = 32f;
+            return multiplier / 35f;
+        }
+        if (sailForceAngle < 120) {
             multiplier = 30f;
             return multiplier / 35f;
         }
+        if (sailForceAngle < 135) {
+            multiplier = 27f;
+            return multiplier / 35f;
+        }
+        if (sailForceAngle < 150) {
+            multiplier = 20f;
+            return multiplier / 35f;
+        }
         if (sailForceAngle < 165) {
-            multiplier = 25f;
+            multiplier = 10f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 180) {
-            multiplier = 20f;
+            multiplier = 0f;
             return multiplier / 35f;
         }
         return multiplier / 35f;

@@ -624,7 +624,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
 
         float boatWorldAngle = Mth.wrapDegrees(pBoat.getYRot());
         float boatWindDifference = Mth.degreesDifferenceAbs(windWorldAngle, boatWorldAngle);
-        if(boatWindDifference < 10 || boatWindDifference > 170){
+        if(boatWindDifference < 10 || boatWindDifference > 170 && pBoat.getMainsailActive()){
             jibsail.yRot = -mastRotation;
             airFoilDirection*=-1;
         } else {
@@ -686,7 +686,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     }
 
     private static void animateSailforceIndicator(SloopEntity pBoat, float pPartialTicks, ModelPart sail_force_indicator){
-        float sailForceAngle = (float) Math.toRadians(Mth.wrapDegrees(pBoat.getMainsailWindAngleAndForce()[0]));
+        float sailForceAngle = (float) Math.toRadians(Mth.wrapDegrees(pBoat.getMainsailWindAngleAndForce()[0])-pBoat.getYRot());
         float sailForce = Mth.clamp(pBoat.getMainsailWindAngleAndForce()[1], 0.1f, 10f);
         sail_force_indicator.yRot =(float) (sailForceAngle);
         sail_force_indicator.zScale = 1;

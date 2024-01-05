@@ -184,10 +184,10 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.tickAnchorInput();
 
         this.tickFloatBoat();
-        this.tickControlBoat();
-        if (this.isControlledByLocalInstance()) {
-            if (this.level().isClientSide()) {
 
+        if (this.isControlledByLocalInstance()) {
+            this.tickControlBoat();
+            if (this.level().isClientSide()) {
                 this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
         }
@@ -245,7 +245,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     protected void tickUpdateWind(boolean waitForWindUpdateTick) {
         if (tickCount % WIND_UPDATE_TICKS == 0 || !waitForWindUpdateTick) {
             Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
-            //windVector = new Vec2(0,-0.5f);
+            //windVector = new Vec2(0.05f,0.05f);
             if (windVector.length() == 0) {
                 windVector = new Vec2(-0.03f, 0f);
             }
