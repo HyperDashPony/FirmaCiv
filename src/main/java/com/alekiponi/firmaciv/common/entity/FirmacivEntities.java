@@ -4,8 +4,7 @@ import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import net.dries007.tfc.util.Helpers;
@@ -48,6 +47,9 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<ChestCompartmentEntity>> CHEST_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_chest", EntityType.Builder.of(ChestCompartmentEntity::new, MobCategory.MISC));
+
+    public static final RegistryObject<EntityType<BarrelCompartmentEntity>> BARREL_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_barrel", EntityType.Builder.of(BarrelCompartmentEntity::new, MobCategory.MISC));
 
     public static final RegistryObject<EntityType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_workbench", EntityType.Builder.of(WorkbenchCompartmentEntity::new, MobCategory.MISC));

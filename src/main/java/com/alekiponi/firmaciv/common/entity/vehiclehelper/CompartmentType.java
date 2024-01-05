@@ -2,12 +2,14 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.BarrelCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.ChestCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.WorkbenchCompartmentEntity;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,10 @@ public class CompartmentType<T extends AbstractCompartmentEntity> {
     public static final CompartmentType<ChestCompartmentEntity> CHEST = register(
             FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), ChestCompartmentEntity::new,
             itemStack -> itemStack.is(FirmacivTags.Items.CHESTS));
+
+    public static final CompartmentType<BarrelCompartmentEntity> BARREL = register(
+            FirmacivEntities.BARREL_COMPARTMENT_ENTITY.get(), BarrelCompartmentEntity::new,
+            itemStack -> itemStack.is(Blocks.BARREL.asItem()));
 
     private final EntityType<T> entityType;
     private final CompartmentFactory<T> factory;

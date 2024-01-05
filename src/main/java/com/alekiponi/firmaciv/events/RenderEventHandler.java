@@ -4,7 +4,8 @@ import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
 import com.alekiponi.firmaciv.client.model.entity.KayakEntityModel;
 import com.alekiponi.firmaciv.client.model.entity.RowboatEntityModel;
-import com.alekiponi.firmaciv.client.render.entity.*;
+import com.alekiponi.firmaciv.client.render.entity.CannonRenderer;
+import com.alekiponi.firmaciv.client.render.entity.CannonballRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.CanoeRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.KayakRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.RowboatRenderer;
@@ -13,21 +14,15 @@ import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.AnchorR
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.CompartmentRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.InvisibleHelperRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.VehicleCleatRenderer;
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-
 @Mod.EventBusSubscriber(modid = Firmaciv.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class RenderEventHandler {
-
-
-    private RenderEventHandler() {
-    }
-
 
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -46,6 +41,7 @@ public final class RenderEventHandler {
 
         event.registerEntityRenderer(FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.BARREL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
 
@@ -61,8 +57,5 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.ANCHOR_ENTITY.get(), AnchorRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.SLOOP.get(), SloopRenderer::new);
-
     }
-
-
 }
