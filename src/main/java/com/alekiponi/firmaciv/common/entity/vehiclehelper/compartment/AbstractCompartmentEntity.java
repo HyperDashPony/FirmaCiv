@@ -20,8 +20,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -75,18 +73,9 @@ public abstract class AbstractCompartmentEntity extends Entity {
         compoundTag.put("heldBlock", NbtUtils.writeBlockState(this.getDisplayBlockState()));
     }
 
-    public Item getDropItem() {
-        return this.getDisplayBlockState().getBlock().asItem();
-    }
-
     @Override
     public double getMyRidingOffset() {
         return 0.125D;
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset();
     }
 
     @Nullable
@@ -128,7 +117,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
                 if (!this.level().isClientSide()) {
                     notRidingTicks++;
                     if (notRidingTicks > lifespan) {
-                        this.spawnAtLocation(this.getDropItem(), 1);
+                        this.spawnAtLocation(this.getDropStack(), 1);
                         this.discard();
                     }
                 }
@@ -137,7 +126,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
             } else if (!this.level().isClientSide()) {
                 notRidingTicks++;
                 if (notRidingTicks > 1) {
-                    this.spawnAtLocation(this.getDropItem(), 1);
+                    this.spawnAtLocation(this.getDropStack(), 1);
                     this.discard();
                 }
             }
@@ -204,7 +193,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
      * @return The compartment passed in
      */
     protected AbstractCompartmentEntity swapCompartments(final AbstractCompartmentEntity newCompartment) {
-        this.spawnAtLocation(this.getDropItem(), 1);
+        this.spawnAtLocation(this.getDropStack(), 1);
         this.stopRiding();
         this.discard();
         newCompartment.setYRot(this.getYRot());
@@ -250,7 +239,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
         }
 
         if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            this.destroy(damageSource);
+            this.spawnAtLocation(this.getDropStack(), 1);
         }
 
         if (this.getRootVehicle() instanceof KayakEntity kayakEntity) {
@@ -296,10 +285,6 @@ public abstract class AbstractCompartmentEntity extends Entity {
         this.entityData.set(DATA_ID_HURT, hurtTime);
     }
 
-    protected void destroy(final DamageSource damageSource) {
-        this.spawnAtLocation(this.getDropItem(), 1);
-    }
-
     /**
      * Gets the forward direction of the entity.
      */
@@ -316,8 +301,18 @@ public abstract class AbstractCompartmentEntity extends Entity {
         return !this.isRemoved();
     }
 
+    /**
+     * Gets the ItemStack that should be dropped when this compartment is destroyed
+     * This is so compartments can easily control the output stack or add NBT
+     *
+     * @return The ItemStack that should be dropped in world when the compartment is destroyed
+     */
+    public ItemStack getDropStack() {
+        return this.getDisplayBlockState().getBlock().asItem().getDefaultInstance();
+    }
+
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(this.getDropItem());
+        return this.getDisplayBlockState().getBlock().asItem().getDefaultInstance();
     }
 }
