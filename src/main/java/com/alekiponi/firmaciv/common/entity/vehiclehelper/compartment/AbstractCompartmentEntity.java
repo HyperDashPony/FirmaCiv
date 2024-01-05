@@ -57,31 +57,29 @@ public abstract class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
-        this.lifespan = compoundTag.getInt("Lifespan");
-        this.notRidingTicks = compoundTag.getInt("notRidingTicks");
-        this.setDisplayBlockState(NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK),
-                compoundTag.getCompound("heldBlock")));
+    protected void defineSynchedData() {
+        this.entityData.define(DATA_ID_HURT, 0);
+        this.entityData.define(DATA_ID_HURT_DIR, 1);
+        this.entityData.define(DATA_ID_DAMAGE, 0F);
+        this.entityData.define(DATA_ID_DISPLAY_BLOCK, Block.getId(Blocks.AIR.defaultBlockState()));
     }
 
-    @Override
-    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
-        compoundTag.putInt("Lifespan", this.lifespan);
-        compoundTag.putInt("notRidingTicks", this.notRidingTicks);
-        compoundTag.put("heldBlock", NbtUtils.writeBlockState(this.getDisplayBlockState()));
-    }
-
-    @Override
-    public double getMyRidingOffset() {
-        return 0.125D;
-    }
-
-    @Nullable
-    public AbstractFirmacivBoatEntity getTrueVehicle() {
-        if (this.getRootVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity) {
-            return firmacivBoatEntity;
-        }
-        return null;
+    /**
+     * Replaces this object with the passed in CompartmentEntity
+     *
+     * @param newCompartment The compartment entity which is replacing this object
+     * @return The compartment passed in
+     */
+    protected AbstractCompartmentEntity swapCompartments(final AbstractCompartmentEntity newCompartment) {
+        this.spawnAtLocation(this.getDropStack(), 1);
+        this.stopRiding();
+        this.discard();
+        newCompartment.setYRot(this.getYRot());
+        newCompartment.setPos(this.getX(), this.getY(), this.getZ());
+        newCompartment.ridingThisPart = this.ridingThisPart;
+        newCompartment.startRiding(ridingThisPart);
+        this.level().addFreshEntity(newCompartment);
+        return newCompartment;
     }
 
     @Override
@@ -92,10 +90,10 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
         if (!this.isPassenger()) {
             if (!(this instanceof EmptyCompartmentEntity)) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
+                this.setDeltaMovement(this.getDeltaMovement().add(0, -0.04D, 0));
                 if (this.isInWater() || this.level().getFluidState(this.blockPosition())
                         .is(TFCFluids.SALT_WATER.getSource())) {
-                    this.setDeltaMovement(0.0D, -0.01D, 0.0D);
+                    this.setDeltaMovement(0, -0.01D, 0);
                     this.setYRot(this.getYRot() + 0.4f);
                 }
                 if (!this.onGround() || this.getDeltaMovement()
@@ -107,7 +105,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
                     if (this.onGround()) {
                         Vec3 vec31 = this.getDeltaMovement();
                         if (vec31.y < 0.0D) {
-                            this.setDeltaMovement(vec31.multiply(1.0D, -0.5D, 1.0D));
+                            this.setDeltaMovement(vec31.multiply(1, -0.5D, 1));
                         }
                     }
                 }
@@ -135,7 +133,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
             this.setHurtTime(this.getHurtTime() - 1);
         }
 
-        if (this.getDamage() > 0.0F) {
+        if (this.getDamage() > 0) {
             this.setDamage(this.getDamage() - DAMAGE_RECOVERY);
         }
 
@@ -174,31 +172,11 @@ public abstract class AbstractCompartmentEntity extends Entity {
     }
 
     protected SoundEvent getHurtSound(final DamageSource damageSource) {
-        damageSource.getEntity();
         return SoundEvents.WOOD_HIT;
     }
 
-    protected void playHurtSound(final DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        this.playSound(soundevent, 1.0f, this.level().getRandom().nextFloat() * 0.05F + 0.35F);
-    }
-
-    /**
-     * Replaces this object with the passed in CompartmentEntity
-     *
-     * @param newCompartment The compartment entity which is replacing this object
-     * @return The compartment passed in
-     */
-    protected AbstractCompartmentEntity swapCompartments(final AbstractCompartmentEntity newCompartment) {
-        this.spawnAtLocation(this.getDropStack(), 1);
-        this.stopRiding();
-        this.discard();
-        newCompartment.setYRot(this.getYRot());
-        newCompartment.setPos(this.getX(), this.getY(), this.getZ());
-        newCompartment.ridingThisPart = this.ridingThisPart;
-        newCompartment.startRiding(ridingThisPart);
-        this.level().addFreshEntity(newCompartment);
-        return newCompartment;
+    protected void playHurtSound(final DamageSource damageSource) {
+        this.playSound(this.getHurtSound(damageSource), 1, this.level().getRandom().nextFloat() * 0.05F + 0.35F);
     }
 
     @Override
@@ -239,11 +217,31 @@ public abstract class AbstractCompartmentEntity extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(DATA_ID_HURT, 0);
-        this.entityData.define(DATA_ID_HURT_DIR, 1);
-        this.entityData.define(DATA_ID_DAMAGE, 0F);
-        this.entityData.define(DATA_ID_DISPLAY_BLOCK, Block.getId(Blocks.AIR.defaultBlockState()));
+    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
+        this.lifespan = compoundTag.getInt("Lifespan");
+        this.notRidingTicks = compoundTag.getInt("notRidingTicks");
+        this.setDisplayBlockState(NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK),
+                compoundTag.getCompound("heldBlock")));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
+        compoundTag.putInt("Lifespan", this.lifespan);
+        compoundTag.putInt("notRidingTicks", this.notRidingTicks);
+        compoundTag.put("heldBlock", NbtUtils.writeBlockState(this.getDisplayBlockState()));
+    }
+
+    @Override
+    public double getMyRidingOffset() {
+        return 0.125D;
+    }
+
+    @Nullable
+    public AbstractFirmacivBoatEntity getTrueVehicle() {
+        if (this.getRootVehicle() instanceof AbstractFirmacivBoatEntity firmacivBoatEntity) {
+            return firmacivBoatEntity;
+        }
+        return null;
     }
 
     public BlockState getDisplayBlockState() {
@@ -270,9 +268,6 @@ public abstract class AbstractCompartmentEntity extends Entity {
         this.entityData.set(DATA_ID_HURT, hurtTime);
     }
 
-    /**
-     * Gets the forward direction of the entity.
-     */
     public int getHurtDir() {
         return this.entityData.get(DATA_ID_HURT_DIR);
     }
