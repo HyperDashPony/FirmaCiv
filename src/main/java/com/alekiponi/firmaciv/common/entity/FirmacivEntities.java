@@ -46,8 +46,8 @@ public final class FirmacivEntities {
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_empty", EntityType.Builder.of(EmptyCompartmentEntity::new, MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<ChestCompartmentEntity>> CHEST_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_chest", EntityType.Builder.of(ChestCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<EntityType<TFCChestCompartmentEntity>> TFC_CHEST_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_chest", EntityType.Builder.of(TFCChestCompartmentEntity::new, MobCategory.MISC));
 
     public static final RegistryObject<EntityType<BarrelCompartmentEntity>> BARREL_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_barrel", EntityType.Builder.of(BarrelCompartmentEntity::new, MobCategory.MISC));

@@ -14,14 +14,15 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class ChestCompartmentEntity extends ContainerCompartmentEntity {
+public class TFCChestCompartmentEntity extends ContainerCompartmentEntity {
 
-    public ChestCompartmentEntity(final EntityType<? extends ChestCompartmentEntity> entityType, final Level level) {
+    public TFCChestCompartmentEntity(final EntityType<? extends TFCChestCompartmentEntity> entityType,
+            final Level level) {
         super(entityType, level, 18);
     }
 
-    public ChestCompartmentEntity(final EntityType<? extends ChestCompartmentEntity> entityType, final Level level,
-            final ItemStack itemStack) {
+    public TFCChestCompartmentEntity(final EntityType<? extends TFCChestCompartmentEntity> entityType,
+            final Level level, final ItemStack itemStack) {
         this(entityType, level);
         if (itemStack.getItem() instanceof BlockItem blockItem) {
             this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
