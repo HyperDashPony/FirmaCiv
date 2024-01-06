@@ -290,10 +290,11 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
     }
 
     public static void animateDestruction(RowboatEntity pEntity, ModelPart[] bones){
+        /*
         float damage = pEntity.getDamage();
         float threshold = pEntity.getDamageThreshold();
         if(pEntity.tickCount > 1 && damage > threshold){
-            float randomRotation = pEntity.getRandomRotation();
+            float randomRotation = pEntityn.getRandomRotation();
             for(ModelPart part : bones){
                 if(randomRotation < 0.333){
                     part.yRot = (1+randomRotation)*randomRotation;
@@ -307,7 +308,7 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
             for(ModelPart part : bones){
                 part.y = bottomOfBoat;
             }
-        }
+        }*/
     }
 
     public static ModelPart[] getAllParts(RowboatEntityModel rowboatEntityModel) {

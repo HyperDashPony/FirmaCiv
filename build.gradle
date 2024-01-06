@@ -161,6 +161,8 @@ dependencies {
     fg.deobf("curse.maven:patchouli-306770:4636277")
     implementation fg.deobf("curse.maven:patchouli-306770:4636277")
 
+    fg.deobf("curse.maven:carry-on-274259:4882500")
+    runtimeOnly fg.deobf("curse.maven:carry-on-274259:4882500")
 
     /*
     fg.deobf("curse.maven:better-third-person-435044:4596768")

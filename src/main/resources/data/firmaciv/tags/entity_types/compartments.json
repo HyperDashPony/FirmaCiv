@@ -1,0 +1,10 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "firmaciv:compartment_workbench",
+    "firmaciv:compartment_anvil",
+    "firmaciv:compartment_chest",
+    "firmaciv:compartment_empty"
+  ]
+}
