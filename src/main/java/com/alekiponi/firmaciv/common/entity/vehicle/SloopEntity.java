@@ -288,7 +288,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 this.setDeltaRotation(Mth.clamp(this.getDeltaRotation(), -1f, 1f));
             }
 
-            if(this.getMainsailActive() || this.getJibsailActive()){
+            if (this.getMainsailActive() || this.getJibsailActive()) {
                 float rotationImpact = 0;
 
                 float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
@@ -333,7 +333,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         }
 
         this.tickDestroyPlants();
-
 
         int ind = 0;
         for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
@@ -409,14 +408,14 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
                     Vec3 averageLeashHolderPosition =
                             new Vec3(
-                            (leashHolder1.getPosition(0).x + leashHolder2.getPosition(0).x)/2.0,
-                            0,
-                            (leashHolder1.getPosition(0).z + leashHolder2.getPosition(0).z)/2.0);
+                                    (leashHolder1.getPosition(0).x + leashHolder2.getPosition(0).x) / 2.0,
+                                    0,
+                                    (leashHolder1.getPosition(0).z + leashHolder2.getPosition(0).z) / 2.0);
 
                     Vec3 averageCleatPosition = new Vec3(
-                            (cleat1.getPosition(0).x + cleat2.getPosition(0).x)/2.0,
+                            (cleat1.getPosition(0).x + cleat2.getPosition(0).x) / 2.0,
                             0,
-                            (cleat1.getPosition(0).z + cleat2.getPosition(0).z)/2.0);
+                            (cleat1.getPosition(0).z + cleat2.getPosition(0).z) / 2.0);
 
                     Vec3 vectorToVehicle = averageCleatPosition.vectorTo(averageLeashHolderPosition).normalize();
 
@@ -425,7 +424,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     if (averageCleatPosition.distanceTo(averageLeashHolderPosition) > 1.0) {
                         this.setDeltaMovement(movementVector);
                     } else {
-                        this.setDeltaMovement(0,this.getDeltaMovement().y,0);
+                        this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
                     }
 
                 }
@@ -653,13 +652,12 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                         .add(sailAccelerationWithKeel).add(sailAccelerationWithSail));
 
 
-
             }
             if (this.getJibsailActive()) {
                 windFunction = (float) (Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.1);
                 acceleration = windFunction * sailForce;
 
-                if(!this.getMainsailActive()){
+                if (!this.getMainsailActive()) {
                     if (acceleration > this.getAcceleration()) {
                         this.setAcceleration(acceleration);
                     } else if (this.getAcceleration() > this.getMomentumSubtractor()) {
