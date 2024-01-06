@@ -6,6 +6,7 @@ import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.world.entity.Entity;
