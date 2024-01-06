@@ -51,8 +51,8 @@ public abstract class CameraMixin {
 
                 double boatSize = boat.getBbWidth();
                 double cameraDistance = 4.0f;
-                if(boatSize > (1/0.85)){
-                    cameraDistance = cameraDistance * (boatSize * 0.85);
+                if(boatSize >1){
+                    cameraDistance = cameraDistance * (boatSize);
                 }
                 this.setRotation(pEntity.getViewYRot(pPartialTick), pEntity.getViewXRot(pPartialTick));
                 this.setPosition(Mth.lerp((double)pPartialTick, boat.xo, boat.getX()), Mth.lerp((double)pPartialTick, boat.yo, boat.getY()) + (double)Mth.lerp(pPartialTick, this.eyeHeightOld, this.eyeHeight), Mth.lerp((double)pPartialTick, boat.zo, boat.getZ()));

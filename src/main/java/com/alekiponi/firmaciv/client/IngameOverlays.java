@@ -153,7 +153,7 @@ public enum IngameOverlays {
 
                         int windSpeed = (int)(sloopEntity.getLocalWindAngleAndSpeed()[1]*160);
                         DecimalFormat df = new DecimalFormat("###.#");
-                        String displayBoatSpeed = df.format(sloopEntity.getSmoothSpeedMS()*3.6) + " kmh";
+                        String displayBoatSpeed = df.format(sloopEntity.getSmoothSpeedMS()*3.6) + " km/h";
                         windSpeed = Mth.clamp(windSpeed, 1, 20);
                         int ticksBetweenFrames = Mth.clamp(Math.abs(windSpeed-20), 1, 20);
                         int ticks = sloopEntity.tickCount/ticksBetweenFrames;

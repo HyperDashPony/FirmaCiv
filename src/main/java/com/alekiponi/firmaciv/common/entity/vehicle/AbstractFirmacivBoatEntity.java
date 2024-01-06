@@ -184,9 +184,9 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.tickAnchorInput();
 
         this.tickFloatBoat();
-
+        this.tickControlBoat();
         if (this.isControlledByLocalInstance()) {
-            this.tickControlBoat();
+
             if (this.level().isClientSide()) {
                 this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
@@ -307,7 +307,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             }
 
             this.tickTurnSpeedFactor();
-
 
             Vec3 vec3 = this.getDeltaMovement();
 

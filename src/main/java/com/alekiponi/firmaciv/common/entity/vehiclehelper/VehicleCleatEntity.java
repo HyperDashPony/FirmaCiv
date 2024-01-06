@@ -107,9 +107,10 @@ public class VehicleCleatEntity extends net.minecraft.world.entity.Entity {
                     this.dropLeash(true, true);
                 }
             }
+            /*
             if (leashHolder.isPassenger() && leashHolder.getVehicle() instanceof EmptyCompartmentEntity) {
                 this.dropLeash(true, true);
-            }
+            }*/
             if (this.distanceTo(leashHolder) > 10f) {
                 if(leashHolder instanceof Player player){
                     this.dropLeash(true, !player.getAbilities().instabuild);

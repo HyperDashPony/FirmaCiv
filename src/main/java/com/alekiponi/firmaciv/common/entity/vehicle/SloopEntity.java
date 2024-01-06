@@ -22,13 +22,10 @@ import java.util.ArrayList;
 public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public final int PASSENGER_NUMBER = 25;
-
     public final int[] CLEATS = {18, 19, 20, 21};
     public final int[] COLLIDERS = {14, 15, 16};
     public final int[] SAIL_SWITCHES = {17, 24};
-
     public final int[] WINDLASSES = {22};
-
     public final int[] MASTS = {23};
 
     protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
@@ -302,7 +299,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     rotationImpact = -1f;
                 }
 
-                rotationImpact = (float) (rotationImpact * this.getDeltaMovement().length());
+                rotationImpact = Mth.clamp((float) (rotationImpact * this.getDeltaMovement().length()), 0, 0.5f);
 
                 this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
             }
@@ -312,37 +309,23 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             float sheet = this.getMainsheetLength();
             float boom = this.getMainBoomRotation();
 
-            if (sheet > Math.abs(boom)) {
-                if (boom < 0) {
-                    boom--;
-                } else if (boom != 0) {
-                    boom++;
-                }
-            }
-            boolean flag = false;
+
             if (boomWindDifference < -171) {
                 boomWindDifference = Mth.wrapDegrees(boomWindDifference - 180);
             }
-            if (boomWindDifference > 4) {
+            if (boomWindDifference > 5 && Math.abs(sheet - boom) > 2) {
                 boom += 2f;
-                flag = true;
-            } else if (boomWindDifference < -4) {
+            }
+            if (boomWindDifference < -5 && Math.abs(sheet - boom) > 2) {
                 boom -= 2f;
-                flag = true;
             }
-            if (boomWindDifference > 1 && !flag) {
-                boom += 0.5f;
-                flag = true;
-            } else if (boomWindDifference < -1 && !flag) {
-                boom -= 0.5f;
-                flag = true;
-            }
-            if (boomWindDifference > 0.5 && !flag) {
-                boom += 0.2f;
-                flag = true;
-            } else if (boomWindDifference < -0.5 && !flag) {
-                boom -= 0.2f;
-                flag = true;
+
+            if (sheet > Math.abs(boom)) {
+                if (boom < 2) {
+                    boom--;
+                } else if (boom > 2) {
+                    boom++;
+                }
             }
 
             this.setMainBoomRotation(boom);
@@ -410,8 +393,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 if (leashHolder1.is(leashHolder2)) {
                     count = 1;
                 } else {
-                    double d0 = leashHolder1.getPosition(0).x - leashHolder2.getX();
-                    double d2 = leashHolder1.getPosition(0).z - leashHolder2.getZ();
+                    double d0 = leashHolder1.getX() - leashHolder2.getX();
+                    double d2 = leashHolder1.getZ() - leashHolder2.getZ();
 
                     float finalRotation = Mth.wrapDegrees(
                             (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
@@ -424,21 +407,25 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                         this.setDeltaRotation(-1 * (this.getYRot() - approach));
                     }
 
-                    Vec3 vectorToVehicle1 = leashHolder1.getPosition(0).vectorTo(cleat1.getPosition(0)).normalize();
+                    Vec3 averageLeashHolderPosition =
+                            new Vec3(
+                            (leashHolder1.getPosition(0).x + leashHolder2.getPosition(0).x)/2.0,
+                            0,
+                            (leashHolder1.getPosition(0).z + leashHolder2.getPosition(0).z)/2.0);
 
-                    Vec3 vectorToVehicle2 = leashHolder2.getPosition(0).vectorTo(cleat2.getPosition(0)).normalize();
+                    Vec3 averageCleatPosition = new Vec3(
+                            (cleat1.getPosition(0).x + cleat2.getPosition(0).x)/2.0,
+                            0,
+                            (cleat1.getPosition(0).z + cleat2.getPosition(0).z)/2.0);
 
-                    Vec3 movementVector1 = new Vec3(vectorToVehicle1.x * -0.002f, this.getDeltaMovement().y,
-                            vectorToVehicle1.z * -0.005f);
+                    Vec3 vectorToVehicle = averageCleatPosition.vectorTo(averageLeashHolderPosition).normalize();
 
-                    Vec3 movementVector2 = new Vec3(vectorToVehicle2.x * -0.002f, this.getDeltaMovement().y,
-                            vectorToVehicle1.z * -0.005f);
+                    Vec3 movementVector = vectorToVehicle.multiply(0.008, 0, 0.008).add(0, this.getDeltaMovement().y, 0);
 
-                    if (cleat1.distanceTo(leashHolder1) > 1.5) {
-                        this.setDeltaMovement(movementVector1);
-                    }
-                    if (cleat2.distanceTo(leashHolder2) > 1.5) {
-                        this.setDeltaMovement(movementVector2);
+                    if (averageCleatPosition.distanceTo(averageLeashHolderPosition) > 1.0) {
+                        this.setDeltaMovement(movementVector);
+                    } else {
+                        this.setDeltaMovement(0,this.getDeltaMovement().y,0);
                     }
 
                 }
@@ -575,10 +562,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
             if (!inputRight && !inputLeft) {
                 if (rudder > 0) {
-                    rudder -= 0.8f;
+                    rudder -= 0.3f;
                 }
                 if (rudder < 0) {
-                    rudder += 0.8f;
+                    rudder += 0.3f;
                 }
                 if (Math.abs(rudder) < 1) {
                     rudder = 0;
@@ -635,7 +622,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected void tickWindInput() {
         super.tickWindInput();
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            float windFunction = (float) (Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.4);
+            float windFunction = (float) (Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.45);
 
             float sailForce = this.getMainsailWindAngleAndForce()[1];
             float sailForceAngle = Mth.wrapDegrees(this.getMainsailWindAngleAndForce()[0]);
@@ -717,11 +704,11 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public float[] getMainsailWindAngleAndForce() {
         float windDifference = Mth.degreesDifference(this.getWindLocalRotation(), Mth.wrapDegrees(this.getMainBoomRotation()));
 
-        // calculate wind force for lifting body scenario
+        // calculate wind force for lifting scenario
         float windForceAngle = Mth.wrapDegrees(2 * windDifference + this.getYRot());
 
         if (Math.abs(windDifference) < 120) {
-            // calculate wind force for dragging body scenario
+            // calculate wind force for dragging scenario
             windForceAngle = this.getLocalWindAngleAndSpeed()[0];
         }
 
@@ -783,6 +770,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         this.setMainBoomRotation(pCompound.getFloat("mainBoomRotation"));
         this.setRudderRotation(pCompound.getFloat("rudderRotation"));
         this.setMainsailActive(pCompound.getBoolean("mainsailActive"));
+        this.setJibsailActive(pCompound.getBoolean("jibsailActive"));
+        this.setTicksNoRiders(pCompound.getInt("ticksNoRiders"));
+        this.setMainsheetLength(pCompound.getFloat("mainSheetLength"));
     }
 
     @Override
@@ -791,5 +781,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         pCompound.putFloat("mainBoomRotation", this.getMainBoomRotation());
         pCompound.putFloat("rudderRotation", this.getRudderRotation());
         pCompound.putBoolean("mainsailActive", this.getMainsailActive());
+        pCompound.putBoolean("jibsailActive", this.getJibsailActive());
+        pCompound.putInt("ticksNoRiders", this.getTicksNoRiders());
+        pCompound.putFloat("mainSheetLength", this.getMainsheetLength());
     }
 }
