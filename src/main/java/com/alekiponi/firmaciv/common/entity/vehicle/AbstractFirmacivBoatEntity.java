@@ -133,10 +133,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     @Override
     public void tick() {
-        if(this.getRandomRotation() == 0){
-            Random r = new Random();
-            this.setRandomRotation(r.nextFloat());
-        }
 
         if (!this.level().isClientSide()) {
             if (this.getPassengers().size() < this.getMaxPassengers()) {
@@ -166,8 +162,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                 this.kill();
             }
         }
-
-        float damage = this.getDamage();
 
         if((this.status == Status.UNDER_FLOWING_WATER || this.status == Status.UNDER_WATER) && this.getDamage() <= this.getDamageThreshold() && this.tickCount % 10 == 0){
             this.hurt(this.damageSources().drown(),this.getDamageRecovery());

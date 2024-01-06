@@ -53,10 +53,8 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
             AbstractVehicle.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> DATA_ID_ACCELERATION = SynchedEntityData.defineId(
             AbstractVehicle.class, EntityDataSerializers.FLOAT);
-
     private static final EntityDataAccessor<ItemStack> DATA_ID_PAINT = SynchedEntityData.defineId(AbstractVehicle.class,
             EntityDataSerializers.ITEM_STACK);
-
 
     private float randomRotation;
 
@@ -73,8 +71,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
     protected final float DAMAGE_RECOVERY = 2.0f;
 
-    private LinkedList<Double> speedOverTime;
-
+    private final LinkedList<Double> speedOverTime;
     protected float invFriction;
     protected int lerpSteps;
     protected double lerpX;
@@ -89,8 +86,6 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     @Nullable
     protected Status oldStatus;
     protected double lastYd;
-
-    private ImmutableList<net.minecraft.world.entity.Entity> passengers = ImmutableList.of();
 
     public AbstractVehicle(final EntityType entityType, final Level level) {
         super(entityType, level);
@@ -239,7 +234,7 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
             this.discard();
         }
         if (this.getDamage() > getDamageThreshold()) {
-            for(Entity entity : passengers){
+            for(Entity entity : this.getPassengers()){
                 entity.kill();
             }
         }
@@ -728,19 +723,6 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         return this.entityData.get(DATA_ID_ACCELERATION);
     }
 
-    public float getRandomRotation(){
-        if(this.getDamage() > this.getDamageThreshold()){
-            return randomRotation;
-        } else {
-            return 1.0f;
-        }
-
-    }
-
-    public void setRandomRotation(float rotation){
-        randomRotation = rotation;
-    }
-
     public ItemStack getPaint() {
         return this.entityData.get(DATA_ID_PAINT);
     }
@@ -756,7 +738,6 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         this.setHurtDir(pCompound.getInt("hurtDir"));
         this.setDamage(pCompound.getFloat("damage"));
         this.setHurtTime(pCompound.getInt("hurtTime"));
-        this.setRandomRotation(pCompound.getFloat("randomRotation"));
     }
 
 
@@ -767,7 +748,6 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         pCompound.putInt("hurtDir", this.getHurtDir());
         pCompound.putFloat("damage", this.getDamage());
         pCompound.putInt("hurtTime", this.getHurtTime());
-        pCompound.putFloat("randomRotation", this.getRandomRotation());
     }
 
     @Override
