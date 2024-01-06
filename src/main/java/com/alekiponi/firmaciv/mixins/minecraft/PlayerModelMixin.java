@@ -4,6 +4,7 @@ import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -33,10 +34,32 @@ public abstract class PlayerModelMixin<T extends LivingEntity> extends HumanoidM
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
     void injectRidingPoseChange(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks,
             float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
+        // Players stand inside barrel compartments
+        if (pEntity.isPassenger() && pEntity.getVehicle() instanceof BarrelCompartmentEntity) {
+            if (this.riding) {
+                this.rightLeg.setPos(-1.9F, 12, 0);
+                this.leftLeg.setPos(01.9F, 12, 0);
+                this.rightPants.setPos(-1.9F, 12, 0);
+                this.leftPants.setPos(01.9F, 12, 0);
 
-        if (pEntity.isPassenger() && pEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
-            if ((emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity)
-                    || (emptyCompartmentEntity.getTrueVehicle() instanceof RowboatEntity && emptyCompartmentEntity.canAddNonPlayers())) {
+                this.rightLeg.xRot = 0;
+                this.rightLeg.yRot = 0;
+                this.rightLeg.zRot = 0;
+
+                this.leftLeg.xRot = 0;
+                this.leftLeg.yRot = 0;
+                this.leftLeg.zRot = 0;
+
+                this.rightPants.xRot = 0;
+                this.rightPants.yRot = 0;
+                this.rightPants.zRot = 0;
+
+                this.leftPants.xRot = 0;
+                this.leftPants.yRot = 0;
+                this.leftPants.zRot = 0;
+            }
+        } else if (pEntity.isPassenger() && pEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
+            if ((emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity) || (emptyCompartmentEntity.getTrueVehicle() instanceof RowboatEntity && emptyCompartmentEntity.canAddNonPlayers())) {
                 if (this.riding) {
                     this.rightLeg.xRot = -1.570796F;
                     this.rightLeg.yRot = 0F;
