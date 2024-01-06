@@ -24,16 +24,16 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
 
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
+        @Override
         protected void onOpen(final Level level, final BlockPos blockPos, final BlockState blockState) {
             BarrelCompartmentEntity.this.playSound(SoundEvents.BARREL_OPEN);
-            BarrelCompartmentEntity.this.setDisplayBlockState(
-                    BarrelCompartmentEntity.this.getDisplayBlockState().setValue(BarrelBlock.OPEN, true));
+            BarrelCompartmentEntity.this.setDisplayBlockState(blockState.setValue(BarrelBlock.OPEN, true));
         }
 
+        @Override
         protected void onClose(final Level level, final BlockPos blockPos, final BlockState blockState) {
             BarrelCompartmentEntity.this.playSound(SoundEvents.BARREL_CLOSE);
-            BarrelCompartmentEntity.this.setDisplayBlockState(
-                    BarrelCompartmentEntity.this.getDisplayBlockState().setValue(BarrelBlock.OPEN, false));
+            BarrelCompartmentEntity.this.setDisplayBlockState(blockState.setValue(BarrelBlock.OPEN, false));
         }
 
         @Override
@@ -41,6 +41,7 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
                 final int count, final int openCount) {
         }
 
+        @Override
         protected boolean isOwnContainer(final Player player) {
             if (!(player.containerMenu instanceof ChestMenu)) return false;
 
@@ -93,17 +94,19 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
         super.remove(removalReason);
     }
 
+    @Override
     public void startOpen(final Player player) {
         if (!player.isSpectator()) {
             this.openersCounter.incrementOpeners(player, this.level(), this.blockPosition(),
-                    Blocks.AIR.defaultBlockState());
+                    this.getDisplayBlockState());
         }
     }
 
+    @Override
     public void stopOpen(final Player player) {
         if (!player.isSpectator()) {
             this.openersCounter.decrementOpeners(player, this.level(), this.blockPosition(),
-                    Blocks.AIR.defaultBlockState());
+                    this.getDisplayBlockState());
         }
     }
 
