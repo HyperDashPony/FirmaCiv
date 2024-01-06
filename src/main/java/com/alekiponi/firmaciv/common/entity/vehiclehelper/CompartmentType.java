@@ -2,9 +2,10 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.TFCChestCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.WorkbenchCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ChestCompartmentEntity;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +31,10 @@ public class CompartmentType<T extends AbstractCompartmentEntity> {
     public static final CompartmentType<BarrelCompartmentEntity> BARREL = register(
             FirmacivEntities.BARREL_COMPARTMENT_ENTITY.get(), BarrelCompartmentEntity::new,
             itemStack -> itemStack.is(Blocks.BARREL.asItem()));
+
+    public static final CompartmentType<ChestCompartmentEntity> CHEST = register(
+            FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), ChestCompartmentEntity::new,
+            itemStack -> itemStack.is(Blocks.CHEST.asItem()));
 
     private final EntityType<T> entityType;
     private final CompartmentFactory<T> factory;
