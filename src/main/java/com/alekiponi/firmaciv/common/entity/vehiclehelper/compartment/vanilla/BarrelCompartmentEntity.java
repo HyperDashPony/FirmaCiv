@@ -62,12 +62,9 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
     }
 
     @Override
-    public void remove(final RemovalReason removalReason) {
-        if (!this.level().isClientSide && removalReason.shouldDestroy()) {
-            this.playSound(SoundEvents.WOOD_BREAK, 1, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
-        }
-
-        super.remove(removalReason);
+    public void tick() {
+        // TODO float on the surface instead of sink
+        super.tick();
     }
 
     @Override
@@ -85,6 +82,15 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
         }
 
         return interactionResult;
+    }
+
+    @Override
+    public void remove(final RemovalReason removalReason) {
+        if (!this.level().isClientSide && removalReason.shouldDestroy()) {
+            this.playSound(SoundEvents.WOOD_BREAK, 1, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
+        }
+
+        super.remove(removalReason);
     }
 
     public void startOpen(final Player player) {
