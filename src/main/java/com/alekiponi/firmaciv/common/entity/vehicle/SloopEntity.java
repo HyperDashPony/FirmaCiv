@@ -369,6 +369,19 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         if (this.getMainsailActive() || this.getJibsailActive()) {
             return;
         }
+        if(this.getDocked()){
+            this.setDeltaMovement(Vec3.ZERO);
+            this.setDeltaRotation(0);
+            if(this.everyNTickUnique(4)){
+                Player player = this.level().getNearestPlayer(this, 6*16);
+                if(player != null) {
+                    if(this.distanceTo(player) < 5 * 16) {
+                        this.setDocked(false);
+                    }
+                }
+            }
+            return;
+        }
         int count = 0;
         ArrayList<VehicleCleatEntity> cleats = this.getCleats();
         ArrayList<VehicleCleatEntity> leashedCleats = new ArrayList<VehicleCleatEntity>();
@@ -424,14 +437,22 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     if (averageCleatPosition.distanceTo(averageLeashHolderPosition) > 1.0) {
                         this.setDeltaMovement(movementVector);
                     } else {
-                        this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
+                        this.setDeltaMovement(Vec3.ZERO);
                     }
+                    Player player = this.level().getNearestPlayer(this, 6*16);
+                    if(player != null){
+                        this.setDocked(this.distanceTo(player) > 5 * 16);
+                    } else {
+                        this.setDocked(true);
+                    }
+
 
                 }
             }
 
         }
         if (count == 1) {
+            this.setDocked(false);
             VehicleCleatEntity cleat = leashedCleats.get(0);
             net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
             if (leashHolder != null) {
@@ -456,10 +477,19 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                         this.setDeltaMovement(movementVector);
                     }
 
+                    Player player = this.level().getNearestPlayer(this, 6*16);
+                    if(player != null){
+                        this.setDocked(this.distanceTo(player) > 5 * 16);
+                    } else {
+                        this.setDocked(true);
+                    }
+
+
                 }
             }
         }
         if (count != 1 && count != 2) {
+            this.setDocked(false);
             for (VehicleCleatEntity cleat : leashedCleats) {
                 net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
                 if (leashHolder != null) {
@@ -469,6 +499,13 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
                     if (cleat.distanceTo(leashHolder) > 1) {
                         this.setDeltaMovement(movementVector);
+                    }
+
+                    Player player = this.level().getNearestPlayer(this, 6*16);
+                    if(player != null){
+                        this.setDocked(this.distanceTo(player) > 5 * 16);
+                    } else {
+                        this.setDocked(true);
                     }
                 }
             }
@@ -692,11 +729,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     protected void tickAnchorInput() {
-        for (WindlassSwitchEntity windlass : this.getWindlasses()) {
-            if (windlass.getAnchored() && !this.getMainsailActive() && this.getJibsailActive()) {
-                this.setDeltaMovement(Vec3.ZERO);
-            }
-        }
+        if(this.getMainsailActive() || this.getJibsailActive()){
+            return;
+        } super.tickAnchorInput();
     }
 
     public float[] getMainsailWindAngleAndForce() {

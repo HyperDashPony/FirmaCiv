@@ -24,6 +24,8 @@ import java.util.Map;
 
 public final class FirmacivEntities {
 
+    private static final int LARGE_VEHICLE_TRACKING = 20;
+    private static final int VEHICLE_HELPER_TRACKING = LARGE_VEHICLE_TRACKING+1;
     public static DeferredRegister<EntityType<?>> ENTITY_TYPES
             = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Firmaciv.MOD_ID);
 
@@ -43,7 +45,7 @@ public final class FirmacivEntities {
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
 
     public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
-            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F).clientTrackingRange(32)
+            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F).setTrackingRange(LARGE_VEHICLE_TRACKING)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
@@ -68,12 +70,12 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<BoatVehiclePart>> BOAT_VEHICLE_PART = ENTITY_TYPES.register(
             "vehicle_part_boat",
-            () -> EntityType.Builder.of(BoatVehiclePart::new, MobCategory.MISC).sized(0.00F, 0.00F).noSummon()
+            () -> EntityType.Builder.of(BoatVehiclePart::new, MobCategory.MISC).sized(0.00F, 0.00F).setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_part_boat").toString()));
 
     public static final RegistryObject<EntityType<VehicleCleatEntity>> VEHICLE_CLEAT_ENTITY = ENTITY_TYPES.register(
             "vehicle_cleat",
-            () -> EntityType.Builder.of(VehicleCleatEntity::new, MobCategory.MISC).sized(0.4F, 0.2F).noSummon()
+            () -> EntityType.Builder.of(VehicleCleatEntity::new, MobCategory.MISC).sized(0.4F, 0.2F).setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_cleat").toString()));
 
     public static final RegistryObject<EntityType<VehicleCollisionEntity>> VEHICLE_COLLISION_ENTITY = ENTITY_TYPES.register(
@@ -88,12 +90,12 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<AnchorEntity>> ANCHOR_ENTITY = ENTITY_TYPES.register(
             "vehicle_anchor",
-            () -> EntityType.Builder.of(AnchorEntity::new, MobCategory.MISC).sized(1.00F, 1.00F).clientTrackingRange(16).noSummon()
+            () -> EntityType.Builder.of(AnchorEntity::new, MobCategory.MISC).sized(1.00F, 1.00F).clientTrackingRange(VEHICLE_HELPER_TRACKING).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_anchor").toString()));
 
     public static final RegistryObject<EntityType<WindlassSwitchEntity>> WINDLASS_SWITCH_ENTITY = ENTITY_TYPES.register(
             "vehicle_switch_windlass",
-            () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon()
+            () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_windlass").toString()));
 
     public static final RegistryObject<EntityType<CannonballEntity>> CANNONBALL_ENTITY = ENTITY_TYPES.register(
@@ -108,7 +110,7 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<MastEntity>> MAST_ENTITY = ENTITY_TYPES.register(
             "vehicle_mast",
-            () -> EntityType.Builder.of(MastEntity::new, MobCategory.MISC).sized(0.3F, 8F).noSummon()
+            () -> EntityType.Builder.of(MastEntity::new, MobCategory.MISC).sized(0.3F, 8F).setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_mast").toString()));
 
     public static void register(IEventBus eventBus) {

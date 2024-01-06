@@ -42,15 +42,15 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> DATA_ID_PADDLE_RIGHT = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-
     protected static final EntityDataAccessor<Vector3f> DATA_ID_WIND_VECTOR = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.VECTOR3);
-
     protected static final EntityDataAccessor<Float> DATA_ID_WIND_ANGLE = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
-
     protected static final EntityDataAccessor<Float> DATA_ID_WIND_SPEED = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Boolean> DATA_ID_DOCKED = SynchedEntityData.defineId(
+            AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
+
 
 
     protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
@@ -87,7 +87,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.entityData.define(DATA_ID_WIND_VECTOR, new Vector3f(0, 0, 0));
         this.entityData.define(DATA_ID_WIND_ANGLE, 0f);
         this.entityData.define(DATA_ID_WIND_SPEED, 0f);
-
+        this.entityData.define(DATA_ID_DOCKED, false);
     }
 
     public abstract int[] getWindlassIndices();
@@ -180,7 +180,6 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.tickFloatBoat();
         this.tickControlBoat();
         if (this.isControlledByLocalInstance()) {
-
             if (this.level().isClientSide()) {
                 this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
@@ -391,6 +390,19 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     @Override
     protected void tickCleatInput(){
+        if(this.getDocked()){
+            this.setDeltaMovement(Vec3.ZERO);
+            this.setDeltaRotation(0);
+            if(this.everyNTickUnique(4)){
+                Player player = this.level().getNearestPlayer(this, 6*16);
+                if(player != null) {
+                    if(this.distanceTo(player) < 5 * 16) {
+                        this.setDocked(false);
+                    }
+                }
+            }
+            return;
+        }
         for(VehicleCleatEntity cleat : this.getCleats()){
             if(cleat.isLeashed()){
                 net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
@@ -445,7 +457,12 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                         if (cleat.distanceTo(leashHolder) > 2) {
                             this.setDeltaMovement(movementVector);
                         } else {
-                            this.setDeltaMovement(Vec3.ZERO);
+                            Player player = this.level().getNearestPlayer(this, 6*16);
+                            if(player != null){
+                                this.setDocked(this.distanceTo(player) > 5 * 16);
+                            } else {
+                                this.setDocked(true);
+                            }
                         }
 
 
@@ -659,18 +676,27 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         return new Vec2(x, y);
     }
 
+    public void setDocked(boolean docked) {
+        this.entityData.set(DATA_ID_DOCKED, docked);
+    }
+
+    public boolean getDocked() {
+        return this.entityData.get(DATA_ID_DOCKED);
+    }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.tickUpdateWind(false);
+        this.setDocked(pCompound.getBoolean("docked"));
     }
 
 
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putFloat("deltaRotation", this.getDeltaRotation());
+        pCompound.putBoolean("docked", this.getDocked());
+
     }
 
     public float getWindLocalRotation() {
