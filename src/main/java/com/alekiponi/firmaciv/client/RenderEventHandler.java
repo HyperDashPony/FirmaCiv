@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.events;
+package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
