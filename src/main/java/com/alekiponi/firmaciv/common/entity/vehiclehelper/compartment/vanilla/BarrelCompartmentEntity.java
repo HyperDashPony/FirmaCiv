@@ -90,7 +90,7 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
 
     @Override
     public void startOpen(final Player player) {
-        if (!player.isSpectator()) {
+        if (!player.isSpectator() || !this.isPassenger()) {
             this.openersCounter.incrementOpeners(player, this.level(), this.blockPosition(),
                     this.getDisplayBlockState());
         }
@@ -98,7 +98,7 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
 
     @Override
     public void stopOpen(final Player player) {
-        if (!player.isSpectator()) {
+        if (!player.isSpectator() || !this.isPassenger()) {
             this.openersCounter.decrementOpeners(player, this.level(), this.blockPosition(),
                     this.getDisplayBlockState());
         }
