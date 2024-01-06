@@ -110,6 +110,18 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
     }
 
     @Override
+    public double getPassengersRidingOffset() {
+        // Offset so players stand on us
+        return 0.55;
+    }
+
+    @Override
+    public BlockState getDisplayBlockState() {
+        return this.isPassenger() ? super.getDisplayBlockState() : super.getDisplayBlockState()
+                .setValue(BarrelBlock.OPEN, true);
+    }
+
+    @Override
     public double getBuoyancy() {
         return this.tickCount % 21 > 10 ? -0.01 : 0.01;
     }
