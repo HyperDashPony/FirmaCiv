@@ -1,5 +1,6 @@
-package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
+package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.ContainerCompartmentEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
