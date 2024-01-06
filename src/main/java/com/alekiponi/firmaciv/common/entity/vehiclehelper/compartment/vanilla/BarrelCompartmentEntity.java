@@ -63,12 +63,6 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
     }
 
     @Override
-    public void tick() {
-        // TODO float on the surface instead of sink
-        super.tick();
-    }
-
-    @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
         // Silly easter egg
         if (!this.isPassenger()) {
@@ -113,5 +107,10 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
     @Override
     protected AbstractContainerMenu createMenu(final int id, final Inventory playerInventory) {
         return ChestMenu.threeRows(id, playerInventory, this);
+    }
+
+    @Override
+    public double getBuoyancy() {
+        return this.tickCount % 21 > 10 ? -0.01 : 0.01;
     }
 }
