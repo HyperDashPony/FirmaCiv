@@ -72,6 +72,12 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
 
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
+        // Silly easter egg
+        if (!this.isPassenger()) {
+            // TODO advancement? "Lost at sea"?
+            return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
+        }
+
         final InteractionResult interactionResult = super.interact(player, hand);
         if (interactionResult.consumesAction()) {
             player.awardStat(Stats.OPEN_BARREL);
