@@ -232,6 +232,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                 }
             }
 
+
         }
     }
 

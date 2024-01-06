@@ -313,10 +313,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             if (boomWindDifference < -171) {
                 boomWindDifference = Mth.wrapDegrees(boomWindDifference - 180);
             }
-            if (boomWindDifference > 5 && Math.abs(sheet - boom) > 2) {
+            if (boomWindDifference > 5) {
                 boom += 2f;
             }
-            if (boomWindDifference < -5 && Math.abs(sheet - boom) > 2) {
+            if (boomWindDifference < -5) {
                 boom -= 2f;
             }
 
