@@ -96,7 +96,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
                 this.setDeltaMovement(this.getDeltaMovement().add(0, -0.04D, 0));
                 if (this.isInWater() || this.level().getFluidState(this.blockPosition())
                         .is(TFCFluids.SALT_WATER.getSource())) {
-                    this.setDeltaMovement(0, -0.01D, 0);
+                    this.setDeltaMovement(0, this.getBuoyancy(), 0);
                     this.setYRot(this.getYRot() + 0.4f);
                 }
                 if (!this.onGround() || this.getDeltaMovement()
@@ -244,6 +244,14 @@ public abstract class AbstractCompartmentEntity extends Entity {
         compoundTag.putInt("Lifespan", this.lifespan);
         compoundTag.putInt("notRidingTicks", this.notRidingTicks);
         compoundTag.put("heldBlock", NbtUtils.writeBlockState(this.getDisplayBlockState()));
+    }
+
+    /**
+     * Allows children to easily override the buoyancy.
+     * This value is used as is so to have a compartment which floats you should return a positive value
+     */
+    public double getBuoyancy() {
+        return -0.01;
     }
 
     @Override
