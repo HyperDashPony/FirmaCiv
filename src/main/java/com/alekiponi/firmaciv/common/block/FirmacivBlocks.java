@@ -38,8 +38,8 @@ public final class FirmacivBlocks {
             () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
                     BoatVariant.ACACIA));
 
+    //TODO: swap between roofing types automatically on place
     /*
-    //TODO: swap between roofing types
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
             () -> new AngledRoofingBlock(BlockBehaviour.Properties.of().strength(0.6F, 0.4F).noOcclusion().isViewBlocking(TFCBlocks::never)
                             .sound(TFCSounds.THATCH).noCollission()));

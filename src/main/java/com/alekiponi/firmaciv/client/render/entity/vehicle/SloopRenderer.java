@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import net.dries007.tfc.client.RenderHelpers;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -73,7 +74,14 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
         sloopModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 
+        sloopModel.getMainsailParts().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                1.0F, 1.0F);
+        sloopModel.getMainsail()
+                .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                        1.0F, 1.0F);
         if(pEntity.getMainsailActive()){
+
+            /*
             if(!pEntity.getPaint().isEmpty() && pEntity.getPaintColor() != null){
                 double[] color = FirmacivRenderHelper.getColorFromName(pEntity.getPaintColor().getName());
                 double factor = 1.0;
@@ -87,22 +95,18 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
                 color[0]+=invFactor;
                 color[1]+=invFactor;
                 color[2]+=invFactor;
-                sloopModel.getMainsailMain()
+                sloopModel.getMainsail()
                         .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,(float)color[0], (float)color[1],
                                 (float)color[2], 1.0F);
             } else {
-                sloopModel.getMainsailMain()
-                        .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
-                                1.0F, 1.0F);
-            }
 
+            }*/
         }
         if(pEntity.getJibsailActive()){
-            sloopModel.getJibsailMain()
+            sloopModel.getJibsail()
                     .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
                             1.0F, 1.0F);
         }
-
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
             sloopModel.getWaterocclusion().render(poseStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
