@@ -28,6 +28,7 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraft.network.chat.Component;
 
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -76,45 +77,54 @@ public enum IngameOverlays {
                 net.minecraft.world.entity.Entity entity = mc.crosshairPickEntity;
                 PoseStack stack = graphics.pose();
 
-                stack.pushPose();
-                stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
-                stack.scale(1.0F, 1.0F, 1.0F);
+                Component press = Component.translatable("press_button");
+
+                Component toEject = Component.translatable("eject_passengers");
+
+                Component restlessPassenger = Component.translatable("restless_passenger");
 
                 String string = "";
 
+                stack.pushPose();
                 if (entity == null) {
-                    entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 5f);
+                    entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 2f);
                 }
 
                 if (entity instanceof LivingEntity livingEntity) {
                     if (livingEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
+
+                        stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
+                        stack.scale(1.0F, 1.0F, 1.0F);
                         long remainingTicks = (long) (ICalendar.TICKS_IN_DAY * 3) - (Calendars.SERVER.getTicks() - emptyCompartmentEntity.getPassengerRideTick());
 
                         if (remainingTicks <= ICalendar.TICKS_IN_DAY) {
-                            string = "This rider is restless. ";
+                            string = restlessPassenger.getString() + " ";
                         }
-                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage()
+                        string += press.getString() + " " + mc.options.keyShift.getTranslatedKeyMessage()
                                 .getString() + " + " + mc.options.keyUse.getTranslatedKeyMessage()
-                                .getString() + " to eject";
+                                .getString() + " " + toEject.getString();
                     }
-                }
-
-                if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
+                } else if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity) {
+                    stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
+                    stack.scale(1.0F, 1.0F, 1.0F);
                     if (emptyCompartmentEntity.getFirstPassenger() instanceof LivingEntity livingEntity) {
                         long remainingTicks = (long) (ICalendar.TICKS_IN_DAY * 3) - (Calendars.SERVER.getTicks() - emptyCompartmentEntity.getPassengerRideTick());
 
                         if (remainingTicks <= ICalendar.TICKS_IN_DAY) {
-                            string = "This rider is restless. ";
+                            string = restlessPassenger.getString() + " ";
                         }
-                        string += "Press " + mc.options.keyShift.getTranslatedKeyMessage()
+                        string += press.getString() + " " + mc.options.keyShift.getTranslatedKeyMessage()
                                 .getString() + " + " + mc.options.keyUse.getTranslatedKeyMessage()
-                                .getString() + " to eject";
+                                .getString() + " " + toEject.getString();
                     }
                 }
 
                 if (!string.equals("")) {
                     graphics.drawString(mc.font, string, -mc.font.width(string) / 2, 0, Color.WHITE.getRGB(), true);
                 }
+
+                //Component copyMessage = Component.translatable("eject_passengers_1");
+                //player.displayClientMessage(copyMessage, true);
 
                 stack.popPose();
             }
@@ -194,7 +204,7 @@ public enum IngameOverlays {
         if (mc.player != null) {
             Player player = mc.player;
             if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
-                net.minecraft.world.entity.Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 3f);
+                net.minecraft.world.entity.Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 4f);
                 PoseStack stack = graphics.pose();
 
                 stack.pushPose();

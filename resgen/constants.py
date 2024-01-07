@@ -204,6 +204,8 @@ DEFAULT_LANG = {
     "creativetab.watercraft_tab": "Watercraft",
     "creativetab.navigation_tab": "Navigation",
 
+
+
     "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_olive": "Large Waterproof Hide",
     "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_tallow": "Large Waterproof Hide",
 
@@ -211,6 +213,22 @@ DEFAULT_LANG = {
     "copy_longitude": "Copy Longitude to Clipboard",
     "copy_latlon": "Copy Latitude and Longitude to Clipboard",
     "copy_altitude": "Copy Altitude to Clipboard",
+
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "degrees": "Degrees",
+    "sea_level": "Sea Level",
+    "north": "North",
+    "south": "South",
+    "east": "East",
+    "west": "West",
+    "above": "Above",
+    "below": "Below",
+    "meters": "Meters",
+
+    "press_button": "Press",
+    "eject_passengers": "to eject",
+    "restless_passenger": "This passenger is restless.",
 
     "firmaciv.advancements.kayak_paddle.title": "Double Trouble",
     "firmaciv.advancements.kayak_paddle.description": "Craft a Kayak Paddle",
