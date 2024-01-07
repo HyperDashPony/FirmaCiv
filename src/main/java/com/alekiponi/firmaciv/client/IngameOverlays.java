@@ -50,12 +50,10 @@ public enum IngameOverlays {
     final IGuiOverlay overlay;
     private final String id;
 
-
     IngameOverlays(IGuiOverlay overlay) {
         this.id = this.name().toLowerCase(Locale.ROOT);
         this.overlay = overlay;
     }
-
 
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
         above(event, VanillaGuiOverlay.CROSSHAIR, COMPARTMENT_STATUS);

@@ -41,6 +41,8 @@ public class AbstractNavItem extends Item {
 
         Component longitudeComponent = Component.translatable("longitude");
 
+        Component altitudeComponent = Component.translatable("altitude");
+
         Component degreesComponent = Component.translatable("degrees");
 
         Component seaLevelComponent = Component.translatable("sea_level");
@@ -68,12 +70,12 @@ public class AbstractNavItem extends Item {
         String lonStr = longitudeComponent.getString() + ": " + df.format(
                 Math.abs(longitude)) + " " + degreesComponent.getString() + " " + (longitude > 0 ? eastComponent.getString() : westComponent.getString());
 
-        String altStr = latitudeComponent.getString() + ": " + dfAlt.format(
+        String altStr = altitudeComponent.getString() + ": " + dfAlt.format(
                 Math.abs(altitude)) + " " + meters.getString()+ " " + (altitude > 0 ? above.getString() : below.getString()) + " " + seaLevelComponent.getString();
 
         String latSim = latitudeComponent.getString(3) + ": " + df.format(Math.abs(latitude)) + " " + (latitude > 0 ? southComponent.getString(1) : northComponent.getString(1));
         String lonSim = longitudeComponent.getString(3) + ": " + df.format(Math.abs(longitude)) + " " + (longitude > 0 ? eastComponent.getString(1) : westComponent.getString(1));
-        String altSim = longitudeComponent.getString(3) + ": " + dfAlt.format(altitude);
+        String altSim = altitudeComponent.getString(3) + ": " + dfAlt.format(altitude);
 
         return new String[]{latStr, lonStr, altStr, latSim, lonSim, altSim};
 
@@ -126,7 +128,6 @@ public class AbstractNavItem extends Item {
                 simpleLocationText =
                         navStrings[AbstractNavItem.NavSelection.LAT_SIMPLE.ordinal()] + ", " +
                                 navStrings[AbstractNavItem.NavSelection.LON_SIMPLE.ordinal()];
-                Component.translatable("copy_latlon");
                 break;
         }
 

@@ -216,6 +216,7 @@ DEFAULT_LANG = {
 
     "latitude": "Latitude",
     "longitude": "Longitude",
+    "altitude": "Altitude",
     "degrees": "Degrees",
     "sea_level": "Sea Level",
     "north": "North",
@@ -246,5 +247,4 @@ DEFAULT_LANG = {
     "firmaciv.advancements.barometer.description": "Craft a Barometer",
     "firmaciv.advancements.oarlock.title": "The Montlake Cut",
     "firmaciv.advancements.oarlock.description": "Smith an Oarlock"
-
 }

@@ -93,6 +93,7 @@
   "copy_altitude": "Copy Altitude to Clipboard",
   "latitude": "Latitude",
   "longitude": "Longitude",
+  "altitude": "Altitude",
   "degrees": "Degrees",
   "sea_level": "Sea Level",
   "north": "North",
