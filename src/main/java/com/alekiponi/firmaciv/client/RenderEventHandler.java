@@ -12,7 +12,7 @@ import com.alekiponi.firmaciv.client.render.entity.vehicle.KayakRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.RowboatRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.SloopRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.AnchorRenderer;
-import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.CompartmentRenderer;
+import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.BlockCompartmentRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.InvisibleHelperRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.VehicleCleatRenderer;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
@@ -41,12 +41,14 @@ public final class RenderEventHandler {
         }
         event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), KayakRenderer::new);
 
-        event.registerEntityRenderer(FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.TFC_CHEST_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.BARREL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.EMPTY_COMPARTMENT_ENTITY.get(), NoopRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.TFC_CHEST_COMPARTMENT_ENTITY.get(),
+                BlockCompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.BARREL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), ChestCompartmentRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
-        event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), CompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(),
+                BlockCompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.BOAT_VEHICLE_PART.get(), InvisibleHelperRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.SAIL_SWITCH_ENTITY.get(), InvisibleHelperRenderer::new);
