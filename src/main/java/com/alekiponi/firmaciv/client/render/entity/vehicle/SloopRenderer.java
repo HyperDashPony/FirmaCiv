@@ -74,36 +74,23 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
         sloopModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 
-        sloopModel.getMainsailParts().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
-                1.0F, 1.0F);
-        sloopModel.getMainsail()
-                .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
-                        1.0F, 1.0F);
+
         if(pEntity.getMainsailActive()){
-
-            /*
-            if(!pEntity.getPaint().isEmpty() && pEntity.getPaintColor() != null){
-                double[] color = FirmacivRenderHelper.getColorFromName(pEntity.getPaintColor().getName());
-                double factor = 1.0;
-                if(color[0] == color[1] && color[1] == color[2]){
-                    factor = 0.9;
-                }
-                double invFactor = 1-factor;
-                color[0]*=factor;
-                color[1]*=factor;
-                color[2]*=factor;
-                color[0]+=invFactor;
-                color[1]+=invFactor;
-                color[2]+=invFactor;
-                sloopModel.getMainsail()
-                        .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,(float)color[0], (float)color[1],
-                                (float)color[2], 1.0F);
-            } else {
-
-            }*/
+            sloopModel.getMainsailDeployedParts().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                    1.0F, 1.0F);
+            sloopModel.getMainsail()
+                    .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                            1.0F, 1.0F);
+        } else {
+            sloopModel.getMainsailFurledParts().render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                    1.0F, 1.0F);
         }
         if(pEntity.getJibsailActive()){
             sloopModel.getJibsail()
+                    .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
+                            1.0F, 1.0F);
+        } else {
+            sloopModel.getJibsailFurled()
                     .render(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY,1.0F, 1.0F,
                             1.0F, 1.0F);
         }

@@ -414,8 +414,8 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                         }
                         if (cleat.distanceTo(leashHolder) > 4f) {
                             Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(cleat.getPosition(0)).normalize();
-                            Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.12f, this.getDeltaMovement().y,
-                                    vectorToVehicle.z * -0.12f);
+                            Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.04f, this.getDeltaMovement().y,
+                                    vectorToVehicle.z * -0.04f);
                             double vehicleSize = Mth.clamp(this.getBbWidth(), 1, 100);
                             movementVector = movementVector.multiply(1 / vehicleSize, 0, 1 / vehicleSize);
 
