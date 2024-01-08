@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -72,7 +73,7 @@ public enum IngameOverlays {
             Player player = mc.player;
 
             if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
-                net.minecraft.world.entity.Entity entity = mc.crosshairPickEntity;
+                Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 2f);
                 PoseStack stack = graphics.pose();
 
                 Component press = Component.translatable("press_button");
@@ -84,9 +85,6 @@ public enum IngameOverlays {
                 String string = "";
 
                 stack.pushPose();
-                if (entity == null) {
-                    entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 2f);
-                }
 
                 if (entity instanceof LivingEntity livingEntity) {
                     if (livingEntity.getVehicle() instanceof EmptyCompartmentEntity emptyCompartmentEntity) {

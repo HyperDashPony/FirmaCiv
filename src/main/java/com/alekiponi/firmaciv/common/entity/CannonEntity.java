@@ -95,10 +95,9 @@ public class CannonEntity extends Entity {
                     }
                 }
             }
-
+            this.checkInsideBlocks();
             this.updateInWaterStateAndDoFluidPushing();
         }
-        this.checkInsideBlocks();
         tickLerp();
         this.setFuseTime(this.getFuseTime()-1);
         if(this.getFuseTime() > 0){
