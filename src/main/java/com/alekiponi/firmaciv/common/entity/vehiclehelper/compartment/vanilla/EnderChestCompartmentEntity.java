@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -57,7 +58,7 @@ public class EnderChestCompartmentEntity extends AbstractCompartmentEntity imple
         super(entityType, level);
     }
 
-    public EnderChestCompartmentEntity(final EntityType<? extends EnderChestCompartmentEntity> entityType,
+    public EnderChestCompartmentEntity(final CompartmentType<? extends EnderChestCompartmentEntity> entityType,
             final Level level, final ItemStack itemStack) {
         this(entityType, level);
 

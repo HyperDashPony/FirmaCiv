@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.ContainerCompartmentEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -52,7 +53,7 @@ public class ChestCompartmentEntity extends ContainerCompartmentEntity {
         super(entityType, level, 27);
     }
 
-    public ChestCompartmentEntity(final EntityType<? extends ChestCompartmentEntity> entityType, final Level level,
+    public ChestCompartmentEntity(final CompartmentType<? extends ChestCompartmentEntity> entityType, final Level level,
             final ItemStack itemStack) {
         this(entityType, level);
         if (itemStack.getItem() instanceof BlockItem blockItem) {
