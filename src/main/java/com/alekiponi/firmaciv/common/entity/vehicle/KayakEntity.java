@@ -177,4 +177,9 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     public ResourceLocation getTextureLocation() {
         return new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/kayak.png");
     }
+
+    @Override
+    public float getStepHeight(){
+        return 0.6f;
+    }
 }

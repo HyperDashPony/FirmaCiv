@@ -276,7 +276,7 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public float getStepHeight(){
-        return 0.6f;
+        return 0.0f;
     }
 }
 

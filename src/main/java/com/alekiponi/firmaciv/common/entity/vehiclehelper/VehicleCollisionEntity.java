@@ -86,7 +86,7 @@ public class VehicleCollisionEntity extends AbstractInvisibleHelper {
         if(this.getRootVehicle() instanceof CanoeEntity){
             return new EntityDimensions(1.125f, 0.625f, false);
         }
-        return new EntityDimensions(1,1, false);
+        return super.getDimensions(pPose);
     }
 
     protected void recalculateBoundingBox() {

@@ -412,16 +412,12 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                         if(this.getEntitiesToTakeWith().contains(player)){
                             return;
                         }
-                        if (this.distanceTo(leashHolder) > 4f) {
-                            Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
-                            Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.5f, this.getDeltaMovement().y,
-                                    vectorToVehicle.z * -0.5f);
+                        if (cleat.distanceTo(leashHolder) > 4f) {
+                            Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(cleat.getPosition(0)).normalize();
+                            Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.12f, this.getDeltaMovement().y,
+                                    vectorToVehicle.z * -0.12f);
                             double vehicleSize = Mth.clamp(this.getBbWidth(), 1, 100);
                             movementVector = movementVector.multiply(1 / vehicleSize, 0, 1 / vehicleSize);
-
-                            if(this.status == Status.ON_LAND){
-                                movementVector = movementVector.multiply(0.1f, 0.1f, 0.1f);
-                            }
 
                             double d0 = leashHolder.getPosition(0).x - this.getX();
                             double d2 = leashHolder.getPosition(0).z - this.getZ();
@@ -430,6 +426,8 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                                     (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
 
                             double difference = (leashHolder.getY()) - this.getY();
+
+
                             if (leashHolder.getY() > this.getY() && difference >= 0.4 && difference <= 1.0 && this.getDeltaMovement()
                                     .length() < 0.02f) {
                                 this.setPos(this.getX(), this.getY() + 0.55f, this.getZ());
@@ -443,7 +441,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                         }
                     }
                     if (leashHolder instanceof HangingEntity && this.status != Status.ON_LAND) {
-                        Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(this.getPosition(0)).normalize();
+                        Vec3 vectorToVehicle = leashHolder.getPosition(0).vectorTo(cleat.getPosition(0)).normalize();
                         Vec3 movementVector = new Vec3(vectorToVehicle.x * -0.005f, this.getDeltaMovement().y,
                                 vectorToVehicle.z * -0.005f);
                         double d0 = leashHolder.getPosition(0).x - this.getX();

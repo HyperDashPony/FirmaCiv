@@ -80,7 +80,7 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<VehicleCollisionEntity>> VEHICLE_COLLISION_ENTITY = ENTITY_TYPES.register(
             "vehicle_collider",
-            () -> EntityType.Builder.of(VehicleCollisionEntity::new, MobCategory.MISC).sized(1.5F, 0.75F).noSummon()
+            () -> EntityType.Builder.of(VehicleCollisionEntity::new, MobCategory.MISC).sized(1F, 1F).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_collider").toString()));
 
     public static final RegistryObject<EntityType<SailSwitchEntity>> SAIL_SWITCH_ENTITY = ENTITY_TYPES.register(

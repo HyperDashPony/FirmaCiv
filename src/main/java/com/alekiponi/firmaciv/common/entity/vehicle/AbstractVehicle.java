@@ -45,7 +45,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity {
+public abstract class AbstractVehicle extends Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_HURT = SynchedEntityData.defineId(
             AbstractVehicle.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(
@@ -836,38 +836,6 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     }
 
     @Override
-    protected void checkInsideBlocks() {
-        super.checkInsideBlocks();
-        for(VehicleCollisionEntity collider : this.getColliders()){
-            AABB aabb = collider.getBoundingBox();
-            BlockPos blockpos = BlockPos.containing(aabb.minX + 1.0E-7D, aabb.minY + 1.0E-7D, aabb.minZ + 1.0E-7D);
-            BlockPos blockpos1 = BlockPos.containing(aabb.maxX - 1.0E-7D, aabb.maxY - 1.0E-7D, aabb.maxZ - 1.0E-7D);
-            if (this.level().hasChunksAt(blockpos, blockpos1)) {
-                BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-
-                for(int i = blockpos.getX(); i <= blockpos1.getX(); ++i) {
-                    for(int j = blockpos.getY(); j <= blockpos1.getY(); ++j) {
-                        for(int k = blockpos.getZ(); k <= blockpos1.getZ(); ++k) {
-                            blockpos$mutableblockpos.set(i, j, k);
-                            BlockState blockstate = this.level().getBlockState(blockpos$mutableblockpos);
-
-                            try {
-                                blockstate.entityInside(this.level(), blockpos$mutableblockpos, this);
-                                this.onInsideBlock(blockstate);
-                            } catch (Throwable throwable) {
-                                CrashReport crashreport = CrashReport.forThrowable(throwable, "Colliding entity with block");
-                                CrashReportCategory crashreportcategory = crashreport.addCategory("Block being collided with");
-                                CrashReportCategory.populateBlockDetails(crashreportcategory, this.level(), blockpos$mutableblockpos, blockstate);
-                                throw new ReportedException(crashreport);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
     public ItemStack getPickResult() {
         return new ItemStack(this.getDropItem());
     }
@@ -880,6 +848,37 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
         return new AABB(startingPoint, endingPoint);
     }
 
+    @NotNull
+    @Override
+    protected Vec3 collide(Vec3 pVec){
+        // TODO make this work by applying the angular velocity to each collider and by making collision affect deltaRotation
+        Vec3 originalCollision = super.collide(pVec);
+        /*
+        if(originalCollision.horizontalDistance() == 0){
+            return originalCollision;
+        }
+        ArrayList<Vec3> addedCollisions = new ArrayList<>();
+        for(VehicleCollisionEntity collider : this.getColliders()){
+            // apply angular velocity to pVec
+            // apply collision to deltaRotation
+
+            AABB aabb = collider.getBoundingBox();
+            List<VoxelShape> list = collider.level().getEntityCollisions(collider, aabb.expandTowards(pVec));
+            Vec3 vec3 = pVec.lengthSqr() == 0.0D ? pVec : collideBoundingBox(collider, pVec, aabb, this.level(), list);
+
+            addedCollisions.add(vec3);
+        }
+
+        // resolve collisions
+        //addedCollisions.add(originalCollision);
+        Vec3 finalCollision = new Vec3(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
+        for(Vec3 collision : addedCollisions){
+            if(collision.horizontalDistance() < finalCollision.horizontalDistance()){
+                finalCollision = collision;
+            }
+        }*/
+        return originalCollision;
+    }
     @Override
     public void onAboveBubbleCol(boolean pDownwards) {
     }
