@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.ContainerCompartmentEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -55,8 +56,8 @@ public class BarrelCompartmentEntity extends ContainerCompartmentEntity {
         super(entityType, level, 27);
     }
 
-    public BarrelCompartmentEntity(final EntityType<? extends BarrelCompartmentEntity> entityType, final Level level,
-            final ItemStack ignoredItemStack) {
+    public BarrelCompartmentEntity(final CompartmentType<? extends BarrelCompartmentEntity> entityType,
+            final Level level, final ItemStack ignoredItemStack) {
         this(entityType, level);
         this.setDisplayBlockState(Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.UP)
                 .setValue(BarrelBlock.OPEN, false));

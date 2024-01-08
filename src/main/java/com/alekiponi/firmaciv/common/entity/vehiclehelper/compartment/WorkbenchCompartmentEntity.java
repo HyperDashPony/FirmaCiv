@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -30,7 +31,7 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
         super(entityType, level);
     }
 
-    public WorkbenchCompartmentEntity(final EntityType<? extends WorkbenchCompartmentEntity> entityType,
+    public WorkbenchCompartmentEntity(final CompartmentType<? extends WorkbenchCompartmentEntity> entityType,
             final Level level, final ItemStack itemStack) {
         this(entityType, level);
         if (itemStack.getItem() instanceof BlockItem blockItem) {

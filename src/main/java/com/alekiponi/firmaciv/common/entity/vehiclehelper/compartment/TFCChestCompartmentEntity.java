@@ -1,5 +1,6 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import net.dries007.tfc.common.container.RestrictedChestContainer;
 import net.dries007.tfc.common.container.TFCContainerTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -21,7 +22,7 @@ public class TFCChestCompartmentEntity extends ContainerCompartmentEntity {
         super(entityType, level, 18);
     }
 
-    public TFCChestCompartmentEntity(final EntityType<? extends TFCChestCompartmentEntity> entityType,
+    public TFCChestCompartmentEntity(final CompartmentType<? extends TFCChestCompartmentEntity> entityType,
             final Level level, final ItemStack itemStack) {
         this(entityType, level);
         if (itemStack.getItem() instanceof BlockItem blockItem) {
