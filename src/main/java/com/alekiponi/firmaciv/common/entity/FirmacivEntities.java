@@ -8,6 +8,7 @@ import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ChestCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.EnderChestCompartmentEntity;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.world.entity.Entity;
@@ -56,6 +57,9 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<ChestCompartmentEntity>> CHEST_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_chest", EntityType.Builder.of(ChestCompartmentEntity::new, MobCategory.MISC));
+
+    public static final RegistryObject<EntityType<EnderChestCompartmentEntity>> ENDER_CHEST_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_ender_chest", EntityType.Builder.of(EnderChestCompartmentEntity::new, MobCategory.MISC));
 
     public static final RegistryObject<EntityType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_workbench", EntityType.Builder.of(WorkbenchCompartmentEntity::new, MobCategory.MISC));
