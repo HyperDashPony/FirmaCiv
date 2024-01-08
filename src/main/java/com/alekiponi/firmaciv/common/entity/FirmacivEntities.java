@@ -6,14 +6,14 @@ import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ChestCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.EnderChestCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.*;
 import com.alekiponi.firmaciv.util.BoatVariant;
+import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -42,31 +42,41 @@ public final class FirmacivEntities {
             EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F));
 
     public static final RegistryObject<EntityType<SloopEntity>> SLOOP = register("sloop",
-            EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F)
-                    .setTrackingRange(LARGE_VEHICLE_TRACKING));
+            EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F).clientTrackingRange(32));
 
-    public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_empty", EntityType.Builder.of(EmptyCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = register(
+            "compartment_empty",
+            EntityType.Builder.of(EmptyCompartmentEntity::new, MobCategory.MISC).sized(0.6F, 0.7F).fireImmune()
+                    .noSummon());
 
-    public static final RegistryObject<EntityType<TFCChestCompartmentEntity>> TFC_CHEST_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_tfcchest", EntityType.Builder.of(TFCChestCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<CompartmentType<TFCChestCompartmentEntity>> TFC_CHEST_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_tfcchest",
+            CompartmentType.Builder.of(TFCChestCompartmentEntity::new, TFCChestCompartmentEntity::new,
+                    itemStack -> itemStack.is(FirmacivTags.Items.CHESTS), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<BarrelCompartmentEntity>> BARREL_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_barrel", EntityType.Builder.of(BarrelCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<CompartmentType<BarrelCompartmentEntity>> BARREL_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_barrel", CompartmentType.Builder.of(BarrelCompartmentEntity::new, BarrelCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.BARREL.asItem()), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<ChestCompartmentEntity>> CHEST_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_chest", EntityType.Builder.of(ChestCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<CompartmentType<ChestCompartmentEntity>> CHEST_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_chest", CompartmentType.Builder.of(ChestCompartmentEntity::new, ChestCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.CHEST.asItem()), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<EnderChestCompartmentEntity>> ENDER_CHEST_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_ender_chest", EntityType.Builder.of(EnderChestCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<CompartmentType<EnderChestCompartmentEntity>> ENDER_CHEST_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_ender_chest",
+            CompartmentType.Builder.of(EnderChestCompartmentEntity::new, EnderChestCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.ENDER_CHEST.asItem()), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_workbench", EntityType.Builder.of(WorkbenchCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<CompartmentType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_workbench",
+            CompartmentType.Builder.of(WorkbenchCompartmentEntity::new, WorkbenchCompartmentEntity::new,
+                    itemStack -> itemStack.is(FirmacivTags.Items.WORKBENCHES), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<AnvilCompartmentEntity>> ANVIL_COMPARTMENT_ENTITY = registerCompartment(
-            "compartment_anvil", EntityType.Builder.of(AnvilCompartmentEntity::new, MobCategory.MISC));
+    public static final RegistryObject<CompartmentType<AnvilCompartmentEntity>> ANVIL_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_anvil", CompartmentType.Builder.of(AnvilCompartmentEntity::new, AnvilCompartmentEntity::new,
+                    itemStack -> itemStack.is(FirmacivTags.Items.ANVILS), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<BoatVehiclePart>> BOAT_VEHICLE_PART = register("vehicle_part_boat",
+    public static final RegistryObject<EntityType<BoatVehiclePart>> BOAT_VEHICLE_PART = register("vehicle_part",
             EntityType.Builder.of(BoatVehiclePart::new, MobCategory.MISC).sized(0, 0)
                     .setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon());
 
@@ -102,9 +112,19 @@ public final class FirmacivEntities {
             EntityType.Builder.of(MastEntity::new, MobCategory.MISC).sized(0.3F, 8)
                     .setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon());
 
-    public static <E extends AbstractCompartmentEntity> RegistryObject<EntityType<E>> registerCompartment(
-            final String name, final EntityType.Builder<E> builder) {
-        return register(name, builder.sized(0.6F, 0.7F).fireImmune().noSummon());
+    private static <E extends AbstractCompartmentEntity> RegistryObject<CompartmentType<E>> registerCompartment(
+            final String name, final CompartmentType.Builder<E> builder) {
+        return registerCompartment(name, builder.sized(0.6F, 0.7F).fireImmune().noSummon(), true);
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static <E extends AbstractCompartmentEntity> RegistryObject<CompartmentType<E>> registerCompartment(
+            final String name, final CompartmentType.Builder<E> builder, final boolean serialize) {
+        final String id = name.toLowerCase(Locale.ROOT);
+        return ENTITY_TYPES.register(id, () -> {
+            if (!serialize) builder.noSave();
+            return CompartmentType.register(builder.build(MOD_ID + ":" + id));
+        });
     }
 
     private static <E extends Entity> RegistryObject<EntityType<E>> register(final String name,
