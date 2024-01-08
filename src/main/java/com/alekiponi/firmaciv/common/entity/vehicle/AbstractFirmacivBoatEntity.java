@@ -190,7 +190,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.tickPaddlingEffects();
 
         // all movement code should happen before collision check
-        this.checkInsideBlocks();
+        //this.checkInsideBlocks();
 
         this.tickUpdateWind(true);
 
@@ -418,6 +418,10 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                                     vectorToVehicle.z * -0.5f);
                             double vehicleSize = Mth.clamp(this.getBbWidth(), 1, 100);
                             movementVector = movementVector.multiply(1 / vehicleSize, 0, 1 / vehicleSize);
+
+                            if(this.status == Status.ON_LAND){
+                                movementVector = movementVector.multiply(0.1f, 0.1f, 0.1f);
+                            }
 
                             double d0 = leashHolder.getPosition(0).x - this.getX();
                             double d2 = leashHolder.getPosition(0).z - this.getZ();

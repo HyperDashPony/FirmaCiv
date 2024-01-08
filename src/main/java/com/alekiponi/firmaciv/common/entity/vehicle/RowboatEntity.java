@@ -251,4 +251,9 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
         return new ResourceLocation(Firmaciv.MOD_ID,
                 "textures/entity/watercraft/rowboat/" + getVariant().getName() + ".png");
     }
+
+    @Override
+    public float getStepHeight(){
+        return 0.6f;
+    }
 }

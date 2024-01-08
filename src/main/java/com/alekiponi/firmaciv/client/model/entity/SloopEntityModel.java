@@ -718,8 +718,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         animateMainsail(pEntity, limbSwing, mainsail_main,mainsail, mainSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
         animateJibsail(pEntity, limbSwing, jibsail_main, jibSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
         animateRudder(pEntity, limbSwing, rudder, (float) Math.toRadians(pEntity.getRudderRotation()));
-        animateWindIndicator(pEntity, limbSwing, wind_indicator);
-        animateSailforceIndicator(pEntity, limbSwing, sail_force_indicator);
+
     }
 
     private ModelPart[][] mainSailParts = new ModelPart[mainsail_horizontal_sections][mainsail_vertical_sections];

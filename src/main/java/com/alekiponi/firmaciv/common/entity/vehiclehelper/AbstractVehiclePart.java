@@ -1,9 +1,9 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractVehicle;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -103,9 +103,9 @@ public abstract class AbstractVehiclePart extends AbstractInvisibleHelper {
     protected boolean tickAddCollider(AbstractVehicle vehicle) {
         for (int i : vehicle.getColliderIndices()) {
             if (vehicle.getPassengers().get(i).is(this) && !vehicle.getPassengers().get(i).isVehicle()) {
-
                 final VehicleCollisionEntity collider = FirmacivEntities.VEHICLE_COLLISION_ENTITY.get()
                         .create(this.level());
+
                 assert collider != null;
                 collider.setPos(this.getX(), this.getY(), this.getZ());
                 if (!collider.startRiding(this)) {

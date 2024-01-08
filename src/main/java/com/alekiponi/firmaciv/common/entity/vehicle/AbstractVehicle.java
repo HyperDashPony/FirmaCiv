@@ -10,6 +10,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.BlockUtil;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -829,6 +832,38 @@ public abstract class AbstractVehicle extends net.minecraft.world.entity.Entity 
     protected void addPassenger(net.minecraft.world.entity.Entity passenger) {
         if (passenger instanceof AbstractVehiclePart) {
             super.addPassenger(passenger);
+        }
+    }
+
+    @Override
+    protected void checkInsideBlocks() {
+        super.checkInsideBlocks();
+        for(VehicleCollisionEntity collider : this.getColliders()){
+            AABB aabb = collider.getBoundingBox();
+            BlockPos blockpos = BlockPos.containing(aabb.minX + 1.0E-7D, aabb.minY + 1.0E-7D, aabb.minZ + 1.0E-7D);
+            BlockPos blockpos1 = BlockPos.containing(aabb.maxX - 1.0E-7D, aabb.maxY - 1.0E-7D, aabb.maxZ - 1.0E-7D);
+            if (this.level().hasChunksAt(blockpos, blockpos1)) {
+                BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+
+                for(int i = blockpos.getX(); i <= blockpos1.getX(); ++i) {
+                    for(int j = blockpos.getY(); j <= blockpos1.getY(); ++j) {
+                        for(int k = blockpos.getZ(); k <= blockpos1.getZ(); ++k) {
+                            blockpos$mutableblockpos.set(i, j, k);
+                            BlockState blockstate = this.level().getBlockState(blockpos$mutableblockpos);
+
+                            try {
+                                blockstate.entityInside(this.level(), blockpos$mutableblockpos, this);
+                                this.onInsideBlock(blockstate);
+                            } catch (Throwable throwable) {
+                                CrashReport crashreport = CrashReport.forThrowable(throwable, "Colliding entity with block");
+                                CrashReportCategory crashreportcategory = crashreport.addCategory("Block being collided with");
+                                CrashReportCategory.populateBlockDetails(crashreportcategory, this.level(), blockpos$mutableblockpos, blockstate);
+                                throw new ReportedException(crashreport);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

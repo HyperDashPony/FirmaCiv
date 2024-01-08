@@ -3,35 +3,60 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.BoatVariant;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 
 public class CanoeEntity extends AbstractFirmacivBoatEntity {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
             EntityDataSerializers.INT);
-    public final int PASSENGER_NUMBER = 3;
+
+    private static final EntityDataAccessor<Integer> DATA_ID_LENGTH = SynchedEntityData.defineId(CanoeEntity.class,
+            EntityDataSerializers.INT);
+    public final int PASSENGER_NUMBER = 5;
     public final int[] CLEATS = {2};
     protected final float DAMAGE_THRESHOLD = 80.0f;
     protected final float DAMAGE_RECOVERY = 2.0f;
     protected final float PASSENGER_SIZE_LIMIT = 0.9F;
 
+    public final int[] COLLIDERS = {3, 4};
+
     public CanoeEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
-
         final String name = entityType.toString().split("canoe.")[1];
-
         this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
+    }
+
+    @Override
+    public InteractionResult interact(final Player player, final InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(FirmacivItems.CANOE_PADDLE.get()) && player.isCreative() && player.isSecondaryUseActive()) {
+            if(this.getLength() == 5){
+                this.setLength(3);
+            } else {
+                this.setLength(this.getLength() +1);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        return super.interact(player, hand);
     }
 
     @Override
@@ -71,7 +96,7 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public int[] getColliderIndices() {
-        return new int[0];
+        return COLLIDERS;
     }
 
     @Override
@@ -124,21 +149,61 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
         switch (index) {
             case 0 -> {
                 //forward seat
-                localX = 0.3f;
                 localZ = 0.0f;
                 localY += 0.0625f;
+                if(this.getLength() == 3){
+                    localX = 0.3f;
+                } else if(this.getLength() == 4){
+                    localX = 0.4f;
+                } else if(this.getLength() == 5){
+                    localX = 1.0f;
+                }
             }
             case 1 -> {
                 //rear seat
-                localX = -0.7f;
                 localZ = 0.0f;
                 localY += 0.0625f;
+                if(this.getLength() == 3){
+                    localX = -0.7f;
+                } else if(this.getLength() == 4){
+                    localX = -0.7f - 0.1f;
+                } else if(this.getLength() == 5){
+                    localX = -0.7f - 0.6f;
+                }
             }
             //cleat
             case 2 -> {
-                localX = 1.0f;
                 localZ = 0.0f;
                 localY += 0.45f;
+                if(this.getLength() == 3){
+                    localX = 1.0f;
+                } else if(this.getLength() == 4){
+                    localX = 1.5f;
+                } else if(this.getLength() == 5){
+                    localX = 2.0f;
+                }
+            }
+            case 3 -> {
+                localZ = 0.0f;
+                localY += 0.0;
+                if(this.getLength() == 3){
+                    localX = 0.7f;
+                } else if(this.getLength() == 4){
+                    localX = 1.3f;
+                } else if(this.getLength() == 5){
+                    localX = 1.7f;
+                }
+            }
+            case 4 -> {
+                localZ = 0.0f;
+                localY += 0.0;
+                if(this.getLength() == 3){
+                    localX = -0.7f;
+                } else if(this.getLength() == 4){
+                    localX = -1.3f;
+                } else if(this.getLength() == 5){
+                    localX = -1.7f;
+                }
             }
         }
         return new Vec3(localX, localY, localZ);
@@ -155,6 +220,14 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
 
     public BoatVariant getVariant() {
         return BoatVariant.byId(this.entityData.get(DATA_ID_TYPE));
+    }
+
+    public void setLength(int length){
+        this.entityData.set(DATA_ID_LENGTH, Mth.clamp(length, 3, 5));
+    }
+
+    public int getLength(){
+        return this.entityData.get(DATA_ID_LENGTH);
     }
 
     @Override
@@ -177,9 +250,33 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
         return new ItemStack(this.getDropItem());
     }
 
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_ID_LENGTH, 3);
+
+    }
+
+    @Override
+    protected void readAdditionalSaveData(final CompoundTag compoundTag) {
+        super.readAdditionalSaveData(compoundTag);
+        this.setLength(compoundTag.getInt("length"));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(final CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+        compoundTag.putInt("length", this.getLength());
+    }
 
     public ResourceLocation getTextureLocation() {
         return new ResourceLocation(Firmaciv.MOD_ID,
                 "textures/entity/watercraft/dugout_canoe/" + getVariant().getName() + ".png");
     }
+
+    @Override
+    public float getStepHeight(){
+        return 0.6f;
+    }
 }
+

@@ -67,11 +67,29 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
         }
         canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
+        if(pEntity.getLength() >= 4){
+            canoeModel.getMiddleMid()
+                    .render(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
+        if(pEntity.getLength() == 5){
+            canoeModel.getMiddleStern()
+                    .render(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            canoeModel.getBars()
+                    .render(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        }
 
         if (!pEntity.isUnderWater()) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            canoeModel.getWaterocclusion()
-                    .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            if(pEntity.getLength() == 3){
+                canoeModel.getWaterocclusion3()
+                        .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            } else if (pEntity.getLength() == 4){
+                canoeModel.getWaterocclusion4()
+                        .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            } else if (pEntity.getLength() == 5){
+                canoeModel.getWaterocclusion5()
+                        .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+            }
         }
 
         pMatrixStack.popPose();
