@@ -41,6 +41,10 @@ public final class RenderEventHandler {
                 BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.BARREL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), ChestCompartmentRenderer::new);
+
+        event.registerEntityRenderer(FirmacivEntities.ENDER_CHEST_COMPARTMENT_ENTITY.get(),
+                BlockCompartmentRenderer::new);
+
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(),
                 BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
