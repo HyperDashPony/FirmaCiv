@@ -9,6 +9,7 @@ import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ChestCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.EnderChestCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ShulkerBoxCompartmentEntity;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.Helpers;
@@ -70,6 +71,11 @@ public final class FirmacivEntities {
             "compartment_ender_chest",
             CompartmentType.Builder.of(EnderChestCompartmentEntity::new, EnderChestCompartmentEntity::new,
                     itemStack -> itemStack.is(Blocks.ENDER_CHEST.asItem()), MobCategory.MISC));
+
+    public static final RegistryObject<CompartmentType<ShulkerBoxCompartmentEntity>> SHULKER_BOX_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_shulker_box",
+            CompartmentType.Builder.of(ShulkerBoxCompartmentEntity::new, ShulkerBoxCompartmentEntity::new,
+                    itemStack -> itemStack.is(FirmacivTags.Items.SHULKER_BOX), MobCategory.MISC));
 
     public static final RegistryObject<CompartmentType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_workbench",
