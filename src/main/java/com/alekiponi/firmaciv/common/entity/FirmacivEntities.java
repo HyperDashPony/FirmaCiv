@@ -67,6 +67,11 @@ public final class FirmacivEntities {
             CompartmentType.Builder.of(EnderChestCompartmentEntity::new, EnderChestCompartmentEntity::new,
                     itemStack -> itemStack.is(Blocks.ENDER_CHEST.asItem()), MobCategory.MISC));
 
+    public static final RegistryObject<CompartmentType<ShulkerBoxCompartmentEntity>> SHULKER_BOX_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_shulker_box",
+            CompartmentType.Builder.of(ShulkerBoxCompartmentEntity::new, ShulkerBoxCompartmentEntity::new,
+                    itemStack -> itemStack.is(FirmacivTags.Items.SHULKER_BOX), MobCategory.MISC));
+
     public static final RegistryObject<CompartmentType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_workbench",
             CompartmentType.Builder.of(WorkbenchCompartmentEntity::new, WorkbenchCompartmentEntity::new,
