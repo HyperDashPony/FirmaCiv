@@ -44,7 +44,7 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.CHEST_COMPARTMENT_ENTITY.get(), ChestCompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.ENDER_CHEST_COMPARTMENT_ENTITY.get(),
-                BlockCompartmentRenderer::new);
+                EnderChestCompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(),
                 BlockCompartmentRenderer::new);
