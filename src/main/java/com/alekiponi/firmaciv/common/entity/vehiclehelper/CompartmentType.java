@@ -35,6 +35,7 @@ public class CompartmentType<T extends AbstractCompartmentEntity> extends Entity
     private final CompartmentFactory<T> factory;
     private final Predicate<ItemStack> predicate;
 
+
     @SuppressWarnings("unused")
     public CompartmentType(final EntityFactory<T> entityFactory, final MobCategory mobCategory, final boolean serialize,
             final boolean summon, final boolean fireImmune, final boolean canSpawnFarFromPlayer,
@@ -114,7 +115,6 @@ public class CompartmentType<T extends AbstractCompartmentEntity> extends Entity
     @SuppressWarnings({"unused", "UnusedReturnValue"})
     public static class Builder<T extends AbstractCompartmentEntity> {
         private final EntityType.EntityFactory<T> factory;
-
         private final MobCategory category;
         private final CompartmentFactory<T> compartmentFactory;
         private final Predicate<ItemStack> predicate;
@@ -127,9 +127,9 @@ public class CompartmentType<T extends AbstractCompartmentEntity> extends Entity
         private int updateInterval = 3;
         private EntityDimensions dimensions = EntityDimensions.scalable(0.6F, 1.8F);
         private FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
-        private Predicate<EntityType<?>> velocityUpdateSupplier = EntityType::defaultVelocitySupplier;
-        private ToIntFunction<EntityType<?>> trackingRangeSupplier = EntityType::defaultTrackingRangeSupplier;
-        private ToIntFunction<EntityType<?>> updateIntervalSupplier = EntityType::defaultUpdateIntervalSupplier;
+        private Predicate<EntityType<?>> velocityUpdateSupplier = entityType -> true;
+        private ToIntFunction<EntityType<?>> trackingRangeSupplier = entityType -> entityType.clientTrackingRange;
+        private ToIntFunction<EntityType<?>> updateIntervalSupplier = entityType -> entityType.updateInterval;
         @Nullable
         private BiFunction<PlayMessages.SpawnEntity, Level, T> customClientFactory;
 
@@ -234,6 +234,5 @@ public class CompartmentType<T extends AbstractCompartmentEntity> extends Entity
                     this.updateInterval, this.requiredFeatures, this.velocityUpdateSupplier, this.trackingRangeSupplier,
                     this.updateIntervalSupplier, this.customClientFactory, this.compartmentFactory, this.predicate);
         }
-
     }
 }
