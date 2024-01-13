@@ -3,6 +3,7 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 import com.alekiponi.firmaciv.common.entity.CannonEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
@@ -24,6 +25,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
@@ -434,6 +436,11 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         }
 
         return super.getDismountLocationForPassenger(passenger);
+    }
+
+    @Override
+    public boolean hurt(final DamageSource damageSource, final float amount) {
+        return this.getTrueVehicle() instanceof KayakEntity && super.hurt(damageSource, amount);
     }
 
     @Nullable

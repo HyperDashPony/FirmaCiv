@@ -198,11 +198,9 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
     @Override
     public boolean hurt(final DamageSource damageSource, final float amount) {
-        if (this instanceof EmptyCompartmentEntity && !(this.getTrueVehicle() instanceof KayakEntity)) return false;
+        if (this.level().isClientSide || this.isRemoved()) return true;
 
         if (this.isInvulnerableTo(damageSource)) return false;
-
-        if (this.level().isClientSide || this.isRemoved()) return true;
 
         this.setHurtDir(-this.getHurtDir());
         this.setHurtTime(10);
@@ -218,7 +216,8 @@ public abstract class AbstractCompartmentEntity extends Entity {
             return true;
         }
 
-        if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+        this.ejectPassengers();
+        if (!instantKill || this.hasCustomName()) {
             this.destroy(damageSource);
         }
 
@@ -234,7 +233,15 @@ public abstract class AbstractCompartmentEntity extends Entity {
     }
 
     protected void destroy(final DamageSource damageSource) {
-        this.spawnAtLocation(this.getDropStack(), 1);
+        this.kill();
+        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+            final ItemStack itemStack = this.getDropStack();
+            if (this.hasCustomName()) {
+                itemStack.setHoverName(this.getCustomName());
+            }
+
+            this.spawnAtLocation(itemStack);
+        }
     }
 
     @Override
