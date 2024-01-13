@@ -50,6 +50,11 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.SHULKER_BOX_COMPARTMENT_ENTITY.get(),
                 ShulkerBoxCompartmentRenderer::new);
 
+        event.registerEntityRenderer(FirmacivEntities.FURNACE_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.BLAST_FURNACE_COMPARTMENT_ENTITY.get(),
+                BlockCompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.SMOKER_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
+
         event.registerEntityRenderer(FirmacivEntities.WORKBENCH_COMPARTMENT_ENTITY.get(),
                 BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);

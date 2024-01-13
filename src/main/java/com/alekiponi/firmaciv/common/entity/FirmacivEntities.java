@@ -6,10 +6,7 @@ import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.BarrelCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ChestCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.EnderChestCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ShulkerBoxCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.*;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivTags;
 import net.dries007.tfc.util.Helpers;
@@ -76,6 +73,20 @@ public final class FirmacivEntities {
             "compartment_shulker_box",
             CompartmentType.Builder.of(ShulkerBoxCompartmentEntity::new, ShulkerBoxCompartmentEntity::new,
                     itemStack -> itemStack.is(FirmacivTags.Items.SHULKER_BOX), MobCategory.MISC));
+
+    public static final RegistryObject<CompartmentType<FurnaceCompartmentEntity>> FURNACE_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_furnace",
+            CompartmentType.Builder.of(FurnaceCompartmentEntity::new, FurnaceCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.FURNACE.asItem()), MobCategory.MISC));
+
+    public static final RegistryObject<CompartmentType<BlastFurnaceCompartmentEntity>> BLAST_FURNACE_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_blast_furnace",
+            CompartmentType.Builder.of(BlastFurnaceCompartmentEntity::new, BlastFurnaceCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.BLAST_FURNACE.asItem()), MobCategory.MISC));
+
+    public static final RegistryObject<CompartmentType<SmokerCompartmentEntity>> SMOKER_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_smoker", CompartmentType.Builder.of(SmokerCompartmentEntity::new, SmokerCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.SMOKER.asItem()), MobCategory.MISC));
 
     public static final RegistryObject<CompartmentType<WorkbenchCompartmentEntity>> WORKBENCH_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_workbench",
