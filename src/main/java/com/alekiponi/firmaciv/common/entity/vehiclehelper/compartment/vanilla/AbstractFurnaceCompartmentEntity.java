@@ -41,8 +41,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 
 import static net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.*;
@@ -102,6 +108,8 @@ public abstract class AbstractFurnaceCompartmentEntity extends ContainerCompartm
             return NUM_DATA_VALUES;
         }
     };
+    private LazyOptional<? extends IItemHandler>[] directionalHandlers = SidedInvWrapper.create(this, Direction.UP,
+            Direction.DOWN, Direction.NORTH);
 
     public AbstractFurnaceCompartmentEntity(final EntityType<? extends AbstractFurnaceCompartmentEntity> entityType,
             final Level level, final RecipeType<? extends AbstractCookingRecipe> recipeType) {
@@ -397,4 +405,28 @@ public abstract class AbstractFurnaceCompartmentEntity extends ContainerCompartm
 
     @Override
     protected abstract AbstractFurnaceCompartmentMenu createMenu(final int id, final Inventory playerInventory);
+
+    @Override
+    public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final Direction facing) {
+        if (!this.isAlive() || facing == null || capability != ForgeCapabilities.ITEM_HANDLER)
+            return super.getCapability(capability, facing);
+
+        if (facing == Direction.UP) return directionalHandlers[0].cast();
+
+        if (facing == Direction.DOWN) return directionalHandlers[1].cast();
+
+        return directionalHandlers[2].cast();
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        Arrays.stream(directionalHandlers).forEach(LazyOptional::invalidate);
+    }
+
+    @Override
+    public void reviveCaps() {
+        super.reviveCaps();
+        this.directionalHandlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+    }
 }
