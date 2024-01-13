@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,7 +27,6 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.world.inventory.StackedContentsCompatible;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -111,10 +111,9 @@ public abstract class AbstractFurnaceCompartmentEntity extends ContainerCompartm
     public AbstractFurnaceCompartmentEntity(
             final CompartmentType<? extends AbstractFurnaceCompartmentEntity> entityType, final Level level,
             final RecipeType<? extends AbstractCookingRecipe> recipeType, final ItemStack itemStack) {
-        this(entityType, level, recipeType);
-        if (itemStack.getItem() instanceof BlockItem blockItem) {
-            this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
-        }
+        super(entityType, level, 3, itemStack);
+        this.quickCheck = RecipeManager.createCheck(recipeType);
+        this.recipeType = recipeType;
     }
 
     private static void createExperience(final ServerLevel level, final Vec3 vec3, final int recipeIndex,

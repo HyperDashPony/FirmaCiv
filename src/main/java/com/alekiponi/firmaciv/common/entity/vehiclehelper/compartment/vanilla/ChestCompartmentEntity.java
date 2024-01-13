@@ -10,7 +10,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ChestLidController;
@@ -55,10 +54,7 @@ public class ChestCompartmentEntity extends ContainerCompartmentEntity {
 
     public ChestCompartmentEntity(final CompartmentType<? extends ChestCompartmentEntity> entityType, final Level level,
             final ItemStack itemStack) {
-        this(entityType, level);
-        if (itemStack.getItem() instanceof BlockItem blockItem) {
-            this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
-        }
+        super(entityType, level, 27, itemStack);
     }
 
     @Override

@@ -10,7 +10,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.Containers;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -70,14 +70,11 @@ public class ShulkerBoxCompartmentEntity extends ContainerCompartmentEntity impl
 
     public ShulkerBoxCompartmentEntity(final CompartmentType<? extends ContainerCompartmentEntity> entityType,
             final Level level, final ItemStack itemStack) {
-        this(entityType, level);
+        super(entityType, level, 27, itemStack);
 
         if (itemStack.getItem() instanceof BlockItem blockItem) {
             if (blockItem.getBlock() instanceof ShulkerBoxBlock shulkerBoxBlock) {
                 this.color = shulkerBoxBlock.getColor();
-                this.setDisplayBlockState(shulkerBoxBlock.defaultBlockState());
-                final CompoundTag blockEntityTag = itemStack.getTagElement("BlockEntityTag");
-                if (blockEntityTag != null) ContainerHelper.loadAllItems(blockEntityTag, this.getItemStacks());
             }
         }
     }
