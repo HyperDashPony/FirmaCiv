@@ -16,6 +16,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
@@ -386,6 +388,11 @@ public abstract class AbstractFurnaceCompartmentEntity extends ContainerCompartm
 
     public boolean isLit() {
         return this.litTime > 0;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(final DamageSource damageSource) {
+        return SoundEvents.STONE_BREAK;
     }
 
     @Override
