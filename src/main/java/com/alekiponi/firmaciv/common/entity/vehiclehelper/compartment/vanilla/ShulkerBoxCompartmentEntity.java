@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -88,17 +89,6 @@ public class ShulkerBoxCompartmentEntity extends ContainerCompartmentEntity impl
         if (!this.isRemoved() && this.level().isClientSide()) {
             this.openersCounter.recheckOpeners(this.level(), this.blockPosition(), this.getDisplayBlockState());
         }
-    }
-
-    @Override
-    public void remove(final RemovalReason removalReason) {
-        if (!this.level().isClientSide && removalReason.shouldDestroy()) {
-            Containers.dropItemStack(this.level(), this.getX(), this.getY(), this.getZ(), this.getDropStack());
-            this.playSound(SoundEvents.STONE_BREAK);
-        }
-
-        this.setRemoved(removalReason);
-        this.invalidateCaps();
     }
 
     @Override
@@ -192,6 +182,11 @@ public class ShulkerBoxCompartmentEntity extends ContainerCompartmentEntity impl
 
     private void signalOpenCount(final Level level, final int openCount) {
         level.broadcastEntityEvent(this, openCount > 0 ? CONTAINER_OPEN : CONTAINER_CLOSE);
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(final DamageSource damageSource) {
+        return SoundEvents.STONE_BREAK;
     }
 
     @Override
