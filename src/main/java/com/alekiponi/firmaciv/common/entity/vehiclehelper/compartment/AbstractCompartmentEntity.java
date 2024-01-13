@@ -219,7 +219,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
         }
 
         if (!instantKill && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            this.spawnAtLocation(this.getDropStack(), 1);
+            this.destroy(damageSource);
         }
 
         if (this.getRootVehicle() instanceof KayakEntity kayakEntity) {
@@ -231,6 +231,10 @@ public abstract class AbstractCompartmentEntity extends Entity {
 
         this.discard();
         return true;
+    }
+
+    protected void destroy(final DamageSource damageSource) {
+        this.spawnAtLocation(this.getDropStack(), 1);
     }
 
     @Override
