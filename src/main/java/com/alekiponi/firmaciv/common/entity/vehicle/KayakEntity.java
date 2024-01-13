@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -102,6 +103,11 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public BoatVariant getVariant() {
+        return null;
+    }
+
+    @Override
     public int getMaxPassengers() {
         return this.PASSENGER_NUMBER;
     }
@@ -139,12 +145,12 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected float getDamageThreshold() {
+    public float getDamageThreshold() {
         return this.DAMAGE_THRESHOLD;
     }
 
     @Override
-    protected float getDamageRecovery() {
+    public float getDamageRecovery() {
         return this.DAMAGE_RECOVERY;
     }
 

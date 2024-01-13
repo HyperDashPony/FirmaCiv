@@ -60,7 +60,7 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
         if(pEntity.getDamage() > pEntity.getDamageThreshold()){
-            poseStack.mulPose(Axis.ZP.rotationDegrees(20));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(pEntity.getId()%30));
         }
         rowboatEntityModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer baseVertexConsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
@@ -80,7 +80,7 @@ public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
         if (pEntity.getOars().getCount() == 2) {
             rowboatEntityModel.getOarPort().render(poseStack, baseVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
-        if (!pEntity.isUnderWater()) {
+        if (!pEntity.isUnderWater() && pEntity.getDamage() < pEntity.getDamageThreshold()*0.9) {
             VertexConsumer waterMaskVertexConsumer = pBuffer.getBuffer(RenderType.waterMask());
             rowboatEntityModel.getWaterocclusion()
                     .render(poseStack, waterMaskVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);

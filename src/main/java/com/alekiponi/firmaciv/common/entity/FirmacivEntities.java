@@ -34,19 +34,19 @@ public final class FirmacivEntities {
                     () -> EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.625F)
                             .build(new ResourceLocation(Firmaciv.MOD_ID,
                                     "dugout_canoe/" + variant.getName()).toString())));
-
     public static final Map<BoatVariant, RegistryObject<EntityType<RowboatEntity>>> ROWBOATS =
             Helpers.mapOfKeys(BoatVariant.class, variant -> ENTITY_TYPES.register("rowboat/" + variant.getName(),
                     () -> EntityType.Builder.of(RowboatEntity::new, MobCategory.MISC).sized(1.875F, 0.625F)
                             .build(new ResourceLocation(Firmaciv.MOD_ID, "rowboat/" + variant.getName()).toString())));
 
+    public static final Map<BoatVariant, RegistryObject<EntityType<SloopEntity>>> SLOOPS =
+            Helpers.mapOfKeys(BoatVariant.class, variant -> ENTITY_TYPES.register("sloop/" + variant.getName(),
+                    () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC)
+                            .sized(3F, 0.75F).setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()
+                            .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop/" + variant.getName()).toString())));
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak",
             () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
-
-    public static final RegistryObject<EntityType<SloopEntity>> SLOOP = ENTITY_TYPES.register("sloop",
-            () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F).setTrackingRange(LARGE_VEHICLE_TRACKING)
-                    .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop").toString()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = ENTITY_TYPES.register(
             "compartment_empty",

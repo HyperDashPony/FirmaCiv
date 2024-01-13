@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractInvisibleHelper;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.core.BlockPos;
@@ -83,11 +84,13 @@ public class CannonballEntity extends Entity {
                 this.discard();
                 this.explode(Mth.clamp((float) Math.ceil(this.getDeltaMovement().length()/2), 1, 10));
                 for(Entity entity : entities){
-                    if(entity instanceof AbstractFirmacivBoatEntity){
-                        entity.hurt(this.damageSources().explosion(this, entity), 100);
-                    }
-                    if(entity instanceof Boat){
-                        entity.hurt(this.damageSources().explosion(this, entity), 1000);
+                    if(!(entity instanceof CannonEntity) && !(entity instanceof EmptyCompartmentEntity) && !(entity instanceof CannonballEntity)){
+                        if(entity instanceof AbstractFirmacivBoatEntity){
+                            entity.hurt(this.damageSources().explosion(this, entity), 100);
+                        }
+                        if(entity instanceof Boat){
+                            entity.hurt(this.damageSources().explosion(this, entity), 1000);
+                        }
                     }
                 }
                 return;

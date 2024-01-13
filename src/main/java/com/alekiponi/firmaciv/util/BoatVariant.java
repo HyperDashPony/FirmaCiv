@@ -47,7 +47,9 @@ public enum BoatVariant {
     WHITE_CEDAR(17, Wood.WHITE_CEDAR, TFCBlocks.WOODS.get(Wood.WHITE_CEDAR).get(Wood.BlockType.STRIPPED_LOG),
             TFCItems.LUMBER.get(Wood.WHITE_CEDAR)),
     WILLOW(18, Wood.WILLOW, TFCBlocks.WOODS.get(Wood.WILLOW).get(Wood.BlockType.STRIPPED_LOG),
-            TFCItems.LUMBER.get(Wood.WILLOW));
+            TFCItems.LUMBER.get(Wood.WILLOW)),
+    MANGROVE(18, Wood.MANGROVE, TFCBlocks.WOODS.get(Wood.MANGROVE).get(Wood.BlockType.STRIPPED_LOG),
+            TFCItems.LUMBER.get(Wood.MANGROVE));
     private static final BoatVariant[] BY_ID = Arrays.stream(values())
             .sorted(Comparator.comparingInt(BoatVariant::getId)).toArray(BoatVariant[]::new);
     private final int id;

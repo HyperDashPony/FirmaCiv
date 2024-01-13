@@ -41,6 +41,7 @@ public final class RenderEventHandler {
         for (final BoatVariant boatVariant : BoatVariant.values()) {
             event.registerEntityRenderer(FirmacivEntities.CANOES.get(boatVariant).get(), CanoeRenderer::new);
             event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(boatVariant).get(), RowboatRenderer::new);
+            event.registerEntityRenderer(FirmacivEntities.SLOOPS.get(boatVariant).get(), SloopRenderer::new);
         }
         event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), KayakRenderer::new);
 
@@ -59,8 +60,6 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.CANNON_ENTITY.get(), CannonRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANCHOR_ENTITY.get(), AnchorRenderer::new);
-
-        event.registerEntityRenderer(FirmacivEntities.SLOOP.get(), SloopRenderer::new);
 
     }
 

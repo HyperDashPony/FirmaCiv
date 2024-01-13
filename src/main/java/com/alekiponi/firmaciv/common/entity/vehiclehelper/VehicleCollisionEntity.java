@@ -1,6 +1,7 @@
 package com.alekiponi.firmaciv.common.entity.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractVehicle;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
@@ -10,9 +11,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -48,6 +52,15 @@ public class VehicleCollisionEntity extends AbstractInvisibleHelper {
     @Override
     public boolean canCollideWith(final Entity other) {
         return canVehicleCollide(this, other);
+    }
+
+    @Override
+    public boolean hurt(final DamageSource damageSource, final float amount) {
+        if(this.getRootVehicle() instanceof AbstractVehicle vehicle){
+            return vehicle.hurt(damageSource, amount);
+        }
+
+        return true;
     }
 
     @Override

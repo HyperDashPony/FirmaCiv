@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -212,6 +213,14 @@ public abstract class AbstractCompartmentEntity extends Entity {
         newCompartment.startRiding(ridingThisPart);
         this.level().addFreshEntity(newCompartment);
         return newCompartment;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource pSource) {
+        if(pSource.is(DamageTypeTags.IS_EXPLOSION)){
+            return true;
+        }
+        return super.isInvulnerableTo(pSource);
     }
 
     @Override

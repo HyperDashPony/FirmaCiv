@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.google.common.collect.ImmutableMap;
@@ -78,7 +79,7 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
                     .render(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
 
-        if (!pEntity.isUnderWater()) {
+        if (!pEntity.isUnderWater() && pEntity.getDamage() < pEntity.getDamageThreshold()*0.9) {
             VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
             if(pEntity.getLength() == 3){
                 canoeModel.getWaterocclusion3()
@@ -90,6 +91,12 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
                 canoeModel.getWaterocclusion5()
                         .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
             }
+        }
+
+        if(pEntity.getDamage() > 0){
+            VertexConsumer damageVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getDamageTexture(pEntity)));
+            float alpha = Mth.clamp((pEntity.getDamage()/(pEntity.getDamageThreshold()))*0.75f, 0, 0.5f);
+            canoeModel.renderToBuffer(pMatrixStack, damageVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
         }
 
         pMatrixStack.popPose();
@@ -104,6 +111,11 @@ public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
 
     public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) {
         return this.canoeResources.get(canoe.getVariant());
+    }
+
+    public ResourceLocation getDamageTexture(CanoeEntity pEntity) {
+        return new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/canoe/" + "damage_overlay" + ".png");
     }
 
 

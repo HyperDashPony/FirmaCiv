@@ -3,7 +3,8 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.network.PacketHandler;
-import com.alekiponi.firmaciv.network.ServerBoundSailUpdatePacket;
+import com.alekiponi.firmaciv.network.ServerBoundSloopPacket;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,8 +14,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -46,6 +51,12 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected static final EntityDataAccessor<Integer> DATA_ID_TICKS_NO_RIDERS = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.INT);
 
+    private static final EntityDataAccessor<ItemStack> DATA_ID_MAINSAIL_DYE = SynchedEntityData.defineId(SloopEntity.class,
+            EntityDataSerializers.ITEM_STACK);
+
+    private static final EntityDataAccessor<ItemStack> DATA_ID_JIBSAIL_DYE = SynchedEntityData.defineId(SloopEntity.class,
+            EntityDataSerializers.ITEM_STACK);
+
     public final int[][] COMPARTMENT_ROTATIONS = {{7, 85}, {8, 85}, {9, 85}, {10, -85}, {11, -85}, {12, -85}};
 
     public final int[] CAN_ADD_ONLY_BLOCKS = {1, 2, 3, 4, 5, 6};
@@ -58,6 +69,10 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
+    }
+
+    public BoatVariant getVariant() {
+        return getVariant("sloop");
     }
 
     @Override
@@ -112,91 +127,93 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         float localX = 0.0F;
         float localZ = 0.0F;
         float localY = (float) ((this.isRemoved() ? (double) 0.01F : this.getPassengersRidingOffset()));
+        float holdLevel = -0.05f;
+        float deckLevel = 0.625f;
         switch (index) {
             case 0 -> {
                 // aft pilot / tiller seat
                 localZ = 0.6f;
                 localX = -2.3f;
-                localY += 0.625f;
+                localY += deckLevel;
             }
             case 1 -> {
-                // hold lower port
-                localZ = -0.35f;
-                localX = -0.4f;
-                localY += -0.1f;
+                // hold aft port
+                localZ = -0.4075f;
+                localX = 1.2555f - (30.0f/16.0f);
+                localY += holdLevel;
             }
             case 2 -> {
-                // hold lower starboard
-                localZ = 0.35f;
-                localX = -0.4f;
-                localY += -0.1f;
+                // hold aft starboard
+                localZ = 0.4075f;
+                localX = 1.2555f - (30.0f/16.0f);
+                localY += holdLevel;
             }
             case 3 -> {
-                // hold middle port
-                localZ = -0.35f;
-                localX = 0.475f;
-                localY += -0.1f;
+                // hold mid port
+                localZ = -0.4075f;
+                localX = 1.2555f - (15f/16.0f);
+                localY += holdLevel;
             }
             case 4 -> {
-                //hold middle starboard
-                localZ = 0.35f;
-                localX = 0.475f;
-                localY += -0.1f;
+                //hold mid starboard
+                localZ = 0.4075f;
+                localX = 1.2555f - (15f/16.0f);
+                localY += holdLevel;
             }
             case 5 -> {
-                //hold upper port
-                localZ = -0.35f;
-                localX = 1.35f;
-                localY += -0.1f;
+                //hold fore port
+                localZ = -0.4075f;
+                localX = 1.2555f - (0.0f/16.0f);
+                localY += holdLevel;
             }
             case 6 -> {
-                //hold upper starboard
-                localZ = 0.35f;
-                localX = 1.35f;
-                localY += -0.1f;
+                //hold fore starboard
+                localZ = 0.4075f;
+                localX = 1.2555f - (0.0f/16.0f);
+                localY += holdLevel;
             }
             case 7 -> {
                 //port side fore
                 localX = 0.3f;
                 localZ = -1.4f;
-                localY += 0.625f;
+                localY += deckLevel;
             }
             case 8 -> {
                 //port side mid
                 localX = -0.5f;
                 localZ = -1.33f;
-                localY += 0.625f;
+                localY += deckLevel;
             }
             case 9 -> {
                 //port side aft
                 localX = -1.3f;
                 localZ = -1.26f;
-                localY += 0.625f;
+                localY += deckLevel;
 
             }
             case 10 -> {
                 //starboard side fore
                 localX = 0.3f;
                 localZ = 1.4f;
-                localY += 0.625f;
+                localY += deckLevel;
             }
             case 11 -> {
                 //starboard side mid
                 localX = -0.5f;
                 localZ = 1.33f;
-                localY += 0.625f;
+                localY += deckLevel;
             }
             case 12 -> {
                 //starboard side aft
                 localX = -1.3f;
                 localZ = 1.26f;
-                localY += 0.625f;
+                localY += deckLevel;
             }
             case 13 -> {
                 //sailing station
                 localZ = -0.6f;
                 localX = -2.3f;
-                localY += 0.625f;
+                localY += deckLevel;
             }
             case 14 -> {
                 //collider 1
@@ -224,32 +241,32 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             }
             case 18 -> {
                 //cleat port fore
-                localZ = -1.8f;
-                localX = 1.2f;
-                localY += 1.0f;
+                localZ = -1.75f;
+                localX = 1.33f;
+                localY += 1.124f;
             }
             case 19 -> {
                 //cleat starboard fore
-                localZ = 1.8f;
-                localX = 1.2f;
-                localY += 1.0f;
+                localZ = 1.75f;
+                localX = 1.33f;
+                localY += 1.124f;
             }
             case 20 -> {
                 //cleat port aft
-                localZ = -1.8f;
-                localX = -2.25f;
-                localY += 1.2f;
+                localZ = -1.75f;
+                localX = -2.405f;
+                localY += 1.1875f;
             }
             case 21 -> {
                 //cleat starboard aft
-                localZ = 1.8f;
-                localX = -2.25f;
-                localY += 1.2f;
+                localZ = 1.75f;
+                localX = -2.405f;
+                localY += 1.1875f;
             }
             case 22 -> {
                 //windlass
-                localZ = -1.2f;
-                localX = 2.7f;
+                localZ = -1.34f;
+                localX = 2.52f;
                 localY += 1.0f;
             }
             case 23 -> {
@@ -269,12 +286,12 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected float getDamageThreshold() {
+    public float getDamageThreshold() {
         return DAMAGE_THRESHOLD;
     }
 
     @Override
-    protected float getDamageRecovery() {
+    public float getDamageRecovery() {
         return DAMAGE_RECOVERY;
     }
 
@@ -386,14 +403,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         ArrayList<VehicleCleatEntity> cleats = this.getCleats();
         ArrayList<VehicleCleatEntity> leashedCleats = new ArrayList<VehicleCleatEntity>();
         for (VehicleCleatEntity cleat : cleats) {
-            if (cleat.isLeashed()) {
+            if (cleat.isLeashed() && !this.getEntitiesToTakeWith().contains(cleat.getLeashHolder())) {
                 leashedCleats.add(cleat);
                 count++;
-            }
-        }
-        for (VehicleCleatEntity leashedCleat : leashedCleats) {
-            if (this.getEntitiesToTakeWith().contains(leashedCleat.getLeashHolder())) {
-                return;
             }
         }
         if (count == 2) {
@@ -528,6 +540,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         this.entityData.define(DATA_ID_JIBSAIL_ACTIVE, false);
         this.entityData.define(DATA_ID_TICKS_NO_RIDERS, 0);
         this.entityData.define(DATA_ID_MAINSHEET_LENGTH, 0f);
+        this.entityData.define(DATA_ID_JIBSAIL_DYE, ItemStack.EMPTY);
+        this.entityData.define(DATA_ID_MAINSAIL_DYE, ItemStack.EMPTY);
     }
 
     @Override
@@ -609,8 +623,11 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             }
             this.setRudderRotation(rudder);
 
-
             tickSailBoat();
+
+            if (this.level().isClientSide() && this.getControllingPassenger() != null) {
+                PacketHandler.clientSendPacket(new ServerBoundSloopPacket(this.getMainsheetLength(), this.getRudderRotation(), this.getId()));
+            }
         }
     }
 
@@ -626,7 +643,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     protected float getMomentumSubtractor() {
-        return 0.001f;
+        return 0.0005f;
     }
 
     protected void tickSailBoat() {
@@ -649,9 +666,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             }
 
             this.setMainsheetLength(sheet);
-            if (this.level().isClientSide() && (inputUp || inputDown)) {
-                PacketHandler.clientSendPacket(new ServerBoundSailUpdatePacket(sheet, this.getId()));
-            }
+
         }
     }
 
@@ -672,7 +687,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     acceleration = this.getAcceleration();
                 }
 
-                float keelFactor = 0.6f;
+                float keelFactor = 0.75f;
                 float sailFactor = 1 - keelFactor;
 
                 Vec3 sailAccelerationWithKeel = new Vec3(
@@ -703,7 +718,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     }
                 }
 
-                float keelFactor = 0.8f;
+                float keelFactor = 0.9f;
                 float sailFactor = 1 - keelFactor;
 
                 Vec3 sailAccelerationWithKeel = new Vec3(
@@ -797,6 +812,38 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         return this.entityData.get(DATA_ID_RUDDER_ROTATION);
     }
 
+    public ItemStack getMainsailDye() {
+        return this.entityData.get(DATA_ID_MAINSAIL_DYE);
+    }
+
+    public void setMainsailDye(final ItemStack itemStack) {
+        this.entityData.set(DATA_ID_MAINSAIL_DYE, itemStack.copy());
+    }
+
+    public ItemStack getJibsailDye() {
+        return this.entityData.get(DATA_ID_JIBSAIL_DYE);
+    }
+
+    public void setJibsailDye(final ItemStack itemStack) {
+        this.entityData.set(DATA_ID_JIBSAIL_DYE, itemStack.copy());
+    }
+
+    public DyeColor getDyeColor(int sailIndex){
+        ItemStack stack = ItemStack.EMPTY;
+        if(sailIndex == 0){
+            stack = this.getMainsailDye();
+        } else if (sailIndex == 1){
+            stack = this.getJibsailDye();
+        }
+        if(!stack.isEmpty()){
+            if(stack.is(Tags.Items.DYES)){
+                return DyeColor.getColor(stack);
+            }
+        }
+
+        return null;
+    }
+
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
@@ -806,6 +853,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         this.setJibsailActive(pCompound.getBoolean("jibsailActive"));
         this.setTicksNoRiders(pCompound.getInt("ticksNoRiders"));
         this.setMainsheetLength(pCompound.getFloat("mainSheetLength"));
+        this.setJibsailDye(ItemStack.of(pCompound.getCompound("jibsailDye")));
+        this.setMainsailDye(ItemStack.of(pCompound.getCompound("mainsailDye")));
+
     }
 
     @Override
@@ -817,5 +867,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         pCompound.putBoolean("jibsailActive", this.getJibsailActive());
         pCompound.putInt("ticksNoRiders", this.getTicksNoRiders());
         pCompound.putFloat("mainSheetLength", this.getMainsheetLength());
+        pCompound.put("jibsailDye", this.getJibsailDye().save(new CompoundTag()));
+        pCompound.put("mainsailDye", this.getMainsailDye().save(new CompoundTag()));
     }
 }

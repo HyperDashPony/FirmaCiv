@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.util.climate.Climate;
 import net.minecraft.core.BlockPos;
@@ -134,13 +135,11 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     @Override
     public void tick() {
 
-        if (!this.level().isClientSide()) {
-            if (this.getPassengers().size() < this.getMaxPassengers()) {
-                final AbstractVehiclePart newPart = FirmacivEntities.BOAT_VEHICLE_PART.get().create(this.level());
-                newPart.setPos(this.getX(), this.getY(), this.getZ());
-                this.level().addFreshEntity(newPart);
-                newPart.startRiding(this);
-            }
+        if (this.getPassengers().size() < this.getMaxPassengers()) {
+            final AbstractVehiclePart newPart = FirmacivEntities.BOAT_VEHICLE_PART.get().create(this.level());
+            newPart.setPos(this.getX(), this.getY(), this.getZ());
+            this.level().addFreshEntity(newPart);
+            newPart.startRiding(this);
         }
 
 
@@ -450,7 +449,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                         float finalRotation = Mth.wrapDegrees(
                                 (float) (Mth.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F);
 
-                        float approach = Mth.approachDegrees(this.getYRot(), finalRotation, 4f);
+                        float approach = Mth.approachDegrees(this.getYRot(), finalRotation, 0.5f);
                         if (Mth.degreesDifferenceAbs(this.getYRot(), finalRotation) < 4) {
                             this.setDeltaRotation(0);
                             this.setYRot(this.getYRot());
@@ -528,6 +527,12 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             }
         }
         return null;
+    }
+
+    public abstract BoatVariant getVariant();
+
+    public BoatVariant getVariant(String boat_type) {
+        return BoatVariant.byName(this.getType().toString().split(boat_type + ".")[1]);
     }
 
     protected abstract float getMomentumSubtractor();

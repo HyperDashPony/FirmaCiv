@@ -54,23 +54,23 @@ public class FirmacivHelper {
             return multiplier / 35f;
         }
         if (sailForceAngle < 20) {
-            multiplier = 2f;
+            multiplier = 8f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 25) {
-            multiplier = 4f;
+            multiplier = 15f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 30) {
-            multiplier = 5f;
-            return multiplier / 35f;
-        }
-        if (sailForceAngle < 45) {
             multiplier = 20f;
             return multiplier / 35f;
         }
+        if (sailForceAngle < 45) {
+            multiplier = 23f;
+            return multiplier / 35f;
+        }
         if (sailForceAngle < 60) {
-            multiplier = 25f;
+            multiplier = 27f;
             return multiplier / 35f;
         }
         if (sailForceAngle < 75) {

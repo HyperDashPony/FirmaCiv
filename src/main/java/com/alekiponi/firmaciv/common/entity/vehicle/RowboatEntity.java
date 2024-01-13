@@ -23,9 +23,6 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 
 public class RowboatEntity extends AbstractFirmacivBoatEntity {
-
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(RowboatEntity.class,
-            EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> DATA_OARS = SynchedEntityData.defineId(RowboatEntity.class,
             EntityDataSerializers.ITEM_STACK);
     public final int PASSENGER_NUMBER = 6;
@@ -43,10 +40,6 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
 
     public RowboatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
-
-        final String name = entityType.toString().split("rowboat.")[1];
-
-        this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
     }
 
     @Override
@@ -135,7 +128,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    protected float getDamageRecovery() {
+    public float getDamageRecovery() {
         return DAMAGE_RECOVERY;
     }
 
@@ -189,12 +182,9 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
         return null;
     }
 
-    public void setType(final BoatVariant boatVariant) {
-        this.entityData.set(DATA_ID_TYPE, boatVariant.ordinal());
-    }
-
+    @Override
     public BoatVariant getVariant() {
-        return BoatVariant.byId(this.entityData.get(DATA_ID_TYPE));
+        return getVariant("rowboat");
     }
 
     public ItemStack getOars() {

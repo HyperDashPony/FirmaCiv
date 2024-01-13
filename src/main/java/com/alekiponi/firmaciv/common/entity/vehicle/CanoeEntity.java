@@ -26,9 +26,6 @@ import net.minecraftforge.common.Tags;
 import javax.annotation.Nullable;
 
 public class CanoeEntity extends AbstractFirmacivBoatEntity {
-    private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(CanoeEntity.class,
-            EntityDataSerializers.INT);
-
     private static final EntityDataAccessor<Integer> DATA_ID_LENGTH = SynchedEntityData.defineId(CanoeEntity.class,
             EntityDataSerializers.INT);
     public final int PASSENGER_NUMBER = 5;
@@ -41,8 +38,6 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
 
     public CanoeEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
         super(entityType, level);
-        final String name = entityType.toString().split("canoe.")[1];
-        this.entityData.define(DATA_ID_TYPE, BoatVariant.byName(name).ordinal());
     }
 
     @Override
@@ -57,6 +52,11 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
             return InteractionResult.SUCCESS;
         }
         return super.interact(player, hand);
+    }
+
+    @Override
+    public BoatVariant getVariant() {
+        return getVariant("canoe");
     }
 
     @Override
@@ -214,14 +214,6 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
         return getVariant().getLumber().get();
     }
 
-    public void setType(final BoatVariant boatVariant) {
-        this.entityData.set(DATA_ID_TYPE, boatVariant.ordinal());
-    }
-
-    public BoatVariant getVariant() {
-        return BoatVariant.byId(this.entityData.get(DATA_ID_TYPE));
-    }
-
     public void setLength(int length){
         this.entityData.set(DATA_ID_LENGTH, Mth.clamp(length, 3, 5));
     }
@@ -271,7 +263,7 @@ public class CanoeEntity extends AbstractFirmacivBoatEntity {
 
     public ResourceLocation getTextureLocation() {
         return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/dugout_canoe/" + getVariant().getName() + ".png");
+                "textures/entity/watercraft/dugout_canoe/" + this.getVariant().getName() + ".png");
     }
 
     @Override

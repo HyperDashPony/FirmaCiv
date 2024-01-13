@@ -1,7 +1,6 @@
 package com.alekiponi.firmaciv.network;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;
@@ -12,27 +11,31 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class ServerBoundSailUpdatePacket implements Packet<ServerGamePacketListener> {
+public class ServerBoundSloopPacket implements Packet<ServerGamePacketListener> {
     private final float sheetLength;
+    private final float rudderAngle;
     private final int entityID;
 
-    public ServerBoundSailUpdatePacket(float sheetLength, int entityID){
+    public ServerBoundSloopPacket(float sheetLength, float rudderAngle,int entityID){
         this.sheetLength = sheetLength;
+        this.rudderAngle = rudderAngle;
         this.entityID = entityID;
     }
 
-    public ServerBoundSailUpdatePacket(FriendlyByteBuf buffer){
+    public ServerBoundSloopPacket(FriendlyByteBuf buffer){
         this.sheetLength = buffer.readFloat();
+        this.rudderAngle = buffer.readFloat();
         this.entityID = buffer.readInt();
     }
 
     public void encoder(FriendlyByteBuf buffer){
         buffer.writeFloat(this.sheetLength);
-        buffer.writeInt(entityID);
+        buffer.writeFloat(this.rudderAngle);
+        buffer.writeInt(this.entityID);
     }
 
-    public static ServerBoundSailUpdatePacket decoder(FriendlyByteBuf buffer){
-        return new ServerBoundSailUpdatePacket(buffer);
+    public static ServerBoundSloopPacket decoder(FriendlyByteBuf buffer){
+        return new ServerBoundSloopPacket(buffer);
     }
 
     public void handle(Supplier<NetworkEvent.Context> context){
@@ -43,6 +46,7 @@ public class ServerBoundSailUpdatePacket implements Packet<ServerGamePacketListe
                 assert player != null;
                 if (player.distanceTo(sloop) < 5) {
                     sloop.setMainsheetLength(this.sheetLength);
+                    sloop.setRudderRotation(this.rudderAngle);
                 }
             }
         });

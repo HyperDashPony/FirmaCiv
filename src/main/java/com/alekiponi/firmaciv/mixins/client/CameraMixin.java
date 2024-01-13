@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.mixins.client;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
@@ -55,7 +56,14 @@ public abstract class CameraMixin {
                     cameraDistance = cameraDistance * (boatSize);
                 }
                 this.setRotation(pEntity.getViewYRot(pPartialTick), pEntity.getViewXRot(pPartialTick));
-                this.setPosition(Mth.lerp((double)pPartialTick, boat.xo, boat.getX()), Mth.lerp((double)pPartialTick, boat.yo, boat.getY()) + (double)Mth.lerp(pPartialTick, this.eyeHeightOld, this.eyeHeight), Mth.lerp((double)pPartialTick, boat.zo, boat.getZ()));
+                double heightModifier = 0;
+                if(boat instanceof SloopEntity){
+                    heightModifier = 3;
+                }
+                this.setPosition(
+                        Mth.lerp((double)pPartialTick, boat.xo, boat.getX()),
+                        Mth.lerp((double)pPartialTick, boat.yo + heightModifier, boat.getY() + heightModifier) + (double)Mth.lerp(pPartialTick, this.eyeHeightOld, this.eyeHeight),
+                        Mth.lerp((double)pPartialTick, boat.zo, boat.getZ()));
                 if(boat instanceof RowboatEntity rowboatEntity){
                     if(rowboatEntity.getControllingCompartment() != null && rowboatEntity.getControllingCompartment().equals(compartment)){
                         this.setRotation(this.yRot + 180.0F, this.xRot);

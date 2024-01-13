@@ -706,9 +706,9 @@ public abstract class AbstractVehicle extends Entity {
         this.entityData.set(DATA_ID_HURTDIR, hurtDirection);
     }
 
-    protected abstract float getDamageThreshold();
+    public abstract float getDamageThreshold();
 
-    protected abstract float getDamageRecovery();
+    public abstract float getDamageRecovery();
 
     public void setDeltaRotation(float deltaRotation) {
         this.entityData.set(DATA_ID_DELTA_ROTATION, deltaRotation);

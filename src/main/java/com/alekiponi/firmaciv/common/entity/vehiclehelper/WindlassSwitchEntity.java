@@ -63,7 +63,7 @@ public class WindlassSwitchEntity extends AbstractSwitchEntity {
 
     @Override
     public Vec3 getRopeHoldPosition(float pPartialTicks) {
-        return this.getPosition(pPartialTicks).add(0.1D, 0.35D, 0.1D);
+        return this.getPosition(pPartialTicks).add(0.0D, 0.35D, 0.0D);
     }
 
     @Override

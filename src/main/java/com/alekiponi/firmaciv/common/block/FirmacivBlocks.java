@@ -33,11 +33,6 @@ public final class FirmacivBlocks {
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
                             boatVariant)));
 
-    // TODO dirty fix remove this when we fix the map above as it's just manually registering a mangrove canoe component
-    public static final RegistryObject<Block> TEMP = registerBlockWithItem("wood/canoe_component_block/mangrove",
-            () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
-                    BoatVariant.ACACIA));
-
     //TODO: swap between roofing types automatically on place
     /*
     public static final RegistryObject<Block> THATCH_ROOFING = registerBlockWithItem("thatch_roofing",
