@@ -3,12 +3,14 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.ChestCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.Material;
 
 import java.util.Calendar;
@@ -49,6 +51,8 @@ public class ChestCompartmentRenderer extends CompartmentRenderer<ChestCompartme
         final Material material = this.xmasTextures ? Sheets.CHEST_XMAS_LOCATION : Sheets.CHEST_LOCATION;
         final VertexConsumer vertexConsumer = material.buffer(bufferSource, RenderType::entityCutout);
 
+        poseStack.mulPose(Axis.YP.rotationDegrees(180));
+        poseStack.translate(-1, 0, -1);
         this.render(poseStack, vertexConsumer, this.lid, this.lock, this.bottom, openAngle, packedLight);
     }
 
@@ -56,8 +60,8 @@ public class ChestCompartmentRenderer extends CompartmentRenderer<ChestCompartme
             final ModelPart lockModel, final ModelPart bottomModel, final float lidAngle, final int packedLight) {
         lidModel.xRot = (float) (-lidAngle * Math.PI / 2);
         lockModel.xRot = lidModel.xRot;
-        lidModel.render(poseStack, vertexConsumer, packedLight, 655360);
-        lockModel.render(poseStack, vertexConsumer, packedLight, 655360);
-        bottomModel.render(poseStack, vertexConsumer, packedLight, 655360);
+        lidModel.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        lockModel.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        bottomModel.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
     }
 }

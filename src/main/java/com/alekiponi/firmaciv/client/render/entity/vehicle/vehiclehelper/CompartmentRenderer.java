@@ -15,7 +15,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class CompartmentRenderer<CompartmentType extends AbstractCompartmentEntity> extends EntityRenderer<CompartmentType> {
-    public CompartmentRenderer(EntityRendererProvider.Context context) {
+
+    public CompartmentRenderer(final EntityRendererProvider.Context context) {
         super(context);
         this.shadowRadius = 0;
     }
@@ -38,7 +39,6 @@ public abstract class CompartmentRenderer<CompartmentType extends AbstractCompar
 
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(180 - rotation));
-        poseStack.mulPose(Axis.YP.rotationDegrees(180));
         if (compartmentEntity.getTrueVehicle() instanceof CanoeEntity) {
             poseStack.scale(0.6F, 0.6F, 0.6F);
         } else {
