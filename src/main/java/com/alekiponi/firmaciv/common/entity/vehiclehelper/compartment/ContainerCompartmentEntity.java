@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HasCustomInventoryScreen;
 import net.minecraft.world.entity.SlotAccess;
@@ -51,6 +52,12 @@ public abstract class ContainerCompartmentEntity extends AbstractCompartmentEnti
     }
 
     @Override
+    protected void destroy(final DamageSource damageSource) {
+        super.destroy(damageSource);
+        this.chestVehicleDestroyed(damageSource, this.level(), this);
+    }
+
+    @Override
     public void remove(final RemovalReason removalReason) {
         if (!this.level().isClientSide && removalReason.shouldDestroy()) {
             Containers.dropContents(this.level(), this, this);
@@ -84,7 +91,6 @@ public abstract class ContainerCompartmentEntity extends AbstractCompartmentEnti
     public void stopOpen(final Player player) {
         this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(player));
     }
-
 
     @Override
     protected void addAdditionalSaveData(final CompoundTag compoundTag) {
