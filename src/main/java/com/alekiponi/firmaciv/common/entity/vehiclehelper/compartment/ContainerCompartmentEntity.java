@@ -81,6 +81,7 @@ public abstract class ContainerCompartmentEntity extends AbstractCompartmentEnti
         }
 
         super.remove(removalReason);
+        this.invalidateCaps();
     }
 
     @Override
