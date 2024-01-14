@@ -188,7 +188,9 @@ public class CannonEntity extends Entity {
         assert cannonball != null;
         cannonball.setPos(this.getX(), this.getY(), this.getZ());
 
-        cannonball.setDeltaMovement((Mth.sin(this.getYRot() * ((float) Math.PI / 180F)) * 3.0), (Mth.sin(-this.getXRot() * ((float) Math.PI / 180F)) * 3.0),
+        cannonball.setDeltaMovement(
+                Mth.sin(this.getYRot() * ((float) Math.PI / 180F)) * 3.0,
+                Mth.sin(-this.getXRot() * ((float) Math.PI / 180F)) * 3.0,
                 Mth.cos(-this.getYRot() * ((float) Math.PI / 180F)) * 3.0);
 
         if(this.isPassenger() && this.getVehicle() instanceof EmptyCompartmentEntity compartment){

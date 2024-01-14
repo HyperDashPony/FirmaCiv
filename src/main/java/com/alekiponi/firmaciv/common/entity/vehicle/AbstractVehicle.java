@@ -1,18 +1,14 @@
 package com.alekiponi.firmaciv.common.entity.vehicle;
 
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractInvisibleHelper;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
-import com.google.common.collect.ImmutableList;
+import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.google.common.collect.Lists;
 import net.dries007.tfc.common.TFCTags;
 import net.minecraft.BlockUtil;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.ReportedException;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -811,7 +807,7 @@ public abstract class AbstractVehicle extends Entity {
     }
 
     public double getSmoothSpeedMS(){
-        if(this.everyNTickUnique(3)){
+        if(this.everyNthTickUnique(3)){
             double speed = this.getDeltaMovement().length()*20;
             this.speedOverTime.poll();
             this.speedOverTime.offer(speed);
@@ -824,8 +820,8 @@ public abstract class AbstractVehicle extends Entity {
         return average;
     }
 
-    public boolean everyNTickUnique(int n){
-        return (this.tickCount + this.getId()) % n == 0;
+    public boolean everyNthTickUnique(int n){
+        return FirmacivHelper.everyNthTickUnique(this.getId(), this.tickCount, n);
     }
 
     @Override

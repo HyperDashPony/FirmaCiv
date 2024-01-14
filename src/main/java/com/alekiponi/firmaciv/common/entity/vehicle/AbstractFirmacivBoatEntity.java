@@ -25,6 +25,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -33,7 +34,6 @@ import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Random;
 
 public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     public static final int PADDLE_LEFT = 0;
@@ -49,9 +49,8 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> DATA_ID_WIND_SPEED = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.FLOAT);
-    protected static final EntityDataAccessor<Boolean> DATA_ID_DOCKED = SynchedEntityData.defineId(
+    protected static final EntityDataAccessor<Boolean> DATA_ID_IMMOBILE = SynchedEntityData.defineId(
             AbstractFirmacivBoatEntity.class, EntityDataSerializers.BOOLEAN);
-
 
 
     protected static final float PADDLE_SPEED = ((float) Math.PI / 8F);
@@ -88,7 +87,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         this.entityData.define(DATA_ID_WIND_VECTOR, new Vector3f(0, 0, 0));
         this.entityData.define(DATA_ID_WIND_ANGLE, 0f);
         this.entityData.define(DATA_ID_WIND_SPEED, 0f);
-        this.entityData.define(DATA_ID_DOCKED, false);
+        this.entityData.define(DATA_ID_IMMOBILE, false);
     }
 
     public abstract int[] getWindlassIndices();
@@ -97,9 +96,9 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     public abstract int[] getMastIndices();
 
-    public ArrayList<SailSwitchEntity> getSailSwitches(){
+    public ArrayList<SailSwitchEntity> getSailSwitches() {
         ArrayList<SailSwitchEntity> list = new ArrayList<SailSwitchEntity>();
-        if(this.getPassengers().size() == this.getMaxPassengers()) {
+        if (this.getPassengers().size() == this.getMaxPassengers()) {
             for (int i : this.getSailSwitchIndices()) {
                 if (this.getPassengers().get(i).getFirstPassenger() instanceof SailSwitchEntity switchEntity) {
                     list.add(switchEntity);
@@ -108,9 +107,10 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         }
         return list;
     }
-    public ArrayList<WindlassSwitchEntity> getWindlasses(){
+
+    public ArrayList<WindlassSwitchEntity> getWindlasses() {
         ArrayList<WindlassSwitchEntity> list = new ArrayList<WindlassSwitchEntity>();
-        if(this.getPassengers().size() == this.getMaxPassengers()) {
+        if (this.getPassengers().size() == this.getMaxPassengers()) {
             for (int i : this.getWindlassIndices()) {
                 if (this.getPassengers().get(i).getFirstPassenger() instanceof WindlassSwitchEntity windlass) {
                     list.add(windlass);
@@ -120,9 +120,9 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         return list;
     }
 
-    public ArrayList<MastEntity> getMasts(){
+    public ArrayList<MastEntity> getMasts() {
         ArrayList<MastEntity> list = new ArrayList<MastEntity>();
-        if(this.getPassengers().size() == this.getMaxPassengers()) {
+        if (this.getPassengers().size() == this.getMaxPassengers()) {
             for (int i : this.getMastIndices()) {
                 if (this.getPassengers().get(i).getFirstPassenger() instanceof MastEntity mast) {
                     list.add(mast);
@@ -150,20 +150,28 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             this.setHurtTime(this.getHurtTime() - 1);
         }
 
-        if(this.getDamage() > this.getDamageThreshold()){
-            if( this.status == Status.IN_WATER){
-                this.setDeltaMovement(this.getDeltaMovement().add(0,-0.1,0));
+        if (this.getDamage() > this.getDamageThreshold()) {
+            if (this.status == Status.IN_WATER) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0, -0.1, 0));
             }
-            for(Entity entity : this.getPassengers()){
+            for (Entity entity : this.getPassengers()) {
                 entity.kill();
             }
-            if(this.getDamage() > this.getDamageThreshold()*2){
+            if (this.getDamage() > this.getDamageThreshold() * 2) {
                 this.kill();
             }
         }
 
-        if((this.status == Status.UNDER_FLOWING_WATER || this.status == Status.UNDER_WATER) && this.getDamage() <= this.getDamageThreshold() && this.tickCount % 10 == 0){
-            this.hurt(this.damageSources().drown(),this.getDamageRecovery());
+        if ((this.status == Status.UNDER_FLOWING_WATER || this.status == Status.UNDER_WATER) && this.getDamage() <= this.getDamageThreshold() && this.tickCount % 10 == 0) {
+            this.hurt(this.damageSources().drown(), this.getDamageRecovery());
+        }
+
+        if (everyNthTickUnique(5)) {
+            if (this.level().getBlockState(this.blockPosition()).is(Blocks.ICE)) {
+                if (this.level().getBlockState(this.blockPosition().above()).is(Blocks.AIR)) {
+                    this.setPos(this.getPosition(0).add(0, 1, 0));
+                }
+            }
         }
 
 
@@ -183,8 +191,19 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                 this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
         }
-
-        this.move(MoverType.SELF, this.getDeltaMovement());
+        if (this.everyNthTickUnique(4)) {
+            Player player = this.level().getNearestPlayer(this, 9 * 16);
+            if (player != null) {
+                if (this.distanceTo(player) < 8 * 16) {
+                    this.setImmobile(false);
+                }
+            } else {
+                this.setImmobile(true);
+            }
+        }
+        if (!this.getImmobile()) {
+            this.move(MoverType.SELF, this.getDeltaMovement());
+        }
 
         this.tickPaddlingEffects();
 
@@ -236,7 +255,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     }
 
     protected void tickUpdateWind(boolean waitForWindUpdateTick) {
-        if (tickCount % WIND_UPDATE_TICKS == 0 || !waitForWindUpdateTick) {
+        if (this.everyNthTickUnique(WIND_UPDATE_TICKS) || !waitForWindUpdateTick) {
             Vec2 windVector = Climate.getWindVector(this.level(), this.blockPosition());
             //windVector = new Vec2(0.05f,0.05f);
             if (windVector.length() == 0) {
@@ -316,7 +335,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     }
 
-    protected void tickTurnSpeedFactor(){
+    protected void tickTurnSpeedFactor() {
         if (this.getControllingCompartment() != null) {
             double turnSpeedFactor = this.getDeltaMovement().length() * 12.0F;
 
@@ -389,26 +408,13 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     }
 
     @Override
-    protected void tickCleatInput(){
-        if(this.getDocked()){
-            this.setDeltaMovement(Vec3.ZERO);
-            this.setDeltaRotation(0);
-            if(this.everyNTickUnique(4)){
-                Player player = this.level().getNearestPlayer(this, 6*16);
-                if(player != null) {
-                    if(this.distanceTo(player) < 5 * 16) {
-                        this.setDocked(false);
-                    }
-                }
-            }
-            return;
-        }
-        for(VehicleCleatEntity cleat : this.getCleats()){
-            if(cleat.isLeashed()){
+    protected void tickCleatInput() {
+        for (VehicleCleatEntity cleat : this.getCleats()) {
+            if (cleat.isLeashed()) {
                 net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
-                if(leashHolder != null){
+                if (leashHolder != null) {
                     if (leashHolder instanceof Player player) {
-                        if(this.getEntitiesToTakeWith().contains(player)){
+                        if (this.getEntitiesToTakeWith().contains(player)) {
                             return;
                         }
                         if (cleat.distanceTo(leashHolder) > 4f) {
@@ -459,12 +465,8 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
                         if (cleat.distanceTo(leashHolder) > 2) {
                             this.setDeltaMovement(movementVector);
                         } else {
-                            Player player = this.level().getNearestPlayer(this, 6*16);
-                            if(player != null){
-                                this.setDocked(this.distanceTo(player) > 5 * 16);
-                            } else {
-                                this.setDocked(true);
-                            }
+                            Player player = this.level().getNearestPlayer(this, 6 * 16);
+                            this.setDeltaMovement(Vec3.ZERO);
                         }
 
 
@@ -476,9 +478,9 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     }
 
-    protected void tickAnchorInput(){
-        for(WindlassSwitchEntity windlass : this.getWindlasses()){
-            if(windlass.getAnchored()){
+    protected void tickAnchorInput() {
+        for (WindlassSwitchEntity windlass : this.getWindlasses()) {
+            if (windlass.getAnchored()) {
                 this.setDeltaMovement(Vec3.ZERO);
             }
         }
@@ -506,7 +508,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             player.swing(hand);
             return InteractionResult.SUCCESS;
         }
-        if(stack.is(this.getDropItem())){
+        if (stack.is(this.getDropItem())) {
             if (this.getDamage() > 0.0F) {
                 this.setDamage(this.getDamage() - getDamageRecovery());
                 stack.split(1);
@@ -519,10 +521,10 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         return InteractionResult.PASS;
     }
 
-    public DyeColor getPaintColor(){
+    public DyeColor getPaintColor() {
         ItemStack stack = this.getPaint();
-        if(!stack.isEmpty()){
-            if(stack.is(Tags.Items.DYES)){
+        if (!stack.isEmpty()) {
+            if (stack.is(Tags.Items.DYES)) {
                 return DyeColor.getColor(stack);
             }
         }
@@ -684,26 +686,26 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         return new Vec2(x, y);
     }
 
-    public void setDocked(boolean docked) {
-        this.entityData.set(DATA_ID_DOCKED, docked);
+    public void setImmobile(boolean immobile) {
+        this.entityData.set(DATA_ID_IMMOBILE, immobile);
     }
 
-    public boolean getDocked() {
-        return this.entityData.get(DATA_ID_DOCKED);
+    public boolean getImmobile() {
+        return this.entityData.get(DATA_ID_IMMOBILE);
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.tickUpdateWind(false);
-        this.setDocked(pCompound.getBoolean("docked"));
+        this.setImmobile(pCompound.getBoolean("immobile"));
     }
 
 
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putBoolean("docked", this.getDocked());
+        pCompound.putBoolean("immobile", this.getImmobile());
 
     }
 

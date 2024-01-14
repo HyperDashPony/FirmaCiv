@@ -126,7 +126,7 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
             }
         }
 
-        if (!pEntity.getJibsailDye().isEmpty() && pEntity.getDyeColor(0) != null) {
+        if (!pEntity.getJibsailDye().isEmpty() && pEntity.getDyeColor(1) != null) {
             VertexConsumer jibsailVertexConsumer = pBuffer.getBuffer(RenderType.entityCutout(getJibsailTexture(pEntity)));
             if (pEntity.getJibsailActive()) {
                 sloopModel.getJibsail().render(poseStack, jibsailVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

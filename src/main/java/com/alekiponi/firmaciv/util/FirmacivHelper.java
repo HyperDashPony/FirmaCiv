@@ -130,4 +130,11 @@ public class FirmacivHelper {
 
     }
 
+    public static boolean everyNthTickUnique(int id, int tickCount, int n){
+        if((id + tickCount) % n == 0){
+            return true;
+        }
+        return false;
+    }
+
 }

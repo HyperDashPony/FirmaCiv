@@ -182,45 +182,45 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             }
         }
 
-        if(this.isVehicle() && !this.level().isClientSide()){
-            if(this.getFirstPassenger() != null && this.getTrueVehicle() != null && this.getFirstPassenger().getBbWidth() > this.getTrueVehicle().getPassengerSizeLimit()){
-                this.ejectPassengers();
-            }
-        }
-
-        this.checkInsideBlocks();
-        final List<Entity> list = this.level()
-                .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
-
-
-        if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level()
-                .isClientSide() && this.getTrueVehicle() != null) {
-            for (final Entity entity : list) {
-                if (!entity.hasPassenger(this)) {
-                    float maxSize = 0.6f;
-                    maxSize = this.getTrueVehicle().getPassengerSizeLimit();
-                    if (this.getPassengers()
-                            .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize) {
-                        if(entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)){
-                            if (!(entity instanceof Predator)) {
-                                entity.startRiding(this);
-                                this.setPassengerRideTick(Calendars.SERVER.getTicks());
-                            }
-                        }
-
-                    }
+        if(everyNthTickUnique(5)){
+            if(this.isVehicle() && !this.level().isClientSide()){
+                if(this.getFirstPassenger() != null && this.getTrueVehicle() != null && this.getFirstPassenger().getBbWidth() > this.getTrueVehicle().getPassengerSizeLimit()){
+                    this.ejectPassengers();
                 }
+            }
 
+            final List<Entity> list = this.level()
+                    .getEntities(this, this.getBoundingBox().inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this));
+
+            if (!list.isEmpty() && this.canAddNonPlayers() && !this.canAddOnlyBLocks() && !this.level()
+                    .isClientSide() && this.getTrueVehicle() != null) {
+                for (final Entity entity : list) {
+                    if (!entity.hasPassenger(this)) {
+                        float maxSize = 0.6f;
+                        maxSize = this.getTrueVehicle().getPassengerSizeLimit();
+                        if (this.getPassengers()
+                                .size() == 0 && !entity.isPassenger() && entity.getBbWidth() <= maxSize) {
+                            if(entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)){
+                                if (!(entity instanceof Predator)) {
+                                    entity.startRiding(this);
+                                    this.setPassengerRideTick(Calendars.SERVER.getTicks());
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+            }
+            if (this.isVehicle() && !(this.getFirstPassenger() instanceof Player)) {
+                long remainingTicks = (long) (ICalendar.TICKS_IN_DAY * 3) - (Calendars.SERVER.getTicks() - this.getPassengerRideTick());
+
+                if (remainingTicks <= 0L) {
+                    this.ejectPassengers();
+                }
             }
         }
 
-        if (this.isVehicle() && !(this.getFirstPassenger() instanceof Player)) {
-            long remainingTicks = (long) (ICalendar.TICKS_IN_DAY * 3) - (Calendars.SERVER.getTicks() - this.getPassengerRideTick());
-
-            if (remainingTicks <= 0L) {
-                this.ejectPassengers();
-            }
-        }
 
         if(!(this.getFirstPassenger() instanceof Player)){
             this.setInputLeft(false);

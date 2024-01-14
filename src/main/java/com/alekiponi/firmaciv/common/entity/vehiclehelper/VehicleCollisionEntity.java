@@ -11,6 +11,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -89,6 +91,16 @@ public class VehicleCollisionEntity extends AbstractInvisibleHelper {
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
 
+    }
+
+    @Override
+    public InteractionResult interact(final Player player, final InteractionHand hand) {
+        return this.getRootVehicle().interact(player,hand);
+    }
+
+    @Override
+    public boolean isPickable() {
+        return !this.isRemoved();
     }
 
     @Override

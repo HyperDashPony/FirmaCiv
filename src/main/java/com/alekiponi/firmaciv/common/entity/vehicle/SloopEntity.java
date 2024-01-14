@@ -319,63 +319,64 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 rotationImpact = Mth.clamp((float) (rotationImpact * this.getDeltaMovement().length()), 0, 0.5f);
 
                 this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
-            }
 
-            float boomWindDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
+                float boomWindDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getSailWorldRotation()));
 
-            float sheet = this.getMainsheetLength();
-            float boom = this.getMainBoomRotation();
+                float sheet = this.getMainsheetLength();
+                float boom = this.getMainBoomRotation();
 
 
-            if (boomWindDifference < -171) {
-                boomWindDifference = Mth.wrapDegrees(boomWindDifference - 180);
-            }
-            if (boomWindDifference > 5) {
-                boom += 2f;
-            }
-            if (boomWindDifference < -5) {
-                boom -= 2f;
-            }
-
-            if (sheet > Math.abs(boom)) {
-                if (boom < 2) {
-                    boom--;
-                } else if (boom > 2) {
-                    boom++;
+                if (boomWindDifference < -171) {
+                    boomWindDifference = Mth.wrapDegrees(boomWindDifference - 180);
                 }
-            }
-
-            this.setMainBoomRotation(boom);
-
-        }
-
-        this.tickDestroyPlants();
-
-        int ind = 0;
-        for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
-            if (ind == 0) {
-                this.setMainsailActive(switchEntity.getSwitched());
-            }
-            if (ind == 1) {
-                this.setJibsailActive(switchEntity.getSwitched());
-            }
-            ind++;
-
-        }
-        if (this.getEntitiesToTakeWith().isEmpty() && this.getTruePassengers().isEmpty()) {
-            this.setTicksNoRiders(this.getTicksNoRiders() + 1);
-            if (this.getTicksNoRiders() >= SAIL_TOGGLE_TICKS) {
-                for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
-                    switchEntity.setSwitched(false);
+                if (boomWindDifference > 5) {
+                    boom += 2f;
                 }
-                this.setJibsailActive(false);
-                this.setMainsailActive(false);
+                if (boomWindDifference < -5) {
+                    boom -= 2f;
+                }
+
+                if (sheet > Math.abs(boom)) {
+                    if (boom < 2) {
+                        boom--;
+                    } else if (boom > 2) {
+                        boom++;
+                    }
+                }
+
+                this.setMainBoomRotation(boom);
             }
-        } else {
-            this.setTicksNoRiders(0);
+
         }
-        if (!this.getMainsailActive() && !this.getJibsailActive()) {
-            this.setMainsheetLength(0);
+
+        if(this.everyNthTickUnique(2)){
+            this.tickDestroyPlants();
+            int ind = 0;
+            for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
+                if (ind == 0) {
+                    this.setMainsailActive(switchEntity.getSwitched());
+                }
+                if (ind == 1) {
+                    this.setJibsailActive(switchEntity.getSwitched());
+                }
+                ind++;
+
+            }
+            if (this.getEntitiesToTakeWith().isEmpty() && this.getTruePassengers().isEmpty()) {
+                this.setTicksNoRiders(this.getTicksNoRiders() + 2);
+                if (this.getTicksNoRiders() >= SAIL_TOGGLE_TICKS) {
+                    for (SailSwitchEntity switchEntity : this.getSailSwitches()) {
+                        switchEntity.setSwitched(false);
+                    }
+                    this.setJibsailActive(false);
+                    this.setMainsailActive(false);
+                }
+            } else {
+                this.setTicksNoRiders(0);
+            }
+            if (!this.getMainsailActive() && !this.getJibsailActive()) {
+                this.setMainsheetLength(0);
+            }
         }
 
         super.tick();
@@ -384,19 +385,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     protected void tickCleatInput() {
         if (this.getMainsailActive() || this.getJibsailActive()) {
-            return;
-        }
-        if(this.getDocked()){
-            this.setDeltaMovement(Vec3.ZERO);
-            this.setDeltaRotation(0);
-            if(this.everyNTickUnique(4)){
-                Player player = this.level().getNearestPlayer(this, 6*16);
-                if(player != null) {
-                    if(this.distanceTo(player) < 5 * 16) {
-                        this.setDocked(false);
-                    }
-                }
-            }
             return;
         }
         int count = 0;
@@ -451,20 +439,12 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     } else {
                         this.setDeltaMovement(Vec3.ZERO);
                     }
-                    Player player = this.level().getNearestPlayer(this, 6*16);
-                    if(player != null){
-                        this.setDocked(this.distanceTo(player) > 5 * 16);
-                    } else {
-                        this.setDocked(true);
-                    }
-
 
                 }
             }
 
         }
         if (count == 1) {
-            this.setDocked(false);
             VehicleCleatEntity cleat = leashedCleats.get(0);
             net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
             if (leashHolder != null) {
@@ -487,13 +467,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
                     if (cleat.distanceTo(leashHolder) > 1) {
                         this.setDeltaMovement(movementVector);
-                    }
-
-                    Player player = this.level().getNearestPlayer(this, 6*16);
-                    if(player != null){
-                        this.setDocked(this.distanceTo(player) > 5 * 16);
                     } else {
-                        this.setDocked(true);
+                        this.setDeltaMovement(Vec3.ZERO);
                     }
 
 
@@ -501,7 +476,6 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             }
         }
         if (count != 1 && count != 2) {
-            this.setDocked(false);
             for (VehicleCleatEntity cleat : leashedCleats) {
                 net.minecraft.world.entity.Entity leashHolder = cleat.getLeashHolder();
                 if (leashHolder != null) {
@@ -511,13 +485,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
                     if (cleat.distanceTo(leashHolder) > 1) {
                         this.setDeltaMovement(movementVector);
-                    }
-
-                    Player player = this.level().getNearestPlayer(this, 6*16);
-                    if(player != null){
-                        this.setDocked(this.distanceTo(player) > 5 * 16);
                     } else {
-                        this.setDocked(true);
+                        this.setDeltaMovement(Vec3.ZERO);
                     }
                 }
             }
@@ -561,6 +530,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
         }
         return null;
     }
+
+    @Override
+    public Item getDropItem(){ return getVariant().getLumber().get(); }
 
     @Nullable
     public EmptyCompartmentEntity getSailingCompartment() {

@@ -3,6 +3,7 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
+import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -105,6 +106,7 @@ public abstract class AbstractCompartmentEntity extends Entity {
         }
 
         if (!this.isPassenger()) {
+            this.checkInsideBlocks();
             if (!(this instanceof EmptyCompartmentEntity)) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
                 if (this.isInWater() || this.level().getFluidState(this.blockPosition())
@@ -221,6 +223,10 @@ public abstract class AbstractCompartmentEntity extends Entity {
             return true;
         }
         return super.isInvulnerableTo(pSource);
+    }
+
+    public boolean everyNthTickUnique(int n){
+        return FirmacivHelper.everyNthTickUnique(this.getId(), this.tickCount, n);
     }
 
     @Override
