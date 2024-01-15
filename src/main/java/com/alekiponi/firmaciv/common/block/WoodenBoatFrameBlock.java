@@ -1,6 +1,7 @@
 package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
+import com.mojang.datafixers.kinds.Const;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
@@ -20,9 +21,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
+
+import static com.alekiponi.firmaciv.common.block.FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
 public class WoodenBoatFrameBlock extends SquaredAngleBlock {
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_7;
@@ -42,7 +46,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
         super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
     }
 
-    public enum ConstantShapeDirections {
+    public enum ConstantShapeDirection {
         NORTH_AND_EAST,
         NORTH_AND_WEST,
         SOUTH_AND_EAST,
@@ -51,80 +55,193 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
         EAST_AND_WEST,
     }
 
+    public enum ConstantShape {
+        STRAIGHT,
+        INNER,
+        OUTER
+    }
+
+    public static ConstantShape getConstantShape(BlockState state){
+        if(isInner(state)){
+            return ConstantShape.INNER;
+        }
+        if(isOuter(state)){
+            return ConstantShape.OUTER;
+        }
+        return ConstantShape.STRAIGHT;
+    }
+
     @Nullable
-    public static ConstantShapeDirections getDirectionHeirarchy(BlockState state) {
+    public static ConstantShapeDirection getDirectionHeirarchy(BlockState state) {
         if (!(state.getBlock() instanceof WoodenBoatFrameBlock)) {
             return null;
         }
         if (state.getValue(FACING) == Direction.SOUTH) {
             if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
-                return ConstantShapeDirections.EAST_AND_WEST;
+                return ConstantShapeDirection.EAST_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
-                return ConstantShapeDirections.NORTH_AND_EAST;
+                return ConstantShapeDirection.NORTH_AND_EAST;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
-                return ConstantShapeDirections.NORTH_AND_WEST;
+                return ConstantShapeDirection.NORTH_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
-                return ConstantShapeDirections.SOUTH_AND_WEST;
+                return ConstantShapeDirection.SOUTH_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
-                return ConstantShapeDirections.SOUTH_AND_EAST;
+                return ConstantShapeDirection.SOUTH_AND_EAST;
             }
         }
         if (state.getValue(FACING) == Direction.NORTH) {
             if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
-                return ConstantShapeDirections.EAST_AND_WEST;
+                return ConstantShapeDirection.EAST_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
-                return ConstantShapeDirections.SOUTH_AND_WEST;
+                return ConstantShapeDirection.SOUTH_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
-                return ConstantShapeDirections.SOUTH_AND_EAST;
+                return ConstantShapeDirection.SOUTH_AND_EAST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
-                return ConstantShapeDirections.NORTH_AND_EAST;
+                return ConstantShapeDirection.NORTH_AND_EAST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
-                return ConstantShapeDirections.NORTH_AND_WEST;
+                return ConstantShapeDirection.NORTH_AND_WEST;
             }
         }
         if (state.getValue(FACING) == Direction.EAST) {
             if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
-                return ConstantShapeDirections.NORTH_AND_SOUTH;
+                return ConstantShapeDirection.NORTH_AND_SOUTH;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
-                return ConstantShapeDirections.NORTH_AND_WEST;
+                return ConstantShapeDirection.NORTH_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
-                return ConstantShapeDirections.SOUTH_AND_WEST;
+                return ConstantShapeDirection.SOUTH_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
-                return ConstantShapeDirections.NORTH_AND_EAST;
+                return ConstantShapeDirection.NORTH_AND_EAST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
-                return ConstantShapeDirections.SOUTH_AND_EAST;
+                return ConstantShapeDirection.SOUTH_AND_EAST;
             }
         }
         if (state.getValue(FACING) == Direction.WEST) {
             if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
-                return ConstantShapeDirections.NORTH_AND_SOUTH;
+                return ConstantShapeDirection.NORTH_AND_SOUTH;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
-                return ConstantShapeDirections.SOUTH_AND_EAST;
+                return ConstantShapeDirection.SOUTH_AND_EAST;
             }
             if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
-                return ConstantShapeDirections.NORTH_AND_EAST;
+                return ConstantShapeDirection.NORTH_AND_EAST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
-                return ConstantShapeDirections.NORTH_AND_WEST;
+                return ConstantShapeDirection.NORTH_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
-                return ConstantShapeDirections.SOUTH_AND_WEST;
+                return ConstantShapeDirection.SOUTH_AND_WEST;
             }
         }
         return null;
+    }
+
+    public static boolean isInner(BlockState state){
+        return state.getValue(SHAPE) == StairsShape.INNER_LEFT || state.getValue(SHAPE) == StairsShape.INNER_RIGHT;
+    }
+
+    public static boolean isOuter(BlockState state){
+        return state.getValue(SHAPE) == StairsShape.OUTER_LEFT || state.getValue(SHAPE) == StairsShape.OUTER_RIGHT;
+    }
+
+    public static boolean isStraight(BlockState state){
+        return state.getValue(SHAPE) == StairsShape.STRAIGHT;
+    }
+
+    @Nullable
+    public static ConstantShapeDirection rotateConstantDirection(ConstantShapeDirection constantDirection, Direction direction){
+        if(direction == Direction.NORTH){
+            return constantDirection;
+        }
+        if(direction == Direction.SOUTH){
+            // clockwise twice / flip
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_SOUTH){
+                return constantDirection;
+            }
+            if(constantDirection == ConstantShapeDirection.EAST_AND_WEST){
+                return constantDirection;
+            }
+
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_EAST){
+                return ConstantShapeDirection.SOUTH_AND_WEST;
+            }
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_WEST){
+                return ConstantShapeDirection.SOUTH_AND_EAST;
+            }
+            if(constantDirection == ConstantShapeDirection.SOUTH_AND_EAST){
+                return ConstantShapeDirection.NORTH_AND_WEST;
+            }
+            if(constantDirection == ConstantShapeDirection.SOUTH_AND_WEST){
+                return ConstantShapeDirection.NORTH_AND_EAST;
+            }
+        }
+        if(direction == Direction.EAST){
+            // clockwise once
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_SOUTH){
+                return ConstantShapeDirection.EAST_AND_WEST;
+            }
+            if(constantDirection == ConstantShapeDirection.EAST_AND_WEST){
+                return ConstantShapeDirection.NORTH_AND_SOUTH;
+            }
+
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_EAST){
+                return ConstantShapeDirection.SOUTH_AND_EAST;
+            }
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_WEST){
+                return ConstantShapeDirection.NORTH_AND_EAST;
+            }
+            if(constantDirection == ConstantShapeDirection.SOUTH_AND_EAST){
+                return ConstantShapeDirection.SOUTH_AND_WEST;
+            }
+            if(constantDirection == ConstantShapeDirection.SOUTH_AND_WEST){
+                return ConstantShapeDirection.NORTH_AND_WEST;
+            }
+        }
+        if(direction == Direction.WEST){
+            // counterclockwise once
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_SOUTH){
+                return ConstantShapeDirection.EAST_AND_WEST;
+            }
+            if(constantDirection == ConstantShapeDirection.EAST_AND_WEST){
+                return ConstantShapeDirection.NORTH_AND_SOUTH;
+            }
+
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_EAST){
+                return ConstantShapeDirection.NORTH_AND_WEST;
+            }
+            if(constantDirection == ConstantShapeDirection.NORTH_AND_WEST){
+                return ConstantShapeDirection.SOUTH_AND_WEST;
+            }
+            if(constantDirection == ConstantShapeDirection.SOUTH_AND_EAST){
+                return ConstantShapeDirection.NORTH_AND_EAST;
+            }
+            if(constantDirection == ConstantShapeDirection.SOUTH_AND_WEST){
+                return ConstantShapeDirection.SOUTH_AND_EAST;
+            }
+        }
+        return null;
+    }
+
+    public static boolean validateForMultiblock(BlockState framestate, ItemStack plankitem) {
+        // check if the plank item matches
+        if (framestate.getBlock() instanceof WoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack()
+                .is(plankitem.getItem())) {
+            // check if the state matches
+            return framestate.getValue(FRAME_PROCESSED_7) == 7;
+        }
+        return false;
+
     }
 
     @Override

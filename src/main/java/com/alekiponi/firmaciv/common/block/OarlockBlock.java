@@ -71,16 +71,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         return origin;
     }
 
-    private static boolean validateFrameState(BlockState framestate, ItemStack plankitem) {
-        // check if the plank item matches
-        if (framestate.getBlock() instanceof WoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack()
-                .is(plankitem.getItem())) {
-            // check if the state matches
-            return framestate.getValue(FRAME_PROCESSED_7) == 7;
-        }
-        return false;
 
-    }
 
     @Override
     public VoxelShape getShape(BlockState pstate, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
@@ -178,7 +169,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
             if (frameState.getValue(FACING) == direction) {
                 // the lower middle watercraft block is validated
                 frameState = level.getBlockState(thispos.relative(direction.getOpposite()));
-                if (frameState.getValue(FACING) == direction.getOpposite() && validateFrameState(frameState,
+                if (frameState.getValue(FACING) == direction.getOpposite() && WoodenBoatFrameBlock.validateForMultiblock(frameState,
                         plankItem)) {
                     //the middle of the boat has been fully validated
                     //proceed left and right
@@ -190,12 +181,12 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
                         positiveDirection1 = direction.getClockWise();
                         negativeDirection2 = direction.getCounterClockWise();
                     }
-                    if (validateFrameState(frameState1, plankItem)) {
+                    if (WoodenBoatFrameBlock.validateForMultiblock(frameState1, plankItem)) {
                         if (frameState1.getValue(FACING) == positiveDirection1
                                 || (frameState1.getValue(FACING).getAxis() != structureAxis && (frameState1.getValue(
                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(
                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
-                            if (validateFrameState(frameState2, plankItem)) {
+                            if (WoodenBoatFrameBlock.validateForMultiblock(frameState2, plankItem)) {
                                 if (frameState2.getValue(FACING) == negativeDirection2
                                         || (frameState2.getValue(FACING)
                                         .getAxis() != structureAxis && (frameState2.getValue(
@@ -205,13 +196,13 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
                                     thispos = thispos.relative(direction.getOpposite());
                                     frameState1 = level.getBlockState(thispos.relative(structureAxis, 1));
                                     frameState2 = level.getBlockState(thispos.relative(structureAxis, -1));
-                                    if (validateFrameState(frameState1, plankItem)) {
+                                    if (WoodenBoatFrameBlock.validateForMultiblock(frameState1, plankItem)) {
                                         if (frameState1.getValue(FACING) == positiveDirection1
                                                 || (frameState1.getValue(FACING)
                                                 .getAxis() != structureAxis && (frameState1.getValue(
                                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(
                                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
-                                            if (validateFrameState(frameState2, plankItem)) {
+                                            if (WoodenBoatFrameBlock.validateForMultiblock(frameState2, plankItem)) {
                                                 //the top of the boat has been fully validated
                                                 //the WHOLE BOAT has been validated
                                                 return frameState2.getValue(FACING) == negativeDirection2
