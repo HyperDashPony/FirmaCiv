@@ -61,6 +61,8 @@ public final class RenderEventHandler {
                 BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.CARTOGRAPHY_TABLE_COMPARTMENT_ENTITY.get(),
                 BlockCompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.SMITHING_TABLE_COMPARTMENT_ENTITY.get(),
+                BlockCompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
 
