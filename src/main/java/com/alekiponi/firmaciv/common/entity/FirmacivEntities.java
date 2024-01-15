@@ -1,10 +1,7 @@
 package com.alekiponi.firmaciv.common.entity;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AnvilCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.ChestCompartmentEntity;
@@ -44,6 +41,12 @@ public final class FirmacivEntities {
                     () -> EntityType.Builder.of(SloopEntity::new, MobCategory.MISC)
                             .sized(3F, 0.75F).setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()
                             .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop/" + variant.getName()).toString())));
+
+    public static final Map<BoatVariant, RegistryObject<EntityType<SloopConstructionEntity>>> SLOOPS_UNDER_CONSTRUCTION =
+            Helpers.mapOfKeys(BoatVariant.class, variant -> ENTITY_TYPES.register("sloop_construction/" + variant.getName(),
+                    () -> EntityType.Builder.of(SloopConstructionEntity::new, MobCategory.MISC)
+                            .sized(3F, 0.75F).setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()
+                            .build(new ResourceLocation(Firmaciv.MOD_ID, "sloop_construction/" + variant.getName()).toString())));
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = ENTITY_TYPES.register("kayak",
             () -> EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F)
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "kayak").toString()));
@@ -95,7 +98,7 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<WindlassSwitchEntity>> WINDLASS_SWITCH_ENTITY = ENTITY_TYPES.register(
             "vehicle_switch_windlass",
-            () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon()
+            () -> EntityType.Builder.of(WindlassSwitchEntity::new, MobCategory.MISC).sized(0.8F, 0.8F).setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_windlass").toString()));
 
     public static final RegistryObject<EntityType<CannonballEntity>> CANNONBALL_ENTITY = ENTITY_TYPES.register(

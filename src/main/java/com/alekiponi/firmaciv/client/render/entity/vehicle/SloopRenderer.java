@@ -153,7 +153,7 @@ public class SloopRenderer extends EntityRenderer<SloopEntity> {
     @Override
     public ResourceLocation getTextureLocation(SloopEntity pEntity) {
         return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/rowboat/" + pEntity.getVariant() + ".png");
+                "textures/entity/watercraft/sloop/" + pEntity.getVariant() + ".png");
     }
 
     public ResourceLocation getMainsailTexture(SloopEntity pEntity) {

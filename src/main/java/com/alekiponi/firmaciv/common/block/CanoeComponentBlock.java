@@ -51,8 +51,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE_1 = Stream.of(
                     Block.box(0, 0, 0, 16, 16, 16))
             .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public final Supplier<? extends Block> strippedBlock;
-    public final Supplier<? extends Item> lumberItem;
     public final BoatVariant variant;
 
     public CanoeComponentBlock(Properties properties, BoatVariant variant) {
@@ -60,13 +58,11 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
                 .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED, 1).setValue(END, false));
         this.variant = variant;
-        this.strippedBlock = variant.getStripped();
-        this.lumberItem = variant.getLumber();
     }
 
     public static Block getByStripped(Block strippedLogBlock) {
         return CANOE_COMPONENT_BLOCKS.values().stream()
-                .filter(registryObject -> registryObject.get().strippedBlock.get() == strippedLogBlock)
+                .filter(registryObject -> registryObject.get().variant.getStripped() == strippedLogBlock)
                 .map(registryObject -> registryObject.get()).findFirst().get();
     }
 
@@ -353,11 +349,11 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     }
 
     public Item getLumber() {
-        return lumberItem.get();
+        return variant.getLumber().get();
     }
 
     public Block getStrippedLog() {
-        return strippedBlock.get();
+        return variant.getStripped().get();
     }
 
     @Override

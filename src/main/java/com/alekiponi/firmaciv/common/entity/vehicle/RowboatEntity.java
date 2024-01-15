@@ -35,7 +35,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     protected final float PASSENGER_SIZE_LIMIT = 1.4F;
 
     protected final float DAMAGE_THRESHOLD = 128.0f;
-    protected final float DAMAGE_RECOVERY = 2.0f;
+    protected final float DAMAGE_RECOVERY = 5.333f;
 
 
     public RowboatEntity(final EntityType<? extends AbstractFirmacivBoatEntity> entityType, final Level level) {
@@ -170,7 +170,7 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     public Item getDropItem() {
-        return getVariant().getLumber().get();
+        return getVariant().getPlanks().get().asItem();
     }
 
     @Nullable

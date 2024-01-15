@@ -6,9 +6,11 @@
 package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.Firmaciv;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractVehicle;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.SailSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.WindlassSwitchEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
@@ -25,22 +27,27 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.common.Tags;
 
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Locale;
-import java.util.Objects;
 
 public enum IngameOverlays {
     COMPARTMENT_STATUS(IngameOverlays::renderCompartmentStatus),
     PASSENGER_STATUS(IngameOverlays::renderPassengerStatus),
 
     SAILING_ELEMENT(IngameOverlays::renderSailingElement);
+
+
 
     public static final ResourceLocation COMPARTMENT_ICONS = new ResourceLocation(Firmaciv.MOD_ID,
             "textures/gui/icons/compartment_icons.png");
@@ -54,6 +61,26 @@ public enum IngameOverlays {
     IngameOverlays(IGuiOverlay overlay) {
         this.id = this.name().toLowerCase(Locale.ROOT);
         this.overlay = overlay;
+    }
+
+    public static final int COMPARTMENT_ICON_WIDTH = 9;
+    public static enum CompIcon {
+        HELM,
+        BLOCK,
+        SAIL,
+        PADDLE,
+        SEAT,
+        EJECT,
+        LEAD,
+        ARROW_UP,
+        ARROW_DOWN,
+        ANCHOR,
+        BRUSH,
+        HAMMER
+    }
+
+    public static int iconOffset(CompIcon icon){
+        return icon.ordinal()*9;
     }
 
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
@@ -205,83 +232,84 @@ public enum IngameOverlays {
 
                 stack.pushPose();
 
+                if(entity instanceof AbstractVehicle || entity instanceof VehicleCollisionEntity){
+                    AbstractVehicle vehicle;
+                    if(entity instanceof VehicleCollisionEntity collider){
+                        entity = collider.getRootVehicle();
+                    }
+                    vehicle = (AbstractVehicle)entity;
+                    for(ItemStack item : player.getHandSlots()){
+                        if(item.is(vehicle.getDropItem())){
+                            stack = setupCompartmentStack(stack, width, height);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.HAMMER), 0, 9, 9);
+                            break;
+                        }
+                        if(item.is(Tags.Items.DYES) || item.is(Items.WATER_BUCKET)){
+                            stack = setupCompartmentStack(stack, width, height);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BRUSH), 0, 9, 9);
+                            break;
+                        }
+
+                    }
+                }
+
                 if (entity instanceof EmptyCompartmentEntity emptyCompartmentEntity && emptyCompartmentEntity.isPassenger() && !emptyCompartmentEntity.isVehicle()) {
-                    stack.scale(1.0F, 1.0F, 1.0F);
-                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
-                    if ((float) height % 2.0 != 0) {
-                        stack.translate(0f, 0.5f, 0.0f);
-                    }
-                    if ((float) width % 2.0 != 0) {
-                        stack.translate(0.5f, 0f, 0.0f);
-                    }
+                    stack = setupCompartmentStack(stack, width, height);
                     if (emptyCompartmentEntity.getTrueVehicle() != null && emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity() != null) {
                         if (emptyCompartmentEntity.getTrueVehicle().getPilotVehiclePartAsEntity().getFirstPassenger()
                                 .is(emptyCompartmentEntity)) {
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 0, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.HELM), 0, 9, 9);
                             if (emptyCompartmentEntity.getTrueVehicle() instanceof CanoeEntity && player.getItemInHand(
                                     player.getUsedItemHand()).is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)) {
-                                graphics.blit(COMPARTMENT_ICONS, -12, 0, 9, 0, 9, 9);
+                                graphics.blit(COMPARTMENT_ICONS, -12, 0, iconOffset(CompIcon.BLOCK), 0, 9, 9);
                             }
 
                         } else if (player.getItemInHand(player.getUsedItemHand())
                                 .is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)) {
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 9, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BLOCK), 0, 9, 9);
                         } else if (player.getItemInHand(player.getUsedItemHand())
                                 .is(FirmacivItems.CANNON.get()) && !emptyCompartmentEntity.canAddOnlyBLocks() && emptyCompartmentEntity.getRootVehicle() instanceof SloopEntity) {
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 9, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BLOCK), 0, 9, 9);
                         }else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()) {
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 36, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.SEAT), 0, 9, 9);
                         } else if (!emptyCompartmentEntity.isVehicle() && emptyCompartmentEntity.canAddOnlyBLocks()) {
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 9, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BLOCK), 0, 9, 9);
                         }
                     }
                 } else if (entity instanceof VehicleCleatEntity vehicleCleatEntity  && vehicleCleatEntity.isPassenger() && !vehicleCleatEntity.isLeashed()) {
-                    if ((float) height % 2.0 != 0) {
-                        stack.translate(0f, 0.5f, 0.0f);
-                    }
-                    if ((float) width % 2.0 != 0) {
-                        stack.translate(0.5f, 0f, 0.0f);
-                    }
-                    stack.scale(1.0F, 1.0F, 1.0F);
-                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
+                    stack = setupCompartmentStack(stack, width, height);
                     if (vehicleCleatEntity.getVehicle().getVehicle() != null) {
                         graphics.blit(COMPARTMENT_ICONS, 0, 0, 54, 0, 9, 9);
                     }
                 } else if (entity instanceof SailSwitchEntity sailSwitch  && sailSwitch.isPassenger()) {
-                    if ((float) height % 2.0 != 0) {
-                        stack.translate(0f, 0.5f, 0.0f);
+                    stack = setupCompartmentStack(stack, width, height);
+                    boolean flag = false;
+                    for(ItemStack item : player.getHandSlots()){
+                        if(item.is(Tags.Items.DYES) || item.is(Items.WATER_BUCKET)){
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BRUSH), 0, 9, 9);
+                            flag = true;
+                            break;
+                        }
                     }
-                    if ((float) width % 2.0 != 0) {
-                        stack.translate(0.5f, 0f, 0.0f);
-                    }
-                    stack.scale(1.0F, 1.0F, 1.0F);
-                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
-                    if (sailSwitch.getVehicle().getVehicle() != null) {
+                    if (sailSwitch.getVehicle().getVehicle() != null && !flag) {
                         if(sailSwitch.getSwitched()){
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 18, 0, 9, 9);
-                            graphics.blit(COMPARTMENT_ICONS, 0, 10, 72, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.SAIL), 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 10, iconOffset(CompIcon.ARROW_DOWN), 0, 9, 9);
                         } else {
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 18, 0, 9, 9);
-                            graphics.blit(COMPARTMENT_ICONS, 0, -10, 63, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.SAIL), 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, -10, iconOffset(CompIcon.ARROW_UP), 0, 9, 9);
                         }
 
                     }
                 } else if (entity instanceof WindlassSwitchEntity windlassSwitch  && windlassSwitch.isPassenger()) {
-                    if ((float) height % 2.0 != 0) {
-                        stack.translate(0f, 0.5f, 0.0f);
-                    }
-                    if ((float) width % 2.0 != 0) {
-                        stack.translate(0.5f, 0f, 0.0f);
-                    }
-                    stack.scale(1.0F, 1.0F, 1.0F);
-                    stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
+                    stack = setupCompartmentStack(stack, width, height);
                     if (windlassSwitch.getVehicle().getVehicle() != null) {
                         if(!windlassSwitch.getSwitched()){
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 81, 0, 9, 9);
-                            graphics.blit(COMPARTMENT_ICONS, 0, 10, 72, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.ANCHOR), 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 10, iconOffset(CompIcon.ARROW_DOWN), 0, 9, 9);
                         } else {
-                            graphics.blit(COMPARTMENT_ICONS, 0, 0, 81, 0, 9, 9);
-                            graphics.blit(COMPARTMENT_ICONS, 0, -10, 63, 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.ANCHOR), 0, 9, 9);
+                            graphics.blit(COMPARTMENT_ICONS, 0, -10, iconOffset(CompIcon.ARROW_UP), 0, 9, 9);
                         }
 
                     }
@@ -290,6 +318,18 @@ public enum IngameOverlays {
                 stack.popPose();
             }
         }
+    }
+
+    public static PoseStack setupCompartmentStack(PoseStack stack, int width, int height){
+        stack.scale(1.0F, 1.0F, 1.0F);
+        stack.translate((float) width / 2.0F - 5f - 12f, (float) height / 2.0F - 5F, 0.0F);
+        if ((float) height % 2.0 != 0) {
+            stack.translate(0f, 0.5f, 0.0f);
+        }
+        if ((float) width % 2.0 != 0) {
+            stack.translate(0.5f, 0f, 0.0f);
+        }
+        return stack;
     }
 
     public static boolean setup(ForgeGui gui, Minecraft minecraft) {

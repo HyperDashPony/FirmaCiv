@@ -175,7 +175,6 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
                 }
             }
 
-
             if (frameState.getValue(FACING) == direction) {
                 // the lower middle watercraft block is validated
                 frameState = level.getBlockState(thispos.relative(direction.getOpposite()));

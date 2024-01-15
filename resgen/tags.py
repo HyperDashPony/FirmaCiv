@@ -12,7 +12,6 @@ def generate(manager: ResourceManager):
         manager.entity_tag("firmaciv:sloops", f"firmaciv:sloop/{wood}")
         manager.entity_tag("firmaciv:dugout_canoes", f"firmaciv:dugout_canoe/{wood}")
         manager.entity_tag("firmaciv:rowboats", f"firmaciv:rowboat/{wood}")
-        manager.entity_tag("firmaciv:outrigger_canoes", f"firmaciv:outrigger_canoe/{wood}")
 
     manager.entity_tag("firmaciv:vehicle_helpers", "firmaciv:vehicle_cleat",
                        "firmaciv:vehicle_part_boat", "firmaciv:vehicle_switch_windlass", "firmaciv:vehicle_switch_sail",
@@ -34,5 +33,5 @@ def generate(manager: ResourceManager):
     # Carryon
     manager.block_tag("carryon:block_blacklist", "#firmaciv:canoe_component_blocks")
     manager.entity_tag("carryon:entity_blacklist", "#firmaciv:dugout_canoes", "#firmaciv:sloops",
-                       "#firmaciv:rowboats", "#firmaciv:outrigger_canoes", "firmaciv:kayak",
+                       "#firmaciv:rowboats", "firmaciv:kayak",
                        "#firmaciv:vehicle_helpers", "#firmaciv:compartments", "firmaciv:cannonball")

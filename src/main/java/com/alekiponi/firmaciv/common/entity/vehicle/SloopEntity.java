@@ -65,7 +65,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
     protected final int SAIL_TOGGLE_TICKS = 20;
     protected final float DAMAGE_THRESHOLD = 512.0f;
-    protected final float DAMAGE_RECOVERY = 2.0f;
+    protected final float DAMAGE_RECOVERY = 5.333f;
 
     public SloopEntity(EntityType<? extends AbstractFirmacivBoatEntity> entityType, Level level) {
         super(entityType, level);
@@ -236,7 +236,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             case 17 -> {
                 //mainsail switch
                 localZ = 0f;
-                localX = 2f;
+                localX = 1.8f;
                 localY += 2.625f;
             }
             case 18 -> {
@@ -532,7 +532,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
-    public Item getDropItem(){ return getVariant().getLumber().get(); }
+    public Item getDropItem(){ return getVariant().getPlanks().get().asItem(); }
 
     @Nullable
     public EmptyCompartmentEntity getSailingCompartment() {

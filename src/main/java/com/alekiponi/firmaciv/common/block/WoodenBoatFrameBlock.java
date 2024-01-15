@@ -22,6 +22,8 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nullable;
+
 public class WoodenBoatFrameBlock extends SquaredAngleBlock {
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
@@ -40,10 +42,95 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
         super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
     }
 
+    public enum ConstantShapeDirections {
+        NORTH_AND_EAST,
+        NORTH_AND_WEST,
+        SOUTH_AND_EAST,
+        SOUTH_AND_WEST,
+        NORTH_AND_SOUTH,
+        EAST_AND_WEST,
+    }
+
+    @Nullable
+    public static ConstantShapeDirections getDirectionHeirarchy(BlockState state) {
+        if (!(state.getBlock() instanceof WoodenBoatFrameBlock)) {
+            return null;
+        }
+        if (state.getValue(FACING) == Direction.SOUTH) {
+            if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
+                return ConstantShapeDirections.EAST_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
+                return ConstantShapeDirections.NORTH_AND_EAST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
+                return ConstantShapeDirections.NORTH_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
+                return ConstantShapeDirections.SOUTH_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
+                return ConstantShapeDirections.SOUTH_AND_EAST;
+            }
+        }
+        if (state.getValue(FACING) == Direction.NORTH) {
+            if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
+                return ConstantShapeDirections.EAST_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
+                return ConstantShapeDirections.SOUTH_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
+                return ConstantShapeDirections.SOUTH_AND_EAST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
+                return ConstantShapeDirections.NORTH_AND_EAST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
+                return ConstantShapeDirections.NORTH_AND_WEST;
+            }
+        }
+        if (state.getValue(FACING) == Direction.EAST) {
+            if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
+                return ConstantShapeDirections.NORTH_AND_SOUTH;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
+                return ConstantShapeDirections.NORTH_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
+                return ConstantShapeDirections.SOUTH_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
+                return ConstantShapeDirections.NORTH_AND_EAST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
+                return ConstantShapeDirections.SOUTH_AND_EAST;
+            }
+        }
+        if (state.getValue(FACING) == Direction.WEST) {
+            if (state.getValue(SHAPE) == StairsShape.STRAIGHT) {
+                return ConstantShapeDirections.NORTH_AND_SOUTH;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_RIGHT) {
+                return ConstantShapeDirections.SOUTH_AND_EAST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.INNER_LEFT) {
+                return ConstantShapeDirections.NORTH_AND_EAST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
+                return ConstantShapeDirections.NORTH_AND_WEST;
+            }
+            if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
+                return ConstantShapeDirections.SOUTH_AND_WEST;
+            }
+        }
+        return null;
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
-            final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
+                                 final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
 
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
@@ -106,7 +193,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
     @Override
     @SuppressWarnings("deprecation")
     public ItemStack getCloneItemStack(final BlockGetter blockGetter, final BlockPos blockPos,
-            final BlockState blockState) {
+                                       final BlockState blockState) {
         // We don't exist as an item so pass it the base version instead
         return FirmacivBlocks.BOAT_FRAME_ANGLED.get().getCloneItemStack(blockGetter, blockPos, blockState);
     }
