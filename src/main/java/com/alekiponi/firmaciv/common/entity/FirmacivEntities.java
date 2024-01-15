@@ -108,6 +108,11 @@ public final class FirmacivEntities {
             CompartmentType.Builder.of(SmithingTableCompartmentEntity::new, SmithingTableCompartmentEntity::new,
                     itemStack -> itemStack.is(Blocks.SMITHING_TABLE.asItem()), MobCategory.MISC));
 
+    public static final RegistryObject<CompartmentType<GrindstoneCompartmentEntity>> GRINDSTONE_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_grindstone",
+            CompartmentType.Builder.of(GrindstoneCompartmentEntity::new, GrindstoneCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.GRINDSTONE.asItem()), MobCategory.MISC));
+
     public static final RegistryObject<CompartmentType<AnvilCompartmentEntity>> ANVIL_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_anvil", CompartmentType.Builder.of(AnvilCompartmentEntity::new, AnvilCompartmentEntity::new,
                     itemStack -> itemStack.is(FirmacivTags.Items.ANVILS), MobCategory.MISC));
