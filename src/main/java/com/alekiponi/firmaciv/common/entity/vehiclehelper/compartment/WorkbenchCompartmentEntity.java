@@ -2,8 +2,6 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.CraftingMenu;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -23,8 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implements HasCustomInventoryScreen, MenuProvider {
-    private static final Component CONTAINER_TITLE = Component.translatable("container.crafting");
+public class WorkbenchCompartmentEntity extends BlockCompartmentEntity implements HasCustomInventoryScreen, MenuProvider {
 
     public WorkbenchCompartmentEntity(final EntityType<? extends WorkbenchCompartmentEntity> entityType,
             final Level level) {
@@ -33,30 +29,19 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
 
     public WorkbenchCompartmentEntity(final CompartmentType<? extends WorkbenchCompartmentEntity> entityType,
             final Level level, final ItemStack itemStack) {
-        this(entityType, level);
-        if (itemStack.getItem() instanceof BlockItem blockItem) {
-            this.setDisplayBlockState(blockItem.getBlock().defaultBlockState());
-        }
-    }
-
-    @Override
-    public void remove(final RemovalReason removalReason) {
-        if (!this.level().isClientSide && removalReason.shouldDestroy()) {
-            this.playSound(SoundEvents.WOOD_BREAK, 1, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
-        }
-
-        super.remove(removalReason);
-    }
-
-    @Override
-    public Component getDisplayName() {
-        return CONTAINER_TITLE;
+        super(entityType, level, itemStack);
     }
 
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
         this.openCustomInventoryScreen(player);
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void openCustomInventoryScreen(final Player player) {
+        player.openMenu(this);
+        player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
     }
 
     @Override
@@ -75,11 +60,5 @@ public class WorkbenchCompartmentEntity extends AbstractCompartmentEntity implem
                 return player.distanceToSqr(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5) <= 64;
             }
         };
-    }
-
-    @Override
-    public void openCustomInventoryScreen(final Player player) {
-        player.openMenu(this);
-        player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
     }
 }
