@@ -36,9 +36,9 @@ public class VehicleCleatRenderer extends EntityRenderer<VehicleCleatEntity> {
 
     public void render(VehicleCleatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
                        MultiBufferSource pBuffer, int pPackedLight) {
-        super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
         net.minecraft.world.entity.Entity entity = pEntity.getLeashHolder();
         if (entity != null) {
+            super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
             float rotation = 0f;
             if (pEntity.getVehicle().getVehicle() instanceof AbstractFirmacivBoatEntity trueVehicle) {
                 rotation = trueVehicle.getYRot();

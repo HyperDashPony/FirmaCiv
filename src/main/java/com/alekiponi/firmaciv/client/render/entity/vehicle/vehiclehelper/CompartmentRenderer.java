@@ -29,6 +29,9 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
 
     public void render(AbstractCompartmentEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
                        MultiBufferSource pBuffer, int pPackedLight) {
+        if(pEntity instanceof EmptyCompartmentEntity){
+            return;
+        }
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
 
         float rotation = 0f;
@@ -41,27 +44,24 @@ public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntit
         if(pEntity.tickCount < 2){
             return;
         }
-
-        if (!(pEntity instanceof EmptyCompartmentEntity)) {
-            BlockState blockstate = null;
-            if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
-                blockstate = bi.getBlock().defaultBlockState();
+        BlockState blockstate = null;
+        if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
+            blockstate = bi.getBlock().defaultBlockState();
+        }
+        if (blockstate != null) {
+            pPoseStack.pushPose();
+            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - rotation));
+            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
+            if(pEntity.getTrueVehicle() instanceof CanoeEntity){
+                pPoseStack.scale(0.6F, 0.6F, 0.6F);
+            } else {
+                pPoseStack.scale(0.6875F, 0.6875F, 0.6875F);
             }
-            if (blockstate != null) {
-                pPoseStack.pushPose();
-                pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - rotation));
-                pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
-                if(pEntity.getTrueVehicle() instanceof CanoeEntity){
-                    pPoseStack.scale(0.6F, 0.6F, 0.6F);
-                } else {
-                    pPoseStack.scale(0.6875F, 0.6875F, 0.6875F);
-                }
 
-                pPoseStack.translate(-0.5F, 00F, -0.5F);
+            pPoseStack.translate(-0.5F, 00F, -0.5F);
 
-                this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);
-                pPoseStack.popPose();
-            }
+            this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);
+            pPoseStack.popPose();
         }
 
     }

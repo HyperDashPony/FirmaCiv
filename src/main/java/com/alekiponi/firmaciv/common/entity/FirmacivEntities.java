@@ -85,7 +85,7 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<SailSwitchEntity>> SAIL_SWITCH_ENTITY = ENTITY_TYPES.register(
             "vehicle_switch_sail",
-            () -> EntityType.Builder.of(SailSwitchEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).noSummon()
+            () -> EntityType.Builder.of(SailSwitchEntity::new, MobCategory.MISC).sized(0.8F, 0.8F).noSummon()
                     .build(new ResourceLocation(Firmaciv.MOD_ID, "vehicle_switch_sail").toString()));
 
     public static final RegistryObject<EntityType<AnchorEntity>> ANCHOR_ENTITY = ENTITY_TYPES.register(
