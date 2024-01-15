@@ -92,11 +92,16 @@ public final class FirmacivEntities {
             "compartment_workbench",
             CompartmentType.Builder.of(WorkbenchCompartmentEntity::new, WorkbenchCompartmentEntity::new,
                     itemStack -> itemStack.is(FirmacivTags.Items.WORKBENCHES), MobCategory.MISC));
-    
+
     public static final RegistryObject<CompartmentType<StonecutterCompartmentEntity>> STONECUTTER_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_stonecutter",
             CompartmentType.Builder.of(StonecutterCompartmentEntity::new, StonecutterCompartmentEntity::new,
                     itemStack -> itemStack.is(Blocks.STONECUTTER.asItem()), MobCategory.MISC));
+
+    public static final RegistryObject<CompartmentType<CartographyTableCompartmentEntity>> CARTOGRAPHY_TABLE_COMPARTMENT_ENTITY = registerCompartment(
+            "compartment_cartography_table",
+            CompartmentType.Builder.of(CartographyTableCompartmentEntity::new, CartographyTableCompartmentEntity::new,
+                    itemStack -> itemStack.is(Blocks.CARTOGRAPHY_TABLE.asItem()), MobCategory.MISC));
 
     public static final RegistryObject<CompartmentType<AnvilCompartmentEntity>> ANVIL_COMPARTMENT_ENTITY = registerCompartment(
             "compartment_anvil", CompartmentType.Builder.of(AnvilCompartmentEntity::new, AnvilCompartmentEntity::new,

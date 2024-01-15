@@ -59,6 +59,9 @@ public final class RenderEventHandler {
                 BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.STONECUTTER_COMPARTMENT_ENTITY.get(),
                 BlockCompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.CARTOGRAPHY_TABLE_COMPARTMENT_ENTITY.get(),
+                BlockCompartmentRenderer::new);
+
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.BOAT_VEHICLE_PART.get(), NoopRenderer::new);
