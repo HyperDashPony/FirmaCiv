@@ -87,7 +87,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (!pOldState.is(pState.getBlock())) {
-            if (checkOppositeOarlock(pLevel, pPos, pState) && checkFrameBlocks(pLevel, pPos, pState)) {
+            if (checkOppositeOarlock(pLevel, pPos, pState) && newCheckFrameBlocks(pLevel, pPos, pState)) {
                 spawnRowboat(pLevel, pPos, pState);
             }
         }
@@ -97,20 +97,13 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     public void destroyMultiblock(Level level, BlockPos thispos, BlockState blockState) {
         Direction direction = blockState.getValue(FACING);
         Direction.Axis axis = direction.getClockWise().getAxis();
-        level.removeBlockEntity(thispos);
         level.destroyBlock(thispos, false);
         level.destroyBlock(thispos.relative(direction.getOpposite()), false);
         thispos = thispos.below();
-        level.removeBlockEntity(thispos);
-        level.removeBlockEntity(thispos.relative(axis, 1));
-        level.removeBlockEntity(thispos.relative(axis, -1));
         level.destroyBlock(thispos, false);
         level.destroyBlock(thispos.relative(axis, 1), false);
         level.destroyBlock(thispos.relative(axis, -1), false);
         thispos = thispos.relative(direction.getOpposite());
-        level.removeBlockEntity(thispos);
-        level.removeBlockEntity(thispos.relative(axis, 1));
-        level.removeBlockEntity(thispos.relative(axis, -1));
         level.destroyBlock(thispos, false);
         level.destroyBlock(thispos.relative(axis, 1), false);
         level.destroyBlock(thispos.relative(axis, -1), false);
@@ -169,7 +162,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
             if (frameState.getValue(FACING) == direction) {
                 // the lower middle watercraft block is validated
                 frameState = level.getBlockState(thispos.relative(direction.getOpposite()));
-                if (frameState.getValue(FACING) == direction.getOpposite() && WoodenBoatFrameBlock.validateForMultiblock(frameState,
+                if (frameState.getValue(FACING) == direction.getOpposite() && WoodenBoatFrameBlock.validateProcessed(frameState,
                         plankItem)) {
                     //the middle of the boat has been fully validated
                     //proceed left and right
@@ -181,12 +174,12 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
                         positiveDirection1 = direction.getClockWise();
                         negativeDirection2 = direction.getCounterClockWise();
                     }
-                    if (WoodenBoatFrameBlock.validateForMultiblock(frameState1, plankItem)) {
+                    if (WoodenBoatFrameBlock.validateProcessed(frameState1, plankItem)) {
                         if (frameState1.getValue(FACING) == positiveDirection1
                                 || (frameState1.getValue(FACING).getAxis() != structureAxis && (frameState1.getValue(
                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(
                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
-                            if (WoodenBoatFrameBlock.validateForMultiblock(frameState2, plankItem)) {
+                            if (WoodenBoatFrameBlock.validateProcessed(frameState2, plankItem)) {
                                 if (frameState2.getValue(FACING) == negativeDirection2
                                         || (frameState2.getValue(FACING)
                                         .getAxis() != structureAxis && (frameState2.getValue(
@@ -196,13 +189,13 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
                                     thispos = thispos.relative(direction.getOpposite());
                                     frameState1 = level.getBlockState(thispos.relative(structureAxis, 1));
                                     frameState2 = level.getBlockState(thispos.relative(structureAxis, -1));
-                                    if (WoodenBoatFrameBlock.validateForMultiblock(frameState1, plankItem)) {
+                                    if (WoodenBoatFrameBlock.validateProcessed(frameState1, plankItem)) {
                                         if (frameState1.getValue(FACING) == positiveDirection1
                                                 || (frameState1.getValue(FACING)
                                                 .getAxis() != structureAxis && (frameState1.getValue(
                                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_RIGHT || frameState1.getValue(
                                                 SquaredAngleBlock.SHAPE) == StairsShape.INNER_LEFT))) {
-                                            if (WoodenBoatFrameBlock.validateForMultiblock(frameState2, plankItem)) {
+                                            if (WoodenBoatFrameBlock.validateProcessed(frameState2, plankItem)) {
                                                 //the top of the boat has been fully validated
                                                 //the WHOLE BOAT has been validated
                                                 return frameState2.getValue(FACING) == negativeDirection2
@@ -223,6 +216,61 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         }
         return false;
     }
+
+    public boolean newCheckFrameBlocks(Level level, BlockPos thispos, BlockState blockState) {
+        Direction structureDirection = blockState.getValue(FACING).getClockWise();
+        Direction.Axis structureAxis = structureDirection.getAxis();
+        Direction crossDirection = structureDirection.getClockWise();
+
+        thispos = thispos.below();
+        thispos = thispos.relative(structureDirection);
+
+        BlockState frameState = level.getBlockState(thispos);
+        ItemStack plankItem = ItemStack.EMPTY;
+        if (frameState.getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock) {
+            plankItem = woodenBoatFrameBlock.getPlankAsItemStack();
+            if (FirmacivConfig.SERVER.shipWoodRestriction.get()) {
+                if (!plankItem.is(FirmacivTags.Items.PLANKS_THAT_MAKE_SHIPS)) {
+                    return false;
+                }
+            } else {
+                if (!plankItem.is(FirmacivTags.Items.PLANKS)) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        BlockState[][] statesToValidate = new BlockState[3][2];
+
+        // get all appropriate block states
+
+        statesToValidate[0][0] = level.getBlockState(thispos);
+        statesToValidate[0][1] = level.getBlockState(thispos.relative(crossDirection));
+
+        thispos = thispos.relative(structureDirection.getOpposite());
+        statesToValidate[1][0] = level.getBlockState(thispos);
+        statesToValidate[1][1] = level.getBlockState(thispos.relative(crossDirection));
+
+        thispos = thispos.relative(structureDirection.getOpposite());
+        statesToValidate[2][0] = level.getBlockState(thispos);
+        statesToValidate[2][1] = level.getBlockState(thispos.relative(crossDirection));
+
+        // check all block states by iterating through the multiblock
+        boolean valid = true;
+        for(int y = 0; y < statesToValidate.length; y++){
+            for(int x = 0; x < statesToValidate[0].length; x++){
+                if(!ShipbuildingMultiblocks.rowboatMultiblock[y][x].validate(statesToValidate[y][x], plankItem, structureDirection)){
+                    return false;
+                }
+            }
+        }
+
+        return valid;
+
+    }
+
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
