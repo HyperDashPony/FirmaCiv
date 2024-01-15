@@ -65,6 +65,7 @@ public final class RenderEventHandler {
                 BlockCompartmentRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.GRINDSTONE_COMPARTMENT_ENTITY.get(),
                 BlockCompartmentRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.LOOM_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
 
