@@ -3,6 +3,7 @@
   "replace": false,
   "values": [
     "firmaciv:watercraft_frame_angled",
+    "firmaciv:watercraft_frame_flat",
     "#firmaciv:canoe_component_blocks",
     "#firmaciv:wooden_watercraft_frames"
   ]

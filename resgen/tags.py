@@ -8,7 +8,8 @@ def generate(manager: ResourceManager):
     for wood in constants.TFC_WOODS.keys():
         manager.block_tag("canoe_component_blocks", f"wood/canoe_component_block/{wood}")
         manager.block_tag("can_make_canoe_unrestricted", f"tfc:wood/stripped_log/{wood}")
-        manager.block_tag("wooden_watercraft_frames", f"wood/watercraft_frame_angled/{wood}")
+        manager.block_tag("wooden_watercraft_frames", f"wood/watercraft_frame_angled/{wood}",
+                          f"wood/watercraft_frame_flat/{wood}")
         manager.entity_tag("firmaciv:sloops", f"firmaciv:sloop/{wood}")
         manager.entity_tag("firmaciv:dugout_canoes", f"firmaciv:dugout_canoe/{wood}")
         manager.entity_tag("firmaciv:rowboats", f"firmaciv:rowboat/{wood}")
@@ -21,8 +22,8 @@ def generate(manager: ResourceManager):
                        "firmaciv:compartment_anvil", "firmaciv:compartment_chest", "firmaciv:compartment_empty")
 
     # Vanilla mining tags
-    manager.block_tag("minecraft:mineable/axe", "watercraft_frame_angled", "#firmaciv:canoe_component_blocks",
-                      "#firmaciv:wooden_watercraft_frames")
+    manager.block_tag("minecraft:mineable/axe", "watercraft_frame_angled", "watercraft_frame_flat",
+                      "#firmaciv:canoe_component_blocks", "#firmaciv:wooden_watercraft_frames")
     manager.block_tag("minecraft:mineable/pickaxe", "oarlock")
 
     # TFC tags
