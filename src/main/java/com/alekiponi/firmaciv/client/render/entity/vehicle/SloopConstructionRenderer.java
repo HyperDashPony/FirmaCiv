@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -79,8 +80,18 @@ public class SloopConstructionRenderer extends EntityRenderer<SloopConstructionE
         sloopModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
                 1.0F, 1.0F);
 
+        poseStack.pushPose();
+        poseStack.translate(0,0.5,2.25);
         BlockState blockstate = FirmacivBlocks.BOAT_FRAME_ANGLED.get().defaultBlockState();
         this.blockRenderer.renderSingleBlock(blockstate, poseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        poseStack.popPose();
+
+        poseStack.pushPose();
+        poseStack.translate(-1,0.5,2.25);
+        blockstate = FirmacivBlocks.BOAT_FRAME_ANGLED.get().defaultBlockState();
+        this.blockRenderer.renderSingleBlock(blockstate, poseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        poseStack.popPose();
+
         //render scaffolding blocks
 
         if(pEntity.getDamage() > 0){

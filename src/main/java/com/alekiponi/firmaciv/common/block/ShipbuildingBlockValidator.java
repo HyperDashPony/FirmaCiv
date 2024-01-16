@@ -24,19 +24,27 @@ public class ShipbuildingBlockValidator {
     @Nullable
     private Direction direction = null;
 
+    /*
+        Use this constructor for inner/outer angled frames
+     */
     ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape constantShape, WoodenBoatFrameBlock.ConstantDirection constantDirection) {
         this.constantShape = constantShape;
         this.constantDirection = constantDirection;
     }
 
+    /*
+        Use this constructor for flat frames or for blocks we don't need to care about (false)
+     */
     ShipbuildingBlockValidator(boolean flat) {
         this.flat = flat;
         this.validatingThisBlock = !flat;
     }
 
-    ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape constantShape, WoodenBoatFrameBlock.ConstantDirection constantDirection, Direction direction) {
-        this.constantShape = constantShape;
-        this.constantDirection = constantDirection;
+    /*
+        Use this constructor for straight angled frames
+     */
+    ShipbuildingBlockValidator(Direction direction) {
+        this.constantShape = WoodenBoatFrameBlock.ConstantShape.STRAIGHT;
         this.direction = direction;
     }
 

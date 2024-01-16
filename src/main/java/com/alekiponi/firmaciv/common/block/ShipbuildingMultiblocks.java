@@ -20,8 +20,8 @@ public class ShipbuildingMultiblocks {
             },
             {
                     new ShipbuildingBlockValidator(false),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.EAST),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.WEST),
+                    new ShipbuildingBlockValidator(Direction.EAST),
+                    new ShipbuildingBlockValidator(Direction.WEST),
                     new ShipbuildingBlockValidator(false),
             },
             {
@@ -31,27 +31,27 @@ public class ShipbuildingMultiblocks {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.SOUTH_AND_WEST),
             },
             {
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.EAST),
+                    new ShipbuildingBlockValidator(Direction.EAST),
                     new ShipbuildingBlockValidator(true),
                     new ShipbuildingBlockValidator(true),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.WEST),
+                    new ShipbuildingBlockValidator(Direction.WEST),
             },
             {
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.EAST),
+                    new ShipbuildingBlockValidator(Direction.EAST),
                     new ShipbuildingBlockValidator(true),
                     new ShipbuildingBlockValidator(true),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.WEST),
+                    new ShipbuildingBlockValidator(Direction.WEST),
             },
             {
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.EAST),
+                    new ShipbuildingBlockValidator(Direction.EAST),
                     new ShipbuildingBlockValidator(true),
                     new ShipbuildingBlockValidator(true),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.WEST),
+                    new ShipbuildingBlockValidator(Direction.WEST),
             },
             {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_EAST),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.EAST_AND_WEST, Direction.SOUTH),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.EAST_AND_WEST, Direction.SOUTH),
+                    new ShipbuildingBlockValidator(Direction.SOUTH),
+                    new ShipbuildingBlockValidator(Direction.SOUTH),
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_WEST),
             },
     };
@@ -62,8 +62,8 @@ public class ShipbuildingMultiblocks {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.SOUTH_AND_WEST)
             },
             {
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.EAST),
-                    new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.STRAIGHT, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_SOUTH, Direction.WEST)
+                    new ShipbuildingBlockValidator(Direction.EAST),
+                    new ShipbuildingBlockValidator(Direction.WEST)
             },
             {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_EAST),
@@ -78,8 +78,6 @@ public class ShipbuildingMultiblocks {
 
     public static boolean validateShipHull(Level level, BlockPos thispos, Direction structureDirection, Multiblock multiblock, ItemStack plankItem) {
         Direction crossDirection = structureDirection.getClockWise();
-
-        BlockState frameState = level.getBlockState(thispos);
 
         ShipbuildingBlockValidator[][] thisMultiblock;
         switch (multiblock) {
