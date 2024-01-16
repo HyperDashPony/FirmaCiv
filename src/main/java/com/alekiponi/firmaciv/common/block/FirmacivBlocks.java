@@ -1,8 +1,8 @@
 package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
+import com.alekiponi.firmaciv.util.BoatVariant;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.Helpers;
@@ -54,8 +54,15 @@ public final class FirmacivBlocks {
             () -> new AngledBoatFrameBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final Map<RegistryWood, RegistryObject<Block>> WOODEN_BOAT_FRAME_ANGLED = registerWoodenBoatFrames();
-    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock",
-            () -> new OarlockBlock(BlockBehaviour.Properties.copy(
+
+    public static final RegistryObject<FlatBoatFrameBlock> BOAT_FRAME_FLAT = registerBlockWithItem(
+            "watercraft_frame_flat",
+            () -> new FlatBoatFrameBlock(BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get())));
+
+    public static final Map<RegistryWood, RegistryObject<FlatWoodenBoatFrameBlock>> WOODEN_BOAT_FRAME_FLAT = registerFlatWoodenBoatFrames();
+
+    public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock", () -> new OarlockBlock(
+            BlockBehaviour.Properties.copy(
                     TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
 
     public static Map<RegistryWood, RegistryObject<Block>> registerWoodenBoatFrames() {
@@ -64,6 +71,18 @@ public final class FirmacivBlocks {
         for (final Wood tfcWood : Wood.values()) {
             map.put(tfcWood, registerBlockWithoutItem("wood/watercraft_frame_angled/" + tfcWood.getSerializedName(),
                     () -> new WoodenBoatFrameBlock(tfcWood, BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get()))));
+        }
+
+        return map;
+    }
+
+    public static Map<RegistryWood, RegistryObject<FlatWoodenBoatFrameBlock>> registerFlatWoodenBoatFrames() {
+        final Map<RegistryWood, RegistryObject<FlatWoodenBoatFrameBlock>> map = new HashMap<>();
+
+        for (final Wood tfcWood : Wood.values()) {
+            map.put(tfcWood, registerBlockWithoutItem("wood/watercraft_frame_flat/" + tfcWood.getSerializedName(),
+                    () -> new FlatWoodenBoatFrameBlock(tfcWood,
+                            BlockBehaviour.Properties.copy(BOAT_FRAME_FLAT.get()))));
         }
 
         return map;

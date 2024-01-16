@@ -6,17 +6,26 @@ import lootTables
 
 
 def generate(rm: ResourceManager):
-    for woodType, name in constants.TFC_WOODS.items():
+    for woodType, woodName in constants.TFC_WOODS.items():
         # Generate models from templates
-        for shape in ["straight", "inner", "outer"]:
-            for progress in ["first", "second", "third", "fourth"]:
+        for progress in ["first", "second", "third", "fourth"]:
+            # Slab frame models
+            rm.block_model(f"wood/watercraft_frame/flat/{woodType}/{progress}",
+                           {"plank": f"tfc:block/wood/planks/{woodType}"},
+                           f"firmaciv:block/watercraft_frame/flat/template/{progress}")
+
+            for shape in ["straight", "inner", "outer"]:
                 rm.block_model(f"wood/watercraft_frame_angled/{woodType}/{shape}/{progress}",
                                {"plank": f"tfc:block/wood/planks/{woodType}"},
                                f"firmaciv:block/watercraft_frame_angled/template/{shape}/{progress}")
 
+        rm.blockstate_multipart(f"wood/watercraft_frame_flat/{woodType}",
+                                *blockStates.getWoodFrameFlatMultipart(woodType)).with_lang(
+            f"{woodName} Flat Shipwright's Scaffolding").with_block_loot(*lootTables.boat_frame_flat(woodType))
+
         rm.blockstate_multipart(f"wood/watercraft_frame_angled/{woodType}",
                                 *blockStates.getWoodFrameMultipart(woodType)).with_lang(
-            f"{name} Shipwright's Scaffolding").with_block_loot(*lootTables.boat_frame(woodType))
+            f"{woodName} Sloped Shipwright's Scaffolding").with_block_loot(*lootTables.boat_frame(woodType))
 
         # Canoe components now
         canoe_component_textures = {"0": f"tfc:block/wood/stripped_log/{woodType}",
@@ -36,7 +45,7 @@ def generate(rm: ResourceManager):
                            f"firmaciv:block/canoe_component_block/template/middle/{n}")
             rm.blockstate(f"wood/canoe_component_block/{woodType}",
                           variants=blockStates.canoe_component(woodType)).with_lang(
-                f"{name} Canoe Component").with_block_loot(f"tfc:wood/lumber/{woodType}")
+                f"{woodName} Canoe Component").with_block_loot(f"tfc:wood/lumber/{woodType}")
 
     # Basic frame
     rm.blockstate("watercraft_frame_angled", variants=blockStates.angledWaterCraftFrame).with_lang(
@@ -44,6 +53,14 @@ def generate(rm: ResourceManager):
 
     # Need to manually make the model
     rm.item_model("watercraft_frame_angled", parent="firmaciv:block/watercraft_frame_angled/straight",
+                  no_textures=True)
+
+    # Basic flat frame
+    rm.blockstate("watercraft_frame_flat", "firmaciv:block/watercraft_frame/flat/frame").with_lang(
+        "Flat Shipwrights Scaffolding").with_block_loot("firmaciv:watercraft_frame_flat")
+
+    # Need to manually make the model
+    rm.item_model("watercraft_frame_flat", parent="firmaciv:block/watercraft_frame/flat/frame",
                   no_textures=True)
 
     rm.blockstate("oarlock", variants={
@@ -72,7 +89,7 @@ def generate(rm: ResourceManager):
     rm.item("cannon").with_item_model().with_lang("Cannon")
     rm.item("cannonball").with_item_model().with_lang("Cannonball")
 
-    #rm.item("sextant").with_item_model().with_lang("Sextant")
+    # rm.item("sextant").with_item_model().with_lang("Sextant")
     rm.item("copper_bolt").with_item_model().with_lang("Copper Bolt")
     rm.item("kayak").with_item_model().with_lang("Kayak")
     rm.item("large_waterproof_hide").with_item_model().with_lang("Large Waterproof Hide")
