@@ -14,10 +14,12 @@ def generate(manager: ResourceManager):
         manager.entity_tag("firmaciv:dugout_canoes", f"firmaciv:dugout_canoe/{wood}")
         manager.entity_tag("firmaciv:rowboats", f"firmaciv:rowboat/{wood}")
 
-    manager.entity_tag("firmaciv:vehicle_helpers", "firmaciv:vehicle_cleat",
-                       "firmaciv:vehicle_part_boat", "firmaciv:vehicle_switch_windlass", "firmaciv:vehicle_switch_sail",
-                       "firmaciv:vehicle_collider", "firmaciv:vehicle_mast", )
+    # Vehicle helpers such as our collision entities
+    manager.entity_tag("vehicle_helpers", "firmaciv:vehicle_cleat", "firmaciv:vehicle_part_boat",
+                       "firmaciv:vehicle_switch_windlass", "firmaciv:vehicle_switch_sail", "firmaciv:vehicle_collider",
+                       "firmaciv:vehicle_mast")
 
+    # Compartment Entities
     manager.entity_tag("firmaciv:compartments", "firmaciv:compartment_workbench",
                        "firmaciv:compartment_anvil", "firmaciv:compartment_chest", "firmaciv:compartment_empty")
 
@@ -31,8 +33,8 @@ def generate(manager: ResourceManager):
     manager.item_tag("tfc:usable_on_tool_rack", "canoe_paddle", "kayak_paddle", "oar", "kayak", "nav_clock", "sextant",
                      "barometer")
 
-    # Carryon
+    # Carryon blacklist tags (as of writing carryon has a bug which means these are ignored)
     manager.block_tag("carryon:block_blacklist", "#firmaciv:canoe_component_blocks")
-    manager.entity_tag("carryon:entity_blacklist", "#firmaciv:dugout_canoes", "#firmaciv:sloops",
-                       "#firmaciv:rowboats", "firmaciv:kayak",
-                       "#firmaciv:vehicle_helpers", "#firmaciv:compartments", "firmaciv:cannonball")
+    manager.entity_tag("carryon:entity_blacklist", "firmaciv:cannonball", "firmaciv:kayak", "#firmaciv:dugout_canoes",
+                       "#firmaciv:sloops", "#firmaciv:rowboats", "#firmaciv:vehicle_helpers", "#firmaciv:compartments",
+                       [f"firmaciv:sloop_construction/{wood}" for wood in constants.TFC_WOODS.keys()])
