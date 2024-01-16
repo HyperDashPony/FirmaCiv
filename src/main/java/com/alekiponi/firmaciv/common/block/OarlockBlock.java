@@ -72,7 +72,6 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     }
 
 
-
     @Override
     public VoxelShape getShape(BlockState pstate, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         Direction direction = pstate.getValue(FACING);
@@ -226,48 +225,12 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         thispos = thispos.relative(structureDirection);
 
         BlockState frameState = level.getBlockState(thispos);
-        ItemStack plankItem = ItemStack.EMPTY;
-        if (frameState.getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock) {
-            plankItem = woodenBoatFrameBlock.getPlankAsItemStack();
-            if (FirmacivConfig.SERVER.shipWoodRestriction.get()) {
-                if (!plankItem.is(FirmacivTags.Items.PLANKS_THAT_MAKE_SHIPS)) {
-                    return false;
-                }
-            } else {
-                if (!plankItem.is(FirmacivTags.Items.PLANKS)) {
-                    return false;
-                }
-            }
-        } else {
+        ItemStack plankItem = ShipbuildingMultiblocks.validatePlanks(frameState);
+        if(plankItem.isEmpty()){
             return false;
         }
 
-        BlockState[][] statesToValidate = new BlockState[3][2];
-
-        // get all appropriate block states
-
-        statesToValidate[0][0] = level.getBlockState(thispos);
-        statesToValidate[0][1] = level.getBlockState(thispos.relative(crossDirection));
-
-        thispos = thispos.relative(structureDirection.getOpposite());
-        statesToValidate[1][0] = level.getBlockState(thispos);
-        statesToValidate[1][1] = level.getBlockState(thispos.relative(crossDirection));
-
-        thispos = thispos.relative(structureDirection.getOpposite());
-        statesToValidate[2][0] = level.getBlockState(thispos);
-        statesToValidate[2][1] = level.getBlockState(thispos.relative(crossDirection));
-
-        // check all block states by iterating through the multiblock
-        boolean valid = true;
-        for(int y = 0; y < statesToValidate.length; y++){
-            for(int x = 0; x < statesToValidate[0].length; x++){
-                if(!ShipbuildingMultiblocks.rowboatMultiblock[y][x].validate(statesToValidate[y][x], plankItem, structureDirection)){
-                    return false;
-                }
-            }
-        }
-
-        return valid;
+        return ShipbuildingMultiblocks.validateShipHull(level, thispos, structureDirection, ShipbuildingMultiblocks.Multiblock.ROWBOAT, plankItem);
 
     }
 
