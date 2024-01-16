@@ -20,8 +20,13 @@ def generate(manager: ResourceManager):
                        "firmaciv:vehicle_mast")
 
     # Compartment Entities
-    manager.entity_tag("firmaciv:compartments", "firmaciv:compartment_workbench",
-                       "firmaciv:compartment_anvil", "firmaciv:compartment_chest", "firmaciv:compartment_empty")
+    manager.entity_tag("firmaciv:compartments", "firmaciv:compartment_anvil", "firmaciv:compartment_barrel",
+                       "firmaciv:compartment_blast_furnace", "firmaciv:compartment_cartography_table",
+                       "firmaciv:compartment_chest", "firmaciv:compartment_empty", "firmaciv:compartment_ender_chest",
+                       "firmaciv:compartment_furnace", "firmaciv:compartment_grindstone", "firmaciv:compartment_loom",
+                       "firmaciv:compartment_shulker_box", "firmaciv:compartment_smithing_table",
+                       "firmaciv:compartment_smoker", "firmaciv:compartment_stonecutter",
+                       "firmaciv:compartment_tfcchest", "firmaciv:compartment_workbench")
 
     # Vanilla mining tags
     manager.block_tag("minecraft:mineable/axe", "watercraft_frame_angled", "watercraft_frame_flat",
