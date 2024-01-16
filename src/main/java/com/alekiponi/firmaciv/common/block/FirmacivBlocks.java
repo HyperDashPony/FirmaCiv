@@ -27,8 +27,8 @@ public final class FirmacivBlocks {
             Firmaciv.MOD_ID);
 
     public static final Map<BoatVariant, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = Helpers.mapOfKeys(
-            BoatVariant.class, boatVariant -> registerBlockWithoutItem(
-                    "wood/canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
+            BoatVariant.class,
+            boatVariant -> registerBlock("wood/canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
                     () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
                             boatVariant)));
 
@@ -53,7 +53,7 @@ public final class FirmacivBlocks {
             () -> new AngledBoatFrameBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).noOcclusion()));
 
     public static final Map<RegistryWood, RegistryObject<Block>> WOODEN_BOAT_FRAME_ANGLED = FirmacivHelper.forAllTFCWoods(
-            wood -> registerBlockWithoutItem("wood/watercraft_frame_angled/" + wood.getSerializedName(),
+            wood -> registerBlock("wood/watercraft_frame_angled/" + wood.getSerializedName(),
                     () -> new WoodenBoatFrameBlock(wood, BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get()))));
 
     public static final RegistryObject<FlatBoatFrameBlock> BOAT_FRAME_FLAT = registerBlockWithItem(
@@ -61,14 +61,14 @@ public final class FirmacivBlocks {
             () -> new FlatBoatFrameBlock(BlockBehaviour.Properties.copy(BOAT_FRAME_ANGLED.get())));
 
     public static final Map<RegistryWood, RegistryObject<FlatWoodenBoatFrameBlock>> WOODEN_BOAT_FRAME_FLAT = FirmacivHelper.forAllTFCWoods(
-            wood -> registerBlockWithoutItem("wood/watercraft_frame_flat/" + wood.getSerializedName(),
+            wood -> registerBlock("wood/watercraft_frame_flat/" + wood.getSerializedName(),
                     () -> new FlatWoodenBoatFrameBlock(wood, BlockBehaviour.Properties.copy(BOAT_FRAME_FLAT.get()))));
 
     public static final RegistryObject<Block> OARLOCK = registerBlockWithItem("oarlock", () -> new OarlockBlock(
             BlockBehaviour.Properties.copy(
                     TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
 
-    private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
+    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);
     }
 
