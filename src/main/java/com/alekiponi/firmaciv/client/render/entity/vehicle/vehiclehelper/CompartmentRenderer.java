@@ -1,78 +1,65 @@
 package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class CompartmentRenderer extends EntityRenderer<AbstractCompartmentEntity> {
-    private final BlockRenderDispatcher blockRenderer;
+public abstract class CompartmentRenderer<CompartmentType extends AbstractCompartmentEntity> extends EntityRenderer<CompartmentType> {
 
-    public CompartmentRenderer(EntityRendererProvider.Context pContext/*, ModelLayerLocation pLayer*/) {
-        super(pContext);
-        this.shadowRadius = 0.0F;
-        this.blockRenderer = pContext.getBlockRenderDispatcher();
-    }
-
-    public void render(AbstractCompartmentEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
-        if(pEntity instanceof EmptyCompartmentEntity){
-            return;
-        }
-        super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
-
-        float rotation = 0f;
-        if(pEntity.getTrueVehicle() != null && pEntity.getVehicle() instanceof AbstractVehiclePart vehiclePart && pEntity.tickCount < 2){
-            rotation = pEntity.getTrueVehicle().getYRot() + vehiclePart.getCompartmentRotation();
-        } else {
-            rotation = pEntityYaw;
-        }
-
-        if(pEntity.tickCount < 2){
-            return;
-        }
-        BlockState blockstate = null;
-        if (pEntity.getBlockTypeItem().getItem() instanceof BlockItem bi) {
-            blockstate = bi.getBlock().defaultBlockState();
-        }
-        if (blockstate != null) {
-            pPoseStack.pushPose();
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F - rotation));
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(180F));
-            if(pEntity.getTrueVehicle() instanceof CanoeEntity){
-                pPoseStack.scale(0.6F, 0.6F, 0.6F);
-            } else {
-                pPoseStack.scale(0.6875F, 0.6875F, 0.6875F);
-            }
-
-            pPoseStack.translate(-0.5F, 00F, -0.5F);
-
-            this.renderCompartmentContents(pEntity, pPartialTicks, blockstate, pPoseStack, pBuffer, pPackedLight);
-            pPoseStack.popPose();
-        }
-
+    public CompartmentRenderer(final EntityRendererProvider.Context context) {
+        super(context);
+        this.shadowRadius = 0;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(AbstractCompartmentEntity pEntity) {
-        return null;
+    public void render(final CompartmentType compartmentEntity, final float entityYaw, final float partialTicks,
+            final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight) {
+        super.render(compartmentEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
+
+        if (compartmentEntity.tickCount < 2) {
+            return;
+        }
+
+        final float rotation;
+        if (compartmentEntity.getTrueVehicle() != null && compartmentEntity.getVehicle() instanceof AbstractVehiclePart vehiclePart && compartmentEntity.tickCount < 2) {
+            rotation = compartmentEntity.getTrueVehicle().getYRot() + vehiclePart.getCompartmentRotation();
+        } else {
+            rotation = entityYaw;
+        }
+
+        poseStack.pushPose();
+        poseStack.mulPose(Axis.YP.rotationDegrees(180 - rotation));
+        if (compartmentEntity.getTrueVehicle() instanceof CanoeEntity) {
+            poseStack.scale(0.6F, 0.6F, 0.6F);
+        } else {
+            poseStack.scale(0.6875F, 0.6875F, 0.6875F);
+        }
+
+        poseStack.translate(-0.5F, 0, -0.5F);
+
+        this.renderCompartmentContents(compartmentEntity, partialTicks, poseStack, bufferSource, packedLight);
+
+        poseStack.popPose();
     }
 
-    protected void renderCompartmentContents(AbstractCompartmentEntity pEntity, float pPartialTicks, BlockState pState,
-                                             PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
-        this.blockRenderer.renderSingleBlock(pState, pPoseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+    /**
+     * Render the compartment contents. This is pre-scaled, rotated and translated for ease of use
+     */
+    protected abstract void renderCompartmentContents(final CompartmentType compartmentEntity, final float partialTicks,
+            final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight);
+
+    @Override
+    public ResourceLocation getTextureLocation(final CompartmentType compartmentEntity) {
+        return MissingTextureAtlasSprite.getLocation();
     }
 }
