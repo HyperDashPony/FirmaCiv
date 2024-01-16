@@ -1,0 +1,30 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"bolts": "tfc:block/metal/block/copper"
+	},
+	"elements": [
+		{
+			"from": [10, 3.85, 5],
+			"to": [11, 4.1, 6],
+			"faces": {
+				"north": {"uv": [5, 11.9, 6, 12.9], "texture": "#bolts"},
+				"east": {"uv": [10, 11.9, 11, 12.9], "texture": "#bolts"},
+				"south": {"uv": [10, 11.9, 11, 12.9], "texture": "#bolts"},
+				"west": {"uv": [5, 11.9, 6, 12.9], "texture": "#bolts"},
+				"up": {"uv": [10, 5, 11, 6], "texture": "#bolts"}
+			}
+		},
+		{
+			"from": [13, 3.85, 2],
+			"to": [14, 4.1, 3],
+			"faces": {
+				"north": {"uv": [2, 11.9, 3, 12.9], "texture": "#bolts"},
+				"east": {"uv": [13, 11.9, 14, 12.9], "texture": "#bolts"},
+				"south": {"uv": [13, 11.9, 14, 12.9], "texture": "#bolts"},
+				"west": {"uv": [2, 11.9, 3, 12.9], "texture": "#bolts"},
+				"up": {"uv": [13, 2, 14, 3], "texture": "#bolts"}
+			}
+		}
+	]
+}

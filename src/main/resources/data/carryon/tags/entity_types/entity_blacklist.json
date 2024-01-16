@@ -2,13 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "replace": false,
   "values": [
+    "firmaciv:cannonball",
+    "firmaciv:kayak",
     "#firmaciv:dugout_canoes",
     "#firmaciv:sloops",
     "#firmaciv:rowboats",
-    "#firmaciv:outrigger_canoes",
-    "firmaciv:kayak",
     "#firmaciv:vehicle_helpers",
-    "#firmaciv:compartments",
-    "firmaciv:cannonball"
+    "#firmaciv:compartments"
   ]
 }

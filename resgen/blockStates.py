@@ -101,6 +101,24 @@ def canoe_component(wood: str) -> Json:
     return var
 
 
+def getWoodFrameFlatMultipart(wood: str) -> list[Json]:
+    json = [{"model": "firmaciv:block/watercraft_frame/flat/frame"}]
+    plankTemplateStates = {"first": "0|1|2|3|4|5|6|7", "second": "1|2|3|4|5|6|7", "third": "2|3|4|5|6|7",
+                           "fourth": "3|4|5|6|7"}
+
+    for template, processedStates in plankTemplateStates.items():
+        json += [({"frame_processed": processedStates},
+                  {"model": f"firmaciv:block/wood/watercraft_frame/flat/{wood}/{template}"})]
+
+    boltTemplateStates = {"first": "4|5|6|7", "second": "5|6|7", "third": "6|7", "fourth": "7"}
+
+    for template, processedStates in boltTemplateStates.items():
+        json += [({"frame_processed": processedStates},
+                  {"model": f"firmaciv:block/watercraft_frame/flat/bolt/{template}"})]
+
+    return json
+
+
 def getWoodFrameMultipart(wood: str) -> list[Json]:
     # Only the frames
     json = [

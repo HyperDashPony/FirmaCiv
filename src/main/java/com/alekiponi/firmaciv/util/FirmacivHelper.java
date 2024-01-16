@@ -1,5 +1,8 @@
 package com.alekiponi.firmaciv.util;
 
+import com.alekiponi.firmaciv.common.block.FirmacivBlocks;
+import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -11,7 +14,10 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public class FirmacivHelper {
     @Nullable
@@ -137,4 +143,23 @@ public class FirmacivHelper {
         return false;
     }
 
+    /**
+     * Utility function to centralize all the mod interop relating to TFC woods.
+     * This should be used anywhere we want to register an object for every TFC wood or similar
+     *
+     * @param function   The function that's used to get the entry for each wood type. See
+     *                   {@link FirmacivBlocks#WOODEN_BOAT_FRAME_ANGLED} for example usage
+     * @param <MapValue> The value type of the map
+     * @return A map of {@link RegistryWood} to the returned object of the function for that wood type
+     */
+    public static <MapValue> Map<RegistryWood, MapValue> forAllTFCWoods(
+            final Function<RegistryWood, MapValue> function) {
+        final Map<RegistryWood, MapValue> map = new HashMap<>();
+
+        for (final Wood tfcWood : Wood.values()) {
+            map.put(tfcWood, function.apply(tfcWood));
+        }
+
+        return map;
+    }
 }
