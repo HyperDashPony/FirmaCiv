@@ -4,12 +4,8 @@ import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.SloopEntityModel;
 import com.alekiponi.firmaciv.common.block.FirmacivBlocks;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopConstructionEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
-import com.alekiponi.firmaciv.util.BoatVariant;
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -19,99 +15,97 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Map;
-import java.util.stream.Stream;
-
 @OnlyIn(Dist.CLIENT)
 public class SloopConstructionRenderer extends EntityRenderer<SloopConstructionEntity> {
 
-    private final Map<BoatVariant, Pair<ResourceLocation, SloopEntityModel>> sloopResources;
-
+    protected final SloopEntityModel sloopModel = new SloopEntityModel();
+    protected final ResourceLocation sloopTexture;
     private final BlockRenderDispatcher blockRenderer;
 
-    public SloopConstructionRenderer(EntityRendererProvider.Context pContext) {
-        super(pContext);
-        this.shadowRadius = 0.8f;
-        this.blockRenderer = pContext.getBlockRenderDispatcher();
-        this.sloopResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
-            return variant;
-        }, (type) -> {
-            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID,
-                            "textures/entity/watercraft/sloop_construction/" + type.getName() + ".png"),
-                    new SloopEntityModel());
-        }));
+    /**
+     * This is primarily for us as it hardcodes the Firmaciv namespace.
+     * Use the constructor taking a {@link ResourceLocation} to provide a fully custom path
+     *
+     * @param woodName The name of the wood
+     */
+    public SloopConstructionRenderer(final EntityRendererProvider.Context context, final String woodName) {
+        this(context, new ResourceLocation(Firmaciv.MOD_ID,
+                "textures/entity/watercraft/sloop_construction/" + woodName + ".png"));
+    }
+
+    /**
+     * Alternative constructor taking a resource location instead of a wood name
+     *
+     * @param sloopTexture The texture location. Must include file extension!
+     */
+    public SloopConstructionRenderer(final EntityRendererProvider.Context context,
+            final ResourceLocation sloopTexture) {
+        super(context);
+        this.shadowRadius = 0.8F;
+        this.sloopTexture = sloopTexture;
+        this.blockRenderer = context.getBlockRenderDispatcher();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SloopConstructionEntity pEntity) {
-        return null;
-    }
-
-    @Override
-    public void render(SloopConstructionEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack poseStack,
-                       MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(final SloopConstructionEntity constructionEntity, final float entityYaw,
+            final float partialTicks, final PoseStack poseStack, final MultiBufferSource bufferSource,
+            final int packedLight) {
         poseStack.pushPose();
-        poseStack.translate(0.0D, 0.5D, 0.0D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
+        poseStack.translate(0, 0.5, 0);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180 - entityYaw));
 
-        Pair<ResourceLocation, SloopEntityModel> pair = getModelWithLocation(pEntity);
-        ResourceLocation resourcelocation = pair.getFirst();
-        SloopEntityModel sloopModel = pair.getSecond();
-
-        poseStack.translate(0.0f, 1.0625f, 0f);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
-        poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
-        if(pEntity.getDamage() > pEntity.getDamageThreshold()){
-            poseStack.mulPose(Axis.ZP.rotationDegrees(pEntity.getId()%30));
+        poseStack.translate(0, 1.0625F, 0);
+        poseStack.scale(-1, -1, 1);
+        poseStack.mulPose(Axis.YP.rotationDegrees(0));
+        if (constructionEntity.getDamage() > constructionEntity.getDamageThreshold()) {
+            poseStack.mulPose(Axis.ZP.rotationDegrees(constructionEntity.getId() % 30));
         }
-        //sloopModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(sloopModel.renderType(resourcelocation));
-        if (pEntity.tickCount < 1) {
+        //sloopModel.setupAnim(constructionEntity, partialTicks, 0, -0.1F, 0, 0);
+        final VertexConsumer vertexConsumer = bufferSource.getBuffer(
+                this.sloopModel.renderType(getTextureLocation(constructionEntity)));
+        if (constructionEntity.tickCount < 1) {
             poseStack.popPose();
-            super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
+            super.render(constructionEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
             return;
         }
 
-        sloopModel.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
-                1.0F, 1.0F);
+        this.sloopModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 
         poseStack.pushPose();
-        poseStack.translate(0,0.5,2.25);
+        poseStack.translate(0, 0.5, 2.25);
         BlockState blockstate = FirmacivBlocks.BOAT_FRAME_ANGLED.get().defaultBlockState();
-        this.blockRenderer.renderSingleBlock(blockstate, poseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        this.blockRenderer.renderSingleBlock(blockstate, poseStack, bufferSource, packedLight,
+                OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
 
         poseStack.pushPose();
-        poseStack.translate(-1,0.5,2.25);
+        poseStack.translate(-1, 0.5, 2.25);
         blockstate = FirmacivBlocks.BOAT_FRAME_ANGLED.get().defaultBlockState();
-        this.blockRenderer.renderSingleBlock(blockstate, poseStack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        this.blockRenderer.renderSingleBlock(blockstate, poseStack, bufferSource, packedLight,
+                OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
 
         //render scaffolding blocks
 
-        if(pEntity.getDamage() > 0){
-            VertexConsumer damageVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getDamageTexture(pEntity)));
-            float alpha = Mth.clamp((pEntity.getDamage()/(pEntity.getDamageThreshold()))*0.75f, 0, 0.75f);
-            sloopModel.renderToBuffer(poseStack, damageVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+        if (constructionEntity.getDamage() > 0) {
+            final VertexConsumer damageVertexConsumer = bufferSource.getBuffer(
+                    RenderType.entityTranslucent(SloopRenderer.DAMAGE_OVERLAY));
+            final float alpha = Mth.clamp(
+                    (constructionEntity.getDamage() / (constructionEntity.getDamageThreshold())) * 0.75f, 0, 0.75f);
+            this.sloopModel.renderToBuffer(poseStack, damageVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                    1, 1, alpha);
         }
 
         poseStack.popPose();
-        super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
+        super.render(constructionEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
     }
 
-    public Pair<ResourceLocation, SloopEntityModel> getModelWithLocation(SloopConstructionEntity sloop) {
-        return this.sloopResources.get(sloop.getVariant());
+    @Override
+    public ResourceLocation getTextureLocation(final SloopConstructionEntity constructionEntity) {
+        return this.sloopTexture;
     }
-
-    public ResourceLocation getDamageTexture(SloopEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/sloop/" + "damage_overlay" + ".png");
-    }
-
-
 }
