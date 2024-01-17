@@ -7,10 +7,8 @@ import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.*;
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.alekiponi.firmaciv.util.FirmacivTags;
-import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,8 +30,8 @@ public final class FirmacivEntities {
     public static DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES,
             MOD_ID);
 
-    public static final Map<BoatVariant, RegistryObject<EntityType<CanoeEntity>>> CANOES = Helpers.mapOfKeys(
-            BoatVariant.class, variant -> register("dugout_canoe/" + variant.getName(),
+    public static final Map<RegistryWood, RegistryObject<EntityType<CanoeEntity>>> CANOES = FirmacivHelper.TFCWoodMap(
+            wood -> register("dugout_canoe/" + wood.getSerializedName(),
                     EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.625F)));
 
     public static final Map<RegistryWood, RegistryObject<EntityType<RowboatEntity>>> ROWBOATS = FirmacivHelper.TFCWoodMap(

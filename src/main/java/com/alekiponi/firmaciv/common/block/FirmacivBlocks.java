@@ -2,10 +2,9 @@ package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.Metal;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.world.item.BlockItem;
@@ -18,7 +17,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -26,11 +24,11 @@ public final class FirmacivBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS,
             Firmaciv.MOD_ID);
 
-    public static final Map<BoatVariant, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = Helpers.mapOfKeys(
-            BoatVariant.class,
-            boatVariant -> registerBlock("wood/canoe_component_block/" + boatVariant.name().toLowerCase(Locale.ROOT),
-                    () -> new CanoeComponentBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion(),
-                            boatVariant)));
+    public static final Map<RegistryWood, RegistryObject<CanoeComponentBlock>> CANOE_COMPONENT_BLOCKS = FirmacivHelper.TFCWoodMap(
+            wood -> registerBlock("wood/canoe_component_block/" + wood.getSerializedName(),
+                    () -> new CanoeComponentBlock(
+                            BlockBehaviour.Properties.copy(wood.getBlock(Wood.BlockType.STRIPPED_LOG).get())
+                                    .mapColor(wood.woodColor()), wood)));
 
     //TODO: swap between roofing types automatically on place
     /*

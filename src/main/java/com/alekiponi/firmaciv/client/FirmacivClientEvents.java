@@ -1,16 +1,12 @@
 package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.client.render.entity.vehicle.CanoeRenderer;
-import com.alekiponi.firmaciv.util.BoatVariant;
-import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import com.alekiponi.firmaciv.common.item.AbstractNavItem;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -35,11 +31,6 @@ public class FirmacivClientEvents {
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
-
-        for (BoatVariant variant : BoatVariant.values()) {
-            EntityRenderers.register(FirmacivEntities.CANOES.get(variant).get(), CanoeRenderer::new);
-        }
-
 
         ItemProperties.register(FirmacivItems.BAROMETER.get(), new ResourceLocation(Firmaciv.MOD_ID, "altitude"),
                 new ClampedItemPropertyFunction() {

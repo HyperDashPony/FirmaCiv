@@ -12,7 +12,6 @@ import com.alekiponi.firmaciv.client.render.entity.vehicle.RowboatRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.SloopRenderer;
 import com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,11 +31,8 @@ public final class RenderEventHandler {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        for (final BoatVariant boatVariant : BoatVariant.values()) {
-            event.registerEntityRenderer(FirmacivEntities.CANOES.get(boatVariant).get(), CanoeRenderer::new);
-        }
-
         FirmacivHelper.forAllTFCWoods(wood -> {
+            event.registerEntityRenderer(FirmacivEntities.CANOES.get(wood).get(), CanoeRenderer::new);
             event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(wood).get(),
                     context -> new RowboatRenderer(context, wood.getSerializedName()));
             event.registerEntityRenderer(FirmacivEntities.SLOOPS.get(wood).get(),
