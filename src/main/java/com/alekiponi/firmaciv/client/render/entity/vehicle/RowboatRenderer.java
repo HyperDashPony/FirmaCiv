@@ -2,14 +2,11 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.RowboatEntityModel;
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.logging.LogUtils;
 import com.mojang.math.Axis;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -17,109 +14,116 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.slf4j.Logger;
 
 import java.util.Map;
-import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class RowboatRenderer extends EntityRenderer<RowboatEntity> {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final ResourceLocation DAMAGE_OVERLAY = new ResourceLocation(Firmaciv.MOD_ID,
+            "textures/entity/watercraft/rowboat/damage_overlay.png");
+    public static final Map<DyeColor, ResourceLocation> PAINT_TEXTURES = Helpers.mapOfKeys(DyeColor.class,
+            dyeColor -> new ResourceLocation(Firmaciv.MOD_ID,
+                    "textures/entity/watercraft/rowboat/paint/" + dyeColor.getSerializedName() + ".png"));
+    protected final RowboatEntityModel rowboatModel = new RowboatEntityModel();
+    protected final ResourceLocation rowboatTexture;
 
-    private final Map<BoatVariant, Pair<ResourceLocation, RowboatEntityModel>> rowboatResources;
+    /**
+     * This is primarily for us as it hardcodes the Firmaciv namespace.
+     * Use the constructor taking a {@link ResourceLocation} to provide a fully custom path
+     *
+     * @param woodName The name of the wood
+     */
+    public RowboatRenderer(final EntityRendererProvider.Context context, final String woodName) {
+        this(context, new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/rowboat/" + woodName + ".png"));
+    }
 
-    private final RowboatEntityModel paintModel = new RowboatEntityModel();
-
-    public RowboatRenderer(EntityRendererProvider.Context pContext) {
-        super(pContext);
-        this.shadowRadius = 1.0f;
-        this.rowboatResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
-            return variant;
-        }, (type) -> {
-            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID,
-                            "textures/entity/watercraft/rowboat/" + type.getName() + ".png"),
-                    new RowboatEntityModel());
-        }));
+    /**
+     * Alternative constructor taking a resource location instead of a wood name
+     *
+     * @param rowboatTexture The texture location. Must include file extension!
+     */
+    public RowboatRenderer(final EntityRendererProvider.Context context, final ResourceLocation rowboatTexture) {
+        super(context);
+        this.shadowRadius = 1;
+        this.rowboatTexture = rowboatTexture;
     }
 
     @Override
-    public void render(RowboatEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack poseStack,
-            MultiBufferSource pBuffer, int pPackedLight) {
-
+    public void render(final RowboatEntity rowboatEntity, final float entityYaw, final float partialTicks,
+            final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight) {
         poseStack.pushPose();
-        poseStack.translate(0.0D, 0.4375D, 0.0D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
+        poseStack.translate(0, 0.4375D, 0);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180 - entityYaw));
 
-        Pair<ResourceLocation, RowboatEntityModel> pair = getModelWithLocation(pEntity);
-        RowboatEntityModel rowboatEntityModel = pair.getSecond();
+        poseStack.translate(0, 1.0625f, 0);
+        poseStack.scale(-1, -1, 1);
+        poseStack.mulPose(Axis.YP.rotationDegrees(0));
 
-        poseStack.translate(0.0f, 1.0625f, 0f);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
-        poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
-        if(pEntity.getDamage() > pEntity.getDamageThreshold()){
-            poseStack.mulPose(Axis.ZP.rotationDegrees(pEntity.getId()%30));
+        if (rowboatEntity.getDamage() > rowboatEntity.getDamageThreshold()) {
+            poseStack.mulPose(Axis.ZP.rotationDegrees(rowboatEntity.getId() % 30));
         }
-        rowboatEntityModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer baseVertexConsumer = pBuffer.getBuffer(rowboatEntityModel.renderType(getTextureLocation(pEntity)));
 
-        if(pEntity.tickCount < 1){
+        this.rowboatModel.setupAnim(rowboatEntity, partialTicks, 0, -0.1F, 0, 0);
+
+        final VertexConsumer baseVertexConsumer = bufferSource.getBuffer(
+                this.rowboatModel.renderType(getTextureLocation(rowboatEntity)));
+
+        if (rowboatEntity.tickCount < 1) {
             poseStack.popPose();
-            super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
+            super.render(rowboatEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
             return;
         }
-        rowboatEntityModel.renderToBuffer(poseStack, baseVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F,
-                1.0F, 1.0F, 1.0F);
 
-        if (pEntity.getOars().getCount() >= 1) {
-            rowboatEntityModel.getOarStarboard()
-                    .render(poseStack, baseVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
-        }
-        if (pEntity.getOars().getCount() == 2) {
-            rowboatEntityModel.getOarPort().render(poseStack, baseVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
-        }
-        if (!pEntity.isUnderWater() && pEntity.getDamage() < pEntity.getDamageThreshold()*0.9) {
-            VertexConsumer waterMaskVertexConsumer = pBuffer.getBuffer(RenderType.waterMask());
-            rowboatEntityModel.getWaterocclusion()
-                    .render(poseStack, waterMaskVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
-        }
-        if(!pEntity.getPaint().isEmpty() && pEntity.getPaintColor() != null){
-            VertexConsumer paintVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getPaintTexture(pEntity)));
-            rowboatEntityModel.renderToBuffer(poseStack, paintVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
-        if(pEntity.getDamage() > 0){
-            VertexConsumer damageVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getDamageTexture(pEntity)));
-            float alpha = Mth.clamp((pEntity.getDamage()/(pEntity.getDamageThreshold()))*0.75f, 0, 0.5f);
-            rowboatEntityModel.renderToBuffer(poseStack, damageVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+        this.rowboatModel.renderToBuffer(poseStack, baseVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1,
+                1);
+
+        if (1 <= rowboatEntity.getOars().getCount()) {
+            this.rowboatModel.getOarStarboard()
+                    .render(poseStack, baseVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
         }
 
+        if (2 == rowboatEntity.getOars().getCount()) {
+            this.rowboatModel.getOarPort()
+                    .render(poseStack, baseVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        }
+
+        if (!rowboatEntity.isUnderWater() && rowboatEntity.getDamage() < rowboatEntity.getDamageThreshold() * 0.9) {
+            final VertexConsumer waterMaskVertexConsumer = bufferSource.getBuffer(RenderType.waterMask());
+            this.rowboatModel.getWaterocclusion()
+                    .render(poseStack, waterMaskVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        }
+
+        if (!rowboatEntity.getPaint().isEmpty() && rowboatEntity.getPaintColor() != null) {
+            final VertexConsumer paintVertexConsumer = bufferSource.getBuffer(
+                    RenderType.entityTranslucent(getPaintTexture(rowboatEntity)));
+            this.rowboatModel.renderToBuffer(poseStack, paintVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                    1, 1, 1);
+        }
+
+        if (0 < rowboatEntity.getDamage()) {
+            final VertexConsumer damageVertexConsumer = bufferSource.getBuffer(
+                    RenderType.entityTranslucent(DAMAGE_OVERLAY));
+            float alpha = Mth.clamp((rowboatEntity.getDamage() / (rowboatEntity.getDamageThreshold())) * 0.75f, 0,
+                    0.5f);
+            this.rowboatModel.renderToBuffer(poseStack, damageVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                    1, 1, alpha);
+        }
 
 
         poseStack.popPose();
-        super.render(pEntity, pEntityYaw, pPartialTicks, poseStack, pBuffer, pPackedLight);
+        super.render(rowboatEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
     }
 
-    @Deprecated // forge: override getModelWithLocation to change the texture / model
-    public ResourceLocation getTextureLocation(RowboatEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/rowboat/" + pEntity.getVariant() + ".png");
+    @Override
+    public ResourceLocation getTextureLocation(final RowboatEntity rowboatEntity) {
+        return this.rowboatTexture;
     }
 
-    public ResourceLocation getPaintTexture(RowboatEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/rowboat/paint/" + pEntity.getPaintColor() + ".png");
+    public ResourceLocation getPaintTexture(final RowboatEntity rowboatEntity) {
+        return PAINT_TEXTURES.get(rowboatEntity.getPaintColor());
     }
-
-    public ResourceLocation getDamageTexture(RowboatEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/rowboat/" + "damage_overlay" + ".png");
-    }
-
-    public Pair<ResourceLocation, RowboatEntityModel> getModelWithLocation(RowboatEntity rowboat) {
-        return this.rowboatResources.get(rowboat.getVariant());
-    }
-
-
 }

@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.TextTable;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
-public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
+public class RowboatEntityModel extends EntityModel<RowboatEntity> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             new ResourceLocation(Firmaciv.MOD_ID, "rowboat_entity"), "main");
@@ -58,11 +58,6 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
         this.keel = root.getChild("keel");
         this.transom = root.getChild("transom");
         this.cleat = root.getChild("cleat");
-    }
-
-    @Override
-    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -336,6 +331,7 @@ public class RowboatEntityModel<T extends Entity> extends EntityModel<T> {
 
     private ModelPart[] allParts = new ModelPart[15];
 
+    @Override
     public void setupAnim(RowboatEntity pEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
                           float headPitch) {
         //animateDestruction(pEntity, allParts);
