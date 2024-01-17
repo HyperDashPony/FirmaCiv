@@ -43,8 +43,8 @@ public final class FirmacivEntities {
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = register("kayak",
             EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F));
 
-    public static final Map<BoatVariant, RegistryObject<EntityType<SloopEntity>>> SLOOPS = Helpers.mapOfKeys(
-            BoatVariant.class, variant -> register("sloop/" + variant.getName(),
+    public static final Map<RegistryWood, RegistryObject<EntityType<SloopEntity>>> SLOOPS = FirmacivHelper.TFCWoodMap(
+            wood -> register("sloop/" + wood.getSerializedName(),
                     EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F)
                             .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
 

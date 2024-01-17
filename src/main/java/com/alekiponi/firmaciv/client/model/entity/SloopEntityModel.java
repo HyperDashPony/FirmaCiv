@@ -3,23 +3,17 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Paste this class into your mod and generate all required imports
 
 
-import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.WindlassSwitchEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
-public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends EntityModel<T> {
+public class SloopEntityModel extends EntityModel<SloopEntity> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     private final ModelPart mainsail;
     private final ModelPart mainsail_deployed;
@@ -48,11 +42,6 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         this.jibsail_furled = root.getChild("jibsail_furled");
         this.windlass = root.getChild("windlass");
         this.static_parts = root.getChild("static_parts");
-    }
-
-    @Override
-    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -1063,6 +1052,7 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     }
 
 
+    @Override
     public void setupAnim(SloopEntity pEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
                           float headPitch) {
         if (mainSailParts[0][0] == null) {

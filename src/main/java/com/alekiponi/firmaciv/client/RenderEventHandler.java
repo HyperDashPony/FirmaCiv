@@ -34,11 +34,14 @@ public final class RenderEventHandler {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         for (final BoatVariant boatVariant : BoatVariant.values()) {
             event.registerEntityRenderer(FirmacivEntities.CANOES.get(boatVariant).get(), CanoeRenderer::new);
-            event.registerEntityRenderer(FirmacivEntities.SLOOPS.get(boatVariant).get(), SloopRenderer::new);
         }
 
-        FirmacivHelper.forAllTFCWoods(wood -> event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(wood).get(),
-                context -> new RowboatRenderer(context, wood.getSerializedName())));
+        FirmacivHelper.forAllTFCWoods(wood -> {
+            event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(wood).get(),
+                    context -> new RowboatRenderer(context, wood.getSerializedName()));
+            event.registerEntityRenderer(FirmacivEntities.SLOOPS.get(wood).get(),
+                    context -> new SloopRenderer(context, wood.getSerializedName()));
+        });
 
         event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), KayakRenderer::new);
 
