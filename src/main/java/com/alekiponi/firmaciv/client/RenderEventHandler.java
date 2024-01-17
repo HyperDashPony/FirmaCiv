@@ -32,7 +32,8 @@ public final class RenderEventHandler {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         FirmacivHelper.forAllTFCWoods(wood -> {
-            event.registerEntityRenderer(FirmacivEntities.CANOES.get(wood).get(), CanoeRenderer::new);
+            event.registerEntityRenderer(FirmacivEntities.CANOES.get(wood).get(),
+                    context -> new CanoeRenderer(context, wood.getSerializedName()));
             event.registerEntityRenderer(FirmacivEntities.ROWBOATS.get(wood).get(),
                     context -> new RowboatRenderer(context, wood.getSerializedName()));
             event.registerEntityRenderer(FirmacivEntities.SLOOPS.get(wood).get(),

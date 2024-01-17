@@ -14,7 +14,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class CanoeEntityModel<T extends CanoeEntity> extends EntityModel<T> {
+public class CanoeEntityModel extends EntityModel<CanoeEntity> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             new ResourceLocation(Firmaciv.MOD_ID, "canoe_entity"), "main");

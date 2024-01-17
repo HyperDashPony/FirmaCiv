@@ -2,14 +2,9 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.client.model.entity.CanoeEntityModel;
-import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.logging.LogUtils;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -20,103 +15,99 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.slf4j.Logger;
-
-import java.util.Map;
-import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class CanoeRenderer extends EntityRenderer<CanoeEntity> {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final ResourceLocation DAMAGE_OVERLAY = new ResourceLocation(Firmaciv.MOD_ID,
+            "textures/entity/watercraft/dugout_canoe/damage_overlay.png");
+    protected final CanoeEntityModel canoeModel = new CanoeEntityModel();
+    protected final ResourceLocation canoeTexture;
 
-    private final Map<BoatVariant, Pair<ResourceLocation, CanoeEntityModel>> canoeResources;
-    private float previousRotation = 0;
+    /**
+     * This is primarily for us as it hardcodes the Firmaciv namespace.
+     * Use the constructor taking a {@link ResourceLocation} to provide a fully custom path
+     *
+     * @param woodName The name of the wood
+     */
+    public CanoeRenderer(final EntityRendererProvider.Context context, final String woodName) {
+        this(context,
+                new ResourceLocation(Firmaciv.MOD_ID, "textures/entity/watercraft/dugout_canoe/" + woodName + ".png"));
+    }
 
-    public CanoeRenderer(EntityRendererProvider.Context pContext) {
-        super(pContext);
-        this.shadowRadius = 0.7f;
-        this.canoeResources = Stream.of(BoatVariant.values()).collect(ImmutableMap.toImmutableMap((variant) -> {
-            return variant;
-        }, (type) -> {
-            return Pair.of(new ResourceLocation(Firmaciv.MOD_ID,
-                            "textures/entity/watercraft/dugout_canoe/" + type.getName() + ".png"),
-                    new CanoeEntityModel());
-        }));
+    /**
+     * Alternative constructor taking a resource location instead of a wood name
+     *
+     * @param canoeTexture The texture location. Must include file extension!
+     */
+    @SuppressWarnings("unused")
+    public CanoeRenderer(final EntityRendererProvider.Context context, final ResourceLocation canoeTexture) {
+        super(context);
+        this.shadowRadius = 0.7F;
+        this.canoeTexture = canoeTexture;
     }
 
     @Override
-    public void render(CanoeEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
-            MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(final CanoeEntity canoeEntity, final float entityYaw, final float partialTicks,
+            final PoseStack poseStack, final MultiBufferSource bufferSource, final int packedLight) {
 
-        pMatrixStack.pushPose();
-        pMatrixStack.translate(0.0D, 0.4375D, 0.0D);
-        pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - pEntityYaw));
+        poseStack.pushPose();
+        poseStack.translate(0, 0.4375D, 0);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180 - entityYaw));
 
-        Pair<ResourceLocation, CanoeEntityModel> pair = getModelWithLocation(pEntity);
-        CanoeEntityModel canoeModel = pair.getSecond();
+        poseStack.translate(0, 1.0625f, 0);
+        poseStack.scale(-1, -1, 1);
+        poseStack.mulPose(Axis.YP.rotationDegrees(0));
 
-        pMatrixStack.translate(0.0f, 1.0625f, 0f);
-        pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
-        pMatrixStack.mulPose(Axis.YP.rotationDegrees(0.0F));
-        canoeModel.setupAnim(pEntity, pPartialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer vertexconsumer = pBuffer.getBuffer(canoeModel.renderType(getTextureLocation(pEntity)));
-        if(pEntity.tickCount < 1){
-            pMatrixStack.popPose();
-            super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+        this.canoeModel.setupAnim(canoeEntity, partialTicks, 0, -0.1F, 0, 0);
+        final VertexConsumer vertexconsumer = bufferSource.getBuffer(
+                this.canoeModel.renderType(getTextureLocation(canoeEntity)));
+
+        if (canoeEntity.tickCount < 1) {
+            poseStack.popPose();
+            super.render(canoeEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
             return;
         }
-        canoeModel.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F,
-                1.0F, 1.0F);
-        if(pEntity.getLength() >= 4){
-            canoeModel.getMiddleMid()
-                    .render(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
-        }
-        if(pEntity.getLength() == 5){
-            canoeModel.getMiddleStern()
-                    .render(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
-            canoeModel.getBars()
-                    .render(pMatrixStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+
+        this.canoeModel.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+
+        if (canoeEntity.getLength() >= 4) {
+            this.canoeModel.getMiddleMid().render(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY);
         }
 
-        if (!pEntity.isUnderWater() && pEntity.getDamage() < pEntity.getDamageThreshold()*0.9) {
-            VertexConsumer vertexconsumer1 = pBuffer.getBuffer(RenderType.waterMask());
-            if(pEntity.getLength() == 3){
-                canoeModel.getWaterocclusion3()
-                        .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
-            } else if (pEntity.getLength() == 4){
-                canoeModel.getWaterocclusion4()
-                        .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
-            } else if (pEntity.getLength() == 5){
-                canoeModel.getWaterocclusion5()
-                        .render(pMatrixStack, vertexconsumer1, pPackedLight, OverlayTexture.NO_OVERLAY);
+        if (canoeEntity.getLength() == 5) {
+            this.canoeModel.getMiddleStern().render(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY);
+            this.canoeModel.getBars().render(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        }
+
+        if (!canoeEntity.isUnderWater() && canoeEntity.getDamage() < canoeEntity.getDamageThreshold() * 0.9) {
+            final VertexConsumer vertexconsumer1 = bufferSource.getBuffer(RenderType.waterMask());
+            if (canoeEntity.getLength() == 3) {
+                this.canoeModel.getWaterocclusion3()
+                        .render(poseStack, vertexconsumer1, packedLight, OverlayTexture.NO_OVERLAY);
+            } else if (canoeEntity.getLength() == 4) {
+                this.canoeModel.getWaterocclusion4()
+                        .render(poseStack, vertexconsumer1, packedLight, OverlayTexture.NO_OVERLAY);
+            } else if (canoeEntity.getLength() == 5) {
+                this.canoeModel.getWaterocclusion5()
+                        .render(poseStack, vertexconsumer1, packedLight, OverlayTexture.NO_OVERLAY);
             }
         }
 
-        if(pEntity.getDamage() > 0){
-            VertexConsumer damageVertexConsumer = pBuffer.getBuffer(RenderType.entityTranslucent(getDamageTexture(pEntity)));
-            float alpha = Mth.clamp((pEntity.getDamage()/(pEntity.getDamageThreshold()))*0.75f, 0, 0.5f);
-            canoeModel.renderToBuffer(pMatrixStack, damageVertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+        if (canoeEntity.getDamage() > 0) {
+            final VertexConsumer damageVertexConsumer = bufferSource.getBuffer(
+                    RenderType.entityTranslucent(DAMAGE_OVERLAY));
+            float alpha = Mth.clamp((canoeEntity.getDamage() / (canoeEntity.getDamageThreshold())) * 0.75F, 0, 0.5F);
+            this.canoeModel.renderToBuffer(poseStack, damageVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1,
+                    1, 1, alpha);
         }
 
-        pMatrixStack.popPose();
-        super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+        poseStack.popPose();
+        super.render(canoeEntity, entityYaw, partialTicks, poseStack, bufferSource, packedLight);
     }
 
-    @Deprecated // forge: override getModelWithLocation to change the texture / model
-    public ResourceLocation getTextureLocation(CanoeEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/dugout_canoe/" + pEntity.getVariant() + ".png");
+    @Deprecated
+    public ResourceLocation getTextureLocation(final CanoeEntity canoeEntity) {
+        return this.canoeTexture;
     }
-
-    public Pair<ResourceLocation, CanoeEntityModel> getModelWithLocation(CanoeEntity canoe) {
-        return this.canoeResources.get(canoe.getVariant());
-    }
-
-    public ResourceLocation getDamageTexture(CanoeEntity pEntity) {
-        return new ResourceLocation(Firmaciv.MOD_ID,
-                "textures/entity/watercraft/canoe/" + "damage_overlay" + ".png");
-    }
-
-
 }
