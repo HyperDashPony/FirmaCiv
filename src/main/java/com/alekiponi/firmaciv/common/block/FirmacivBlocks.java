@@ -68,6 +68,10 @@ public final class FirmacivBlocks {
             BlockBehaviour.Properties.copy(
                     TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
 
+    public static final RegistryObject<Block> CLEAT = registerBlockWithItem("cleat", () -> new CleatBlock(
+            BlockBehaviour.Properties.copy(
+                    TFCBlocks.METALS.get(Metal.Default.WROUGHT_IRON).get(Metal.BlockType.BLOCK).get()).noOcclusion()));
+
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);
     }

@@ -1,27 +1,19 @@
 package com.alekiponi.firmaciv.common.blockentity;
 
 import com.alekiponi.firmaciv.common.block.CanoeComponentBlock;
-import com.mojang.logging.LogUtils;
 import net.dries007.tfc.common.blockentities.TFCBlockEntity;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.VisibleForTesting;
-import org.slf4j.Logger;
 
 import static com.alekiponi.firmaciv.common.block.CanoeComponentBlock.CANOE_CARVED;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
 
 public class CanoeComponentBlockEntity extends TFCBlockEntity {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
-    private ServerPlayer lighter;
     private long litTick;
     private boolean isLit;
 
@@ -44,15 +36,6 @@ public class CanoeComponentBlockEntity extends TFCBlockEntity {
         }
 
     }
-
-    public boolean isLit() {
-        return this.isLit;
-    }
-
-    public long getLitTick() {
-        return this.litTick;
-    }
-
 
     public void light() {
 

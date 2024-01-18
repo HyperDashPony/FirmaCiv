@@ -1,9 +1,6 @@
 package com.alekiponi.firmaciv.common.entity;
 
-import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.*;
@@ -44,6 +41,11 @@ public final class FirmacivEntities {
     public static final Map<BoatVariant, RegistryObject<EntityType<SloopEntity>>> SLOOPS = Helpers.mapOfKeys(
             BoatVariant.class, variant -> register("sloop/" + variant.getName(),
                     EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F)
+                            .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
+
+    public static final Map<BoatVariant, RegistryObject<EntityType<SloopConstructionEntity>>> SLOOPS_UNDER_CONSTRUCTION = Helpers.mapOfKeys(
+            BoatVariant.class, variant -> register("sloop_construction/" + variant.getName(),
+                    EntityType.Builder.of(SloopConstructionEntity::new, MobCategory.MISC).sized(3F, 0.75F)
                             .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = register(

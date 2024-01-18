@@ -19,7 +19,7 @@ public class ShipbuildingBlockValidator {
 
     private boolean flat = false;
 
-    private boolean validatingThisBlock = true;
+    private boolean validatingThisBlock = false;
 
     @Nullable
     private Direction direction = null;
@@ -30,6 +30,7 @@ public class ShipbuildingBlockValidator {
     ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape constantShape, WoodenBoatFrameBlock.ConstantDirection constantDirection) {
         this.constantShape = constantShape;
         this.constantDirection = constantDirection;
+        this.validatingThisBlock = true;
     }
 
     /*
@@ -37,7 +38,7 @@ public class ShipbuildingBlockValidator {
      */
     ShipbuildingBlockValidator(boolean flat) {
         this.flat = flat;
-        this.validatingThisBlock = !flat;
+        this.validatingThisBlock = flat;
     }
 
     /*
@@ -46,15 +47,19 @@ public class ShipbuildingBlockValidator {
     ShipbuildingBlockValidator(Direction direction) {
         this.constantShape = WoodenBoatFrameBlock.ConstantShape.STRAIGHT;
         this.direction = direction;
+        this.validatingThisBlock = true;
+    }
+
+    public boolean shouldDestroy(){
+        return validatingThisBlock;
     }
 
     public boolean validate(BlockState state, ItemStack plankItem, Direction structureDirection) {
         if (!validatingThisBlock) {
             return true;
         }
-        if (flat) {
-            // TODO flat validation
-            return true;
+        if (flat && state.getBlock() instanceof FlatWoodenBoatFrameBlock) {
+            return FlatWoodenBoatFrameBlock.validateProcessed(state, plankItem);
         }
 
         if (state.getBlock() instanceof WoodenBoatFrameBlock) {
@@ -69,16 +74,15 @@ public class ShipbuildingBlockValidator {
                 }
                 if (WoodenBoatFrameBlock.getConstantShape(state) == WoodenBoatFrameBlock.ConstantShape.STRAIGHT) {
                     Direction rotatedDirection = direction;
-                    if (structureDirection == Direction.NORTH) {
+                    Direction facing = state.getValue(FACING);
+                    if (structureDirection == Direction.SOUTH) {
                         rotatedDirection = direction.getOpposite();
-                    }
-                    if (structureDirection == Direction.EAST) {
+                    } else if (structureDirection == Direction.EAST) {
+                        rotatedDirection = direction.getClockWise();
+                    } else if (structureDirection == Direction.WEST) {
                         rotatedDirection = direction.getCounterClockWise();
                     }
-                    if (structureDirection == Direction.WEST) {
-                        rotatedDirection = direction.getClockWise();
-                    }
-                    if (state.getValue(FACING) == rotatedDirection) {
+                    if (facing == rotatedDirection && WoodenBoatFrameBlock.validateProcessed(state, plankItem)) {
                         return true;
                     }
                 }
@@ -86,9 +90,10 @@ public class ShipbuildingBlockValidator {
             }
 
             // angled validation
-            WoodenBoatFrameBlock.ConstantDirection constantDirection = WoodenBoatFrameBlock.getConstantDirection(state);
+            WoodenBoatFrameBlock.ConstantDirection frameConstantDirection = WoodenBoatFrameBlock.getConstantDirection(state);
             if (WoodenBoatFrameBlock.validateProcessed(state, plankItem)) {
-                if (constantDirection == WoodenBoatFrameBlock.rotateConstantDirection(this.constantDirection, structureDirection)) {
+                WoodenBoatFrameBlock.ConstantDirection rotatedValidatorDirection = WoodenBoatFrameBlock.rotateConstantDirection(this.constantDirection, structureDirection);
+                if (frameConstantDirection == rotatedValidatorDirection) {
                     if (this.constantShape == WoodenBoatFrameBlock.getConstantShape(state)) {
                         return true;
                     }

@@ -20,8 +20,8 @@ public class ShipbuildingMultiblocks {
             },
             {
                     new ShipbuildingBlockValidator(false),
-                    new ShipbuildingBlockValidator(Direction.EAST),
                     new ShipbuildingBlockValidator(Direction.WEST),
+                    new ShipbuildingBlockValidator(Direction.EAST),
                     new ShipbuildingBlockValidator(false),
             },
             {
@@ -31,22 +31,22 @@ public class ShipbuildingMultiblocks {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.SOUTH_AND_WEST),
             },
             {
-                    new ShipbuildingBlockValidator(Direction.EAST),
-                    new ShipbuildingBlockValidator(true),
-                    new ShipbuildingBlockValidator(true),
                     new ShipbuildingBlockValidator(Direction.WEST),
+                    new ShipbuildingBlockValidator(true),
+                    new ShipbuildingBlockValidator(true),
+                    new ShipbuildingBlockValidator(Direction.EAST),
             },
             {
-                    new ShipbuildingBlockValidator(Direction.EAST),
-                    new ShipbuildingBlockValidator(true),
-                    new ShipbuildingBlockValidator(true),
                     new ShipbuildingBlockValidator(Direction.WEST),
+                    new ShipbuildingBlockValidator(true),
+                    new ShipbuildingBlockValidator(true),
+                    new ShipbuildingBlockValidator(Direction.EAST),
             },
             {
-                    new ShipbuildingBlockValidator(Direction.EAST),
-                    new ShipbuildingBlockValidator(true),
-                    new ShipbuildingBlockValidator(true),
                     new ShipbuildingBlockValidator(Direction.WEST),
+                    new ShipbuildingBlockValidator(true),
+                    new ShipbuildingBlockValidator(true),
+                    new ShipbuildingBlockValidator(Direction.EAST),
             },
             {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_EAST),
@@ -62,8 +62,8 @@ public class ShipbuildingMultiblocks {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.SOUTH_AND_WEST)
             },
             {
-                    new ShipbuildingBlockValidator(Direction.EAST),
-                    new ShipbuildingBlockValidator(Direction.WEST)
+                    new ShipbuildingBlockValidator(Direction.WEST),
+                    new ShipbuildingBlockValidator(Direction.EAST)
             },
             {
                     new ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape.INNER, WoodenBoatFrameBlock.ConstantDirection.NORTH_AND_EAST),
@@ -91,16 +91,27 @@ public class ShipbuildingMultiblocks {
                 thisMultiblock = new ShipbuildingBlockValidator[0][0];
             }
         }
-
+        boolean success = true;
         for (int y = 0; y < thisMultiblock.length; y++) {
             for (int x = 0; x < thisMultiblock[0].length; x++) {
                 BlockState state = level.getBlockState(thispos.relative(structureDirection.getOpposite(), y).relative(crossDirection, x));
                 if (!thisMultiblock[y][x].validate(state, plankItem, structureDirection)) {
-                    return false;
+                    success = false;
+                    break;
                 }
             }
         }
-        return true;
+        if(success){
+            for (int y = 0; y < thisMultiblock.length; y++) {
+                for (int x = 0; x < thisMultiblock[0].length; x++) {
+                    if(thisMultiblock[y][x].shouldDestroy()){
+                        level.destroyBlock(thispos.relative(structureDirection.getOpposite(), y).relative(crossDirection, x), false);
+                    }
+                }
+            }
+        }
+
+        return success;
     }
 
     public static ItemStack validatePlanks(BlockState frameState) {

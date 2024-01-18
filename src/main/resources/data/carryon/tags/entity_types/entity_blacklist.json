@@ -8,6 +8,7 @@
     "#firmaciv:sloops",
     "#firmaciv:rowboats",
     "#firmaciv:vehicle_helpers",
-    "#firmaciv:compartments"
+    "#firmaciv:compartments",
+    "firmaciv:sloop_construction/acacia/firmaciv:sloop_construction/ash/firmaciv:sloop_construction/aspen/firmaciv:sloop_construction/birch/firmaciv:sloop_construction/blackwood/firmaciv:sloop_construction/chestnut/firmaciv:sloop_construction/douglas_fir/firmaciv:sloop_construction/hickory/firmaciv:sloop_construction/kapok/firmaciv:sloop_construction/mangrove/firmaciv:sloop_construction/maple/firmaciv:sloop_construction/oak/firmaciv:sloop_construction/palm/firmaciv:sloop_construction/pine/firmaciv:sloop_construction/rosewood/firmaciv:sloop_construction/sequoia/firmaciv:sloop_construction/spruce/firmaciv:sloop_construction/sycamore/firmaciv:sloop_construction/white_cedar/firmaciv:sloop_construction/willow"
   ]
 }

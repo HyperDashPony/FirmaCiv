@@ -702,8 +702,8 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     private static void animateMainsail(SloopEntity pBoat, float pPartialTicks, ModelPart mainsail_main, ModelPart mainsail, ModelPart[][] sails, float mastRotation, int animationTick) {
 
         if (pBoat.getMainsailActive()) {
-            mainsail_main.yRot  = Mth.rotLerp(pPartialTicks, mainsail_main.yRot, mastRotation);
-            mainsail.yRot  = Mth.rotLerp(pPartialTicks, mainsail.yRot, mastRotation);
+            mainsail_main.yRot  = mastRotation;
+            mainsail.yRot  = mastRotation;
 
             float windWorldAngle = Mth.wrapDegrees(pBoat.getLocalWindAngleAndSpeed()[0]);
             float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] * 20f;
@@ -817,12 +817,11 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
         float boatWorldAngle = Mth.wrapDegrees(pBoat.getYRot());
         float boatWindDifference = Mth.degreesDifferenceAbs(windWorldAngle, boatWorldAngle);
         if (boatWindDifference < 10 || boatWindDifference > 170 && pBoat.getMainsailActive()) {
-            jibsail.yRot = Mth.rotLerp(pPartialTicks, jibsail.yRot, -mastRotation);
+            jibsail.yRot = -mastRotation;
             airFoilDirection *= -1;
         } else {
-            jibsail.yRot = Mth.rotLerp(pPartialTicks, jibsail.yRot, mastRotation);
+            jibsail.yRot = mastRotation;
         }
-
 
         if(pBoat.getJibsailActive()){
             for (int zindex = 0; zindex < jibsail_horizontal_sections; zindex++) {
@@ -936,12 +935,12 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
     }
 
     private static void animateRudder(SloopEntity pBoat, float pPartialTicks, ModelPart rudder, float rudderRotation) {
-        rudder.yRot = Mth.rotLerp(pPartialTicks, rudder.yRot, rudderRotation);
+        rudder.yRot = rudderRotation;
     }
 
     private static void animateWindlass(SloopEntity pBoat, float pPartialTicks, ModelPart windlass, float anchorDistance) {
         float degrees = (anchorDistance * 180);
-        windlass.getChild("crank_arm").zRot = Mth.rotLerp(pPartialTicks, windlass.getChild("crank_arm").zRot, (float) Math.toRadians(degrees));
+        windlass.getChild("crank_arm").zRot = (float) Math.toRadians(degrees);
         if (degrees % 360 < 90) {
             windlass.getChild("spool").zRot = (float) Math.toRadians(0);
         } else if (degrees % 360 < 180) {
@@ -963,12 +962,12 @@ public class SloopEntityModel<T extends AbstractFirmacivBoatEntity> extends Enti
             double thing = Math.toDegrees(boomRotation);
             float rotation = (float) mainSheetRotationLookupCauseImBadAtMath((float) Math.toDegrees(boomRotation));
             if (boomRotation > 0) {
-                mainsheet.zRot = Mth.rotLerp(pPartialTicks, mainsheet.zRot, rotation);
-                mainsheet.xRot = Mth.rotLerp(pPartialTicks, mainsheet.xRot, boomRotation * 0.6f);
+                mainsheet.zRot = rotation;
+                mainsheet.xRot = boomRotation * 0.6f;
             } else {
                 rotation *= -1;
-                mainsheet.zRot = Mth.rotLerp(pPartialTicks, mainsheet.zRot, rotation);
-                mainsheet.xRot = Mth.rotLerp(pPartialTicks, mainsheet.xRot, -1 * boomRotation * 0.6f);
+                mainsheet.zRot = rotation;
+                mainsheet.xRot = -1 * boomRotation * 0.6f;
             }
             // oh my god this is bad
             if (Math.abs(thing) < 5) {

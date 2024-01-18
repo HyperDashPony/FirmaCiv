@@ -69,6 +69,29 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
         return ConstantShape.STRAIGHT;
     }
 
+    public static Direction[] getSolid(BlockState state){
+        ConstantShape shape = getConstantShape(state);
+        ConstantDirection directions = getConstantDirection(state);
+        if(shape == ConstantShape.STRAIGHT){
+            return new Direction[]{state.getValue(FACING)};
+        }
+        if(shape == ConstantShape.INNER){
+            if(directions == ConstantDirection.NORTH_AND_EAST){
+                return new Direction[]{Direction.WEST, Direction.SOUTH};
+            }
+            if(directions == ConstantDirection.SOUTH_AND_EAST){
+                return new Direction[]{Direction.WEST, Direction.NORTH};
+            }
+            if(directions == ConstantDirection.NORTH_AND_WEST){
+                return new Direction[]{Direction.SOUTH, Direction.EAST};
+            }
+            if(directions == ConstantDirection.SOUTH_AND_WEST){
+                return new Direction[]{Direction.EAST, Direction.NORTH};
+            }
+        }
+        return new Direction[]{};
+    }
+
     @Nullable
     public static ConstantDirection getConstantDirection(BlockState state) {
         if (!(state.getBlock() instanceof WoodenBoatFrameBlock)) {
@@ -119,10 +142,10 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
                 return ConstantDirection.SOUTH_AND_WEST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_RIGHT) {
-                return ConstantDirection.NORTH_AND_EAST;
+                return ConstantDirection.SOUTH_AND_EAST;
             }
             if (state.getValue(SHAPE) == StairsShape.OUTER_LEFT) {
-                return ConstantDirection.SOUTH_AND_EAST;
+                return ConstantDirection.NORTH_AND_EAST;
             }
         }
         if (state.getValue(FACING) == Direction.WEST) {
