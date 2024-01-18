@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "facing=east": {
+      "model": "firmaciv:block/cleat",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "firmaciv:block/cleat"
+    },
+    "facing=south": {
+      "model": "firmaciv:block/cleat",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "firmaciv:block/cleat",
+      "y": 270
+    }
+  }
+}

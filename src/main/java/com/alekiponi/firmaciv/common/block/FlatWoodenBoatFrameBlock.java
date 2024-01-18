@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import static com.alekiponi.firmaciv.common.block.FirmacivBlockStateProperties.FRAME_PROCESSED_7;
+
 public class FlatWoodenBoatFrameBlock extends FlatBoatFrameBlock {
 
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_7;
@@ -34,6 +36,16 @@ public class FlatWoodenBoatFrameBlock extends FlatBoatFrameBlock {
     @Override
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder.add(FRAME_PROCESSED));
+    }
+
+    public static boolean validateProcessed(BlockState framestate, ItemStack plankitem) {
+        // check if the plank item matches
+        if (framestate.getBlock() instanceof FlatWoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack()
+                .is(plankitem.getItem())) {
+            // check if the state matches
+            return framestate.getValue(FRAME_PROCESSED_7) == 7;
+        }
+        return false;
     }
 
     @Override
@@ -107,5 +119,9 @@ public class FlatWoodenBoatFrameBlock extends FlatBoatFrameBlock {
 
     public Block getUnderlyingPlank() {
         return wood.getBlock(Wood.BlockType.PLANKS).get();
+    }
+
+    public ItemStack getPlankAsItemStack() {
+        return wood.getBlock(Wood.BlockType.PLANKS).get().asItem().getDefaultInstance();
     }
 }

@@ -57,7 +57,7 @@ def generate(rm: ResourceManager):
 
     # Basic flat frame
     rm.blockstate("watercraft_frame_flat", "firmaciv:block/watercraft_frame/flat/frame").with_lang(
-        "Flat Shipwrights Scaffolding").with_block_loot("firmaciv:watercraft_frame_flat")
+        "Flat Shipwright's Scaffolding").with_block_loot("firmaciv:watercraft_frame_flat")
 
     # Need to manually make the model
     rm.item_model("watercraft_frame_flat", parent="firmaciv:block/watercraft_frame/flat/frame",
@@ -81,6 +81,25 @@ def generate(rm: ResourceManager):
         }
     }).with_lang("Oarlock").with_block_loot("firmaciv:oarlock")
     rm.item_model("oarlock")
+
+    rm.blockstate("cleat", variants={
+        "facing=east": {
+            "model": "firmaciv:block/cleat",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "firmaciv:block/cleat"
+        },
+        "facing=south": {
+            "model": "firmaciv:block/cleat",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "firmaciv:block/cleat",
+            "y": 270
+        }
+    }).with_lang("Cleat").with_block_loot("firmaciv:cleat")
+    rm.item_model("cleat")
 
     # Items with generated models
     rm.item("unfinished_barometer").with_item_model().with_lang("Unfinished Barometer")

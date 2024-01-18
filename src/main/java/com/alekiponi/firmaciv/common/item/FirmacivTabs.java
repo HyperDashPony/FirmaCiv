@@ -38,13 +38,13 @@ public class FirmacivTabs {
                         pOutput.accept(FirmacivItems.OAR.get());
                         pOutput.accept(FirmacivBlocks.OARLOCK.get());
                         pOutput.accept(FirmacivItems.COPPER_BOLT.get());
+                        pOutput.accept(FirmacivBlocks.CLEAT.get());
 
                         pOutput.accept(FirmacivItems.CANNON.get());
                         pOutput.accept(FirmacivItems.CANNONBALL.get());
 
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME_ANGLED.get());
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME_FLAT.get());
-
 
                     }).build());
 
