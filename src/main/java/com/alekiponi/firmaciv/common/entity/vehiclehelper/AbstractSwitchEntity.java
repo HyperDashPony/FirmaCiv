@@ -38,7 +38,6 @@ public abstract class AbstractSwitchEntity extends AbstractInvisibleHelper {
         super.tick();
     }
 
-
     public void setSwitched(boolean switched) {
         this.entityData.set(DATA_ID_SWITCH, switched);
     }
@@ -46,7 +45,6 @@ public abstract class AbstractSwitchEntity extends AbstractInvisibleHelper {
     public boolean getSwitched() {
         return this.entityData.get(DATA_ID_SWITCH);
     }
-
 
     @Override
     public boolean isPickable() {

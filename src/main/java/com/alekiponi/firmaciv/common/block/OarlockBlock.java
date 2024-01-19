@@ -84,8 +84,10 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (!pOldState.is(pState.getBlock())) {
+            BlockState frameState = pLevel.getBlockState(pPos.below());
             if (validateOarlocks(pLevel, pPos, pState) && validateFrames(pLevel, pPos, pState)) {
-                spawnRowboat(pLevel, pPos, pState);
+                destroyOarlocks(pLevel, pPos, pState);
+                spawnRowboat(pLevel, pPos, pState, frameState);
             }
         }
         super.onPlace(pState, pLevel, pPos, pOldState, pIsMoving);
@@ -102,21 +104,22 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         return isSupportedByWatercraftFrame(pLevel, pPos);
     }
 
-    private void spawnRowboat(Level pLevel, BlockPos thispos, BlockState blockState) {
+    private void spawnRowboat(Level pLevel, BlockPos thispos, BlockState blockState, BlockState framestate) {
         Direction direction = blockState.getValue(FACING);
         Direction.Axis axis = direction.getClockWise().getAxis();
-        WoodenBoatFrameBlock boatFrameBlock = (WoodenBoatFrameBlock) pLevel.getBlockState(thispos.below()).getBlock();
-        String woodName = boatFrameBlock.getPlankAsItemStack().getItem().toString().split("planks/")[1];
-        BoatVariant variant = BoatVariant.byName(woodName);
-        RowboatEntity rowboat = FirmacivEntities.ROWBOATS.get(variant).get().create(pLevel);
-        //FirmacivEntities.CANOES.get(ccb.variant).get().create(pLevel)
-        rowboat.moveTo(getSpawnPosition(pLevel, thispos, blockState));
-        if (axis == Direction.Axis.X) {
-            rowboat.setYRot(90F);
-        }
+        if(framestate.getBlock() instanceof WoodenBoatFrameBlock boatFrameBlock){
+            RowboatEntity rowboat = FirmacivEntities.ROWBOATS.get(boatFrameBlock.wood).get().create(pLevel);
+            rowboat.setPos(getSpawnPosition(pLevel, thispos, blockState));
+            if (axis == Direction.Axis.X) {
+                rowboat.setYRot(90F);
+            }
 
-        pLevel.addFreshEntity(rowboat);
-        destroyOarlocks(pLevel, thispos, blockState);
+            pLevel.addFreshEntity(rowboat);
+        }
+        //String woodName = boatFrameBlock.getPlankAsItemStack().getItem().toString().split("planks/")[1];
+        //BoatVariant variant = BoatVariant.byName(woodName);
+        //RowboatEntity rowboat = FirmacivEntities.ROWBOATS.get(variant).get().create(pLevel);
+
     }
 
     public boolean validateOarlocks(Level level, BlockPos thispos, BlockState blockState) {

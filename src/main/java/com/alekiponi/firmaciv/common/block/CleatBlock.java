@@ -1,9 +1,7 @@
 package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.vehicle.SloopConstructionEntity;
-import com.alekiponi.firmaciv.util.BoatVariant;
-import net.minecraft.client.Minecraft;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopUnderConstructionEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -170,11 +168,12 @@ public class CleatBlock extends HorizontalDirectionalBlock implements SimpleWate
         }
 
         ItemStack plankItem = ShipbuildingMultiblocks.validatePlanks(level.getBlockState(thispos.below()));
+        BlockState framestate = level.getBlockState(thispos.below());
         if (plankItem.isEmpty()) {
             return;
         }
 
-        if (ShipbuildingMultiblocks.validateShipHull(level, origin, structureDirection, ShipbuildingMultiblocks.Multiblock.SLOOP, plankItem)) {
+        if (ShipbuildingMultiblocks.validateShipHull(level, origin, structureDirection, ShipbuildingMultiblocks.Multiblock.SLOOP, plankItem) && framestate.getBlock() instanceof WoodenBoatFrameBlock boatFrameBlock) {
             // destroy cleats
             for (BlockPos pos : cleats) {
                 level.destroyBlock(pos, false);
@@ -184,9 +183,7 @@ public class CleatBlock extends HorizontalDirectionalBlock implements SimpleWate
             BlockPos pos2 = origin.relative(structureDirection.getOpposite(), 5).relative(structureDirection.getClockWise(), 3);
             Vec3 spawnPosition = new Vec3(pos1.getX() + pos2.getX(), pos1.getY() + pos2.getY(), pos1.getZ() + pos2.getZ()).multiply(0.5, 0.5, 0.5);
 
-            String woodName = plankItem.getItem().toString().split("planks/")[1];
-            BoatVariant variant = BoatVariant.byName(woodName);
-            SloopConstructionEntity sloop = FirmacivEntities.SLOOPS_UNDER_CONSTRUCTION.get(variant).get().create(level);
+            SloopUnderConstructionEntity sloop = FirmacivEntities.SLOOPS_UNDER_CONSTRUCTION.get(boatFrameBlock.wood).get().create(level);
             sloop.setPos(spawnPosition);
             if (structureDirection == Direction.NORTH) {
                 sloop.setYRot(180F);
@@ -196,6 +193,8 @@ public class CleatBlock extends HorizontalDirectionalBlock implements SimpleWate
                 sloop.setYRot(90F);
             }
             level.addFreshEntity(sloop);
+
+
         }
 
 

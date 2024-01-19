@@ -102,6 +102,8 @@ public abstract class AbstractVehicle extends Entity {
 
     public abstract int[] getColliderIndices();
 
+    public abstract int[] getConstructionIndices();
+
     public abstract int[] getCanAddOnlyBlocksIndices();
 
     public ArrayList<VehicleCleatEntity> getCleats(){

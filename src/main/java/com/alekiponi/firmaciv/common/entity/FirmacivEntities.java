@@ -43,9 +43,16 @@ public final class FirmacivEntities {
                     EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F)
                             .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
 
+    /*
     public static final Map<BoatVariant, RegistryObject<EntityType<SloopConstructionEntity>>> SLOOPS_UNDER_CONSTRUCTION = Helpers.mapOfKeys(
             BoatVariant.class, variant -> register("sloop_construction/" + variant.getName(),
                     EntityType.Builder.of(SloopConstructionEntity::new, MobCategory.MISC).sized(3F, 0.75F)
+                            .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
+     */
+
+    public static final Map<RegistryWood, RegistryObject<EntityType<SloopUnderConstructionEntity>>> SLOOPS_UNDER_CONSTRUCTION = FirmacivHelper.TFCWoodMap(
+            wood -> register("sloop_construction/" + wood.getSerializedName(),
+                    EntityType.Builder.of(SloopUnderConstructionEntity::new, MobCategory.MISC).sized(3F, 0.75F)
                             .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = register(
@@ -127,6 +134,10 @@ public final class FirmacivEntities {
             EntityType.Builder.of(BoatVehiclePart::new, MobCategory.MISC).sized(0, 0)
                     .setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon());
 
+    public static final RegistryObject<EntityType<ConstructionVehiclePart>> CONSTRUCTION_VEHICLE_PART = register("vehicle_part_construction",
+            EntityType.Builder.of(ConstructionVehiclePart::new, MobCategory.MISC).sized(0, 0)
+                    .setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon());
+
     public static final RegistryObject<EntityType<VehicleCleatEntity>> VEHICLE_CLEAT_ENTITY = register("vehicle_cleat",
             EntityType.Builder.of(VehicleCleatEntity::new, MobCategory.MISC).sized(0.4F, 0.2F)
                     .setTrackingRange(VEHICLE_HELPER_TRACKING).noSummon());
@@ -141,6 +152,10 @@ public final class FirmacivEntities {
 
     public static final RegistryObject<EntityType<AnchorEntity>> ANCHOR_ENTITY = register("vehicle_anchor",
             EntityType.Builder.of(AnchorEntity::new, MobCategory.MISC).sized(1, 1)
+                    .clientTrackingRange(VEHICLE_HELPER_TRACKING).noSummon());
+
+    public static final RegistryObject<EntityType<ConstructionEntity>> CONSTRUCTION_ENTITY = register("vehicle_construction",
+            EntityType.Builder.of(ConstructionEntity::new, MobCategory.MISC).sized(1, 1)
                     .clientTrackingRange(VEHICLE_HELPER_TRACKING).noSummon());
 
     public static final RegistryObject<EntityType<WindlassSwitchEntity>> WINDLASS_SWITCH_ENTITY = register(

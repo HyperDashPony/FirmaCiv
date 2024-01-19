@@ -96,6 +96,10 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     public abstract int[] getMastIndices();
 
+    public int[] getConstructionIndices(){
+        return new int[0];
+    }
+
     public ArrayList<SailSwitchEntity> getSailSwitches() {
         ArrayList<SailSwitchEntity> list = new ArrayList<SailSwitchEntity>();
         if (this.getPassengers().size() == this.getMaxPassengers()) {

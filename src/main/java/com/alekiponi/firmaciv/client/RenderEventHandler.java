@@ -36,6 +36,8 @@ public final class RenderEventHandler {
                     context -> new RowboatRenderer(context, wood.getSerializedName()));
             event.registerEntityRenderer(FirmacivEntities.SLOOPS.get(wood).get(),
                     context -> new SloopRenderer(context, wood.getSerializedName()));
+            event.registerEntityRenderer(FirmacivEntities.SLOOPS_UNDER_CONSTRUCTION.get(wood).get(),
+                    context -> new SloopConstructionRenderer(context, wood.getSerializedName()));
         });
 
         event.registerEntityRenderer(FirmacivEntities.KAYAK_ENTITY.get(), KayakRenderer::new);
@@ -72,6 +74,7 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.ANVIL_COMPARTMENT_ENTITY.get(), BlockCompartmentRenderer::new);
 
         event.registerEntityRenderer(FirmacivEntities.BOAT_VEHICLE_PART.get(), NoopRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.CONSTRUCTION_VEHICLE_PART.get(), NoopRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.SAIL_SWITCH_ENTITY.get(), NoopRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_COLLISION_ENTITY.get(), NoopRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.WINDLASS_SWITCH_ENTITY.get(), NoopRenderer::new);
@@ -81,5 +84,6 @@ public final class RenderEventHandler {
         event.registerEntityRenderer(FirmacivEntities.CANNON_ENTITY.get(), CannonRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.VEHICLE_CLEAT_ENTITY.get(), VehicleCleatRenderer::new);
         event.registerEntityRenderer(FirmacivEntities.ANCHOR_ENTITY.get(), AnchorRenderer::new);
+        event.registerEntityRenderer(FirmacivEntities.CONSTRUCTION_ENTITY.get(), ConstructionRenderer::new);
     }
 }
