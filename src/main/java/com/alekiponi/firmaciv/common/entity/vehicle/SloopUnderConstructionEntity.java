@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.util.BoatVariant;
+import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.client.Minecraft;
@@ -26,10 +27,11 @@ import java.util.Comparator;
 
 public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstruction {
 
-    //public final RegistryWood wood;
+    public final RegistryWood wood;
 
-    public SloopUnderConstructionEntity(EntityType entityType, Level level) {
+    public SloopUnderConstructionEntity(EntityType entityType, Level level, RegistryWood wood) {
         super(entityType, level);
+        this.wood = wood;
     }
 
     private static final EntityDataAccessor<ItemStack> DATA_ID_KEEL = SynchedEntityData.defineId(SloopUnderConstructionEntity.class,
@@ -224,9 +226,9 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
     @Override
     public void interactFromConstructionEntity(Player player, InteractionHand hand) {
         final ItemStack stack = player.getItemInHand(hand);
-        Item lumber = this.getVariant().getLumber().get();
-        Item stripped = this.getVariant().getStripped().get().asItem();
-        Item planks = this.getVariant().getPlanks().get().asItem();
+        Item lumber = TFCItems.LUMBER.get((Wood)(wood)).get();
+        Item stripped = wood.getBlock(Wood.BlockType.STRIPPED_LOG).get().asItem();
+        Item planks = wood.getBlock(Wood.BlockType.PLANKS).get().asItem();
         //TODO correct items
         Item sail = TFCItems.WOOL_CLOTH.get();
         Item anchor = Items.IRON_INGOT;
@@ -334,7 +336,11 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
             }
         }
         if(stage == ConstructionState.COMPLETE){
-            //
+            SloopEntity sloop = FirmacivEntities.SLOOPS.get(wood).get().create(this.level());
+            sloop.setYRot(this.getYRot());
+            sloop.setPos(this.getPosition(0));
+            this.level().addFreshEntity(sloop);
+            this.kill();
         }
     }
 
@@ -354,7 +360,7 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
 
     @Override
     public BoatVariant getVariant() {
-        return getVariant("sloop_construction");
+        return null;
     }
 
     protected float getMomentumSubtractor() {
