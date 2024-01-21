@@ -2,10 +2,7 @@ package com.alekiponi.firmaciv.common.block;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.StairsShape;
 
 import javax.annotation.Nullable;
 
@@ -13,9 +10,9 @@ import static com.alekiponi.firmaciv.common.block.SquaredAngleBlock.FACING;
 
 public class ShipbuildingBlockValidator {
 
-    private WoodenBoatFrameBlock.ConstantDirection constantDirection = null;
+    private AngledWoodenBoatFrameBlock.ConstantDirection constantDirection = null;
 
-    private WoodenBoatFrameBlock.ConstantShape constantShape = null;
+    private AngledWoodenBoatFrameBlock.ConstantShape constantShape = null;
 
     private boolean flat = false;
 
@@ -27,7 +24,7 @@ public class ShipbuildingBlockValidator {
     /*
         Use this constructor for inner/outer angled frames
      */
-    ShipbuildingBlockValidator(WoodenBoatFrameBlock.ConstantShape constantShape, WoodenBoatFrameBlock.ConstantDirection constantDirection) {
+    ShipbuildingBlockValidator(AngledWoodenBoatFrameBlock.ConstantShape constantShape, AngledWoodenBoatFrameBlock.ConstantDirection constantDirection) {
         this.constantShape = constantShape;
         this.constantDirection = constantDirection;
         this.validatingThisBlock = true;
@@ -45,7 +42,7 @@ public class ShipbuildingBlockValidator {
         Use this constructor for straight angled frames
      */
     ShipbuildingBlockValidator(Direction direction) {
-        this.constantShape = WoodenBoatFrameBlock.ConstantShape.STRAIGHT;
+        this.constantShape = AngledWoodenBoatFrameBlock.ConstantShape.STRAIGHT;
         this.direction = direction;
         this.validatingThisBlock = true;
     }
@@ -62,17 +59,17 @@ public class ShipbuildingBlockValidator {
             return FlatWoodenBoatFrameBlock.validateProcessed(state, plankItem);
         }
 
-        if (state.getBlock() instanceof WoodenBoatFrameBlock) {
-            if (WoodenBoatFrameBlock.getConstantDirection(state) == null) {
+        if (state.getBlock() instanceof AngledWoodenBoatFrameBlock) {
+            if (AngledWoodenBoatFrameBlock.getConstantDirection(state) == null) {
                 return false;
             }
 
             // straight validation
-            if (this.constantShape == WoodenBoatFrameBlock.ConstantShape.STRAIGHT) {
+            if (this.constantShape == AngledWoodenBoatFrameBlock.ConstantShape.STRAIGHT) {
                 if (direction == null) {
                     return false;
                 }
-                if (WoodenBoatFrameBlock.getConstantShape(state) == WoodenBoatFrameBlock.ConstantShape.STRAIGHT) {
+                if (AngledWoodenBoatFrameBlock.getConstantShape(state) == AngledWoodenBoatFrameBlock.ConstantShape.STRAIGHT) {
                     Direction rotatedDirection = direction;
                     Direction facing = state.getValue(FACING);
                     if (structureDirection == Direction.SOUTH) {
@@ -82,7 +79,7 @@ public class ShipbuildingBlockValidator {
                     } else if (structureDirection == Direction.WEST) {
                         rotatedDirection = direction.getCounterClockWise();
                     }
-                    if (facing == rotatedDirection && WoodenBoatFrameBlock.validateProcessed(state, plankItem)) {
+                    if (facing == rotatedDirection && AngledWoodenBoatFrameBlock.validateProcessed(state, plankItem)) {
                         return true;
                     }
                 }
@@ -90,11 +87,11 @@ public class ShipbuildingBlockValidator {
             }
 
             // angled validation
-            WoodenBoatFrameBlock.ConstantDirection frameConstantDirection = WoodenBoatFrameBlock.getConstantDirection(state);
-            if (WoodenBoatFrameBlock.validateProcessed(state, plankItem)) {
-                WoodenBoatFrameBlock.ConstantDirection rotatedValidatorDirection = WoodenBoatFrameBlock.rotateConstantDirection(this.constantDirection, structureDirection);
+            AngledWoodenBoatFrameBlock.ConstantDirection frameConstantDirection = AngledWoodenBoatFrameBlock.getConstantDirection(state);
+            if (AngledWoodenBoatFrameBlock.validateProcessed(state, plankItem)) {
+                AngledWoodenBoatFrameBlock.ConstantDirection rotatedValidatorDirection = AngledWoodenBoatFrameBlock.rotateConstantDirection(this.constantDirection, structureDirection);
                 if (frameConstantDirection == rotatedValidatorDirection) {
-                    if (this.constantShape == WoodenBoatFrameBlock.getConstantShape(state)) {
+                    if (this.constantShape == AngledWoodenBoatFrameBlock.getConstantShape(state)) {
                         return true;
                     }
                 }

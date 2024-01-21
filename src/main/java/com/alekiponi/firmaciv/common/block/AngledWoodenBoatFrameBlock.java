@@ -26,12 +26,12 @@ import javax.annotation.Nullable;
 
 import static com.alekiponi.firmaciv.common.block.FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
-public class WoodenBoatFrameBlock extends SquaredAngleBlock {
+public class AngledWoodenBoatFrameBlock extends SquaredAngleBlock {
     public static final IntegerProperty FRAME_PROCESSED = FirmacivBlockStateProperties.FRAME_PROCESSED_7;
 
     public final RegistryWood wood;
 
-    public WoodenBoatFrameBlock(final RegistryWood wood, final Properties properties) {
+    public AngledWoodenBoatFrameBlock(final RegistryWood wood, final Properties properties) {
         super(properties);
         this.registerDefaultState(
                 this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(SHAPE, StairsShape.STRAIGHT)
@@ -94,7 +94,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
 
     @Nullable
     public static ConstantDirection getConstantDirection(BlockState state) {
-        if (!(state.getBlock() instanceof WoodenBoatFrameBlock)) {
+        if (!(state.getBlock() instanceof AngledWoodenBoatFrameBlock)) {
             return null;
         }
         if (state.getValue(FACING) == Direction.SOUTH) {
@@ -256,7 +256,7 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
 
     public static boolean validateProcessed(BlockState framestate, ItemStack plankitem) {
         // check if the plank item matches
-        if (framestate.getBlock() instanceof WoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack()
+        if (framestate.getBlock() instanceof AngledWoodenBoatFrameBlock wbfb && wbfb.getPlankAsItemStack()
                 .is(plankitem.getItem())) {
             // check if the state matches
             return framestate.getValue(FRAME_PROCESSED_7) == 7;
@@ -302,7 +302,9 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
         if (heldStack.is(this.getPlankAsItemStack().getItem())) {
             // Must be [0,3)
             if (processState < 3) {
-                heldStack.shrink(1);
+                if(!player.getAbilities().instabuild){
+                    heldStack.shrink(1);
+                }
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -315,7 +317,9 @@ public class WoodenBoatFrameBlock extends SquaredAngleBlock {
         if (heldStack.is(FirmacivItems.COPPER_BOLT.get()) && player.getOffhandItem().is(TFCTags.Items.HAMMERS)) {
             // Must be [3,7)
             if (3 <= processState && processState < 7) {
-                heldStack.shrink(1);
+                if(!player.getAbilities().instabuild){
+                    heldStack.shrink(1);
+                }
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.METAL_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);

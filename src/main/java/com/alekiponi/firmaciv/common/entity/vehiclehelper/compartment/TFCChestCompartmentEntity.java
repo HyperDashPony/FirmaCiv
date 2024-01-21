@@ -3,6 +3,7 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import net.dries007.tfc.common.container.RestrictedChestContainer;
 import net.dries007.tfc.common.container.TFCContainerTypes;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,6 +15,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class TFCChestCompartmentEntity extends ContainerCompartmentEntity {
 
@@ -35,7 +39,6 @@ public class TFCChestCompartmentEntity extends ContainerCompartmentEntity {
         if (!this.level().isClientSide && removalReason.shouldDestroy()) {
             this.playSound(SoundEvents.WOOD_BREAK, 1, this.level().getRandom().nextFloat() * 0.1F + 0.9F);
         }
-
         super.remove(removalReason);
     }
 

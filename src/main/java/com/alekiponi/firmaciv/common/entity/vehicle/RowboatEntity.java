@@ -153,6 +153,11 @@ public class RowboatEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    protected float getTurnSpeed(){
+        return 0.7f;
+    }
+
+    @Override
     protected float getMomentumSubtractor() {
         return 0.005f;
     }

@@ -65,6 +65,11 @@ public class CannonEntity extends Entity {
     protected static final EntityDataAccessor<Integer> DATA_ID_FUSE_TIME = SynchedEntityData.defineId(
             CannonEntity.class, EntityDataSerializers.INT);
 
+    public final Item cannonBallItem = FirmacivItems.CANNONBALL.get();
+
+    public final Item paperItem = TFCItems.UNREFINED_PAPER.get();
+
+    public final Item gunpowderItem = Items.GUNPOWDER;
 
     protected int lerpSteps;
     protected double lerpX;
@@ -88,8 +93,9 @@ public class CannonEntity extends Entity {
             }
             if (!this.onGround() || this.getDeltaMovement()
                     .horizontalDistanceSqr() > (double) 1.0E-5F || (this.tickCount + this.getId()) % 4 == 0) {
+                this.checkInsideBlocks();
                 this.move(MoverType.SELF, this.getDeltaMovement());
-                float f1 = 0.98F;
+                float f1 = 0.8F;
 
                 this.setDeltaMovement(this.getDeltaMovement().multiply(f1, 0.98D, f1));
                 if (this.onGround()) {
@@ -99,7 +105,6 @@ public class CannonEntity extends Entity {
                     }
                 }
             }
-            this.checkInsideBlocks();
             this.updateInWaterStateAndDoFluidPushing();
         }
         tickLerp();
@@ -118,21 +123,21 @@ public class CannonEntity extends Entity {
     @Override
     public InteractionResult interact(final Player player, final InteractionHand hand) {
         final ItemStack item = player.getItemInHand(hand);
-        if (item.is(FirmacivItems.CANNONBALL.get())) {
+        if (item.is(this.cannonBallItem)) {
             if(this.getCannonball().isEmpty()){
                 this.setCannonball(item.split(1));
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.CONSUME;
         }
-        if (item.is((TFCItems.UNREFINED_PAPER.get()))) {
+        if (item.is(this.paperItem)) {
             if(this.getPaper().isEmpty()){
                 this.setPaper(item.split(1));
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.CONSUME;
         }
-        if (item.is(Items.GUNPOWDER)) {
+        if (item.is(this.gunpowderItem)) {
             if(this.getGunpowder().isEmpty()){
                 this.setGunpowder(item.split(1));
                 return InteractionResult.SUCCESS;
@@ -306,15 +311,15 @@ public class CannonEntity extends Entity {
 
     }
 
-    protected ItemStack getCannonball(){
+    public ItemStack getCannonball(){
         return this.entityData.get(DATA_ID_CANNONBALL_ITEM);
     }
 
-    protected ItemStack getPaper(){
+    public ItemStack getPaper(){
         return this.entityData.get(DATA_ID_PAPER_ITEM);
     }
 
-    protected ItemStack getGunpowder(){
+    public ItemStack getGunpowder(){
         return this.entityData.get(DATA_ID_GUNPOWDER_ITEM);
     }
 
@@ -378,6 +383,10 @@ public class CannonEntity extends Entity {
         return FirmacivItems.CANNON.get();
     }
 
+    @Override
+    public ItemStack getPickResult() {
+        return getDropItem().getDefaultInstance();
+    }
 
     @Override
     public boolean isPickable() {

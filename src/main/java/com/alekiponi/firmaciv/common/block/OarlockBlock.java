@@ -1,6 +1,5 @@
 package com.alekiponi.firmaciv.common.block;
 
-import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
 import net.minecraft.core.BlockPos;
@@ -51,11 +50,11 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
 
     public static boolean isSupportedByWatercraftFrame(LevelReader pLevel, BlockPos thispos) {
         if (pLevel.getBlockState(thispos.below())
-                .getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock && pLevel.getBlockState(
+                .getBlock() instanceof AngledWoodenBoatFrameBlock woodenBoatFrameBlock && pLevel.getBlockState(
                 thispos.below()).getValue(FRAME_PROCESSED_7) == 7) {
-            return WoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
-                    thispos.below())) == WoodenBoatFrameBlock.ConstantShape.INNER || WoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
-                    thispos.below())) == WoodenBoatFrameBlock.ConstantShape.STRAIGHT;
+            return AngledWoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
+                    thispos.below())) == AngledWoodenBoatFrameBlock.ConstantShape.INNER || AngledWoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
+                    thispos.below())) == AngledWoodenBoatFrameBlock.ConstantShape.STRAIGHT;
         }
         return false;
     }
@@ -107,7 +106,7 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
     private void spawnRowboat(Level pLevel, BlockPos thispos, BlockState blockState, BlockState framestate) {
         Direction direction = blockState.getValue(FACING);
         Direction.Axis axis = direction.getClockWise().getAxis();
-        if(framestate.getBlock() instanceof WoodenBoatFrameBlock boatFrameBlock){
+        if(framestate.getBlock() instanceof AngledWoodenBoatFrameBlock boatFrameBlock){
             RowboatEntity rowboat = FirmacivEntities.ROWBOATS.get(boatFrameBlock.wood).get().create(pLevel);
             rowboat.setPos(getSpawnPosition(pLevel, thispos, blockState));
             if (axis == Direction.Axis.X) {
@@ -158,8 +157,8 @@ public class OarlockBlock extends HorizontalDirectionalBlock implements SimpleWa
         BlockState blockstate = this.defaultBlockState()
                 .setValue(FACING, pContext.getHorizontalDirection().getOpposite());
 
-        if (level.getBlockState(blockpos.below()).getBlock() instanceof WoodenBoatFrameBlock) {
-            Direction[] directions = WoodenBoatFrameBlock.getSolid(level.getBlockState(blockpos.below()));
+        if (level.getBlockState(blockpos.below()).getBlock() instanceof AngledWoodenBoatFrameBlock) {
+            Direction[] directions = AngledWoodenBoatFrameBlock.getSolid(level.getBlockState(blockpos.below()));
             if (directions.length == 0) {
                 return blockstate;
             }

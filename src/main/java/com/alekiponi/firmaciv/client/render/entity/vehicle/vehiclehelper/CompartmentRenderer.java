@@ -3,6 +3,7 @@ package com.alekiponi.firmaciv.client.render.entity.vehicle.vehiclehelper;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.TFCChestCompartmentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -39,6 +40,10 @@ public abstract class CompartmentRenderer<CompartmentType extends AbstractCompar
 
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(180 - rotation));
+        if(compartmentEntity instanceof TFCChestCompartmentEntity){
+            poseStack.mulPose(Axis.YP.rotationDegrees(180));
+        }
+
         if (compartmentEntity.getTrueVehicle() instanceof CanoeEntity) {
             poseStack.scale(0.6F, 0.6F, 0.6F);
         } else {
@@ -46,6 +51,7 @@ public abstract class CompartmentRenderer<CompartmentType extends AbstractCompar
         }
 
         poseStack.translate(-0.5F, 0, -0.5F);
+
 
         this.renderCompartmentContents(compartmentEntity, partialTicks, poseStack, bufferSource, packedLight);
 

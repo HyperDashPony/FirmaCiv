@@ -167,7 +167,7 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
 
     @Override
     protected float getMomentumSubtractor() {
-        return 0.010f;
+        return 0.000f;
     }
 
     @Override

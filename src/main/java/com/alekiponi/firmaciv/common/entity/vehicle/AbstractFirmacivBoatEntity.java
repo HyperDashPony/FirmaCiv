@@ -368,11 +368,11 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             float turning = getPaddleAcceleration()[2];
 
             if (inputLeft) {
-                this.setDeltaRotation(this.getDeltaRotation() - 1);
+                this.setDeltaRotation(this.getDeltaRotation() - this.getTurnSpeed());
             }
 
             if (inputRight) {
-                this.setDeltaRotation(this.getDeltaRotation() + 1);
+                this.setDeltaRotation(this.getDeltaRotation() + this.getTurnSpeed());
             }
 
             if (inputRight != inputLeft && !inputUp && !inputDown) {
@@ -493,10 +493,14 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     protected abstract float getPaddleMultiplier();
 
     protected float[] getPaddleAcceleration() {
-        float forward = 0.0275F;
-        float backward = 0.0125F;
-        float turning = 0.0025F;
+        float forward = 0.0275F*2;
+        float backward = 0.0125F*2;
+        float turning = 0.0025F*2;
         return new float[]{forward, backward, turning};
+    }
+
+    protected float getTurnSpeed() {
+        return 1;
     }
 
     @Override

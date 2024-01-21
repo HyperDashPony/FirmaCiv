@@ -84,7 +84,9 @@ public class FlatWoodenBoatFrameBlock extends FlatBoatFrameBlock {
         if (heldStack.is(this.getUnderlyingPlank().asItem())) {
             // Must be [0,3)
             if (processState < 3) {
-                heldStack.shrink(1);
+                if(!player.getAbilities().instabuild){
+                    heldStack.shrink(1);
+                }
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), UPDATE_CLIENTS | UPDATE_IMMEDIATE);
                 level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);
@@ -97,7 +99,9 @@ public class FlatWoodenBoatFrameBlock extends FlatBoatFrameBlock {
         if (heldStack.is(FirmacivItems.COPPER_BOLT.get()) && player.getOffhandItem().is(TFCTags.Items.HAMMERS)) {
             // Must be [3,7)
             if (3 <= processState && processState < 7) {
-                heldStack.shrink(1);
+                if(!player.getAbilities().instabuild){
+                    heldStack.shrink(1);
+                }
                 level.setBlock(blockPos, blockState.cycle(FRAME_PROCESSED), 10);
                 level.playSound(null, blockPos, SoundEvents.METAL_PLACE, SoundSource.BLOCKS, 1.5F,
                         level.getRandom().nextFloat() * 0.1F + 0.9F);

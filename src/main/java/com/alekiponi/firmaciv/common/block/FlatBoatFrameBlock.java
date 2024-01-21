@@ -64,7 +64,9 @@ public class FlatBoatFrameBlock extends Block implements SimpleWaterloggedBlock 
 
             level.setBlock(blockPos, woodenFrameBlock.defaultBlockState(), UPDATE_CLIENTS | UPDATE_IMMEDIATE);
 
-            heldStack.shrink(1);
+            if(!player.getAbilities().instabuild){
+                heldStack.shrink(1);
+            }
 
             level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
                     level.getRandom().nextFloat() * 0.1F + 0.9F);

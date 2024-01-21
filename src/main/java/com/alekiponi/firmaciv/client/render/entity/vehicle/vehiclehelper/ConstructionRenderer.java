@@ -41,7 +41,7 @@ public class ConstructionRenderer extends EntityRenderer<Entity> {
         }
         Minecraft mc = Minecraft.getInstance();
         assert mc.player != null;
-        if(mc.player.distanceTo(pEntity) > 3){
+        if(mc.player.distanceTo(pEntity.getRootVehicle()) > 5){
             return;
         }
 

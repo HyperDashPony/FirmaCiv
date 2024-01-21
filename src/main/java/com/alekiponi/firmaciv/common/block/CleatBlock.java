@@ -47,11 +47,11 @@ public class CleatBlock extends HorizontalDirectionalBlock implements SimpleWate
 
     public static boolean isSupportedByWatercraftFrame(LevelReader pLevel, BlockPos thispos) {
         if (pLevel.getBlockState(thispos.below())
-                .getBlock() instanceof WoodenBoatFrameBlock woodenBoatFrameBlock && pLevel.getBlockState(
+                .getBlock() instanceof AngledWoodenBoatFrameBlock woodenBoatFrameBlock && pLevel.getBlockState(
                 thispos.below()).getValue(FRAME_PROCESSED_7) == 7) {
-            return WoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
-                    thispos.below())) == WoodenBoatFrameBlock.ConstantShape.INNER || WoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
-                    thispos.below())) == WoodenBoatFrameBlock.ConstantShape.STRAIGHT;
+            return AngledWoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
+                    thispos.below())) == AngledWoodenBoatFrameBlock.ConstantShape.INNER || AngledWoodenBoatFrameBlock.getConstantShape(pLevel.getBlockState(
+                    thispos.below())) == AngledWoodenBoatFrameBlock.ConstantShape.STRAIGHT;
         }
         return false;
     }
@@ -150,7 +150,7 @@ public class CleatBlock extends HorizontalDirectionalBlock implements SimpleWate
             cleats = newCleats;
         }
 
-        if (level.getBlockState(cleats[0].below().relative(crossAxis, 1).relative(axis, 2)).getBlock() instanceof WoodenBoatFrameBlock) {
+        if (level.getBlockState(cleats[0].below().relative(crossAxis, 1).relative(axis, 2)).getBlock() instanceof AngledWoodenBoatFrameBlock) {
             structureDirection = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
         } else {
             structureDirection = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE);
@@ -173,7 +173,7 @@ public class CleatBlock extends HorizontalDirectionalBlock implements SimpleWate
             return;
         }
 
-        if (ShipbuildingMultiblocks.validateShipHull(level, origin, structureDirection, ShipbuildingMultiblocks.Multiblock.SLOOP, plankItem) && framestate.getBlock() instanceof WoodenBoatFrameBlock boatFrameBlock) {
+        if (ShipbuildingMultiblocks.validateShipHull(level, origin, structureDirection, ShipbuildingMultiblocks.Multiblock.SLOOP, plankItem) && framestate.getBlock() instanceof AngledWoodenBoatFrameBlock boatFrameBlock) {
             // destroy cleats
             for (BlockPos pos : cleats) {
                 level.destroyBlock(pos, false);
@@ -210,8 +210,8 @@ public class CleatBlock extends HorizontalDirectionalBlock implements SimpleWate
                 .setValue(FACING, pContext.getHorizontalDirection().getOpposite());
 
 
-        if (level.getBlockState(blockpos.below()).getBlock() instanceof WoodenBoatFrameBlock) {
-            Direction[] directions = WoodenBoatFrameBlock.getSolid(level.getBlockState(blockpos.below()));
+        if (level.getBlockState(blockpos.below()).getBlock() instanceof AngledWoodenBoatFrameBlock) {
+            Direction[] directions = AngledWoodenBoatFrameBlock.getSolid(level.getBlockState(blockpos.below()));
             if (directions.length == 0) {
                 return blockstate;
             }

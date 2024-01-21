@@ -6,14 +6,10 @@
 package com.alekiponi.firmaciv.client;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.vehicle.AbstractVehicle;
-import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.SailSwitchEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCollisionEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.WindlassSwitchEntity;
+import com.alekiponi.firmaciv.common.entity.CannonEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.*;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.VehicleCleatEntity;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.alekiponi.firmaciv.util.FirmacivTags;
@@ -27,6 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -44,9 +41,9 @@ import java.util.Locale;
 public enum IngameOverlays {
     COMPARTMENT_STATUS(IngameOverlays::renderCompartmentStatus),
     PASSENGER_STATUS(IngameOverlays::renderPassengerStatus),
-
-    SAILING_ELEMENT(IngameOverlays::renderSailingElement);
-
+    SAILING_ELEMENT(IngameOverlays::renderSailingElement),
+    SLOOP_CONSTRUCTION(IngameOverlays::renderSloopConstructionStatus),
+    CANNON_LOAD_STATE(IngameOverlays::renderCannonLoadState);
 
 
     public static final ResourceLocation COMPARTMENT_ICONS = new ResourceLocation(Firmaciv.MOD_ID,
@@ -86,6 +83,8 @@ public enum IngameOverlays {
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
         above(event, VanillaGuiOverlay.CROSSHAIR, COMPARTMENT_STATUS);
         above(event, VanillaGuiOverlay.CROSSHAIR, PASSENGER_STATUS);
+        above(event, VanillaGuiOverlay.CROSSHAIR, SLOOP_CONSTRUCTION);
+        above(event, VanillaGuiOverlay.CROSSHAIR, CANNON_LOAD_STATE);
         above(event, VanillaGuiOverlay.HOTBAR, SAILING_ELEMENT);
     }
 
@@ -154,6 +153,75 @@ public enum IngameOverlays {
         }
     }
 
+    private static void renderSloopConstructionStatus(ForgeGui gui, GuiGraphics graphics, float partialTick, int width,
+                                              int height) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            Player player = mc.player;
+
+            if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
+                Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 2f);
+                PoseStack stack = graphics.pose();
+
+                stack.pushPose();
+
+                if (entity instanceof ConstructionEntity constructionEntity && constructionEntity.getRootVehicle() instanceof SloopUnderConstructionEntity sloop) {
+                    stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
+                    stack.scale(1.0F, 1.0F, 1.0F);
+
+                    int countLeft = sloop.getNumberItemsLeft();
+                    Item item = sloop.getCurrentRequiredItem();
+
+                    graphics.renderItem(item.getDefaultInstance().copyWithCount(countLeft), 0,0);
+                    graphics.renderItemDecorations(mc.font, item.getDefaultInstance().copyWithCount(countLeft), 0,0);
+                }
+
+                stack.popPose();
+            }
+        }
+    }
+
+    private static void renderCannonLoadState(ForgeGui gui, GuiGraphics graphics, float partialTick, int width,
+                                                      int height) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            Player player = mc.player;
+
+            if (setup(gui, mc) && !player.isSpectator() && mc.options.getCameraType().isFirstPerson()) {
+                Entity entity = FirmacivHelper.getAnyEntityAtCrosshair(player, 2f);
+                PoseStack stack = graphics.pose();
+
+                stack.pushPose();
+
+                if (entity instanceof CannonEntity cannon) {
+                    stack.translate((float) width / 2.0F, (float) height / 2.0F - 15.0F, 0.0F);
+                    stack.scale(1.0F, 1.0F, 1.0F);
+
+                    Item cannonBall = cannon.cannonBallItem;
+                    Item gunpowder = cannon.gunpowderItem;
+                    Item paper = cannon.paperItem;
+
+                    if(cannon.getCannonball().getCount() == 0){
+                        graphics.renderItem(cannonBall.getDefaultInstance(), 0,0);
+                    }
+                    if(cannon.getPaper().getCount() == 0){
+                        graphics.renderItem(paper.getDefaultInstance(), 16,0);
+                    }
+                    if(cannon.getGunpowder().getCount() == 0){
+                        graphics.renderItem(gunpowder.getDefaultInstance(), 32,0);
+                    }
+                    if(cannon.getPaper().getCount() == cannon.getCannonball().getCount() &&
+                            cannon.getCannonball().getCount() == cannon.getGunpowder().getCount() &&
+                            cannon.getGunpowder().getCount() == 1 && cannon.getFuseTime() < 0){
+                        graphics.renderItem(Items.FLINT_AND_STEEL.getDefaultInstance(), 0,0);
+                    }
+
+                }
+
+                stack.popPose();
+            }
+        }
+    }
 
     private static void renderSailingElement(ForgeGui gui, GuiGraphics graphics, float partialTick, int width,
             int height) {
@@ -232,12 +300,16 @@ public enum IngameOverlays {
 
                 stack.pushPose();
 
-                if(entity instanceof AbstractVehicle || entity instanceof VehicleCollisionEntity){
-                    AbstractVehicle vehicle;
-                    if(entity instanceof VehicleCollisionEntity collider){
+                if(entity instanceof AbstractFirmacivBoatEntity || entity instanceof VehicleCollisionEntity){
+                    AbstractFirmacivBoatEntity vehicle;
+                    if(entity instanceof VehicleCollisionEntity collider && collider.getRootVehicle() instanceof AbstractFirmacivBoatEntity){
                         entity = collider.getRootVehicle();
                     }
-                    vehicle = (AbstractVehicle)entity;
+                    vehicle = (AbstractFirmacivBoatEntity)entity;
+                    if(vehicle instanceof KayakEntity){
+                        stack.popPose();
+                        return;
+                    }
                     for(ItemStack item : player.getHandSlots()){
                         if(item.is(vehicle.getDropItem())){
                             stack = setupCompartmentStack(stack, width, height);
@@ -249,7 +321,6 @@ public enum IngameOverlays {
                             graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BRUSH), 0, 9, 9);
                             break;
                         }
-
                     }
                 }
 
