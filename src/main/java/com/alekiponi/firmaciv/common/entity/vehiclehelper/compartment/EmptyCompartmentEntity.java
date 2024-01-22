@@ -2,10 +2,8 @@ package com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment;
 
 import com.alekiponi.firmaciv.common.entity.CannonEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
-import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
-import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.*;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.AbstractVehiclePart;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.CompartmentType;
 import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.network.PacketHandler;
@@ -351,18 +349,20 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
         if (this.canAddNonPlayers() && !this.canAddOnlyBLocks() && heldStack.is(
                 FirmacivItems.CANNON.get()) && this.getRootVehicle() instanceof SloopEntity) {
-            CannonEntity cannon = FirmacivEntities.CANNON_ENTITY.get().create(this.level());
-            cannon.moveTo(this.getPosition(0));
-            cannon.setYRot(-this.getYRot() - 180);
-            cannon.startRiding(this);
-            if (!this.level().isClientSide()) {
-                this.level().addFreshEntity(cannon);
+            if(this.getVehicle() instanceof AbstractVehiclePart part && part.getCompartmentRotation() == Math.abs(85)){
+                CannonEntity cannon = FirmacivEntities.CANNON_ENTITY.get().create(this.level());
+                cannon.moveTo(this.getPosition(0));
+                cannon.setYRot(-this.getYRot() - 180);
+                cannon.startRiding(this);
+                if (!this.level().isClientSide()) {
+                    this.level().addFreshEntity(cannon);
+                }
+                player.awardStat(Stats.ITEM_USED.get(FirmacivItems.CANNON.get()));
+                if (!player.getAbilities().instabuild) {
+                    heldStack.shrink(1);
+                }
+                return InteractionResult.SUCCESS;
             }
-            player.awardStat(Stats.ITEM_USED.get(FirmacivItems.CANNON.get()));
-            if (!player.getAbilities().instabuild) {
-                heldStack.shrink(1);
-            }
-            return InteractionResult.SUCCESS;
         }
 
         if (player.isSecondaryUseActive()) {
@@ -378,8 +378,13 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
         final Optional<CompartmentType<?>> compartmentType = CompartmentType.fromStack(heldStack);
 
         if (compartmentType.isPresent()) {
+            if((this.getRootVehicle() instanceof AbstractVehicle vehicle && !(vehicle instanceof CanoeEntity)) && vehicle.getControllingCompartment().is(this)){
+                return InteractionResult.FAIL;
+            }
+
             final AbstractCompartmentEntity compartmentEntity = compartmentType.get()
                     .create(this.level(), heldStack.split(1));
+            assert compartmentEntity != null;
             this.swapCompartments(compartmentEntity);
             // TODO per type placement sounds
             this.playSound(SoundEvents.WOOD_PLACE, 1, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
@@ -391,7 +396,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
         }
 
-        return InteractionResult.SUCCESS;
+        return InteractionResult.FAIL;
     }
 
     @Override

@@ -1,7 +1,7 @@
 {
   "name": "Getting Started: Boats",
   "category": "tfc:firmaciv",
-  "icon": "firmaciv:textures/item/anchor_icon.png",
+  "icon": "firmaciv:textures/item/anchor",
   "pages": [
     {
       "type": "patchouli:text",

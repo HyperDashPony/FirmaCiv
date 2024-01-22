@@ -9,8 +9,14 @@
       "text": "The Dugout Canoe will likely be the first step on your aquatic journey! If you're in the copper age, you can probably build a canoe."
     },
     {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/canoe_isometric.png"
+      ],
+    },
+    {
       "type": "patchouli:text",
-      "text": "You can put blocks or animals in both seats, but be aware that there's no way to pilot the boat if you do this! It's most useful if you just want to send materials down a river on their own.$(br2)A canoe has two seats, and is piloted from the rear. You need to hold a canoe paddle in order to move at full speed, and if two players are holding paddles, you can go even faster."
+      "text": "You can put blocks or animals in the pilot seat, but be aware that there's no way to paddle the boat if you do this! It's most useful if you just want to send materials down a river on their own.$(br2)A canoe has two seats, and is piloted from the rear. You need to hold a canoe paddle in order to move at full speed, and if two players are holding paddles, you can go even faster."
     },
     {
       "type": "patchouli:text",
@@ -79,14 +85,6 @@
       "name": "A Strange Sculpture",
       "text": "A fully carved Dugout Canoe, ready for hollowing out the hull.",
       "enable_visualize": false
-    },
-    {
-      "type": "patchouli:image",
-      "title": "Dugout Canoe",
-      "images": [
-        "firmaciv:textures/gui/book/canoe_isometric.png"
-      ],
-      "text": "A completed Dugout Canoe."
     },
     {
       "type": "patchouli:crafting",

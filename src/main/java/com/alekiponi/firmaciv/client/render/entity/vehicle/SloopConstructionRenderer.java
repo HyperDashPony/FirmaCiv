@@ -105,9 +105,10 @@ public class SloopConstructionRenderer extends EntityRenderer<SloopUnderConstruc
         }
         if(constructionEntity.getConstructionStage().ordinal() >= SloopUnderConstructionEntity.ConstructionState.MAINSAIL.ordinal()){
             //render boom and gaff
+            /*
             for(ModelPart part : sloopModel.getBoomGaff()){
-                part.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
-            }
+            }*/
+            sloopModel.getBoomGaff()[0].render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         }
         if(constructionEntity.getConstructionStage().ordinal() >= SloopUnderConstructionEntity.ConstructionState.JIBSAIl.ordinal()){
             //render mainsail furled
@@ -128,12 +129,18 @@ public class SloopConstructionRenderer extends EntityRenderer<SloopUnderConstruc
         }
         if(constructionEntity.getConstructionStage().ordinal() >= SloopUnderConstructionEntity.ConstructionState.ANCHOR.ordinal()){
             //render bow railing
+
             for(ModelPart part : sloopModel.getBowRailing()){
                 part.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
             }
         }
         if(constructionEntity.getConstructionStage().ordinal() >= SloopUnderConstructionEntity.ConstructionState.RIGGING.ordinal()){
             poseStack.pushPose();
+
+            poseStack.translate(1.34f+1.3,-2.52+1.6,-2.52-0.75);
+            poseStack.mulPose(Axis.XP.rotationDegrees(90));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(60));
+
             final VertexConsumer vertexConsumerAnchor = bufferSource.getBuffer(this.anchorModel.renderType(ANCHOR));
             this.anchorModel.renderToBuffer(poseStack, vertexConsumerAnchor, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
             poseStack.popPose();

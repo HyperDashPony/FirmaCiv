@@ -172,10 +172,10 @@ dependencies {
 
      */
 
-    /*
+    
     fg.deobf("curse.maven:jei-238222:4712868")
     runtimeOnly fg.deobf("curse.maven:jei-238222:4712868")
-     */
+
 
     fg.deobf("curse.maven:alekis-easy-held-models-953157:4977248")
     runtimeOnly fg.deobf("curse.maven:alekis-easy-held-models-953157:4977248")

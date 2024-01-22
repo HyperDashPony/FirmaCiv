@@ -2,6 +2,6 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "item/generated",
   "textures": {
-    "layer0": "firmaciv:item/kayak_with_paddle_icon_only"
+    "layer0": "firmaciv:item/medium_triangular_sail"
   }
 }

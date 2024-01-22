@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S  ",
+    "WS ",
+    "WWS"
+  ],
+  "key": {
+    "W": {
+      "item": "firmaciv:small_triangular_sail"
+    },
+    "S": {
+      "tag": "forge:string"
+    }
+  },
+  "result": {
+    "item": "firmaciv:medium_triangular_sail"
+  }
+}

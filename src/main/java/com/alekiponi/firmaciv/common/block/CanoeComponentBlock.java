@@ -4,6 +4,7 @@ import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -31,6 +32,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
@@ -60,11 +62,21 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     }
 
     public static Block getByStripped(Block strippedLogBlock) {
-        // TODO this was broken before I touched it! Don't blame me - Traister101: RegistryWood migration
+        // TODO if you want you can make this back into a stream - alekiponi
+        for(RegistryObject<CanoeComponentBlock> ccb : CANOE_COMPONENT_BLOCKS.values()){
+            if(ccb.get().wood.getBlock(Wood.BlockType.STRIPPED_LOG).get() == strippedLogBlock){
+                return ccb.get();
+            }
+            //return ccb.get().wood.getBlock(Wood.BlockType.STRIPPED_LOG).get();
+        }
+        return null;
+        /*
         return CANOE_COMPONENT_BLOCKS.values().stream()
                 .filter(registryObject -> registryObject.get().wood.getBlock(
                         Wood.BlockType.STRIPPED_LOG) == strippedLogBlock)
                 .map(registryObject -> registryObject.get()).findFirst().get();
+
+         */
     }
 
     public static boolean isValidCanoeShape(LevelAccessor world, Block strippedLogBlock, BlockPos pPos) {

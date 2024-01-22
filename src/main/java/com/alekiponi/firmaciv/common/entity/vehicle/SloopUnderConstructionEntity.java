@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.block.FirmacivBlocks;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.item.FirmacivItems;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.TFCItems;
@@ -36,7 +37,8 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
     public final Item stripped;
     public final Item planks;
     //TODO correct items
-    public final Item sail;
+    public final Item mainsail;
+    public final Item jibsail;
     public final Item anchor;
     public final Item rigging;
 
@@ -69,9 +71,10 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
         this.stripped = wood.getBlock(Wood.BlockType.STRIPPED_LOG).get().asItem();
         this.planks = wood.getBlock(Wood.BlockType.PLANKS).get().asItem();
         //TODO correct items
-        this.sail = TFCItems.WOOL_CLOTH.get();
-        this.anchor = Items.IRON_INGOT;
-        this.rigging = Items.LEAD;
+        this.mainsail = FirmacivItems.MEDIUM_TRIANGULAR_SAIL.get();
+        this.jibsail = FirmacivItems.SMALL_TRIANGULAR_SAIL.get();
+        this.anchor = FirmacivItems.ANCHOR.get();
+        this.rigging = FirmacivItems.ROPE_COIL.get();
     }
 
     private static final EntityDataAccessor<ItemStack> DATA_ID_KEEL = SynchedEntityData.defineId(SloopUnderConstructionEntity.class,
@@ -343,8 +346,11 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
             case DECK -> {
                 return this.planks;
             }
-            case MAINSAIL, JIBSAIl -> {
-                return this.sail;
+            case MAINSAIL -> {
+                return this.mainsail;
+            }
+            case JIBSAIl -> {
+                return this.jibsail;
             }
             case RAILINGS_STERN, RAILINGS_BOW -> {
                 return this.lumber;
@@ -490,7 +496,7 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
                 }
             }
             case MAINSAIL -> {
-                if (stack.is(sail)) {
+                if (stack.is(mainsail)) {
                     this.setMainsail(new ItemStack(stack.split(1).getItem(), this.getMainsail().getCount() + 1));
                     this.playSound(SoundEvents.WOOL_PLACE);
                     if (this.getMainsail().getCount() >= MAINSAIL_ITEM_NUMBER) {
@@ -505,7 +511,7 @@ public class SloopUnderConstructionEntity extends AbstractVehicleUnderConstructi
                 }
             }
             case JIBSAIl -> {
-                if (stack.is(sail)) {
+                if (stack.is(jibsail)) {
                     this.setJibsail(new ItemStack(stack.split(1).getItem(), this.getJibsail().getCount() + 1));
                     this.playSound(SoundEvents.WOOL_PLACE);
                     if (this.getJibsail().getCount() >= JIBSAIL_ITEM_NUMBER) {

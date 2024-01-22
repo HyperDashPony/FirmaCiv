@@ -1,0 +1,16 @@
+{
+  "type": "tfc:anvil",
+  "input": {
+    "tag": "forge:double_ingots/wrought_iron"
+  },
+  "result": {
+    "item": "firmaciv:cannonball",
+    "count": 1
+  },
+  "tier": 2,
+  "rules": [
+    "bend_last",
+    "bend_second_last",
+    "hit_third_last"
+  ]
+}

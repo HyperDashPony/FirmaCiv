@@ -107,8 +107,19 @@ def generate(rm: ResourceManager):
     rm.item("unfinished_sextant").with_item_model().with_lang("Unfinished Sextant")
     rm.item("cannon").with_item_model().with_lang("Cannon")
     rm.item("cannonball").with_item_model().with_lang("Cannonball")
+    rm.item("cannon_barrel").with_item_model().with_lang("Cannon Barrel")
+    rm.item("anchor").with_item_model().with_lang("Anchor")
+    rm.item("small_triangular_sail").with_item_model().with_lang("Small Sail")
+    rm.item("medium_triangular_sail").with_item_model().with_lang("Medium Sail")
+    rm.item("large_triangular_sail").with_item_model().with_lang("Large Sail")
+    rm.item("rope_coil").with_item_model().with_lang("Jute Rope")
 
-    # rm.item("sextant").with_item_model().with_lang("Sextant")
+    rm.item("sloop_icon_only").with_item_model().with_lang("ICON ONLY")
+    rm.item("canoe_icon_only").with_item_model().with_lang("ICON ONLY")
+    rm.item("canoe_with_paddle_icon_only").with_item_model().with_lang("ICON ONLY")
+    rm.item("kayak_with_paddle_icon_only").with_item_model().with_lang("ICON ONLY")
+    rm.item("rowboat_icon_only").with_item_model().with_lang("ICON ONLY")
+
     rm.item("copper_bolt").with_item_model().with_lang("Copper Bolt")
     rm.item("kayak").with_item_model().with_lang("Kayak")
     rm.item("large_waterproof_hide").with_item_model().with_lang("Large Waterproof Hide")
@@ -116,6 +127,7 @@ def generate(rm: ResourceManager):
 
     # Items with custom models
     rm.item("barometer").with_lang("Barometer")
+    rm.item("sextant").with_lang("Sextant")
     rm.item("nav_clock").with_lang("Navigator's Timepiece")
     rm.item("firmaciv_compass").with_lang("Compass (Declination: True North)")
 

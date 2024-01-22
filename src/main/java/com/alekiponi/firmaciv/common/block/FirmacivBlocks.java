@@ -28,7 +28,7 @@ public final class FirmacivBlocks {
             wood -> registerBlock("wood/canoe_component_block/" + wood.getSerializedName(),
                     () -> new CanoeComponentBlock(
                             BlockBehaviour.Properties.copy(wood.getBlock(Wood.BlockType.STRIPPED_LOG).get())
-                                    .mapColor(wood.woodColor()), wood)));
+                                    .mapColor(wood.woodColor()).noOcclusion(), wood)));
 
     //TODO: swap between roofing types automatically on place
     /*

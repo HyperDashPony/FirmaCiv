@@ -8,9 +8,9 @@ version="0.2.0-test-alpha"
 displayName="Firma: Civilization"
 logoFile="icon.png"
 authors="alekiponi"
-
+credits = "Contributors: alekiponi, Traister101, EERussianGuy"
 description='''
-Firma: Civilization is an addon/expansion for TerraFirmaCraft focusing on multiplayer experiences and key technologies missing from the base mod.
+Firma: Civilization is an addon/expansion for TerraFirmaCraft focusing on key, civilization-building technologies missing from the base mod.
 
 '''
 [[dependencies.firmaciv]]

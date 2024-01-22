@@ -1,0 +1,16 @@
+{
+  "type": "tfc:anvil",
+  "input": {
+    "tag": "forge:double_sheets/steel"
+  },
+  "result": {
+    "item": "firmaciv:anchor",
+    "count": 1
+  },
+  "tier": 4,
+  "rules": [
+    "hit_last",
+    "punch_second_last",
+    "bend_third_last"
+  ]
+}

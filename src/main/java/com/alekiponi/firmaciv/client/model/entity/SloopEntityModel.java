@@ -27,6 +27,8 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
     protected final ModelPart windlass;
     protected final ModelPart static_parts;
     protected final ModelPart jibsheet_transform_checker;
+    private final ModelPart telltail;
+
 
     public SloopEntityModel() {
         ModelPart root = createBodyLayer().bakeRoot();
@@ -42,6 +44,7 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
         this.jibsail_furled = root.getChild("jibsail_furled");
         this.windlass = root.getChild("windlass");
         this.static_parts = root.getChild("static_parts");
+        this.telltail = root.getChild("telltail");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -605,6 +608,20 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
                 .texOffs(89, 943).addBox(10.7074F, 42.0F, -13.5F, 14.0F, 1.0F, 27.0F, new CubeDeformation(0.0F))
                 .texOffs(89, 914).addBox(25.7074F, 42.0F, -13.5F, 14.0F, 1.0F, 27.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -53.5F, -22.7926F, 0.0F, -1.5708F, 0.0F));
 
+        PartDefinition telltail = partdefinition.addOrReplaceChild("telltail", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -159.92F, -33.6F, 0.0F, 0.0F, 0.0F));
+
+        PartDefinition telltail_part_4 = telltail.addOrReplaceChild("telltail_part_4", CubeListBuilder.create().texOffs(678, 1019).addBox(-0.5F, -2.0F, -6.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 14.6F));
+
+        PartDefinition telltail_part_3 = telltail.addOrReplaceChild("telltail_part_3", CubeListBuilder.create().texOffs(678, 1019).addBox(-0.5F, -2.0F, 1.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 4.6F));
+
+        PartDefinition telltail_part_2 = telltail.addOrReplaceChild("telltail_part_2", CubeListBuilder.create().texOffs(678, 1019).addBox(-0.5F, -2.0F, 5.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -2.4F));
+
+        PartDefinition telltail_part_1 = telltail.addOrReplaceChild("telltail_part_1", CubeListBuilder.create().texOffs(678, 1019).addBox(-0.5F, -2.0F, 8.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -8.4F));
+
+        PartDefinition telltail_part_5 = telltail.addOrReplaceChild("telltail_part_5", CubeListBuilder.create().texOffs(678, 1019).addBox(-0.5F, -2.0F, 11.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.6F));
+
+        PartDefinition telltail_part_6 = telltail.addOrReplaceChild("telltail_part_6", CubeListBuilder.create().texOffs(678, 1019).addBox(-0.5F, -2.0F, 14.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.6F));
+
         // GENERATED MODEL PARTS, DO NOT REPLACE FROM BLOCKBENCH
         {
             generateMainsail(mainsail);
@@ -828,8 +845,11 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
                     if (sails[zindex][yindex] == null) {
                         break;
                     }
+
+                    //TODO clean up the math
+
                     float luffFunction = (float) (5 * Mth.sin((float) (0.1 * ((zindex * jibsail_section_widths) + animationTickFloat + yindex * jibsail_section_widths))));
-                    float squaredFunctionComponent = (zindex - 22f) * (zindex - 22f);
+                    float squaredFunctionComponent = (float) Math.pow(zindex - 22f,2);
 
                     float falloff = 0.6f * (float) Math.log((zindex + 1.00f)) + 0.1f;
                     falloff = Mth.clamp(falloff, 0.0f, 1.0f);
@@ -861,6 +881,9 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
                 }
             }
         }
+
+
+
 
 
         /*
@@ -928,6 +951,37 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
         jibsheet.zRot=(float) Math.toRadians(0);
 
          */
+
+
+    }
+
+    private static void animateTelltail(SloopEntity pBoat, float pPartialTicks, ModelPart telltail, ModelPart[] telltailParts, int animationTick) {
+
+        float windLocalAngle = Mth.wrapDegrees(pBoat.getWindLocalRotation()-180);
+        float windSpeed = pBoat.getLocalWindAngleAndSpeed()[1] * 20f;
+
+        if (windSpeed < 0.1) {
+            windSpeed = 0.1f;
+        }
+        float animationTickFloat = animationTick + pPartialTicks;
+        animationTickFloat = (-windSpeed * animationTickFloat);
+
+        for (int zindex = 0; zindex < 6; zindex++) {
+            if (telltailParts[zindex] == null) {
+                break;
+            }
+            float luffFunction = (float) (2 * Mth.sin((float) (0.1 * ((zindex * 6) + animationTickFloat))));
+
+            float falloff = 0.4f * (float) Math.log((zindex + 1.00f)) + 0.1f;
+            if (falloff > 1.0f) {
+                falloff = 1.0f;
+            }
+
+            telltailParts[zindex].x = (luffFunction * falloff);
+
+        }
+
+        telltail.yRot = (float) Math.toRadians(windLocalAngle);
 
 
     }
@@ -1069,11 +1123,15 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
         if (jibSailParts[0][0] == null) {
             jibSailParts = getJibsailParts(this);
         }
+        if (telltailParts[0] == null) {
+            telltailParts = getTelltailParts(this);
+        }
         //(float) Math.toRadians(45f)
         animateMainsail(pEntity, limbSwing, mainsail_deployed, mainsail, mainSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
         animateMainsheet(pEntity, limbSwing, mainsheet_main, rope_spiral, (float) Math.toRadians(pEntity.getMainBoomRotation()));
         animateJibsail(pEntity, limbSwing, jibsail_deployed, jibsheet_transform_checker, jibSailParts, (float) Math.toRadians(pEntity.getMainBoomRotation()), pEntity.tickCount);
         animateRudder(pEntity, limbSwing, rudder, (float) Math.toRadians(pEntity.getRudderRotation()));
+        animateTelltail(pEntity, limbSwing, telltail, telltailParts, pEntity.tickCount);
 
         float distance = 0;
         for (WindlassSwitchEntity windlassSwitch : pEntity.getWindlasses()) {
@@ -1125,6 +1183,16 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
         return sails;
     }
 
+    private ModelPart[] telltailParts = new ModelPart[6];
+
+    public static ModelPart[] getTelltailParts(SloopEntityModel sloopEntityModel) {
+        ModelPart[] telltailParts = new ModelPart[6];
+        for (int i = 1; i <= 6; i++) {
+            String name = "telltail_part_" + i;
+            telltailParts[i-1] = sloopEntityModel.telltail.getChild(name);
+        }
+        return telltailParts;
+    }
     public ModelPart getWaterocclusion() {
         return this.waterocclusion;
     }
@@ -1161,6 +1229,7 @@ public class SloopEntityModel extends EntityModel<SloopEntity> {
         rudder.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         mainsheet_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         rope_spiral.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        telltail.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         //jibsheet_transform_checker.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
