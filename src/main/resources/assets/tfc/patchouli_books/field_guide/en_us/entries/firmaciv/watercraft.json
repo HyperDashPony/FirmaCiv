@@ -98,7 +98,7 @@
       "images": [
         "firmaciv:textures/gui/book/sails.png"
       ],
-      "text": "Both the jibsail (Left) and mainsail (right) have been deployed on this sloop."
+      "text": "Both the jibsail (left) and mainsail (right) have been deployed on this sloop."
     },
     {
       "type": "patchouli:text",
@@ -125,6 +125,11 @@
         "firmaciv:textures/gui/book/painting.png"
       ],
       "text": "A sloop has been painted yellow and its sails have been dyed."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Damage and Repair",
+      "text": "A damaged boat will start to show cracks. For any boat built using Shipwright's Scaffolding, use the appropriate type of planks to repair it. For canoes, use lumber. At 90% damage, a boat will appear to take on water, and at 100% damage, it will sink! This does not apply to Kayaks."
     }
   ],
   "read_by_default": true,
