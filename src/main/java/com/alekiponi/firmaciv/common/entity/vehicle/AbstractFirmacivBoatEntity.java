@@ -228,7 +228,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     protected void tickWindInput() {
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            double windFunction = Mth.clamp(this.getWindVector().length(), 0.001, 0.002 * this.getBoundingBox().getXsize());
+            double windFunction = Mth.clamp(this.getLocalWindAngleAndSpeed()[1], 0.001, 0.002 * this.getBoundingBox().getXsize());
 
             float windDifference = Mth.degreesDifference(this.getLocalWindAngleAndSpeed()[0], Mth.wrapDegrees(this.getYRot()));
 
@@ -265,6 +265,10 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
             if (windVector.length() == 0) {
                 windVector = new Vec2(-0.03f, 0f);
             }
+            /*
+            float subtractWeatherMultiplier = -(0.4F * this.level().getRainLevel(0.0F) + 0.3F * this.level().getThunderLevel(0.0F));
+            windVector = new Vec2(windVector.x*subtractWeatherMultiplier,windVector.y*subtractWeatherMultiplier);*/
+
             this.setWindVector(windVector);
             updateLocalWindAngleAndSpeed();
         }
@@ -632,7 +636,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
                 this.windAngle = Mth.wrapDegrees((float) Math.round(lerpedRot));
 
-                this.windSpeed = (float) this.oldWindSpeed;
+                this.windSpeed = this.oldWindSpeed;
                 return;
             }
 
@@ -645,11 +649,11 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         }
 
         this.windAngle = Mth.wrapDegrees((float) Math.round(newDirection));
-        this.windSpeed = (float) newSpeed;
+        this.windSpeed = newSpeed;
     }
 
     public float[] getLocalWindAngleAndSpeed() {
-        return new float[]{(float) this.windAngle, (float) this.windSpeed};
+        return new float[]{(float) this.windAngle, (float) Mth.clamp(this.windSpeed, 0, 0.2f)};
     }
 
     @Nullable

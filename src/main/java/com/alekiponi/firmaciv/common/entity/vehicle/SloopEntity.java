@@ -645,7 +645,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     protected void tickWindInput() {
         super.tickWindInput();
         if (this.status == Status.IN_WATER || this.status == Status.IN_AIR) {
-            float windFunction = (float) (Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.45);
+            float windFunction = (float) (Mth.clamp(this.getLocalWindAngleAndSpeed()[1], 0.02, 1.0) * 0.45);
 
             float sailForce = this.getMainsailWindAngleAndForce()[1];
             float sailForceAngle = Mth.wrapDegrees(this.getMainsailWindAngleAndForce()[0]);
@@ -678,7 +678,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
             }
             if (this.getJibsailActive()) {
-                windFunction = (float) (Mth.clamp(this.getWindVector().length(), 0.02, 1.0) * 0.1);
+                windFunction = (float) (Mth.clamp(this.getLocalWindAngleAndSpeed()[1], 0.02, 1.0) * 0.1);
                 acceleration = windFunction * sailForce;
 
                 if (!this.getMainsailActive()) {

@@ -53,7 +53,7 @@ public final class FirmacivEntities {
     public static final Map<RegistryWood, RegistryObject<EntityType<SloopUnderConstructionEntity>>> SLOOPS_UNDER_CONSTRUCTION = FirmacivHelper.TFCWoodMap(
             wood -> register("sloop_construction/" + wood.getSerializedName(),
                     EntityType.Builder.<SloopUnderConstructionEntity>of((type, level) -> new SloopUnderConstructionEntity(type,level, wood), MobCategory.MISC).sized(4F, 0.75F)
-                            .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
+                            .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune().noSummon()));
 
     public static final RegistryObject<EntityType<EmptyCompartmentEntity>> EMPTY_COMPARTMENT_ENTITY = register(
             "compartment_empty",
