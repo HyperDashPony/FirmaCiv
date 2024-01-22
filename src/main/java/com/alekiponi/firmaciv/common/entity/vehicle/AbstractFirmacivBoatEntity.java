@@ -2,6 +2,7 @@ package com.alekiponi.firmaciv.common.entity.vehicle;
 
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.*;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.AbstractCompartmentEntity;
 import com.alekiponi.firmaciv.util.BoatVariant;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import net.dries007.tfc.util.climate.Climate;
@@ -98,6 +99,20 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     public int[] getConstructionIndices(){
         return new int[0];
+    }
+
+    public abstract int[] getCanAddCannonsIndices();
+
+    public ArrayList<AbstractCompartmentEntity> getCanAddCannons(){
+        ArrayList<AbstractCompartmentEntity> list = new ArrayList<AbstractCompartmentEntity>();
+        if(this.getPassengers().size() == this.getMaxPassengers()) {
+            for (int i : this.getCanAddCannonsIndices()) {
+                if (this.getPassengers().get(i).getFirstPassenger() instanceof AbstractCompartmentEntity compartment) {
+                    list.add(compartment);
+                }
+            }
+        }
+        return list;
     }
 
     public ArrayList<SailSwitchEntity> getSailSwitches() {

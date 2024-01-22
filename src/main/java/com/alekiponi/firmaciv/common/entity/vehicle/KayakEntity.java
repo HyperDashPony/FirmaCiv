@@ -128,6 +128,11 @@ public class KayakEntity extends AbstractFirmacivBoatEntity {
     }
 
     @Override
+    public int[] getCanAddCannonsIndices() {
+        return new int[0];
+    }
+
+    @Override
     public int[] getColliderIndices() {
         return new int[0];
     }

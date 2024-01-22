@@ -56,11 +56,14 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected boolean canAddNonPlayers;
     protected boolean canAddOnlyBlocks;
 
+    protected boolean canAddCannons;
+
 
     public EmptyCompartmentEntity(final EntityType<? extends EmptyCompartmentEntity> entityType, final Level level) {
         super(entityType, level);
         canAddNonPlayers = true;
         canAddOnlyBlocks = false;
+        canAddCannons = false;
     }
 
     @Override
@@ -88,6 +91,10 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
     public boolean canAddOnlyBLocks() {
         return canAddOnlyBlocks;
+    }
+
+    public boolean canAddCannons() {
+        return canAddCannons;
     }
 
 
@@ -178,6 +185,11 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
                 for(AbstractCompartmentEntity compartment : this.getTrueVehicle().getCanAddOnlyBlocks()){
                     if(compartment.getVehicle() == this.getVehicle()){
                         canAddOnlyBlocks = true;
+                    }
+                }
+                for(AbstractCompartmentEntity compartment : this.getTrueVehicle().getCanAddCannons()){
+                    if(compartment.getVehicle() == this.getVehicle()){
+                        canAddCannons = true;
                     }
                 }
             }
@@ -349,7 +361,7 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
 
         if (this.canAddNonPlayers() && !this.canAddOnlyBLocks() && heldStack.is(
                 FirmacivItems.CANNON.get()) && this.getRootVehicle() instanceof SloopEntity) {
-            if(this.getVehicle() instanceof AbstractVehiclePart part && part.getCompartmentRotation() == Math.abs(85)){
+            if(this.getVehicle() instanceof AbstractVehiclePart part && this.canAddCannons){
                 CannonEntity cannon = FirmacivEntities.CANNON_ENTITY.get().create(this.level());
                 cannon.moveTo(this.getPosition(0));
                 cannon.setYRot(-this.getYRot() - 180);

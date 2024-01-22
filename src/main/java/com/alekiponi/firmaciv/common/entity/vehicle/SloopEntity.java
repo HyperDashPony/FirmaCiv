@@ -33,6 +33,8 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     public final int[] WINDLASSES = {22};
     public final int[] MASTS = {23};
 
+    public final int[] CAN_ADD_CANNONS = {7,8,9,10,11,12};
+
     protected static final EntityDataAccessor<Float> DATA_ID_MAIN_BOOM_ROTATION = SynchedEntityData.defineId(
             SloopEntity.class, EntityDataSerializers.FLOAT);
 
@@ -99,6 +101,11 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
     @Override
     public int[] getMastIndices() {
         return MASTS;
+    }
+
+    @Override
+    public int[] getCanAddCannonsIndices() {
+        return CAN_ADD_CANNONS;
     }
 
     @Override

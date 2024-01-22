@@ -8,6 +8,7 @@ import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompa
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.google.common.collect.Lists;
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.BlockUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -820,6 +821,11 @@ public abstract class AbstractVehicle extends Entity {
         }
         average = average/speedOverTime.size();
         return average;
+    }
+
+    public boolean isInWater() {
+        return this.wasTouchingWater || this.level().getFluidState(this.blockPosition())
+                .is(TFCFluids.SALT_WATER.getSource());
     }
 
     public boolean everyNthTickUnique(int n){

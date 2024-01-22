@@ -339,7 +339,7 @@ public enum IngameOverlays {
                                 .is(FirmacivTags.Items.CAN_PLACE_IN_COMPARTMENTS)) {
                             graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BLOCK), 0, 9, 9);
                         } else if (player.getItemInHand(player.getUsedItemHand())
-                                .is(FirmacivItems.CANNON.get()) && !emptyCompartmentEntity.canAddOnlyBLocks() && emptyCompartmentEntity.getRootVehicle() instanceof SloopEntity) {
+                                .is(FirmacivItems.CANNON.get()) && !emptyCompartmentEntity.canAddOnlyBLocks() && emptyCompartmentEntity.canAddCannons() && emptyCompartmentEntity.getRootVehicle() instanceof SloopEntity) {
                             graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.BLOCK), 0, 9, 9);
                         }else if (!emptyCompartmentEntity.isVehicle() && !emptyCompartmentEntity.canAddOnlyBLocks()) {
                             graphics.blit(COMPARTMENT_ICONS, 0, 0, iconOffset(CompIcon.SEAT), 0, 9, 9);

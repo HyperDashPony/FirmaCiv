@@ -169,6 +169,10 @@ public class CannonEntity extends Entity {
         if(!this.getGunpowder().is(Items.GUNPOWDER)){
             return;
         }
+        if(this.isInWater() || this.level().getFluidState(this.blockPosition())
+                .is(TFCFluids.SALT_WATER.getSource())){
+            return;
+        }
 
         this.setFuseTime(40);
         this.playSound(SoundEvents.TNT_PRIMED, 1.5f, this.level().getRandom().nextFloat() * 0.05F + 0.91F);
