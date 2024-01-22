@@ -3,7 +3,7 @@ package com.alekiponi.firmaciv.client.model.entity;// Made with Blockbench 4.8.3
 // Paste this class into your mod and generate all required imports
 
 
-import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;

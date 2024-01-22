@@ -5,6 +5,7 @@ import com.alekiponi.firmaciv.network.PacketHandler;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 

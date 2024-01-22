@@ -1,0 +1,23 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "LL ",
+    "R R"
+  ],
+  "key": {
+    "B": {
+      "item": "firmaciv:cannon_barrel"
+    },
+    "L": {
+      "tag": "tfc:lumber"
+    },
+    "R": {
+      "tag": "forge:rods/wrought_iron"
+    }
+  },
+  "result": {
+    "item": "firmaciv:cannon"
+  }
+}

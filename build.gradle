@@ -3,7 +3,7 @@ buildscript {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
-        maven { url = 'https://repo.spongepowered.org/maven'}
+        maven { url = 'https://repo.spongepowered.org/maven' }
         maven {
             url "https://repo.spongepowered.org/repository/maven-public/"
             content { includeGroup "org.spongepowered" }
@@ -28,18 +28,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-/*
-val minecraftVersion: String = "1.20.1"
-
-val forgeVersion: String = "47.1.3"
-val mixinVersion: String = "0.8.5"
-
-val patchouliVersion: String = "1.20.1-81-FORGE"
-val jeiVersion: String = "15.2.0.21"
-
-val modId: String = "firmaciv"
-*/
-version = 'FirmaCivilization-0.1.10-alpha-1.20.1'
+version = 'FirmaCivilization-0.2.0-test-alpha-1.20.1'
 group = 'com.alekiponi.' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = ''
 
@@ -50,27 +39,19 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 minecraft {
     mappings channel: 'parchment', version: '2023.09.03-1.20.1'
 
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
     runs {
         client {
             workingDirectory project.file('run')
 
-            //property 'forge.logging.markers', 'SCAN'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'examplemod'
 
             arg "-mixin.config=firmaciv.mixins.json"
@@ -85,7 +66,6 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            //property 'forge.logging.markers', 'SCAN'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -93,7 +73,6 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'examplemod'
 
             arg "-mixin.config=firmaciv.mixins.json"
@@ -105,35 +84,23 @@ minecraft {
             }
         }
 
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
 
             workingDirectory project.file('run')
 
-            //property 'forge.logging.markers', 'SCAN'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
-
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            property 'forge.enabledGameTestNamespaces', 'firmaciv'
 
             arg "-mixin.config=firmaciv.mixins.json"
 
             mods {
-                examplemod {
+                firmaciv {
                     source sourceSets.main
                 }
             }
@@ -156,7 +123,7 @@ minecraft {
             arg "-mixin.config=firmaciv.mixins.json"
 
             mods {
-                examplemod {
+                firmaciv {
                     source sourceSets.main
                 }
             }
@@ -185,12 +152,6 @@ repositories {
 
 dependencies {
 
-    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
-    // The userdev artifact is a special name and will
-    //
-    // get all sorts of transformations applied to it.
-
     minecraft 'net.minecraftforge:forge:1.20.1-47.1.3'
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
@@ -202,29 +163,23 @@ dependencies {
     fg.deobf("curse.maven:patchouli-306770:4636277")
     implementation fg.deobf("curse.maven:patchouli-306770:4636277")
 
+    fg.deobf("curse.maven:carry-on-274259:4882500")
+    runtimeOnly fg.deobf("curse.maven:carry-on-274259:4882500")
 
+    /*
     fg.deobf("curse.maven:better-third-person-435044:4596768")
     runtimeOnly fg.deobf("curse.maven:better-third-person-435044:4596768")
 
-    /*
+     */
+
+    
     fg.deobf("curse.maven:jei-238222:4712868")
     runtimeOnly fg.deobf("curse.maven:jei-238222:4712868")
-     */
+
 
     fg.deobf("curse.maven:alekis-easy-held-models-953157:4977248")
     runtimeOnly fg.deobf("curse.maven:alekis-easy-held-models-953157:4977248")
 
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
-
-    // Examples using mod jars from ./libs
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
 
@@ -236,18 +191,16 @@ mixin {
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
-        attributes([
-                "Specification-Title"     : "firmaciv",
-                "Specification-Vendor"    : "alekiponi",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "alekiponi",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "TweakClaass":"org.spongepowered.asm.launch.MixinTweaker",
-                "TweakOrder":0,
-                "MixinConfigs":"firmaciv.mixins.json"
-        ])
+        attributes(["Specification-Title"     : "firmaciv",
+                    "Specification-Vendor"    : "alekiponi",
+                    "Specification-Version"   : "1", // We are version 1 of ourselves
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : project.jar.archiveVersion,
+                    "Implementation-Vendor"   : "alekiponi",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "TweakClaass"             : "org.spongepowered.asm.launch.MixinTweaker",
+                    "TweakOrder"              : 0,
+                    "MixinConfigs"            : "firmaciv.mixins.json"])
     }
 }
 

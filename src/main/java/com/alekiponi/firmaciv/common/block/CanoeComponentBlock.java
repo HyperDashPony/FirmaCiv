@@ -2,16 +2,17 @@ package com.alekiponi.firmaciv.common.block;
 
 import com.alekiponi.firmaciv.common.blockentity.CanoeComponentBlockEntity;
 import com.alekiponi.firmaciv.common.blockentity.FirmacivBlockEntities;
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
-import com.alekiponi.firmaciv.common.entity.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.FirmacivEntities;
+import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -31,9 +32,9 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.alekiponi.firmaciv.common.block.FirmacivBlocks.CANOE_COMPONENT_BLOCKS;
@@ -51,23 +52,31 @@ public class CanoeComponentBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE_1 = Stream.of(
                     Block.box(0, 0, 0, 16, 16, 16))
             .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    public final Supplier<? extends Block> strippedBlock;
-    public final Supplier<? extends Item> lumberItem;
-    public final BoatVariant variant;
+    private final RegistryWood wood;
 
-    public CanoeComponentBlock(Properties properties, BoatVariant variant) {
+    public CanoeComponentBlock(final Properties properties, final RegistryWood wood) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH)
                 .setValue(AXIS, Direction.Axis.Z).setValue(CANOE_CARVED, 1).setValue(END, false));
-        this.variant = variant;
-        this.strippedBlock = variant.getStripped();
-        this.lumberItem = variant.getLumber();
+        this.wood = wood;
     }
 
     public static Block getByStripped(Block strippedLogBlock) {
+        // TODO if you want you can make this back into a stream - alekiponi
+        for(RegistryObject<CanoeComponentBlock> ccb : CANOE_COMPONENT_BLOCKS.values()){
+            if(ccb.get().wood.getBlock(Wood.BlockType.STRIPPED_LOG).get() == strippedLogBlock){
+                return ccb.get();
+            }
+            //return ccb.get().wood.getBlock(Wood.BlockType.STRIPPED_LOG).get();
+        }
+        return null;
+        /*
         return CANOE_COMPONENT_BLOCKS.values().stream()
-                .filter(registryObject -> registryObject.get().strippedBlock.get() == strippedLogBlock)
+                .filter(registryObject -> registryObject.get().wood.getBlock(
+                        Wood.BlockType.STRIPPED_LOG) == strippedLogBlock)
                 .map(registryObject -> registryObject.get()).findFirst().get();
+
+         */
     }
 
     public static boolean isValidCanoeShape(LevelAccessor world, Block strippedLogBlock, BlockPos pPos) {
@@ -245,7 +254,7 @@ public class CanoeComponentBlock extends BaseEntityBlock {
 
             CanoeComponentBlock ccb = (CanoeComponentBlock) canoeComponentBlock;
 
-            CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.variant).get().create(pLevel);
+            CanoeEntity canoe = FirmacivEntities.CANOES.get(ccb.wood).get().create(pLevel);
 
             if (axis == Direction.Axis.X) {
                 canoe.moveTo((double) middleblockpos.getX() + 0.5D, (double) middleblockpos.getY() + 0.05D,
@@ -350,14 +359,6 @@ public class CanoeComponentBlock extends BaseEntityBlock {
         pBuilder.add(AXIS);
         pBuilder.add(CANOE_CARVED);
         pBuilder.add(END);
-    }
-
-    public Item getLumber() {
-        return lumberItem.get();
-    }
-
-    public Block getStrippedLog() {
-        return strippedBlock.get();
     }
 
     @Override

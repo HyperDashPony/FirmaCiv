@@ -38,7 +38,7 @@ public class FirmacivTags {
         public static final TagKey<Item> PLANKS = create("planks");
         public static final TagKey<Item> CHESTS = create("chests");
         public static final TagKey<Item> WORKBENCHES = create("workbenches");
-
+        public static final TagKey<Item> SHULKER_BOX = create("shulker_box");
         public static final TagKey<Item> CAN_PLACE_IN_COMPARTMENTS = create("can_place_in_compartments");
 
         public static final TagKey<Item> PLANKS_THAT_MAKE_SHIPS = create("planks_that_make_ships");
@@ -51,6 +51,4 @@ public class FirmacivTags {
             return TagKey.create(Registries.ITEM, new ResourceLocation("firmaciv", id));
         }
     }
-
-
 }

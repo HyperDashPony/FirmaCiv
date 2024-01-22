@@ -1,21 +1,17 @@
 package com.alekiponi.firmaciv.mixins.client;
 
-import com.alekiponi.firmaciv.common.entity.AbstractFirmacivBoatEntity;
-import com.alekiponi.firmaciv.common.entity.RowboatEntity;
-import com.alekiponi.firmaciv.common.entity.vehiclehelper.EmptyCompartmentEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.RowboatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.SloopEntity;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.EmptyCompartmentEntity;
 import net.minecraft.client.Camera;
-import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Camera.class)
@@ -54,13 +50,20 @@ public abstract class CameraMixin {
             if(compartment.getTrueVehicle() != null){
                 AbstractFirmacivBoatEntity boat = compartment.getTrueVehicle();
 
-                double boatSize = boat.getBoundingBox().getXsize();
+                double boatSize = boat.getBbWidth();
                 double cameraDistance = 4.0f;
-                if(boatSize > (1/0.65)){
-                    cameraDistance = cameraDistance * (boatSize * 0.65);
+                if(boatSize >1){
+                    cameraDistance = cameraDistance * (boatSize);
                 }
                 this.setRotation(pEntity.getViewYRot(pPartialTick), pEntity.getViewXRot(pPartialTick));
-                this.setPosition(Mth.lerp((double)pPartialTick, boat.xo, boat.getX()), Mth.lerp((double)pPartialTick, boat.yo, boat.getY()) + (double)Mth.lerp(pPartialTick, this.eyeHeightOld, this.eyeHeight), Mth.lerp((double)pPartialTick, boat.zo, boat.getZ()));
+                double heightModifier = 0;
+                if(boat instanceof SloopEntity){
+                    heightModifier = 3;
+                }
+                this.setPosition(
+                        Mth.lerp((double)pPartialTick, boat.xo, boat.getX()),
+                        Mth.lerp((double)pPartialTick, boat.yo + heightModifier, boat.getY() + heightModifier) + (double)Mth.lerp(pPartialTick, this.eyeHeightOld, this.eyeHeight),
+                        Mth.lerp((double)pPartialTick, boat.zo, boat.getZ()));
                 if(boat instanceof RowboatEntity rowboatEntity){
                     if(rowboatEntity.getControllingCompartment() != null && rowboatEntity.getControllingCompartment().equals(compartment)){
                         this.setRotation(this.yRot + 180.0F, this.xRot);

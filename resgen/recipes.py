@@ -33,7 +33,19 @@ def generate(rm: ResourceManager):
         }}, "firmaciv:firmaciv_compass")
 
     rm.crafting_shaped("crafting/watercraft_frame_angled", [" LL", "LLL", "LL "], {"L": "#tfc:lumber"},
-                       "firmaciv:watercraft_frame_angled").with_advancement("firmaciv:watercraft_frame_angled")
+                       ("firmaciv:watercraft_frame_angled")).with_advancement("firmaciv:watercraft_frame_angled")
+
+    rm.crafting_shaped("crafting/watercraft_frame_angled_3", ["LL ", "LLL", " LL"], {"L": "#tfc:lumber"},
+                       ("firmaciv:watercraft_frame_angled")).with_advancement("firmaciv:watercraft_frame_angled")
+
+    rm.crafting_shaped("crafting/watercraft_frame_flat", ["AA"], {"A": "firmaciv:watercraft_frame_angled"},
+                       (2, "firmaciv:watercraft_frame_flat")).with_advancement("firmaciv:watercraft_frame_flat")
+
+    rm.crafting_shaped("crafting/watercraft_frame_angled_1", ["F ", " F"], {"F": "firmaciv:watercraft_frame_flat"},
+                       (2, "firmaciv:watercraft_frame_angled"))
+
+    rm.crafting_shaped("crafting/watercraft_frame_angled_2", [" F", "F "], {"F": "firmaciv:watercraft_frame_flat"},
+                       (2, "firmaciv:watercraft_frame_angled"))
 
     # Boating items
     rm.crafting_shapeless("crafting/barometer",
@@ -58,10 +70,15 @@ def generate(rm: ResourceManager):
                        "firmaciv:kayak").with_advancement("firmaciv:kayak")
 
     rm.crafting_shapeless("crafting/large_waterproof_hide",
-                          ["tfc:large_prepared_hide", *["firmalife:beeswax" for _ in range(4)]],
+                          ["tfc:large_prepared_hide", *["firmalife:beeswax" for _ in range(8)]],
                           "firmaciv:large_waterproof_hide",
                           conditions={"type": "forge:mod_loaded", "modid": "firmalife"}).with_advancement(
         "firmaciv:large_waterproof_hide")
+
+    rm.crafting_shapeless("crafting/rope_coil",
+                          [*["tfc:jute_fiber" for _ in range(9)]],
+                          "firmaciv:rope_coil").with_advancement(
+        "firmaciv:rope_coil")
 
     # Oar/paddles
     rm.crafting_shaped("crafting/oar", ["  S", " S ", "L  "], {"S": "#forge:rods/wooden", "L": "#tfc:lumber"},
@@ -71,11 +88,29 @@ def generate(rm: ResourceManager):
     rm.crafting_shaped("crafting/canoe_paddle", [" S ", "L  "], {"S": "#forge:rods/wooden", "L": "#tfc:lumber"},
                        "firmaciv:canoe_paddle").with_advancement("firmaciv:canoe_paddle")
 
+    rm.crafting_shaped("crafting/cannon", ["BBB", "LL ", "R R"], {"B": "firmaciv:cannon_barrel", "L": "#tfc:lumber",
+                                                                  "R": "#forge:rods/wrought_iron"},
+                       "firmaciv:cannon").with_advancement("firmaciv:cannon")
+
+    rm.crafting_shaped("crafting/small_triangular_sail", ["WSS", "WWS", "WWW"],
+                       {"W": "tfc:wool_cloth", "S": "#forge:string"},
+                       "firmaciv:small_triangular_sail").with_advancement("firmaciv:small_triangular_sail")
+
+    rm.crafting_shaped("crafting/medium_triangular_sail", ["S  ", "WS ", "WWS"],
+                       {"W": "firmaciv:small_triangular_sail", "S": "#forge:string"},
+                       "firmaciv:medium_triangular_sail").with_advancement("firmaciv:medium_triangular_sail")
+
+
     heat_recipe(rm, "barometer", "firmaciv:barometer", 930, None, "200 tfc:metal/brass")
     heat_recipe(rm, "copper_bolt", "firmaciv:copper_bolt", 1080, None, "25 tfc:metal/copper")
     heat_recipe(rm, "nav_clock", "firmaciv:nav_clock", 930, None, "400 tfc:metal/brass")
     heat_recipe(rm, "oarlock", "firmaciv:oarlock", 1535, None, "200 tfc:metal/cast_iron")
     heat_recipe(rm, "sextant", "firmaciv:sextant", 930, None, "200 tfc:metal/brass")
+    heat_recipe(rm, "cannonball", "firmaciv:cannonball", 1535, None, "200 tfc:metal/cast_iron")
+    heat_recipe(rm, "cannon_barrel", "firmaciv:cannon_barrel", 1535, None, "400 tfc:metal/cast_iron")
+    heat_recipe(rm, "cannon", "firmaciv:cannon", 1535, None, "1300 tfc:metal/cast_iron")
+    heat_recipe(rm, "anchor", "firmaciv:anchor", 1540, None, "400 tfc:metal/steel")
+    heat_recipe(rm, "cleat", "firmaciv:cleat", 1540, None, "200 tfc:metal/steel")
     heat_recipe(rm, "unfinished_barometer", "firmaciv:unfinished_barometer", 930, None, "200 tfc:metal/brass")
     heat_recipe(rm, "unfinished_nav_clock", "firmaciv:unfinished_nav_clock", 930, None, "400 tfc:metal/brass")
     heat_recipe(rm, "unfinished_sextant", "firmaciv:unfinished_sextant", 930, None, "200 tfc:metal/brass")

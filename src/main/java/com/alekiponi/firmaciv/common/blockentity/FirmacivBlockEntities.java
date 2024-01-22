@@ -1,7 +1,6 @@
 package com.alekiponi.firmaciv.common.blockentity;
 
 import com.alekiponi.firmaciv.Firmaciv;
-import com.alekiponi.firmaciv.common.entity.BoatVariant;
 import net.dries007.tfc.util.registry.RegistrationHelpers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,7 +25,7 @@ public class FirmacivBlockEntities {
         BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Firmaciv.MOD_ID);
 
         CANOE_COMPONENT_BLOCK_ENTITY = register("canoe_component_block_entity", CanoeComponentBlockEntity::new,
-                Stream.of(BoatVariant.values()).map(CANOE_COMPONENT_BLOCKS::get));
+                CANOE_COMPONENT_BLOCKS.values().stream());
     }
 
     public FirmacivBlockEntities() {

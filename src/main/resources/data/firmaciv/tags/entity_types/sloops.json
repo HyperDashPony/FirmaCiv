@@ -1,0 +1,26 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "firmaciv:sloop/acacia",
+    "firmaciv:sloop/ash",
+    "firmaciv:sloop/aspen",
+    "firmaciv:sloop/birch",
+    "firmaciv:sloop/blackwood",
+    "firmaciv:sloop/chestnut",
+    "firmaciv:sloop/douglas_fir",
+    "firmaciv:sloop/hickory",
+    "firmaciv:sloop/kapok",
+    "firmaciv:sloop/mangrove",
+    "firmaciv:sloop/maple",
+    "firmaciv:sloop/oak",
+    "firmaciv:sloop/palm",
+    "firmaciv:sloop/pine",
+    "firmaciv:sloop/rosewood",
+    "firmaciv:sloop/sequoia",
+    "firmaciv:sloop/spruce",
+    "firmaciv:sloop/sycamore",
+    "firmaciv:sloop/white_cedar",
+    "firmaciv:sloop/willow"
+  ]
+}

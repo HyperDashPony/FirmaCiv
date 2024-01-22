@@ -1,0 +1,26 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "firmaciv:dugout_canoe/acacia",
+    "firmaciv:dugout_canoe/ash",
+    "firmaciv:dugout_canoe/aspen",
+    "firmaciv:dugout_canoe/birch",
+    "firmaciv:dugout_canoe/blackwood",
+    "firmaciv:dugout_canoe/chestnut",
+    "firmaciv:dugout_canoe/douglas_fir",
+    "firmaciv:dugout_canoe/hickory",
+    "firmaciv:dugout_canoe/kapok",
+    "firmaciv:dugout_canoe/mangrove",
+    "firmaciv:dugout_canoe/maple",
+    "firmaciv:dugout_canoe/oak",
+    "firmaciv:dugout_canoe/palm",
+    "firmaciv:dugout_canoe/pine",
+    "firmaciv:dugout_canoe/rosewood",
+    "firmaciv:dugout_canoe/sequoia",
+    "firmaciv:dugout_canoe/spruce",
+    "firmaciv:dugout_canoe/sycamore",
+    "firmaciv:dugout_canoe/white_cedar",
+    "firmaciv:dugout_canoe/willow"
+  ]
+}

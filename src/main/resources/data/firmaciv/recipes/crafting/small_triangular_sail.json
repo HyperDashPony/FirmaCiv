@@ -1,0 +1,20 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WSS",
+    "WWS",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "tfc:wool_cloth"
+    },
+    "S": {
+      "tag": "forge:string"
+    }
+  },
+  "result": {
+    "item": "firmaciv:small_triangular_sail"
+  }
+}

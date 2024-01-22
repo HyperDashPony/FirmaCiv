@@ -1,0 +1,26 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "firmaciv:rowboat/acacia",
+    "firmaciv:rowboat/ash",
+    "firmaciv:rowboat/aspen",
+    "firmaciv:rowboat/birch",
+    "firmaciv:rowboat/blackwood",
+    "firmaciv:rowboat/chestnut",
+    "firmaciv:rowboat/douglas_fir",
+    "firmaciv:rowboat/hickory",
+    "firmaciv:rowboat/kapok",
+    "firmaciv:rowboat/mangrove",
+    "firmaciv:rowboat/maple",
+    "firmaciv:rowboat/oak",
+    "firmaciv:rowboat/palm",
+    "firmaciv:rowboat/pine",
+    "firmaciv:rowboat/rosewood",
+    "firmaciv:rowboat/sequoia",
+    "firmaciv:rowboat/spruce",
+    "firmaciv:rowboat/sycamore",
+    "firmaciv:rowboat/white_cedar",
+    "firmaciv:rowboat/willow"
+  ]
+}

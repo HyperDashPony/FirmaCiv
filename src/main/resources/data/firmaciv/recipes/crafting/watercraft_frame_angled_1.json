@@ -1,0 +1,17 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "F ",
+    " F"
+  ],
+  "key": {
+    "F": {
+      "item": "firmaciv:watercraft_frame_flat"
+    }
+  },
+  "result": {
+    "item": "firmaciv:watercraft_frame_angled",
+    "count": 2
+  }
+}

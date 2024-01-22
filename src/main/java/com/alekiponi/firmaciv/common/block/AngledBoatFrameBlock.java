@@ -25,8 +25,6 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
     @SuppressWarnings("deprecation")
     public InteractionResult use(final BlockState blockState, final Level level, final BlockPos blockPos,
             final Player player, final InteractionHand hand, final BlockHitResult hitResult) {
-        // Don't do logic on client side
-        if (level.isClientSide()) return InteractionResult.PASS;
 
         final ItemStack heldStack = player.getItemInHand(hand);
 
@@ -35,7 +33,7 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
 
         // We must replace ourselves with the correct wood version
         for (final RegistryObject<Block> registryObject : FirmacivBlocks.WOODEN_BOAT_FRAME_ANGLED.values()) {
-            if (!(registryObject.get() instanceof WoodenBoatFrameBlock woodenFrameBlock)) continue;
+            if (!(registryObject.get() instanceof AngledWoodenBoatFrameBlock woodenFrameBlock)) continue;
 
             // Must find the right block variant for this item
             if (!heldStack.is(woodenFrameBlock.getPlankAsItemStack().getItem())) continue;
@@ -45,7 +43,9 @@ public class AngledBoatFrameBlock extends SquaredAngleBlock {
 
             level.setBlock(blockPos, newBlockState, 10);
 
-            heldStack.shrink(1);
+            if(!player.getAbilities().instabuild){
+                heldStack.shrink(1);
+            }
 
             level.playSound(null, blockPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.5F,
                     level.getRandom().nextFloat() * 0.1F + 0.9F);

@@ -169,30 +169,60 @@ DEFAULT_LANG = {
     "entity.firmaciv.sloop.white_cedar": "White Cedar Sloop",
     "entity.firmaciv.sloop.willow": "Willow Sloop",
 
+    "entity.firmaciv.sloop_construction.acacia": "Acacia Sloop",
+    "entity.firmaciv.sloop_construction.ash": "Ash Sloop",
+    "entity.firmaciv.sloop_construction.aspen": "Aspen Sloop",
+    "entity.firmaciv.sloop_construction.birch": "Birch Sloop",
+    "entity.firmaciv.sloop_construction.blackwood": "Blackwood Sloop",
+    "entity.firmaciv.sloop_construction.chestnut": "Chestnut Sloop",
+    "entity.firmaciv.sloop_construction.douglas_fir": "Douglas Fir Sloop",
+    "entity.firmaciv.sloop_construction.hickory": "Hickory Sloop",
+    "entity.firmaciv.sloop_construction.kapok": "KapokRowboat",
+    "entity.firmaciv.sloop_construction.maple": "Maple Sloop",
+    "entity.firmaciv.sloop_construction.oak": "Oak Sloop",
+    "entity.firmaciv.sloop_construction.palm": "Palm Sloop",
+    "entity.firmaciv.sloop_construction.pine": "Pine Sloop",
+    "entity.firmaciv.sloop_construction.rosewood": "Rosewood Sloop",
+    "entity.firmaciv.sloop_construction.sequoia": "Sequoia Sloop",
+    "entity.firmaciv.sloop_construction.spruce": "Spruce Sloop",
+    "entity.firmaciv.sloop_construction.sycamore": "Sycamore Sloop",
+    "entity.firmaciv.sloop_construction.white_cedar": "White Cedar Sloop",
+    "entity.firmaciv.sloop_construction.willow": "Willow Sloop",
+
     "entity.firmaciv.kayak": "Kayak",
 
     "entity.firmaciv.vehicle_part": "Vehicle Part",
     "entity.firmaciv.vehicle_cleat": "Cleat",
+    "entity.firmaciv.vehicle_switch_windlass": "Windlass",
+    "entity.firmaciv.vehicle_switch_sail": "Sail",
+    "entity.firmaciv.vehicle_collider": "Vehicle",
+    "entity.firmaciv.vehicle_part_boat": "Boat Part",
+    "entity.firmaciv.vehicle_mast": "Mast",
 
+    "entity.firmaciv.cannonball": "Cannonball",
+    "entity.firmaciv.cannon": "Cannon",
+
+    "entity.firmaciv.compartment_tfcchest": "Chest Compartment",
     "entity.firmaciv.compartment_chest": "Chest Compartment",
     "entity.firmaciv.compartment_workbench": "Workbench Compartment",
     "entity.firmaciv.compartment_log_pile": "Log Pile Compartment",
+    "entity.firmaciv.compartment_anvil": "Anvil Compartment",
+    "entity.firmaciv.compartment_barrel": "Barrel Compartment",
     "entity.firmaciv.compartment_large_vessel": "Large Vessel Compartment",
     "entity.firmaciv.compartment_empty": "Empty Compartment",
+
+
 
     "block.firmaciv.boat_frame": "Shipwright's Scaffolding",
 
     "block.firmaciv.thatch_roofing": "Thatch Roofing",
 
-    "item.firmaciv.canoe_icon_only": "ICON ONLY",
-    "item.firmaciv.canoe_with_paddle_icon_only": "ICON ONLY",
-    "item.firmaciv.kayak_with_paddle_icon_only": "ICON ONLY",
-    "item.firmaciv.rowboat_icon_only": "ICON ONLY",
-
     "itemGroup.firmaciv": "Firma: Civilization",
     "creativetab.firmaciv_tab": "Firma: Civilization",
     "creativetab.watercraft_tab": "Watercraft",
     "creativetab.navigation_tab": "Navigation",
+
+
 
     "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_olive": "Large Waterproof Hide",
     "tfc.recipe.barrel.firmaciv.barrel.large_waterproof_hide_tallow": "Large Waterproof Hide",
@@ -201,6 +231,23 @@ DEFAULT_LANG = {
     "copy_longitude": "Copy Longitude to Clipboard",
     "copy_latlon": "Copy Latitude and Longitude to Clipboard",
     "copy_altitude": "Copy Altitude to Clipboard",
+
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "altitude": "Altitude",
+    "degrees": "Degrees",
+    "sea_level": "Sea Level",
+    "north": "North",
+    "south": "South",
+    "east": "East",
+    "west": "West",
+    "above": "Above",
+    "below": "Below",
+    "meters": "Meters",
+
+    "press_button": "Press",
+    "eject_passengers": "to eject",
+    "restless_passenger": "This passenger is restless.",
 
     "firmaciv.advancements.kayak_paddle.title": "Double Trouble",
     "firmaciv.advancements.kayak_paddle.description": "Craft a Kayak Paddle",
@@ -218,5 +265,4 @@ DEFAULT_LANG = {
     "firmaciv.advancements.barometer.description": "Craft a Barometer",
     "firmaciv.advancements.oarlock.title": "The Montlake Cut",
     "firmaciv.advancements.oarlock.description": "Smith an Oarlock"
-
 }
