@@ -4,12 +4,16 @@
   "icon": "firmaciv:textures/item/nav_toolkit.png",
   "pages": [
     {
-      "type": "patchouli:text",
-      "text": "Navigating the world is not an easy task. In order to build a successful civilization, you must have a good grasp of your location, and a good record of important places!"
+      "type": "patchouli:image",
+      "title": "Navigation",
+      "images": [
+        "firmaciv:textures/gui/book/navigation.png"
+      ],
+      "border": true
     },
     {
       "type": "patchouli:text",
-      "text": "No longer are there magic numbers that tell you exactly where you are. Instead, you must make technological advancements and acquire precise instruments to determine your position."
+      "text": "Navigating the world is not an easy task. In order to build a successful civilization, you must have a good grasp of your location, and a good record of important places! No longer are there magic numbers that tell you exactly where you are. Instead, you must make technological advancements and acquire precise instruments to determine your position."
     },
     {
       "type": "patchouli:text",

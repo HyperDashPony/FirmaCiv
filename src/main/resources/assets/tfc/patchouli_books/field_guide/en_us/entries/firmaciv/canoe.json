@@ -12,7 +12,7 @@
       "type": "patchouli:image",
       "images": [
         "firmaciv:textures/gui/book/canoe_isometric.png"
-      ],
+      ]
     },
     {
       "type": "patchouli:text",
