@@ -2,10 +2,12 @@ package com.alekiponi.firmaciv.common.item;
 
 import com.alekiponi.firmaciv.Firmaciv;
 import com.alekiponi.firmaciv.common.block.FirmacivBlocks;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -44,6 +46,9 @@ public class FirmacivTabs {
                         pOutput.accept(FirmacivItems.CANNON.get());
                         pOutput.accept(FirmacivItems.CANNON_BARREL.get());
                         pOutput.accept(FirmacivItems.CANNONBALL.get());
+
+                        pOutput.accept(TFCItems.UNREFINED_PAPER.get());
+                        pOutput.accept(Items.GUNPOWDER);
 
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME_ANGLED.get());
                         pOutput.accept(FirmacivBlocks.BOAT_FRAME_FLAT.get());
