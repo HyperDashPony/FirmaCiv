@@ -313,7 +313,9 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
 
                 float keelImpact = 0;
 
-                float travelAngle = (float) -Math.acos(this.getDeltaMovement().normalize().dot(new Vec3(0,0,1))) / Mth.PI * 180f;
+                Vec3 south = new Vec3(0,0,1);
+                Vec3 up = new Vec3(0,1,0);
+                float travelAngle = (float) Math.atan2(this.getDeltaMovement().cross(south).dot(up), this.getDeltaMovement().dot(south)) / Mth.PI * 180f;
                 float keelDifference = Mth.degreesDifference(travelAngle, this.getYRot());
 
                 if (Mth.abs(keelDifference) < 15f) {
