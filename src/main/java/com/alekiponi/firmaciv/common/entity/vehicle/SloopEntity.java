@@ -332,6 +332,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
             if (this.getMainsailActive() || this.getJibsailActive()) {
                 float rotationImpact = 0;
 
+                float windSpeed = getLocalWindAngleAndSpeed()[1];
                 float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
 
                 if (windDifference > 4) {
@@ -340,7 +341,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     rotationImpact = -1f;
                 }
 
-                rotationImpact = rotationImpact * Mth.clamp((float) (this.getDeltaMovement().length()), 0, 0.5f);
+                rotationImpact = rotationImpact * Mth.clamp(windSpeed, 0, 0.5f);
 
                 this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
 
