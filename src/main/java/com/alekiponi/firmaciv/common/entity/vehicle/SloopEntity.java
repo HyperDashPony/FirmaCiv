@@ -310,11 +310,31 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                 this.setDeltaRotation((float) (-1 * this.getRudderRotation() * 0.25f *
                         (Mth.clamp(this.getDeltaMovement().length(), 0.05f, 1))));
                 this.setDeltaRotation(Mth.clamp(this.getDeltaRotation(), -1f, 1f));
+
+                float keelImpact = 0;
+
+                Vec3 south = new Vec3(0,0,1);
+                Vec3 up = new Vec3(0,1,0);
+                float travelAngle = (float) Mth.atan2(this.getDeltaMovement().cross(south).dot(up), this.getDeltaMovement().dot(south)) / Mth.PI * 180f;
+                float keelDifference = Mth.degreesDifference(travelAngle, this.getYRot());
+
+                if (Mth.abs(keelDifference) < 15f) {
+                    if (keelDifference > 0.25f) {
+                        keelImpact = -1f;
+                    }  else if (keelDifference < -0.25f) {
+                        keelImpact = 1f;
+                    }
+                }
+
+                keelImpact = 0.25f * keelImpact * Mth.clamp((float) (this.getDeltaMovement().length()), 0, 2.0f);
+
+                this.setDeltaRotation(this.getDeltaRotation() + keelImpact);
             }
 
             if (this.getMainsailActive() || this.getJibsailActive()) {
                 float rotationImpact = 0;
 
+                float windSpeed = getLocalWindAngleAndSpeed()[1];
                 float windDifference = Mth.degreesDifference(getMainsailWindAngleAndForce()[0], Mth.wrapDegrees(this.getYRot()));
 
                 if (windDifference > 4) {
@@ -323,7 +343,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     rotationImpact = -1f;
                 }
 
-                rotationImpact = Mth.clamp((float) (rotationImpact * this.getDeltaMovement().length()), 0, 0.5f);
+                rotationImpact = rotationImpact * Mth.clamp(windSpeed, 0, 0.5f);
 
                 this.setDeltaRotation(this.getDeltaRotation() + rotationImpact);
 
