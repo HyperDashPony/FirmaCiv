@@ -666,7 +666,7 @@ public class SloopEntity extends AbstractFirmacivBoatEntity {
                     acceleration = this.getAcceleration();
                 }
 
-                float keelFactor = 0.75f;
+                float keelFactor = 0.85f;
                 float sailFactor = 1 - keelFactor;
 
                 Vec3 sailAccelerationWithKeel = new Vec3(

@@ -36,6 +36,8 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
+import static com.alekiponi.firmaciv.util.FirmacivHelper.tickTakeEntitiesForARide;
+
 public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
     public static final int PADDLE_LEFT = 0;
     public static final int PADDLE_RIGHT = 1;
@@ -163,7 +165,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
 
         this.oldStatus = this.status;
-        this.status = this.getStatus();
+        this.status = this.getUpdateStatus();
 
         if (this.getHurtTime() > 0) {
             this.setHurtTime(this.getHurtTime() - 1);
@@ -237,7 +239,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
         // all code that moves other entities should happen after collision check
         FirmacivHelper.tickHopPlayersOnboard(this);
 
-        this.tickTakeEntitiesForARide();
+        tickTakeEntitiesForARide(this);
 
     }
 
@@ -673,7 +675,7 @@ public abstract class AbstractFirmacivBoatEntity extends AbstractVehicle {
 
     @Nullable
     protected SoundEvent getPaddleSound() {
-        switch (this.getStatus()) {
+        switch (this.getUpdateStatus()) {
             case IN_WATER:
             case UNDER_WATER:
             case UNDER_FLOWING_WATER:

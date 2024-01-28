@@ -6,6 +6,7 @@ import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.*;
 import com.alekiponi.firmaciv.common.entity.vehiclehelper.compartment.vanilla.*;
 import com.alekiponi.firmaciv.util.FirmacivHelper;
 import com.alekiponi.firmaciv.util.FirmacivTags;
+import com.alekiponi.firmaciv.util.FirmacivWoodHelper;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -27,18 +28,18 @@ public final class FirmacivEntities {
     public static DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES,
             MOD_ID);
 
-    public static final Map<RegistryWood, RegistryObject<EntityType<CanoeEntity>>> CANOES = FirmacivHelper.TFCWoodMap(
+    public static final Map<RegistryWood, RegistryObject<EntityType<CanoeEntity>>> CANOES = FirmacivWoodHelper.TFCWoodMap(
             wood -> register("dugout_canoe/" + wood.getSerializedName(),
                     EntityType.Builder.of(CanoeEntity::new, MobCategory.MISC).sized(1.125F, 0.625F)));
 
-    public static final Map<RegistryWood, RegistryObject<EntityType<RowboatEntity>>> ROWBOATS = FirmacivHelper.TFCWoodMap(
+    public static final Map<RegistryWood, RegistryObject<EntityType<RowboatEntity>>> ROWBOATS = FirmacivWoodHelper.TFCWoodMap(
             wood -> register("rowboat/" + wood.getSerializedName(),
                     EntityType.Builder.of(RowboatEntity::new, MobCategory.MISC).sized(1.875F, 0.625F)));
 
     public static final RegistryObject<EntityType<KayakEntity>> KAYAK_ENTITY = register("kayak",
             EntityType.Builder.of(KayakEntity::new, MobCategory.MISC).sized(0.79F, 0.625F));
 
-    public static final Map<RegistryWood, RegistryObject<EntityType<SloopEntity>>> SLOOPS = FirmacivHelper.TFCWoodMap(
+    public static final Map<RegistryWood, RegistryObject<EntityType<SloopEntity>>> SLOOPS = FirmacivWoodHelper.TFCWoodMap(
             wood -> register("sloop/" + wood.getSerializedName(),
                     EntityType.Builder.of(SloopEntity::new, MobCategory.MISC).sized(3F, 0.75F)
                             .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
@@ -50,7 +51,7 @@ public final class FirmacivEntities {
                             .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune()));
      */
 
-    public static final Map<RegistryWood, RegistryObject<EntityType<SloopUnderConstructionEntity>>> SLOOPS_UNDER_CONSTRUCTION = FirmacivHelper.TFCWoodMap(
+    public static final Map<RegistryWood, RegistryObject<EntityType<SloopUnderConstructionEntity>>> SLOOPS_UNDER_CONSTRUCTION = FirmacivWoodHelper.TFCWoodMap(
             wood -> register("sloop_construction/" + wood.getSerializedName(),
                     EntityType.Builder.<SloopUnderConstructionEntity>of((type, level) -> new SloopUnderConstructionEntity(type,level, wood), MobCategory.MISC).sized(4F, 0.75F)
                             .setTrackingRange(LARGE_VEHICLE_TRACKING).fireImmune().noSummon()));

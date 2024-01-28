@@ -1,4 +1,4 @@
-package com.alekiponi.firmaciv.mixins.minecraft;
+package com.alekiponi.firmaciv.mixins.client;
 
 import com.alekiponi.firmaciv.common.entity.vehicle.CanoeEntity;
 import com.alekiponi.firmaciv.common.entity.vehicle.KayakEntity;

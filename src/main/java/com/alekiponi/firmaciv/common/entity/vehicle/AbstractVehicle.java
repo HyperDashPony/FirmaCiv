@@ -10,7 +10,6 @@ import com.google.common.collect.Lists;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.minecraft.BlockUtil;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -271,6 +270,8 @@ public abstract class AbstractVehicle extends Entity {
         return !this.isRemoved();
     }
 
+
+
     @Override
     public void lerpTo(final double posX, final double posY, final double posZ, final float yaw, final float pitch,
                        final int pPosRotationIncrements, final boolean teleport) {
@@ -307,42 +308,9 @@ public abstract class AbstractVehicle extends Entity {
 
     }
 
-    protected void tickTakeEntitiesForARide(){
-        if(this instanceof AbstractFirmacivBoatEntity && (this.status == Status.UNDER_WATER || this.status == Status.UNDER_FLOWING_WATER)){
-            return;
-        }
-        if(this.getDeltaMovement().length() > 0.01){
-            List<Entity> entitiesToTakeWith = this.getEntitiesToTakeWith();
 
-            if (!entitiesToTakeWith.isEmpty()) {
-                for (final Entity entity : entitiesToTakeWith) {
-                    if (this.level().isClientSide() && entity instanceof LocalPlayer player && !entity.isPassenger() && (Math.abs(this.getBoundingBox().maxY-player.getBoundingBox().minY) < 0.01)) {
-                        if(this.getSmoothSpeedMS() > 4){
-                            if(!player.input.jumping || Math.abs(player.getDeltaMovement().y) > 0.05 ){
-                                player.setPos(this.getDismountLocationForPassenger(player));
-                            }
-                            //player.setPos(player.getPosition(0).add(this.getDeltaMovement()));
-                        } else {
-                            if(player.input.jumping || player.input.left || player.input.right || player.input.up || player.input.down){
-                                player.setDeltaMovement(player.getDeltaMovement().multiply(1.0,1,1.0).add(this.getDeltaMovement().multiply(0.45,0,0.45)));
-                            } else {
-                                player.setPos(player.getPosition(0).add(this.getDeltaMovement()));
-                                if(player.getDeltaMovement().length() > this.getDeltaMovement().length()+0.01){
-                                    player.setDeltaMovement(Vec3.ZERO);
-                                }
-                            }
-                        }
 
-                    }
-                    if (!(entity instanceof AbstractVehicle) && !entity.isPassenger() && !(entity instanceof Player))  {
-                        entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().multiply(0.45, 0, 0.45)));
-                    }
-                }
-            }
-        }
-    }
-
-    protected List<Entity> getEntitiesToTakeWith(){
+    public List<Entity> getEntitiesToTakeWith(){
         List<Entity> entities = this.level()
                 .getEntities(this, this.getBoundingBox().inflate(0, -this.getBoundingBox().getYsize() + 2, 0).move(0, this.getBoundingBox().getYsize(), 0), EntitySelector.pushableBy(this));
 
@@ -385,7 +353,7 @@ public abstract class AbstractVehicle extends Entity {
 
     }
 
-    protected Status getStatus() {
+    protected Status getUpdateStatus() {
         final Status underwater = this.isUnderwater();
 
         if (underwater != null) {
@@ -405,6 +373,11 @@ public abstract class AbstractVehicle extends Entity {
         }
 
         return Status.IN_AIR;
+    }
+
+    @Nullable
+    public Status getStatus(){
+        return this.status;
     }
 
     public float getWaterLevelAbove() {

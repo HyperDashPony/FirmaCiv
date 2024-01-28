@@ -1,12 +1,17 @@
 package com.alekiponi.firmaciv.util;
 
 import com.alekiponi.firmaciv.common.block.FirmacivBlocks;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractFirmacivBoatEntity;
+import com.alekiponi.firmaciv.common.entity.vehicle.AbstractVehicle;
+import com.alekiponi.firmaciv.common.entity.vehiclehelper.MastEntity;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.registry.RegistryWood;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -14,11 +19,14 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static net.minecraftforge.fml.loading.FMLEnvironment.dist;
 
 public class FirmacivHelper {
     @Nullable
@@ -137,6 +145,62 @@ public class FirmacivHelper {
 
     }
 
+    public static void tickTakeEntitiesForARide(AbstractVehicle thisVehicle){
+        if(thisVehicle instanceof AbstractFirmacivBoatEntity && (thisVehicle.getStatus() == AbstractVehicle.Status.UNDER_WATER || thisVehicle.getStatus() == AbstractVehicle.Status.UNDER_FLOWING_WATER)){
+            return;
+        }
+        if(thisVehicle.getDeltaMovement().length() > 0.01){
+            List<Entity> entitiesToTakeWith = thisVehicle.getEntitiesToTakeWith();
+
+            if (!entitiesToTakeWith.isEmpty()) {
+                for (final Entity entity : entitiesToTakeWith) {
+                    if (thisVehicle.level().isClientSide() && entity instanceof Player player && !entity.isPassenger() && (Math.abs(thisVehicle.getBoundingBox().maxY-player.getBoundingBox().minY) < 0.01)) {
+                        if(thisVehicle.getSmoothSpeedMS() > 4){
+                            if(Math.abs(player.getDeltaMovement().y) > 0.05 ){
+                                player.setPos(thisVehicle.getDismountLocationForPassenger(player));
+                            }
+                            //player.setPos(player.getPosition(0).add(this.getDeltaMovement()));
+                        } else {
+                            if(player.xxa > 0 || player.zza > 0 || player.yya > 0 || Math.abs(player.getDeltaMovement().y) > 0.05){
+                                player.setDeltaMovement(player.getDeltaMovement().multiply(1.0,1,1.0).add(thisVehicle.getDeltaMovement().multiply(0.45,0,0.45)));
+                            } else {
+                                player.setPos(player.getPosition(0).add(thisVehicle.getDeltaMovement()));
+                                if(player.getDeltaMovement().length() > thisVehicle.getDeltaMovement().length()+0.01){
+                                    player.setDeltaMovement(Vec3.ZERO);
+                                }
+                            }
+                        }
+
+                    }
+                    if (!(entity instanceof AbstractVehicle) && !entity.isPassenger() && !(entity instanceof Player))  {
+                        entity.setDeltaMovement(entity.getDeltaMovement().add(thisVehicle.getDeltaMovement().multiply(0.45, 0, 0.45)));
+                    }
+                }
+            }
+        }
+    }
+
+    public static void tickClimbMast(MastEntity thisMast){
+        List<net.minecraft.world.entity.Entity> playersToMoveWithMast = new ArrayList<Entity>();
+
+        playersToMoveWithMast.addAll(thisMast.level()
+                .getEntities(thisMast, thisMast.getBoundingBox().inflate(0, 0, 0).move(0, 0, 0), EntitySelector.pushableBy(thisMast)));
+
+        for (Entity entity : playersToMoveWithMast) {
+            if ((entity instanceof LocalPlayer player)) {
+                player.move(MoverType.SELF, thisMast.getRootVehicle().getDeltaMovement().multiply(1, 0, 1).add(0,0,0));
+                if (player.input.jumping) {
+                    player.setDeltaMovement(player.getDeltaMovement().multiply(1,0,1).add(0,0.1,0));
+                } else if(player.input.shiftKeyDown){
+                    player.setDeltaMovement(player.getDeltaMovement().multiply(1,0,1).add(0,0,0));
+                } else {
+                    player.setDeltaMovement(player.getDeltaMovement().multiply(1,0,1).add(0,-0.1,0));
+                }
+
+            }
+        }
+    }
+
     public static boolean everyNthTickUnique(int id, int tickCount, int n){
         if((id + tickCount) % n == 0){
             return true;
@@ -144,32 +208,5 @@ public class FirmacivHelper {
         return false;
     }
 
-    /**
-     * Utility function to centralize all the mod interop relating to TFC woods.
-     * This should be used anywhere we want to iterate over all the supported TFC woods
-     *
-     * @param woodConsumer A consumer that is passed each {@link RegistryWood}
-     */
-    public static void forAllTFCWoods(final Consumer<RegistryWood> woodConsumer) {
-        for (final Wood tfcWood : Wood.values()) {
-            woodConsumer.accept(tfcWood);
-        }
-    }
 
-    /**
-     * Creates a map for every TFC wood. See {@link FirmacivHelper#forAllTFCWoods(Consumer)} if you just want to
-     * iterate over the wood types we support
-     *
-     * @param function   The function that's used to get the entry for each wood type. See
-     *                   {@link FirmacivBlocks#WOODEN_BOAT_FRAME_ANGLED} for example usage
-     * @param <MapValue> The value type of the map
-     * @return A map of {@link RegistryWood} to the returned object of the function for that wood type
-     */
-    public static <MapValue> Map<RegistryWood, MapValue> TFCWoodMap(final Function<RegistryWood, MapValue> function) {
-        final Map<RegistryWood, MapValue> map = new HashMap<>();
-
-        forAllTFCWoods(wood -> map.put(wood, function.apply(wood)));
-
-        return map;
-    }
 }
