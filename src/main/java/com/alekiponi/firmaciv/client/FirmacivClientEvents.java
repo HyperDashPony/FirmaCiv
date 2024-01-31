@@ -94,7 +94,7 @@ public class FirmacivClientEvents {
                                     } else {
                                         rotation = entity.getYRot();
                                     }
-                                    direction = ((Mth.wrapDegrees(rotation) + 180) % 360) / 360;
+                                    direction = ((Mth.wrapDegrees(-rotation) + 180) % 360) / 360;
                                 } else {
                                     direction = Math.random();
                                 }
