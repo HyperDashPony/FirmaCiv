@@ -37,6 +37,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static net.minecraftforge.fml.loading.FMLEnvironment.dist;
+
 public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
     protected static final EntityDataAccessor<Long> DATA_ID_PASSENGER_RIDE_TICK = SynchedEntityData.defineId(
             EmptyCompartmentEntity.class, EntityDataSerializers.LONG);
@@ -308,7 +310,9 @@ public class EmptyCompartmentEntity extends AbstractCompartmentEntity {
             this.setInputRight(false);
             this.setInputUp(false);
             this.setInputDown(false);
-            PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(false, false, false, false, this.getId()));
+            if(this.level().isClientSide()){
+                PacketHandler.clientSendPacket(new ServerboundCompartmentInputPacket(false, false, false, false, this.getId()));
+            }
         }
 
     }
