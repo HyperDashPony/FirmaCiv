@@ -8,6 +8,12 @@
       "text": "那么，已经进入了铁器时代后，你想升级吗？好吧，划艇就是为你量身定制的。它有三个座位，可以容纳3名玩家，或者最多容纳2只动物，包括马！和往常一样，您也可以用一些容器更换座椅（驾驶员座椅除外）。您也可以在船尾放置另外两个容器。"
     },
     {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/rowboat_isometric.png"
+      ]
+    },
+    {
       "type": "patchouli:text",
       "text": "在划艇中，与其他船只不同，当你驾驶船只时，你会凡着做。这将能让你借力，以更方便的使用桨！当然，你可以用第一人称视角驾驶划艇，但你肯定会认为第三人称看着更舒服。"
     },
@@ -65,12 +71,12 @@
           ]
         ],
         "mapping": {
-          "1": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_right,frame_processed=3]",
-          "2": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_left,frame_processed=3]",
-          "0": "firmaciv:wood/watercraft_frame_angled/hickory[facing=north,shape=straight,frame_processed=3]",
-          "4": "firmaciv:wood/watercraft_frame_angled/hickory[facing=south,shape=straight,frame_processed=3]",
-          "5": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_left,frame_processed=3]",
-          "6": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_right,frame_processed=3]"
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=3]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=3]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=3]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=3]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=3]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=3]"
         }
       },
       "name": "搭建划艇的脚手架",
@@ -93,12 +99,12 @@
           ]
         ],
         "mapping": {
-          "1": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
-          "2": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
-          "0": "firmaciv:wood/watercraft_frame_angled/hickory[facing=north,shape=straight,frame_processed=7]",
-          "4": "firmaciv:wood/watercraft_frame_angled/hickory[facing=south,shape=straight,frame_processed=7]",
-          "5": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
-          "6": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_right,frame_processed=7]"
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=7]"
         }
       },
       "name": "搭建划艇的脚手架",
@@ -121,14 +127,14 @@
           ]
         ],
         "mapping": {
-          "1": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
-          "2": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
-          "0": "firmaciv:wood/watercraft_frame_angled/hickory[facing=north,shape=straight,frame_processed=7]",
-          "4": "firmaciv:wood/watercraft_frame_angled/hickory[facing=south,shape=straight,frame_processed=7]",
-          "5": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
-          "6": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_right,frame_processed=7]",
-          "L": "firmaciv:oarlock[facing=north]",
-          "R": "firmaciv:oarlock[facing=south]"
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=7]",
+          "L": "alekiships:oarlock[facing=north]",
+          "R": "alekiships:oarlock[facing=south]"
         }
       },
       "name": "搭建划艇的脚手架",
@@ -137,16 +143,8 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe2": "firmaciv:crafting/oar",
+      "recipe2": "alekiships:crafting/oar",
       "text": "现在，用$(item)$(k:key.use)$()把桨安装到划艇上，划艇就可以下水啦！"
-    },
-    {
-      "type": "patchouli:image",
-      "title": "划艇",
-      "images": [
-        "firmaciv:textures/gui/book/rowboat_isometric.png"
-      ],
-      "text": "一只建造完成的划艇。"
     }
   ],
   "read_by_default": true,

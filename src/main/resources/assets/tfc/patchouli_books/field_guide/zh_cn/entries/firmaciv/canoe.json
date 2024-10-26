@@ -9,12 +9,18 @@
       "text": "独木舟很可能是您水上之旅的第一步！如果你生活在青铜时代，你很可能会造一艘独木舟。"
     },
     {
-      "type": "patchouli:text",
-      "text": "你当然可以在两个座位上都放上方块或动物，但要注意，如果你这样做，就没有办法驾驶它了！不过如果你不想亲自运送材料，那就当我没说了。$(br2)独木舟有两个座位，从后面驾驶。你得划桨才能全速前进，如果两个玩家一起划桨，它可以走得更快。"
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/canoe_isometric.png"
+      ]
     },
     {
       "type": "patchouli:text",
-      "text": "要制作独木舟，你首先得将3根剥皮的原木水平放置成一排，并用锯切掉顶部。然后，用斧头雕刻出独木舟的形状。最后，点燃独木舟的内部，掏空船体。这将花费与坑窑相同的时间来完成挖空过程。"
+      "text": "你当然可以在两个座位上都放上方块或动物，但要注意，如果你这样做，就没有办法驾驶它了！不过如果你不想亲自运送材料，那就当我没说了。$(br2)独木舟有两个座位，从后面驾驶。你得划桨才能全速前进，如果两个玩家一起划桨，它可以行驶得更快。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "要制作独木舟，你首先得将3根剥皮的原木水平放置成一排，并用锯切掉顶部，然后用斧头雕刻出独木舟的形状。最后点燃独木舟的内部，掏空船体。这将花费与坑窑相同的时间来完成挖空过程。"
     },
     {
       "type": "patchouli:text",
@@ -36,7 +42,7 @@
           "B": "tfc:wood/stripped_log/douglas_fir[axis=x]"
         }
       },
-      "name": "诶，弄一根原木给你",
+      "name": "就一根原木",
       "text": "制作独木舟的第一步",
       "enable_visualize": false
     },
@@ -81,17 +87,9 @@
       "enable_visualize": false
     },
     {
-      "type": "patchouli:image",
-      "title": "独木舟",
-      "images": [
-        "firmaciv:textures/gui/book/canoe_isometric.png"
-      ],
-      "text": "一艘完整的独木舟"
-    },
-    {
       "type": "patchouli:crafting",
       "recipe": "firmaciv:crafting/canoe_paddle",
-      "text": "别忘了制作一两支桨！"
+      "text": "别忘了制作一对桨"
     }
   ],
   "read_by_default": true,

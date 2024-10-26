@@ -1,7 +1,7 @@
 {
   "name": "新手入门：船只",
   "category": "tfc:firmaciv",
-  "icon": "firmaciv:textures/item/anchor_icon.png",
+  "icon": "firmaciv:anchor",
   "pages": [
     {
       "type": "patchouli:text",
@@ -9,6 +9,7 @@
     },
     {
       "type": "patchouli:image",
+
       "images": [
         "firmaciv:textures/gui/book/boats.png"
       ],
@@ -17,7 +18,7 @@
     },
     {
       "type": "patchouli:text",
-      "title": "Customization",
+      "title": "定制",
       "text": "你可以为船只添加自己的方块！像你放置一个方块那样，当你手中拿着一个箱子时，按住$(item)$(k:key.use)$()就可以将它安装到船只上。按$(item)$(k:key.use)$() 键以与它们交互。如果你不能在某个地方放置一个方块，那可能是因为那个地方是驾驶位！你怎么驾驶一辆没有驾驶位的船？你能像平常一样撸掉你想拆的方块，就能把它从船上拆下来了。"
     },
     {
@@ -30,7 +31,7 @@
     {
       "type": "patchouli:text",
       "title": "能放进物品栏的船",
-      "text": "根本就不存在！除了独木舟。如果你把一艘船撸掉，它就只能掉落一些原材料！这意味着当你需要带着船穿越大陆时，最好带一艘独木舟。这也意味着，如果想建造大型船只，需要建造一个港口来停泊它们！"
+      "text": "根本就不存在！除了独木舟。如果你把一艘船破坏掉，它就只能掉落一些原材料！这意味着当你需要带着船穿越大陆时，最好带一艘独木舟。这也意味着，如果想建造大型船只，需要建造一个港口来停泊它们！"
     },{
       "type": "patchouli:image",
       "images": [
@@ -39,7 +40,7 @@
     },
     {
       "type": "patchouli:text",
-      "title": "Transporting Animals",
+      "title": "运输动物",
       "text": "和往常一样，你可以用船来移动动物！不过，要注意，像马这样的大型动物只适合乘坐足够大的船。如果船上做了一只动物，而且挡住了你的路，你可以通过shift+ $(item)$(k:key.use)$()以让它从载具上下来。动物在船上呆2天后会坐立不安，呆3天后会自己下船。"
     },
     {
@@ -52,7 +53,7 @@
     },
     {
       "type": "patchouli:text",
-      "title": "桨",
+      "title": "桨和划桨",
       "text": "如果你感觉到你的船太慢了，请检查一下你握着的是不是正确的桨；如果你的船是需要桨架上的固定桨的，请检查桨架上的桨是否正确安装。在一些船上，多名玩家一起划船会让船的速度更快哦！"
     },
     {
@@ -63,7 +64,7 @@
     },
     {
       "type": "patchouli:text",
-      "title": "Cleats and Leads",
+      "title": "船桩和缆绳",
       "text": "大多数船都至少配备一个用来绑栓神的固定桩。你可以用一根引绳来绑住它，并且牵着船移动。你也可以把船拉上海岸线，或是把它拉上一个半砖。"
     },
     {
@@ -72,6 +73,63 @@
       "images": [
         "firmaciv:textures/gui/book/leads.png"
       ]
+    },
+    {
+      "type": "patchouli:text",
+      "title": "锚和绞盘",
+      "text": "大型船只配有锚，可以用于完全停止船只，前提是锚扎根于海底且没有展开帆。船在停锚时仍会随风转动。请查找位于绞盘（锚绞车）上的锚图标，并按下$(item)$(k:key.use)$()来放下和收起锚。"
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/anchor.png"
+      ],
+      "text": "单桅帆船上的锚和绞盘。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "帆",
+      "text": "帆船当然有帆。为了正确控制你的船，你需要展开帆。请查找三角形的帆图标，并按下$(item)$(k:key.use)$()来展开每一片帆。由于大多数船只有多片帆，你可以使用不同的帆组合来控制你的速度。"
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/sails.png"
+      ],
+      "text": "这艘单桅帆船上的前帆（左）和主帆（右）都已经展开。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "航行",
+      "text": "与您可能习惯的船只不同，在群峦传说：航海文明中，航行是一项技能。当您驾驶帆船时，会出现一个新的用户界面元素，显示风速和风向，以及船的速度。风箭头的颜色将指示在该方向航行的难度。使用前进和后退的移动键来调整帆的角度，并进行实验，以找到最适合该风向的角度。"
+    },
+    {
+      "type": "patchouli:image",
+      "border": false,
+      "images": [
+        "firmaciv:textures/gui/book/sailing.png"
+      ],
+      "text": "航行UI将帮助您控制您的船只。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "上色和染色",
+      "text": "任何使用船匠脚手架建造的船只都可以上色，任何帆也可以单独染色。只需将染料物品拿在手中，当您看到画笔图标时按下$(item)$(k:key.use)$()，即可为船体上色或为帆染色。较大的船只对每种颜色都有独特的图案。"
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/painting.png"
+      ],
+      "text": "这艘单桅帆船已被涂成黄色，帆也已染色。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "损坏与修复",
+      "text": "受损的船只会开始出现裂缝。对于任何使用船匠脚手架建造的船只，请使用适当类型的木板进行修复。对于独木舟，请使用木材。当损坏达到90%时，船只看起来会进水，而在100%损坏时，它将沉没！这不适用于皮划艇。"
     }
   ],
   "read_by_default": true,

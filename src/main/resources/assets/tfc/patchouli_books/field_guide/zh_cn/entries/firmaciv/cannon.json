@@ -1,0 +1,29 @@
+
+{
+  "name": "大炮",
+  "category": "tfc:firmaciv",
+  "icon": "alekiships:cannon",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "大炮！谁不想要大炮呢？这些强大的海战武器可以放置在大型船只上，也可以用于陆地，是摧毁敌方舰艇的最佳方式，对船只造成的伤害远超过任何替代品。"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/cannon_isometric.png"
+      ]
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/cannon",
+      "text": "用锻铁双层薄板锻造炮管，并通过合成完成大炮。"
+    },
+    {
+      "type": "text",
+      "text": "您还需要炮弹，这些炮弹是由锻铁双锭锻造而成，以及火药、未精制的纸张和打火石，以便发射火炮。一个UI将指示火炮的状态。您可以通过按$(item)$(k:key.use)$()向上调整火炮角度，向下则是蹲下并按$(item)$(k:key.use)$()。"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 5
+}
