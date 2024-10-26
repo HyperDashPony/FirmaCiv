@@ -65,12 +65,12 @@
           ]
         ],
         "mapping": {
-          "1": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_right,frame_processed=3]",
-          "2": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_left,frame_processed=3]",
-          "0": "firmaciv:wood/watercraft_frame_angled/hickory[facing=north,shape=straight,frame_processed=3]",
-          "4": "firmaciv:wood/watercraft_frame_angled/hickory[facing=south,shape=straight,frame_processed=3]",
-          "5": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_left,frame_processed=3]",
-          "6": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_right,frame_processed=3]"
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=3]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=3]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=3]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=3]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=3]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=3]"
         }
       },
       "name": "搭建划艇的脚手架",
@@ -93,12 +93,12 @@
           ]
         ],
         "mapping": {
-          "1": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
-          "2": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
-          "0": "firmaciv:wood/watercraft_frame_angled/hickory[facing=north,shape=straight,frame_processed=7]",
-          "4": "firmaciv:wood/watercraft_frame_angled/hickory[facing=south,shape=straight,frame_processed=7]",
-          "5": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
-          "6": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_right,frame_processed=7]"
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=7]"
         }
       },
       "name": "搭建划艇的脚手架",
@@ -121,14 +121,14 @@
           ]
         ],
         "mapping": {
-          "1": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
-          "2": "firmaciv:wood/watercraft_frame_angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
-          "0": "firmaciv:wood/watercraft_frame_angled/hickory[facing=north,shape=straight,frame_processed=7]",
-          "4": "firmaciv:wood/watercraft_frame_angled/hickory[facing=south,shape=straight,frame_processed=7]",
-          "5": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
-          "6": "firmaciv:wood/watercraft_frame_angled/hickory[facing=east,shape=inner_right,frame_processed=7]",
-          "L": "firmaciv:oarlock[facing=north]",
-          "R": "firmaciv:oarlock[facing=south]"
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=7]",
+          "L": "alekiships:oarlock[facing=north]",
+          "R": "alekiships:oarlock[facing=south]"
         }
       },
       "name": "搭建划艇的脚手架",
