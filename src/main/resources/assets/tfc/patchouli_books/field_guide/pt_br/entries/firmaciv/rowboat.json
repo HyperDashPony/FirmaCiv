@@ -1,0 +1,152 @@
+{
+  "name": "Botes",
+  "category": "tfc:firmaciv",
+  "icon": "firmaciv:rowboat_icon_only",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Então, você chegou à Idade do Ferro e quer um upgrade? Pois bem, o Bote é para você. Ele tem três assentos, então pode acomodar 3 jogadores ou até 2 animais, incluindo cavalos! Como sempre, você também pode substituir os assentos (exceto o assento do piloto) por contêineres de sua escolha. Você também pode colocar dois contêineres adicionais na popa."
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/rowboat_isometric.png"
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "text": "No bote, ao contrário de outros barcos, você estará sentado de costas para pilotá-lo. Isso lhe dá uma vantagem mecânica para que você possa realmente se concentrar nos remos! Você pode, é claro, pilotá-lo em primeira pessoa, mas pode achar mais intuitivo pilotá-lo em terceira pessoa, olhando para você mesmo."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/watercraft_frame_angled",
+      "text": "Para construir um bote, você precisará começar com as Estruturas Navais. Elas permitem que você mantenha os materiais do barco no lugar enquanto constrói.$(br2)Em seguida, você os posicionará voltados para dentro em uma área de 2 por 3."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "   ",
+            "   ",
+            "   "
+          ],
+          [
+            " 12",
+            " 04",
+            " 56"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:watercraft_frame_angled[facing=west,shape=inner_right]",
+          "2": "firmaciv:watercraft_frame_angled[facing=west,shape=inner_left]",
+          "0": "firmaciv:watercraft_frame_angled[facing=north,shape=straight]",
+          "4": "firmaciv:watercraft_frame_angled[facing=south,shape=straight]",
+          "5": "firmaciv:watercraft_frame_angled[facing=east,shape=inner_left]",
+          "6": "firmaciv:watercraft_frame_angled[facing=east,shape=inner_right]"
+        }
+      },
+      "name": "Estrutura do Bote",
+      "text": "Estruturas Navais dispostas para construir um bote.",
+      "enable_visualize": true
+    },
+
+    {
+      "type": "patchouli:text",
+      "text": "Em seguida, você precisará adicionar tábuas de uma madeira dura e forte: $(br2)Acácia$(br)Álamo$(br)Bétula$(br)Bordo$(br)Carvalho$(br)Castanheira$(br)Ébano$(br)Freixo$(br)Jacarandá$(br)Nogueira$(br)Sicômoro"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "   ",
+            "   ",
+            "   "
+          ],
+          [
+            " 12",
+            " 04",
+            " 56"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=3]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=3]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=3]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=3]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=3]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=3]"
+        }
+      },
+      "name": "Estrutura do Bote",
+      "text": "Quatro tábuas foram adicionadas a cada estrutura.",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "   ",
+            "   ",
+            "   "
+          ],
+          [
+            " 12",
+            " 04",
+            " 56"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=7]"
+        }
+      },
+      "name": "Estrutura do Bote",
+      "text": "Usando um martelo na mão secundária, adicione quatro pinos de cobre a cada estrutura. Os pinos de cobre são forjados a partir de lingotes de cobre.",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "   ",
+            " LR",
+            "   "
+          ],
+          [
+            " 12",
+            " 04",
+            " 56"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/hickory[facing=west,shape=inner_left,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/angled/hickory[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/hickory[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_left,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/hickory[facing=east,shape=inner_right,frame_processed=7]",
+          "L": "alekiships:oarlock[facing=north]",
+          "R": "alekiships:oarlock[facing=south]"
+        }
+      },
+      "name": "Estrutura do Bote",
+      "text": "Por fim, adicione as forquetas ao centro do barco. Elas são feitas de Lingotes Duplos de Ferro Forjado.",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe2": "alekiships:crafting/oar",
+      "text": "Agora, adicione remos com $(item)$(k:key.use)$() e você estará no caminho certo!"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 3
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Navegação",
+  "category": "tfc:firmaciv",
+  "icon": "firmaciv:textures/item/nav_toolkit.png",
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "title": "Navegação",
+      "images": [
+        "firmaciv:textures/gui/book/navigation.png"
+      ],
+      "border": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Navegar pelo mundo não é uma tarefa fácil. Para construir uma civilização bem-sucedida, você precisa ter um bom conhecimento de sua localização e um bom registro de lugares importantes! Não existem mais números mágicos que indicam exatamente onde você está. Em vez disso, você precisa fazer avanços tecnológicos e adquirir instrumentos precisos para determinar sua posição."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Longitude",
+      "text": "Para encontrar sua Longitude, ou seja, sua distância do Meridiano Primário, você precisa de um relógio! Mais especificamente, você precisa de um relógio preciso que se mantenha sincronizado com a hora solar no Meridiano Primário.$(br2)Forje um Relógio de Navegador Inacabado a partir de uma Chapa Dupla de Latão antes de completá-lo com a receita à direita."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/nav_clock",
+      "text": "Depois de criar seu Relógio do Navegador, você pode segurá-lo e pressionar $(item)$(k:key.use)$() para determinar sua Longitude. Lembre-se de que sua Longitude é medida em Graus Leste ou Oeste, ou seja, 0 Graus no Meridiano Principal e 360 Graus para um clima idêntico."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Latitude",
+      "text": "Para encontrar sua Latitude, ou seja, sua distância do Equador, você precisa determinar os graus em que você observa a Polaris, a Estrela Polar ou o Sol. Especificamente, você precisa de um mecanismo preciso para visualizar características astronômicas e medir sua distância angular em relação ao horizonte.(br2)Forje um Sextante Inacabado com um Lingote Duplo de Latão antes de completá-lo com a receita à direita."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/sextant",
+      "text": "Depois de criar seu Sextante, você pode segurá-lo e pressionar $(item)$(k:key.use)$() para determinar sua Latitude. Lembre-se de que sua Latitude é medida em Graus Norte ou Sul, ou seja, 0 Graus no Equador e 90 Graus Norte ou Sul para uma região polar."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Altitude",
+      "text": "Para encontrar sua altitude, ou seja, sua distância vertical a partir do Nível do Mar, você precisa medir a pressão atmosférica. Especificamente, você precisa de um dispositivo contendo um fluido compressível e precisa medir o volume desse fluido para determinar a pressão.(br2)Forje um Barômetro Inacabado a partir de uma Chapa de Latão antes de completá-lo com a receita à direita."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/barometer",
+      "text": "Depois de criar seu Barômetro, você pode segurá-lo e pressionar $(item)$(k:key.use)$() para determinar sua Altitude. Lembre-se de que sua Altitude é medida em distância do nível do mar."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Notas de Rodapé",
+      "text": "Como você medirá a distância em Graus, pode ser útil conhecer as conversões de blocos. Cada 90 Graus equivale a 20.000 blocos, e cada grau equivale a cerca de 222 blocos.$(br2)Em Firma: Civilização, as Bússolas sempre apontam para o Norte, mas são criadas com a receita original do TerraFirmaCraft."
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 20
+}

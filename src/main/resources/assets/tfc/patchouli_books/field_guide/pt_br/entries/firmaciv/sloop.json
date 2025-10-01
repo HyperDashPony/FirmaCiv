@@ -1,0 +1,218 @@
+{
+  "name": "Saveiros",
+  "category": "tfc:firmaciv",
+  "icon": "firmaciv:sloop_icon_only",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Era do Aço, já? Bem, acho que já passou da hora de você construir um navio de verdade. O saveiro tem 4 blocos de largura e mais de 8 de comprimento, uma evolução impressionante em relação ao bote! Ele comporta até 13 contêineres e até 7 passageiros e, dependendo do vento, pode navegar extremamente rápido. Também pode transportar até 6 canhões!"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/sloop_isometric.png"
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "text": "No entanto, o saveiro é caro, exigindo uma grande quantidade de aço, cobre, lã e outros materiais. Mas os materiais não são o único custo! Você também terá que aprender a velejar, e isso pode exigir alguma prática! Você provavelmente também vai querer construir docas e outras infraestruturas se planeja aproximar seu navio da costa."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Aqui está a lista de materiais para a construção do saveiro: $(br2)12 Lingotes de Aço$(br)24 Lingotes de Cobre$(br)648 Madeira Serrada$(br)34 Toras$(br)24 Tecido de Lã$(br)6 Cordas$(br)72 Fibra de Juta"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Estrutura",
+      "recipe": "firmaciv:crafting/watercraft_frame_flat",
+      "text": "Assim como um barco a remo, você começará com a Estrutura Naval. No entanto, você também precisará de uma nova variante plana para navios maiores."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     "
+          ],
+          [
+            "  12 ",
+            "  34 ",
+            " 1562",
+            " 30a4",
+            " 3aa4",
+            " 3aa4",
+            " 7889"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:watercraft_frame_angled[facing=west,shape=inner_right]",
+          "2": "firmaciv:watercraft_frame_angled[facing=west,shape=inner_left]",
+          "3": "firmaciv:watercraft_frame_angled[facing=north,shape=straight]",
+          "4": "firmaciv:watercraft_frame_angled[facing=south,shape=straight]",
+          "5": "firmaciv:watercraft_frame_angled[facing=west,shape=outer_right]",
+          "6": "firmaciv:watercraft_frame_angled[facing=west,shape=outer_left]",
+          "7": "firmaciv:watercraft_frame_angled[facing=east,shape=inner_left]",
+          "8": "firmaciv:watercraft_frame_angled[facing=east,shape=straight]",
+          "9": "firmaciv:watercraft_frame_angled[facing=east,shape=inner_right]",
+          "0": "firmaciv:watercraft_frame_flat",
+          "a": "firmaciv:watercraft_frame_flat"
+        }
+      },
+      "name": "Estrutura de Saveiro",
+      "text": "Estruturas Navais dispostas para construir um casco de saveiro.",
+      "enable_visualize": true
+    },
+
+    {
+      "type": "patchouli:text",
+      "text": "Em seguida, você precisará adicionar tábuas de uma madeira dura e forte: $(br2)Acácia$(br)Álamo$(br)Bétula$(br)Bordo$(br)Carvalho$(br)Castanheira$(br)Ébano$(br)Freixo$(br)Jacarandá$(br)Nogueira$(br)Sicômoro"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     "
+          ],
+          [
+            "  12 ",
+            "  34 ",
+            " 1562",
+            " 30a4",
+            " 3aa4",
+            " 3aa4",
+            " 7889"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=inner_right,frame_processed=3]",
+          "2": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=inner_left,frame_processed=3]",
+          "3": "firmaciv:wood/watercraft_frame/angled/oak[facing=north,shape=straight,frame_processed=3]",
+          "4": "firmaciv:wood/watercraft_frame/angled/oak[facing=south,shape=straight,frame_processed=3]",
+          "5": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=outer_right,frame_processed=3]",
+          "6": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=outer_left,frame_processed=3]",
+          "7": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=inner_left,frame_processed=3]",
+          "8": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=straight,frame_processed=3]",
+          "9": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=inner_right,frame_processed=3]",
+          "0": "firmaciv:wood/watercraft_frame/flat/oak[frame_processed=3]",
+          "a": "firmaciv:wood/watercraft_frame/flat/oak[frame_processed=3]"
+        }
+      },
+      "name": "Estrutura de Saveiro",
+      "text": "Quatro tábuas foram adicionadas a cada estrutura.",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     "
+          ],
+          [
+            "  12 ",
+            "  34 ",
+            " 1562",
+            " 30a4",
+            " 3aa4",
+            " 3aa4",
+            " 7889"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=inner_left,frame_processed=7]",
+          "3": "firmaciv:wood/watercraft_frame/angled/oak[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/oak[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=outer_right,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=outer_left,frame_processed=7]",
+          "7": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=inner_left,frame_processed=7]",
+          "8": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=straight,frame_processed=7]",
+          "9": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=inner_right,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/flat/oak[frame_processed=7]",
+          "a": "firmaciv:wood/watercraft_frame/flat/oak[frame_processed=7]"
+        }
+      },
+      "name": "Estrutura de Saveiro",
+      "text": "Usando um martelo na mão secundária, adicione quatro pinos de cobre a cada estrutura. Os pinos de cobre são forjados a partir de lingotes de cobre.",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            "     ",
+            "     ",
+            " L  R",
+            "     ",
+            "     ",
+            "     ",
+            " L  R"
+          ],
+          [
+            "  12 ",
+            "  34 ",
+            " 1562",
+            " 30a4",
+            " 3aa4",
+            " 3aa4",
+            " 7889"
+          ]
+        ],
+        "mapping": {
+          "1": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=inner_right,frame_processed=7]",
+          "2": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=inner_left,frame_processed=7]",
+          "3": "firmaciv:wood/watercraft_frame/angled/oak[facing=north,shape=straight,frame_processed=7]",
+          "4": "firmaciv:wood/watercraft_frame/angled/oak[facing=south,shape=straight,frame_processed=7]",
+          "5": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=outer_right,frame_processed=7]",
+          "6": "firmaciv:wood/watercraft_frame/angled/oak[facing=west,shape=outer_left,frame_processed=7]",
+          "7": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=inner_left,frame_processed=7]",
+          "8": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=straight,frame_processed=7]",
+          "9": "firmaciv:wood/watercraft_frame/angled/oak[facing=east,shape=inner_right,frame_processed=7]",
+          "0": "firmaciv:wood/watercraft_frame/flat/oak[frame_processed=7]",
+          "a": "firmaciv:wood/watercraft_frame/flat/oak[frame_processed=7]",
+          "L": "alekiships:cleat[facing=north]",
+          "R": "alekiships:cleat[facing=south]"
+        }
+      },
+      "name": "Estrutura de Saveiro",
+      "text": "Por fim, adicione os cunhos ao casco. Eles são forjados a partir de lingotes duplos de aço.",
+      "enable_visualize": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Construir o casco é apenas o primeiro passo da construção do saveiro! Depois que o casco estiver pronto, procure o ícone do martelo azul e aperte $(item)$(k:key.use)$() para adicionar os itens que aparecem ao lado da sua mira, construindo o restante do navio.$(br2) As páginas a seguir contêm receitas para itens exclusivos que você precisará para concluir a construção."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/small_triangular_sail",
+      "recipe2": "firmaciv:crafting/medium_triangular_sail"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe2": "firmaciv:crafting/rope_coil",
+      "text": "Você também precisará adicionar uma âncora, que é forjada de uma Chapa Dupla de Aço."
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 4
+}

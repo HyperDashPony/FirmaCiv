@@ -1,0 +1,29 @@
+
+{
+  "name": "Canhões",
+  "category": "tfc:firmaciv",
+  "icon": "alekiships:cannon",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Canhões! Quem não quer canhões? Essas poderosas armas de guerra naval podem ser instaladas em grandes navios, bem como em terra, e são a melhor maneira de destruir as embarcações inimigas, causando muito mais dano aos navios do que qualquer outra alternativa."
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/cannon_isometric.png"
+      ]
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/cannon",
+      "text": "Forje os Canos de Canhão feitos de Chapas Duplas de Ferro Forjado e complete o canhão com crafting."
+    },
+    {
+      "type": "text",
+      "text": "Você também precisará de balas de canhão, forjadas a partir de Lingotes Duplos de Ferro Forjado, além de Pólvora, Papel Não Refinado e uma Pederneira para disparar um canhão. Um elemento da interface indicará o status do canhão. Você pode inclinar um canhão para cima pressionando $(item)$(k:key.use)$() e para baixo agachando-se e pressionando $(item)$(k:key.use)$()."
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 5
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Caiaques",
+  "category": "tfc:firmaciv",
+  "icon": "firmaciv:kayak_with_paddle_icon_only",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Seu melhor amigo para aventuras solo em terra. Claro, ser o único barco que pode ser carregado como item ajuda. É o barco mais rápido para um jogador solo e muito manobrável!$(br2)Para transportar o caiaque, basta quebrá-lo.",
+      "title": "Caiaque"
+    },
+    {
+      "type": "patchouli:image",
+      "title": "Caiaque",
+      "images": [
+        "firmaciv:textures/gui/book/kayak_isometric.png"
+      ],
+      "text": "Caiaques são os menores e mais portáteis barcos."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/kayak",
+      "recipe2": "firmaciv:crafting/kayak_paddle"
+    },
+    {
+      "type": "tfc:sealed_barrel_recipe",
+      "anchor": "soaking",
+      "recipe": "firmaciv:barrel/large_waterproof_hide_olive",
+      "text": "Mergulhe um Couro Grande Preparado em banha ou azeite para tornar sua superfície impermeável à água."
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 2
+}

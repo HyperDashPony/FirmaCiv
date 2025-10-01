@@ -1,0 +1,137 @@
+{
+  "name": "Introdução: Barcos",
+  "category": "tfc:firmaciv",
+  "icon": "firmaciv:anchor",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Criar e usar um barco pode ser um pouco mais complexo do que você está acostumado, mas não há nada como construir a embarcação perfeita e partir em alto mar. Leia este manual e aprenda os detalhes de como esculpir, criar, construir, remar, pilotar e personalizar ao seu gosto."
+    },
+    {
+      "type": "patchouli:image",
+
+      "images": [
+        "firmaciv:textures/gui/book/boats.png"
+      ],
+      "border": true,
+      "text": "Viajar pelo mundo, ou apenas pela sua localidade, geralmente é melhor feito por vias navegáveis."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Customização",
+      "text": "Você pode adicionar blocos aos barcos! Como se estivesse colocando um bloco em terra firme, pressione $(item)$(k:key.use)$() enquanto segura um baú, uma bigorna ou uma bancada para adicioná-lo ao barco. Pressione $(item)$(k:key.use)$() para acessá-los. Se você não conseguir colocar um bloco em um local específico, provavelmente é porque é o assento do piloto! Você não pode pilotar o barco se houver um bloco no caminho! Você pode remover os blocos quebrando-os, como de costume."
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/customization.png"
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Barcos como Itens",
+      "text": "Eles não existem! Com exceção do caiaque, se você quebrar um barco, ele só deixará cair alguns dos seus ingredientes! Isso significa que você precisará de um caiaque se quiser transportar um barco por terra, e também significa que você pode querer construir um cais para suas embarcações maiores."
+    },{
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/items.png"
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Transporte de Animais",
+      "text": "Como sempre, você pode mover animais usando barcos! No entanto, esteja ciente de que animais maiores, como cavalos, só cabem em barcos grandes o suficiente. Se um animal estiver em um barco e estiver no seu caminho, você só precisa se agachar e pressionar $(item)$(k:key.use)$() para ejetá-lo do barco. Os animais ficarão inquietos após 2 dias no barco e o sairão sozinhos em 3 dias."
+    },
+    {
+      "type": "patchouli:image",
+      "title": "Piloting",
+      "images": [
+        "firmaciv:textures/gui/book/piloting.png"
+      ],
+      "text": "Cada barco tem um assento específico que você precisa usar para controlar o barco."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Remos de Canoa e Remos de Bote",
+      "text": "Se você sentir que seu barco está se movendo lentamente, verifique se está segurando o remo apropriado ou, se o seu barco precisar de remos, se os remos estão instalados nos suportes. Em alguns barcos, vários jogadores podem remar para acelerar o barco."
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/paddles.png"
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Cunhos e Laços",
+      "text": "A maioria dos barcos tem pelo menos um cunho. Você pode prender um laço ao cunho e usá-lo para puxar o barco, e também para puxar barcos pequenos até a costa e lajes. Os laços também podem ser usados para prender barcos a cercas, e prender dois laços em cada cerca permitirá que você atraque barcos maiores facilmente. Você vai querer usar laços extensivamente para evitar que seus barcos se afastem!"
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/leads.png"
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Âncoras e Molinetes",
+      "text": "Barcos grandes possuem âncoras, que podem ser usadas para pará-los completamente, desde que a âncora esteja no fundo do mar e nenhuma vela esteja aberta. O barco ainda girará com o vento enquanto estiver ancorado. Procure o ícone de âncora localizado no molinete (guincho da âncora) e pressione $(item)$(k:key.use)$() para abaixar e içar a âncora."
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/anchor.png"
+      ],
+      "text": "A âncora e o molinete em um saveiro."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Velas",
+      "text": "Veleiros, é claro, têm velas. Você precisará abri-las para controlar seu barco corretamente. Procure o ícone triangular de vela e pressione $(item)$(k:key.use)$() para abrir cada vela. Como a maioria dos barcos tem várias velas, você pode usar diferentes combinações de abertura de velas para controlar sua velocidade."
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/sails.png"
+      ],
+      "text": "Tanto a vela de proa (esquerda) quanto a vela principal (direita) foram posicionadas neste saveiro."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Velejando",
+      "text": "Ao contrário dos navios com os quais você pode estar acostumado, velejar é uma habilidade em Firma: Civilização. Ao pilotar um veleiro, um novo elemento de interface do usuário aparecerá mostrando a velocidade e a direção do vento, bem como a velocidade do barco. A cor da seta do vento indicará a dificuldade de navegar naquela direção. Use as teclas de movimento para frente e para trás para definir o ângulo das velas e experimente encontrar a melhor para o ângulo do vento."
+    },
+    {
+      "type": "patchouli:image",
+      "border": false,
+      "images": [
+        "firmaciv:textures/gui/book/sailing.png"
+      ],
+      "text": "A interface de navegação ajudará você a controlar sua embarcação."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Pintura e Tingimento",
+      "text": "Qualquer barco construído com a Estrutura Naval pode ser pintado, e qualquer vela pode ser tingida individualmente. Basta segurar um item de tinta na mão e pressionar $(item)$(k:key.use)$() quando vir o ícone do pincel para pintar um casco ou tingir uma vela. Barcos maiores têm padrões exclusivos para cada cor de tinta."
+    },
+    {
+      "type": "patchouli:image",
+      "border": true,
+      "images": [
+        "firmaciv:textures/gui/book/painting.png"
+      ],
+      "text": "Um saveiro foi pintado de amarelo e suas velas foram tingidas."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Danos e Reparos",
+      "text": "Um barco danificado começará a apresentar rachaduras. Para qualquer barco construído com a Estrutura Naval, use o tipo apropriado de tábuas para repará-lo. Para canoas, use madeira. Com 90% de dano, o barco parecerá estar entrando em contato com a água, e com 100% de dano, afundará! Isso não se aplica a Caiaques."
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 0
+}

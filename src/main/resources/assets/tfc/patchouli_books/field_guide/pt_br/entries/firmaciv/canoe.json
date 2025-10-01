@@ -1,0 +1,97 @@
+
+{
+  "name": "Canoas de Tronco",
+  "category": "tfc:firmaciv",
+  "icon": "firmaciv:canoe_with_paddle_icon_only",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A Canoa de Tronco provavelmente será o primeiro passo na sua jornada aquática! Se você está na era do cobre, provavelmente pode construir uma canoa."
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/canoe_isometric.png"
+      ]
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Você pode colocar blocos ou animais no assento do piloto, mas esteja ciente de que não há como remar o barco dessa forma! É mais útil se você quiser apenas enviar materiais rio abaixo sozinho.$(br2)Uma canoa tem dois assentos e é pilotada pela parte traseira. Você precisa segurar um remo de canoa para se mover a toda velocidade, e se dois jogadores estiverem segurando os remos, você pode ir ainda mais rápido."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Para construir uma canoa, coloque 3 toras de madeira descascadas em uma fileira, na horizontal, e corte os topos com uma serra. Em seguida, esculpa o formato da canoa com um machado. Por fim, acenda o interior da canoa para abrir o casco. O processo de escavação levará o mesmo tempo que um forno de cova."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Esculpir uma canoa requer uma madeira mais macia e, como resultado, apenas alguns troncos são trabalháveis: $(br2)Abeto$(br)Abeto Douglas$(br)Cedro Branco$(br)Mangue$(br)Palmeira$(br)Pinheiro$(br)Salgueiro$(br)Sequoia$(br)Sumaúma"
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            " F ",
+            " 0 ",
+            " B "
+          ]
+        ],
+        "mapping": {
+          "F": "tfc:wood/stripped_log/douglas_fir[axis=x]",
+          "0": "tfc:wood/stripped_log/douglas_fir[axis=x]",
+          "B": "tfc:wood/stripped_log/douglas_fir[axis=x]"
+        }
+      },
+      "name": "Só uma Tora",
+      "text": "O primeiro passo para fazer uma Canoa de Tronco.",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            " F ",
+            " 0 ",
+            " B "
+          ]
+        ],
+        "mapping": {
+          "F": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=true]",
+          "0": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=false]",
+          "B": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=5,facing=east,end=true]"
+        }
+      },
+      "name": "Lajes Estranhas",
+      "text": "A parte superior do tronco foi removida com uma serra.",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [
+            " F ",
+            " 0 ",
+            " B "
+          ]
+        ],
+        "mapping": {
+          "F": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=11,facing=west,end=true]",
+          "0": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=11,facing=east,end=false]",
+          "B": "firmaciv:wood/canoe_component_block/douglas_fir[canoe_carved=11,facing=east,end=true]"
+        }
+      },
+      "name": "Uma Escultura Estranha",
+      "text": "Uma canoa totalmente esculpida, pronta para ter o casco escavado.",
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/canoe_paddle",
+      "text": "Não se esqueça de criar um ou dois remos!"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 1
+}
