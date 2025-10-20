@@ -1,0 +1,29 @@
+
+{
+  "name": "加农炮",
+  "category": "tfc:firmaciv",
+  "icon": "alekiships:cannon",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "加农炮！谁不想要加农炮呢？这些强大的海战武器既可部署在大型船只上，也可安置在陆地上，是摧毁敌方舰船的最佳方式，对船只造成的伤害远超其他手段。"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "firmaciv:textures/gui/book/cannon_isometric.png"
+      ]
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "firmaciv:crafting/cannon",
+      "text": "用双层锻铁板锻造炮管，并通过合成完成整门加农炮。"
+    },
+    {
+      "type": "text",
+      "text": "你还需要炮弹（由锻铁双锭锻造）、以及火药、未精制纸和打火石与钢，以便发射加农炮。界面元素会显示加农炮的状态。按下$(item)$(k:key.use)$()可将炮口上仰，蹲伏并按下$(item)$(k:key.use)$()可将炮口下压。"
+    }
+  ],
+  "read_by_default": true,
+  "sortnum": 5
+}
